@@ -4,22 +4,25 @@ import {
   Title,
   ContentWrapper,
   Hr,
+  InputWrapper,
 } from "./Input.styles";
 
 interface InputProps {
+  title: string;
+  placeholder: string;
   isButton?: boolean;
 }
 
-const Input = ({ isButton = true }: InputProps) => {
+const Input = ({ title, placeholder, isButton = false }: InputProps) => {
   return (
-    <div>
-      <Title>비밀번호</Title>
+    <InputWrapper>
+      <Title>{title}</Title>
       <ContentWrapper>
-        <ContentInput placeholder="비밀번호를 입력해주세요" />
+        <ContentInput placeholder={placeholder} />
         {isButton && <Button />}
       </ContentWrapper>
       <Hr />
-    </div>
+    </InputWrapper>
   );
 };
 

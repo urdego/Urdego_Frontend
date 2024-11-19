@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const InputWrapper = styled.div`
+  margin: 2rem 0;
+  flex-grow: 1;
+`;
+
 export const Title = styled.div`
   font-size: 14px;
   font-weight: 400;
@@ -14,11 +19,9 @@ export const ContentWrapper = styled.div`
 
 export const ContentInput = styled.input`
   width: 100%;
-
   border: none;
   outline: none;
   padding-left: 0;
-
   font-size: 16px;
   font-weight: 400;
 `;
