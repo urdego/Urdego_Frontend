@@ -18,10 +18,22 @@ export const NormalContent: Story = {
   },
 };
 
-export const Password: Story = {
+export const HiddenPassword: Story = {
   args: {
     title: "비밀번호",
     placeholder: "8자 이상의 문자 입력 (숫자, 영어, 특수문자 포함)",
     isButton: true,
+    isHiddenPassword: true,
+    handleClick: () => {},
+  },
+};
+
+export const OpenPassword: Story = {
+  args: {
+    title: "비밀번호",
+    placeholder: "8자 이상의 문자 입력 (숫자, 영어, 특수문자 포함)",
+    isButton: true,
+    isHiddenPassword: false,
+    handleClick: () => {},
   },
 };
