@@ -1,5 +1,5 @@
 import Button from "../../components/common/Button/Button";
-import PlusIcon from "../../components/common/Icon/PlusIcon.png";
+import PlusIcon from "../../styles/Icon/PlusIcon.png";
 import { Meta, StoryObj } from "@storybook/react";
 
 const meta = {

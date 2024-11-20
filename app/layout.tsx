@@ -16,7 +16,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <NavBar />
         <StyledComponentsRegistry>
           <GlobalStyle />
           <Container>{children}</Container>
