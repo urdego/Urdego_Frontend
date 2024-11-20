@@ -9,8 +9,6 @@ export default function StyledComponentsRegistry({
 }: {
   children: React.ReactNode;
 }) {
-  // Only create stylesheet once with lazy initial state
-  // x-ref: https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
   useServerInsertedHTML(() => {
@@ -19,10 +17,15 @@ export default function StyledComponentsRegistry({
     return <>{styles}</>;
   });
 
-  if (typeof window !== "undefined") return <>{children}</>;
+  if (typeof window !== "undefined") {
+    return <>{children}</>;
+  }
 
   return (
-    <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
+    <StyleSheetManager
+      sheet={styledComponentsStyleSheet.instance}
+      enableVendorPrefixes
+    >
       {children}
     </StyleSheetManager>
   );

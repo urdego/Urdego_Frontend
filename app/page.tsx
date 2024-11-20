@@ -1,3 +1,8 @@
-export default function Home() {
-  return <div>홈페이지</div>;
-}
+const onBoarding = () => {
+  return (
+    <div>
+      <h1>OnBoarding</h1>
+    </div>
+  );
+};
+export default onBoarding;
