@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const InputWrapper = styled.div`
-  margin: 2rem 0;
+  padding-bottom: 32px;
   flex-grow: 1;
 `;
 
