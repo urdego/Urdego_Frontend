@@ -9,4 +9,5 @@ export const Title = styled.div`
   font-weight: 400;
   text-align: center;
   line-height: 150%;
+  margin-bottom: 8px;
 `;
