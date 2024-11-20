@@ -1,4 +1,4 @@
-import Input from "@/components/Input/Input";
+import Input from "@/components/Common/Input/Input";
 import DuplicateCheckButton from "./DuplicateCheckButton";
 import { NickNameWrapper } from "./NickNameInput.styles";
 

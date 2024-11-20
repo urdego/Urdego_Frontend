@@ -1,8 +1,8 @@
 "use client";
 
-import Input from "@/components/Input/Input";
+import NickNameInput from "@/components/Signup/NickNameInput";
+import Input from "@/components/Common/Input/Input";
 import { SignupWrapper, Title } from "./Signup.styles";
-import NickNameInput from "./components/NickNameInput";
 import { useState } from "react";
 
 const Signup = () => {

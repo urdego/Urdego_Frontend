@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Input from "../../../components/Input/Input"; // 수정된 부분
+import Input from "@/components/Common/Input/Input";
 
 const meta = {
-  title: "Common/Input/Input",
+  title: "Common/Input",
   component: Input,
   tags: ["autodocs"],
 } satisfies Meta<typeof Input>;

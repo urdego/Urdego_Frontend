@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import NickNameInput from "@/app/signup/components/NickNameInput";
+import NickNameInput from "@/components/Signup/NickNameInput";
 
 const meta = {
-  title: "Common/Input/NickNameInput",
+  title: "Signup/NickNameInput",
   component: NickNameInput,
   tags: ["autodocs"],
 } satisfies Meta<typeof NickNameInput>;
