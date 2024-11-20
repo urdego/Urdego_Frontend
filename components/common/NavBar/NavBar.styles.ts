@@ -31,20 +31,17 @@ export const NavBarText = styled.div`
   text-align: center;
   font-size: 12px;
   color: #4d4d4d;
-  transition: color 0.3s ease;
 `;
 
 export const NavItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 12px 0px 14px 0px;
+  gap: 4px;
   flex: 1;
 
   &:hover ${IconPlaceholder} {
     background-color: #e0e0e0;
-  }
-
-  &:hover ${NavBarText} {
-    color: #e0e0e0;
   }
 `;

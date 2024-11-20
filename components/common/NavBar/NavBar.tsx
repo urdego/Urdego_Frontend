@@ -1,31 +1,44 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
-import { Nav, NavItem, IconPlaceholder, NavBarText } from "./NavBar.styles";
+import { Nav, NavItem, NavBarText } from "./NavBar.styles";
+import {
+  HomeIcon,
+  HomeColorIcon,
+  MapIcon,
+  MapColorIcon,
+  StarIcon,
+  StarColorIcon,
+  MypageIcon,
+  MypageColorIcon,
+} from "./NavIcon";
 
 const NavBar = () => {
+  const [selected, setSelected] = useState<string>("home");
+
   return (
     <Nav>
-      <Link href="/home">
-        <NavItem>
-          <IconPlaceholder />
+      <Link href="/home" passHref>
+        <NavItem onClick={() => setSelected("home")}>
+          {selected === "home" ? <HomeColorIcon /> : <HomeIcon />}
           <NavBarText>홈</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/placeRegister">
-        <NavItem>
-          <IconPlaceholder />
+      <Link href="/placeRegister" passHref>
+        <NavItem onClick={() => setSelected("placeRegister")}>
+          {selected === "placeRegister" ? <MapColorIcon /> : <MapIcon />}
           <NavBarText>장소등록</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/rank">
-        <NavItem>
-          <IconPlaceholder />
+      <Link href="/rank" passHref>
+        <NavItem onClick={() => setSelected("rank")}>
+          {selected === "rank" ? <StarColorIcon /> : <StarIcon />}
           <NavBarText>랭킹</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/myPage">
-        <NavItem>
-          <IconPlaceholder />
+      <Link href="/myPage" passHref>
+        <NavItem onClick={() => setSelected("myPage")}>
+          {selected === "myPage" ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>
         </NavItem>
       </Link>
