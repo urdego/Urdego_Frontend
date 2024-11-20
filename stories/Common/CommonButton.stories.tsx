@@ -3,7 +3,7 @@ import PlusIcon from "../../styles/Icon/Plus.svg";
 import { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "Common/Button/CommonButton",
+  title: "Common/CommonButton",
   component: Button,
   argTypes: {
     buttonType: {
