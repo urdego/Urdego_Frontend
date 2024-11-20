@@ -1,7 +1,7 @@
 "use client";
 
 import Input from "@/components/Input/Input";
-import { SignupWrapper } from "./Signup.styles";
+import { SignupWrapper, Title } from "./Signup.styles";
 import NickNameInput from "./components/NickNameInput";
 import { useState } from "react";
 
@@ -13,6 +13,11 @@ const Signup = () => {
 
   return (
     <SignupWrapper>
+      <Title>
+        어데고?!에서 사용할
+        <br />
+        닉네임, 아이디, 비밀번호를 입력해주세요.
+      </Title>
       <NickNameInput />
       <Input
         title="아이디"

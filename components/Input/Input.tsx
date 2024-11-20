@@ -28,7 +28,7 @@ const Input = ({
       <ContentWrapper>
         <ContentInput placeholder={placeholder} />
         {isButton && (
-          <Button isHiddenPassword={isHiddenPassword} onClick={handleClick} />
+          <Button $isHiddenPassword={isHiddenPassword} onClick={handleClick} />
         )}
       </ContentWrapper>
       <Hr />
