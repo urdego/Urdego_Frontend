@@ -1,8 +1,8 @@
-import NavBar from "@/components/common/NavBar/NavBar";
-export default function Home() {
+const onBoarding = () => {
   return (
     <div>
-      <NavBar />
+      <h1>OnBoarding</h1>
     </div>
   );
-}
+};
+export default onBoarding;
