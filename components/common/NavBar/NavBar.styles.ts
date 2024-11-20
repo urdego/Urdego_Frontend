@@ -6,12 +6,12 @@ export const Nav = styled.nav`
   left: 50%;
   display: flex;
   transform: translateX(-50%);
-  width: 375px;
+  width: 100%;
+  min-width: 340px;
+  max-width: 430px;
   height: 100px;
-  padding: 0px 8px 20px 8px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-start;
-  gap: 8px;
   background-color: #f8f9fa;
 `;
 
