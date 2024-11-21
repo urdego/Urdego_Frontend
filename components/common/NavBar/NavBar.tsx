@@ -36,7 +36,7 @@ const NavBar = () => {
           <NavBarText>랭킹</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/myPage" passHref>
+      <Link href="/mypage" passHref>
         <NavItem onClick={() => setSelected("myPage")}>
           {selected === "myPage" ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>

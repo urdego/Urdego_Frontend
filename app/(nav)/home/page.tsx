@@ -1,8 +1,11 @@
+import TopBar from "@/components/Common/TopBar/TopBar";
+
 const Home = () => {
   return (
-    <div>
+    <>
+      <TopBar NavType="main"/>
       <h1>Home</h1>
-    </div>
+    </>
   );
 };
 
