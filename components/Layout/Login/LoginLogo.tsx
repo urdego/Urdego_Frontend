@@ -1,4 +1,4 @@
-import { LogoWrapper, LogoImage } from './LoginLogo.styles';
+import { LogoWrapper, LogoImage } from '@layout/Login/LoginLogo.styles';
 
 interface LoginLogoProps {
   src?: string;

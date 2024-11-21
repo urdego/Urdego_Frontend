@@ -1,4 +1,4 @@
-import { Button } from "./DuplicateCheckButton.styles";
+import { Button } from '@layout/Signup/DuplicateCheckButton.styles';
 
 interface DuplicateCheckButtonProps {
   handleClick: () => void;
