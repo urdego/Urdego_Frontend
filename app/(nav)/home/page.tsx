@@ -1,8 +1,8 @@
 'use client';
 
 import RoomButton from '@/components/Common/RoomButton/RoomButton';
-import Channel from '@/components/Layout/Home/ChannelButton/ChannelButton';
-import Loaction from '@/components/Layout/Home/LocationButton/LocationButton';
+import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
+import LoactionButton from '@/components/Layout/Home/LocationButton/LocationButton';
 
 const Home = () => {
   return (
@@ -14,9 +14,9 @@ const Home = () => {
         groupMemberCount={3}
         maxMemberCount={8}
       />
-      <Loaction title="올린 장소" count={999} />
-      <Channel title="게임1" />
-      <Channel title="게임2" />
+      <LoactionButton title="올린 장소" count={999} />
+      <ChannelButton title="그룹 게임" />
+      <ChannelButton title="랭킹 게임" />
     </div>
   );
 };

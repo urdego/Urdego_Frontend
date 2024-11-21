@@ -1,9 +1,11 @@
 import {
+  PersonBox,
+  RoomBottomContainer,
   RoomButtonLayout,
   RoomButtonWrapper,
-  RoomCount,
   RoomPerson,
   RoomTitle,
+  RoomTopContainer,
 } from './RoomButton.styles';
 import { PersonIcon } from './RoomButtonIcon';
 
@@ -23,18 +25,18 @@ const RoomButton = ({
   return (
     <RoomButtonWrapper>
       <RoomButtonLayout>
-        <div>
+        <RoomTopContainer>
           <RoomTitle>{title}</RoomTitle>
           <RoomPerson>
             <PersonIcon />
-            <div>
+            <PersonBox>
               {hostUser}외 {groupMemberCount - 1}명
-            </div>
+            </PersonBox>
           </RoomPerson>
-        </div>
-        <RoomCount>
+        </RoomTopContainer>
+        <RoomBottomContainer>
           ({groupMemberCount}/{maxMemberCount})
-        </RoomCount>
+        </RoomBottomContainer>
       </RoomButtonLayout>
     </RoomButtonWrapper>
   );

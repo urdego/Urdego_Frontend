@@ -34,8 +34,12 @@ export const RoomPerson = styled.div`
   font-weight: 400;
 `;
 
-export const RoomCount = styled.div`
+export const RoomTopContainer = styled.div``;
+
+export const RoomBottomContainer = styled.div`
   color: #fdf8ff;
   font-size: 12px;
   font-weight: 700;
 `;
+
+export const PersonBox = styled.div``;

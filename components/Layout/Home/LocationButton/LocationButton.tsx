@@ -6,7 +6,7 @@ interface LocationProps {
   count: number;
 }
 
-const Loaction = ({ title, count }: LocationProps) => {
+const LoactionButton = ({ title, count }: LocationProps) => {
   return (
     <LocationWrapper>
       <LocationText>
@@ -18,4 +18,4 @@ const Loaction = ({ title, count }: LocationProps) => {
   );
 };
 
-export default Loaction;
+export default LoactionButton;
