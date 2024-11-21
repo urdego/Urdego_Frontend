@@ -5,6 +5,7 @@ export const LocationWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   background: #909191;
   border-radius: 4px;
 `;

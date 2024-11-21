@@ -9,7 +9,7 @@ const Home = () => {
       <h1>Home</h1>
       <Loaction title="올린 장소" count={999} />
       <Channel title="게임1" />
-      <Channel title="게임2" height="short" background="gray" />
+      <Channel title="게임2" height="short" />
     </div>
   );
 };

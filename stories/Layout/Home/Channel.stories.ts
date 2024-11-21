@@ -14,7 +14,6 @@ export const LongChannel: Story = {
   args: {
     title: '게임1',
     height: 'long',
-    background: 'black',
   },
 };
 
@@ -22,6 +21,5 @@ export const ShortChannel: Story = {
   args: {
     title: '게임2',
     height: 'short',
-    background: 'gray',
   },
 };
