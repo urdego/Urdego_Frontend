@@ -1,6 +1,5 @@
-// NavBar.stories.tsx
 import { Meta, StoryObj } from "@storybook/react";
-import NavBar from "@/components/common/NavBar/NavBar";
+import NavBar from "@/components/Common/NavBar/NavBar";
 
 const meta = {
   title: "Common/NavBar",

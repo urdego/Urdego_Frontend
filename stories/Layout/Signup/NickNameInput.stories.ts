@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import NickNameInput from "@/components/Signup/NickNameInput";
+import NickNameInput from "@/components/Layout/Signup/NickNameInput";
 
 const meta = {
   title: "Signup/NickNameInput",
