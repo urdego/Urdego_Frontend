@@ -1,8 +1,8 @@
-import StyledComponentsRegistry from "@/lib/registry";
-import { ReactNode } from "react";
-import { metadata } from "./metadata";
-import Container from "@/styles/Container";
-import GlobalStyle from "@/styles/GlobalStyle";
+import StyledComponentsRegistry from '@/lib/registry';
+import { ReactNode } from 'react';
+import { metadata } from '@/app/metadata';
+import Container from '@/styles/Container';
+import GlobalStyle from '@/styles/GlobalStyle';
 
 export { metadata };
 

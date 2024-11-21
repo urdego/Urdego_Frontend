@@ -1,19 +1,19 @@
-import { StyledButton, IconWrapper } from "./Button.styles";
-import { StaticImageData } from "next/image";
+import { StyledButton, IconWrapper } from '@common/Button/Button.styles';
+import { StaticImageData } from 'next/image';
 
 interface ButtonProps {
-  buttonType?: "fill" | "outline";
-  buttonSize?: "small" | "large";
-  buttonHeight?: "default" | "short";
+  buttonType?: 'fill' | 'outline';
+  buttonSize?: 'small' | 'large';
+  buttonHeight?: 'default' | 'short';
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
 }
 
 const Button = ({
-  buttonType = "fill",
-  buttonSize = "large",
-  buttonHeight = "default",
+  buttonType = 'fill',
+  buttonSize = 'large',
+  buttonHeight = 'default',
   label,
   icon,
   onClick,
@@ -27,7 +27,7 @@ const Button = ({
     >
       {icon && (
         <IconWrapper>
-          {typeof icon === "string" ? (
+          {typeof icon === 'string' ? (
             <img src={icon} alt="" />
           ) : (
             <img src={icon.src} alt="" />

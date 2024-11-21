@@ -1,10 +1,10 @@
-import Input from "@/components/Common/Input/Input";
-import DuplicateCheckButton from "./DuplicateCheckButton";
-import { NickNameWrapper } from "./NickNameInput.styles";
+import Input from '@/components/Common/Input/Input';
+import DuplicateCheckButton from '@layout/Signup/DuplicateCheckButton';
+import { NickNameWrapper } from '@layout/Signup/NickNameInput.styles';
 
 const NickNameInput = () => {
   const handleClick = () => {
-    alert("중복확인");
+    alert('중복확인');
   };
   return (
     <NickNameWrapper>
