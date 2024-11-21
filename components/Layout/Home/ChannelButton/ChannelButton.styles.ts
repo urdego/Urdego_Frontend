@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ChannelProps {
-  $height?: 'long' | 'short';
+  $title?: '게임1' | '게임2';
 }
 
 export const ChannelWrapper = styled.div<ChannelProps>`
@@ -10,8 +10,8 @@ export const ChannelWrapper = styled.div<ChannelProps>`
   justify-content: space-between;
   align-items: start;
   width: 21.5rem;
-  height: ${({ $height }) => ($height === 'long' ? '8.75rem' : 'auto')};
-  background: ${({ $height }) => ($height === 'long' ? '#2F3131' : '#767777')};
+  height: ${({ $title }) => ($title === '게임1' ? '8.75rem' : 'auto')};
+  background: ${({ $title }) => ($title === '게임1' ? '#2F3131' : '#767777')};
   border-radius: 12px;
   padding: 1.25rem;
 `;

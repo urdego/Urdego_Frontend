@@ -9,16 +9,16 @@ import { PersonIcon } from './RoomButtonIcon';
 
 interface RoomButtonProps {
   title: string;
-  userName: string;
-  currCount: number;
-  totalCount: number;
+  hostUser: string;
+  groupMemberCount: number;
+  maxMemberCount: number;
 }
 
 const RoomButton = ({
   title,
-  userName,
-  currCount,
-  totalCount,
+  hostUser,
+  groupMemberCount,
+  maxMemberCount,
 }: RoomButtonProps) => {
   return (
     <RoomButtonWrapper>
@@ -27,11 +27,13 @@ const RoomButton = ({
           <RoomTitle>{title}</RoomTitle>
           <RoomPerson>
             <PersonIcon />
-            <div>{userName}</div>
+            <div>
+              {hostUser}외 {groupMemberCount - 1}명
+            </div>
           </RoomPerson>
         </div>
         <RoomCount>
-          ({currCount}/{totalCount})
+          ({groupMemberCount}/{maxMemberCount})
         </RoomCount>
       </RoomButtonLayout>
     </RoomButtonWrapper>

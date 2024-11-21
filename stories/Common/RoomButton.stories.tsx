@@ -13,8 +13,8 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     title: '방제목',
-    userName: '유저명',
-    currCount: 0,
-    totalCount: 0,
+    hostUser: '유저명',
+    groupMemberCount: 3,
+    maxMemberCount: 8,
   },
 };

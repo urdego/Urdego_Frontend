@@ -13,13 +13,11 @@ type Story = StoryObj<typeof meta>;
 export const LongChannel: Story = {
   args: {
     title: '게임1',
-    height: 'long',
   },
 };
 
 export const ShortChannel: Story = {
   args: {
     title: '게임2',
-    height: 'short',
   },
 };

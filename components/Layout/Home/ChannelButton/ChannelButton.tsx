@@ -2,15 +2,14 @@ import { EntranceIcon, LockIcon } from './ChannelButtonIcon';
 import { ChannelWrapper, ChannelTitle } from './ChannelButton.styles';
 
 interface ChannelProps {
-  title: string;
-  height?: 'long' | 'short';
+  title: '게임1' | '게임2';
 }
 
-const Channel = ({ title, height = 'long' }: ChannelProps) => {
+const Channel = ({ title }: ChannelProps) => {
   return (
-    <ChannelWrapper $height={height}>
+    <ChannelWrapper $title={title}>
       <ChannelTitle>{title}</ChannelTitle>
-      {height === 'long' ? <EntranceIcon /> : <LockIcon />}
+      {title === '게임1' ? <EntranceIcon /> : <LockIcon />}
     </ChannelWrapper>
   );
 };
