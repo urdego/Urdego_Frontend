@@ -6,7 +6,7 @@ interface StyledTopBarProps {
 
 export const Nav = styled.nav<StyledTopBarProps>`
   position: fixed;
-  top: 0;
+  top:44px;
   left: 50%;
   transform: translateX(-50%);
   width: 375px;
@@ -36,13 +36,16 @@ export const BackIconWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const RightIconsWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
+
 
 export const Label = styled.div`
   flex: 1;
