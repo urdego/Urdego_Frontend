@@ -1,5 +1,5 @@
-"use client";
-import { createGlobalStyle } from "styled-components";
+'use client';
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Pretendard", sans-serif;
     background-color: #e0e0e0;
     color: #ffffff;
-    
+    box-sizing: border-box;
   }
 
   html, body, #__next {
