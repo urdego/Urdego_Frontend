@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onTabClick: (tab) => {
+    handleTabClick: (tab) => {
       console.log(`Selected tab: ${tab}`);
     },
   },
