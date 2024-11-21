@@ -1,7 +1,7 @@
 'use client';
 
-import Channel from '@/components/Layout/Home/Channel/Channel';
-import Loaction from '@/components/Layout/Home/Location/Location';
+import Channel from '@/components/Layout/Home/ChannelButton/ChannelButton';
+import Loaction from '@/components/Layout/Home/LocationButton/LocationButton';
 
 const Home = () => {
   return (

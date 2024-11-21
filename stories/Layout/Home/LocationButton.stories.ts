@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Loaction from '@/components/Layout/Home/Location/Location';
+import Loaction from '@/components/Layout/Home/LocationButton/LocationButton';
 
 const meta = {
-  title: 'Layout/Home/Loaction',
+  title: 'Layout/Home/LoactionButton',
   component: Loaction,
   tags: ['autodocs'],
 } satisfies Meta<typeof Loaction>;

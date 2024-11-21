@@ -1,5 +1,5 @@
-import { LocationWrapper, LocationText } from './Location.styles';
-import { ArrowRightSmallIcon } from './LocationIcon';
+import { LocationWrapper, LocationText } from './LocationButton.styles';
+import { ArrowRightSmallIcon } from './LocationButtonIcon';
 
 interface LocationProps {
   title: string;

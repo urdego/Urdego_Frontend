@@ -1,5 +1,5 @@
-import { EntranceIcon, LockIcon } from './ChannelIcon';
-import { ChannelWrapper, ChannelTitle } from './Channerl.styles';
+import { EntranceIcon, LockIcon } from './ChannelButtonIcon';
+import { ChannelWrapper, ChannelTitle } from './ChannelButton.styles';
 
 interface ChannelProps {
   title: string;

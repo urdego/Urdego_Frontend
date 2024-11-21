@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Channel from '@/components/Layout/Home/Channel/Channel';
+import Channel from '@/components/Layout/Home/ChannelButton/ChannelButton';
 
 const meta = {
-  title: 'Layout/Home/Channel',
+  title: 'Layout/Home/ChannelButton',
   component: Channel,
   tags: ['autodocs'],
 } satisfies Meta<typeof Channel>;
