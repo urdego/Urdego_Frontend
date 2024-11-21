@@ -1,4 +1,4 @@
-import Button from "../../components/Aommon/Button/Button";
+import Button from "../../components/Common/Button/Button";
 import PlusIcon from "../../styles/Icon/Plus.svg";
 import { Meta, StoryObj } from "@storybook/react";
 

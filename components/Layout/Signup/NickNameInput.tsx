@@ -1,4 +1,4 @@
-import Input from '@/components/Aommon/Input/Input';
+import Input from '@/components/Common/Input/Input';
 import DuplicateCheckButton from '@layout/Signup/DuplicateCheckButton';
 import { NickNameWrapper } from '@layout/Signup/NickNameInput.styles';
 

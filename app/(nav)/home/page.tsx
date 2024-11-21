@@ -1,5 +1,5 @@
 "use client"
-import TopBar from "@/components/Aommon/TopBar/TopBar";
+import TopBar from "@/components/Common/TopBar/TopBar";
 import { MainBanner } from "@/components/Layout/MainBanner/MainBanner";
 const Home = () => {
   return (

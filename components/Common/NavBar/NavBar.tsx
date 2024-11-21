@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Nav, NavItem, NavBarText } from '@/components/Aommon/NavBar/NavBar.styles';
+import { Nav, NavItem, NavBarText } from '@/components/Common/NavBar/NavBar.styles';
 import {
   HomeIcon,
   HomeColorIcon,
@@ -11,7 +11,7 @@ import {
   StarColorIcon,
   MypageIcon,
   MypageColorIcon,
-} from '@/components/Aommon/NavBar/NavIcon';
+} from '@/components/Common/NavBar/NavIcon';
 
 const NavBar = () => {
   const [selected, setSelected] = useState<string>('home');
