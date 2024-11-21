@@ -18,7 +18,7 @@ export const ChannelWrapper = styled.div<ChannelProps>`
   padding: 1.25rem;
 `;
 
-export const Title = styled.div`
+export const ChannelTitle = styled.div`
   font-size: 30px;
   font-weight: 700;
   line-height: 150%;

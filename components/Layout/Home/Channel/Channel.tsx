@@ -1,5 +1,5 @@
 import { EntranceIcon, LockIcon } from './ChannelIcon';
-import { ChannelWrapper, Title } from './Channerl.styles';
+import { ChannelWrapper, ChannelTitle } from './Channerl.styles';
 
 interface ChannelProps {
   title: string;
@@ -14,7 +14,7 @@ const Channel = ({
 }: ChannelProps) => {
   return (
     <ChannelWrapper $height={height} $background={background}>
-      <Title>{title}</Title>
+      <ChannelTitle>{title}</ChannelTitle>
       {height === 'long' ? <EntranceIcon /> : <LockIcon />}
     </ChannelWrapper>
   );
