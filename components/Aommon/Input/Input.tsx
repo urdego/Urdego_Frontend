@@ -5,7 +5,7 @@ import {
   ContentWrapper,
   Hr,
   InputWrapper,
-} from "./Input.styles";
+} from '@/components/Aommon/Input/Input.styles';
 
 interface InputProps {
   title: string;
