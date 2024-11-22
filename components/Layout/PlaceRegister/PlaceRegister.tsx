@@ -1,12 +1,28 @@
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
-import { PlaceRegisterWrapper } from './PlaceRegister.styles';
+import {
+  PlaceRegistertext,
+  PlaceRegisterWrapper,
+} from './PlaceRegister.styles';
+import PlaceSearchButton from './PlaceSearchButton';
 
-const PlaceRegister = () => {
+interface PlaceRegisterProps {
+  title: string;
+  currCount: number;
+  totalCount: number;
+}
+
+const PlaceRegister = ({
+  title,
+  currCount,
+  totalCount,
+}: PlaceRegisterProps) => {
   return (
     <PlaceRegisterWrapper>
-      <ImageUpload currCount={0} totalCount={3} />
+      <PlaceRegistertext>{title}</PlaceRegistertext>
+      <ImageUpload currCount={currCount} totalCount={totalCount} />
       <PlaceInput placeholder="장소명" />
+      <PlaceSearchButton />
       <PlaceInput placeholder="(선택) 힌트를 작성해주세요" />
     </PlaceRegisterWrapper>
   );

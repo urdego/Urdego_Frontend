@@ -8,7 +8,7 @@ const PlaceRegisterPage = () => {
   return (
     <PlaceRegisterWrapper>
       <TopBar NavType="default" label="장소 등록하기" />
-      <PlaceRegister />
+      <PlaceRegister title="장소1" currCount={0} totalCount={3} />
     </PlaceRegisterWrapper>
   );
 };
