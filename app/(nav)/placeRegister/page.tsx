@@ -8,7 +8,6 @@ const PlaceRegisterPage = () => {
   return (
     <PlaceRegisterWrapper>
       <TopBar NavType="default" label="장소 등록하기" />
-      {/* <h1>Place Register</h1> */}
       <PlaceRegister />
     </PlaceRegisterWrapper>
   );
