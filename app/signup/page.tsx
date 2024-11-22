@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import NickNameInput from "@/components/Layout/Signup/NickNameInput";
-import Input from "@/components/Common/Input/Input";
-import { SignupWrapper, Title } from "./Signup.styles";
-import { useState } from "react";
+import NickNameInput from '@/components/Layout/Signup/NickNameInput';
+import Input from '@/components/Common/Input/Input';
+import { SignupWrapper, Title } from './Signup.styles';
+import { useState } from 'react';
 
 const Signup = () => {
   const [isHiddenPassword, setIsHiddenPassword] = useState({
@@ -11,7 +11,7 @@ const Signup = () => {
     copy: true,
   });
 
-  const handleClick = (type: "origin" | "copy") => {
+  const handleClick = (type: 'origin' | 'copy') => {
     setIsHiddenPassword((prev) => ({
       ...prev,
       [type]: !prev[type],
@@ -32,14 +32,14 @@ const Signup = () => {
         placeholder="비밀번호를 입력해주세요"
         isButton={true}
         isHiddenPassword={isHiddenPassword.origin}
-        handleClick={() => handleClick("origin")}
+        handleClick={() => handleClick('origin')}
       />
       <Input
         title="비밀번호 확인"
         placeholder="비밀번호를 재입력해주세요"
         isButton={true}
         isHiddenPassword={isHiddenPassword.copy}
-        handleClick={() => handleClick("copy")}
+        handleClick={() => handleClick('copy')}
       />
     </SignupWrapper>
   );
