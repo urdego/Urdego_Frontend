@@ -1,4 +1,4 @@
-import { StyledButton, IconWrapper } from '@common/Button/Button.styles';
+import { StyledButton, IconWrapper } from '@/components/Common/Button/Button.styles';
 import { StaticImageData } from 'next/image';
 
 interface ButtonProps {

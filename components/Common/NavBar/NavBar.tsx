@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Nav, NavItem, NavBarText } from '@common/NavBar/NavBar.styles';
+import { Nav, NavItem, NavBarText } from '@/components/Common/NavBar/NavBar.styles';
 import {
   HomeIcon,
   HomeColorIcon,
@@ -11,7 +11,7 @@ import {
   StarColorIcon,
   MypageIcon,
   MypageColorIcon,
-} from '@common/NavBar/NavIcon';
+} from '@/components/Common/NavBar/NavIcon';
 
 const NavBar = () => {
   const [selected, setSelected] = useState<string>('home');
@@ -36,9 +36,9 @@ const NavBar = () => {
           <NavBarText>랭킹</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/myPage" passHref>
+      <Link href="/mypage" passHref>
         <NavItem onClick={() => setSelected('myPage')}>
-          {selected === 'myPage' ? <MypageColorIcon /> : <MypageIcon />}
+          {selected === 'mypage' ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>
         </NavItem>
       </Link>

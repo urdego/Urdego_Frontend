@@ -1,8 +1,11 @@
+import TopBar from "@/components/Common/TopBar/TopBar";
+
 const Rank = () => {
   return (
-    <div>
+    <>
+      <TopBar NavType="other" label="랭킹"></TopBar>
       <h1>Rank</h1>
-    </div>
+    </>
   );
 };
 export default Rank;
