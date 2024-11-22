@@ -1,9 +1,10 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
+import colors from '@styles/color/palette';
 
 interface StyledButtonProps {
-  $buttonType: "fill" | "outline";
-  $buttonSize: "small" | "large";
-  $buttonHeight: "default" | "short";
+  $buttonType: 'purple' | 'gray';
+  $buttonSize: 'small' | 'large';
+  $buttonHeight: 'default' | 'short';
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -14,9 +15,9 @@ export const StyledButton = styled.button<StyledButtonProps>`
   user-select: none;
 
   ${({ $buttonType }) =>
-    $buttonType === "fill"
+    $buttonType === 'purple'
       ? css`
-          background-color: black;
+          background-color: ${colors.purple[50]};
           color: white;
           border: none;
           &:hover {
@@ -24,27 +25,27 @@ export const StyledButton = styled.button<StyledButtonProps>`
           }
         `
       : css`
-          background-color: white;
-          color: black;
-          border: 1px solid black;
+          background-color: ${colors.gray[70]};
+          color: ${colors.etc.white};
+          border: none;
           &:hover {
             opacity: 0.8;
           }
         `}
 
   ${({ $buttonSize }) =>
-    $buttonSize === "small"
+    $buttonSize === 'small'
       ? css`
           width: 166px;
           font-size: 16px;
         `
       : css`
-          width: 345px;
+          width: 100%;
           font-size: 16px;
         `}
 
     ${({ $buttonHeight }) =>
-    $buttonHeight === "default"
+    $buttonHeight === 'default'
       ? css`
           height: 48px;
         `

@@ -1,8 +1,11 @@
-import { StyledButton, IconWrapper } from '@/components/Common/Button/Button.styles';
+import {
+  StyledButton,
+  IconWrapper,
+} from '@/components/Common/Button/Button.styles';
 import { StaticImageData } from 'next/image';
 
 interface ButtonProps {
-  buttonType?: 'fill' | 'outline';
+  buttonType?: 'purple' | 'gray';
   buttonSize?: 'small' | 'large';
   buttonHeight?: 'default' | 'short';
   label: string;
@@ -11,7 +14,7 @@ interface ButtonProps {
 }
 
 const Button = ({
-  buttonType = 'fill',
+  buttonType = 'purple',
   buttonSize = 'large',
   buttonHeight = 'default',
   label,
