@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
-  width: 100%;
+  min-height: calc(var(--vh, 1vh) * 100);
   min-width: 340px;
   max-width: 430px;
   max-height: 812px; /* 고정된 화면 높이 */
