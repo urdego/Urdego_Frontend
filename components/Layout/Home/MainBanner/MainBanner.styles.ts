@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const BannerWrapper = styled.div`
-  position: absolute;
+  position: relative;
   top: 0;
-  width: 430px;
-  left: 50%;
-  transform: translateX(-50%);
+  width: calc(100% + 46px);
+  left: 0;
+  transform: translateX(-23px);
   display: flex;
   justify-content: center;
   align-items: center;
