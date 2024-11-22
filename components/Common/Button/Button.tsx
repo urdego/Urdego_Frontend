@@ -8,6 +8,7 @@ interface ButtonProps {
   buttonType?: 'purple' | 'gray';
   buttonSize?: 'small' | 'large';
   buttonHeight?: 'default' | 'short';
+  styleType?: 'whiteBackground' | 'coloredBackground';
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
@@ -17,6 +18,7 @@ const Button = ({
   buttonType = 'purple',
   buttonSize = 'large',
   buttonHeight = 'default',
+  styleType = 'coloredBackground',
   label,
   icon,
   onClick,
@@ -26,6 +28,7 @@ const Button = ({
       $buttonType={buttonType}
       $buttonSize={buttonSize}
       $buttonHeight={buttonHeight}
+      $styleType={styleType}
       onClick={onClick}
     >
       {icon && (
