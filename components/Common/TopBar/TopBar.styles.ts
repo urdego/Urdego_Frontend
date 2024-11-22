@@ -5,8 +5,7 @@ interface StyledTopBarProps {
 }
 
 export const Nav = styled.nav<StyledTopBarProps>`
-  position: fixed;
-  top:44px;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   width: 375px;
@@ -14,7 +13,7 @@ export const Nav = styled.nav<StyledTopBarProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding-top:80px;
   z-index: 100;
 
   ${({ $NavType }) =>

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const LocationWrapper = styled.div`
-  width: 7.938rem;
+  width: 127px;
+  line-height: 150%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
