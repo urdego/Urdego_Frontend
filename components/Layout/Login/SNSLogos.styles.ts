@@ -15,13 +15,11 @@ export const SocialButton = styled.button`
   cursor: pointer;
   background: transparent;
   transition: transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     transform: scale(1.1);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
   }
 `;
