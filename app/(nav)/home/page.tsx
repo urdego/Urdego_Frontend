@@ -3,15 +3,15 @@ import Link from 'next/link';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
-import { HomeTitle,ChannelWrapper, } from './Home.styles';
+import { HomeTitle,ChannelWrapper} from './Home.styles';
 
 const Home = () => {
   return (
-    <div>
+    <>
       <TopBar NavType="main" />
       <MainBanner />
-      <ChannelWrapper>
       <HomeTitle>게임채널</HomeTitle>
+      <ChannelWrapper>
         <Link href="/groupList">
           <ChannelButton title="그룹 게임" />
         </Link>
@@ -25,7 +25,7 @@ const Home = () => {
           maxMemberCount={8}
         />
       </HomeWrapper> */}
-    </div>
+    </>
   );
 };
 
