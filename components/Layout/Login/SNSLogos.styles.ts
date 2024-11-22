@@ -5,7 +5,6 @@ export const SocialLoginWrapper = styled.div`
   gap: 43px;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 `;
 
 export const SocialButton = styled.button`
