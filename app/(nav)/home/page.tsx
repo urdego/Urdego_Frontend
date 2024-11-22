@@ -3,7 +3,7 @@ import Link from 'next/link';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
-import { HomeTitle,ChannelWrapper } from './Home.styles';
+import { HomeTitle,ChannelWrapper} from './Home.styles';
 
 const Home = () => {
   return (
