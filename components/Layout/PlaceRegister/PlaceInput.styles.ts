@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export const PlaceInputWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-grow: 1;
   border-radius: 4px;
   border: 1px solid #aaabab;
@@ -16,12 +17,12 @@ export const ContentInput = styled.input`
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
-  color:${colors.etc.black}
+
+  &:focus {
+    color: ${colors.etc.black};
+  }
 
   &::placeholder {
     color: ${colors.gray[70]};
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 150%;
   }
 `;

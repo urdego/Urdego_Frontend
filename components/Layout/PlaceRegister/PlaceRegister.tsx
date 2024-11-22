@@ -4,6 +4,7 @@ import {
   PlaceRegistertext,
   PlaceRegisterWrapper,
 } from './PlaceRegister.styles';
+import { TrashIcon } from './PlaceRegisterIcon';
 import PlaceSearchButton from './PlaceSearchButton';
 
 interface PlaceRegisterProps {
@@ -19,7 +20,10 @@ const PlaceRegister = ({
 }: PlaceRegisterProps) => {
   return (
     <PlaceRegisterWrapper>
-      <PlaceRegistertext>{title}</PlaceRegistertext>
+      <PlaceRegistertext>
+        <div>{title}</div>
+        <TrashIcon />
+      </PlaceRegistertext>
       <ImageUpload currCount={currCount} totalCount={totalCount} />
       <PlaceInput placeholder="장소명" />
       <PlaceSearchButton />
