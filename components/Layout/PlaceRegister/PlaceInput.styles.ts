@@ -26,3 +26,7 @@ export const ContentInput = styled.input`
     color: ${colors.gray[70]};
   }
 `;
+
+export const ContentResetButton = styled.div`
+  cursor: pointer;
+`;
