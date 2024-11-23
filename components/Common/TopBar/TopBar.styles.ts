@@ -29,6 +29,7 @@ export const Nav = styled.nav<StyledTopBarProps>`
       : css`
           background-color: #F4EEFF;
           justify-content: flex-end;
+          padding-right: 16px;
         `}
 `;
 
