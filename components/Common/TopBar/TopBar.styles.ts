@@ -40,6 +40,11 @@ export const Nav = styled.nav<StyledTopBarProps>`
 export const BackIconWrapper = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;
 
 export const RightIconsWrapper = styled.div`
