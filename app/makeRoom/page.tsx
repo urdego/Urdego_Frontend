@@ -1,6 +1,6 @@
 "use client";
 import TopBar from "@/components/Common/TopBar/TopBar";
-import { PageWrapper } from "../commonPage.styles"
+import { PageWrapper } from "../(nav)/commonPage.styles"
 
 const MakeRoomPage = () => {
   return (

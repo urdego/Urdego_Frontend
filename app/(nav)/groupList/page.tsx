@@ -1,7 +1,7 @@
 'use client';
 import TopBar from "@/components/Common/TopBar/TopBar";
 import RoomButton from "@/components/Common/RoomButton/RoomButton";
-import { PageWrapper } from "../../commonPage.styles";
+import { PageWrapper } from "../commonPage.styles";
 import { RoomButtonGrid,ListTitle, SubTitle } from './groupList.styles';
 import MakeRoom from "@/components/Common/MakeRoom/MakeRoom";
 
