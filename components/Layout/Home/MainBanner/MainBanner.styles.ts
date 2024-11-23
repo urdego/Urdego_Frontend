@@ -17,7 +17,7 @@ export const BannerWrapper = styled.div`
 export const ButtonWrapper = styled.div`
   position: absolute;
   bottom: 8px;
-  right: 16px;
+  right: 32px;
   display: flex;
   flex-direction: column;
   gap: 8px;

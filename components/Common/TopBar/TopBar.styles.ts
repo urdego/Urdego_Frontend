@@ -5,16 +5,17 @@ interface StyledTopBarProps {
 }
 
 export const Nav = styled.nav<StyledTopBarProps>`
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
-  width: 375px;
+  /* width: 375px; */
+  width: calc(100% + 46px);
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top:80px;
   z-index: 100;
+  top: 44px;
 
   ${({ $NavType }) =>
     $NavType === "default"
@@ -26,7 +27,7 @@ export const Nav = styled.nav<StyledTopBarProps>`
           background-color: white;
         `
       : css`
-          background-color: transparent;
+          background-color: #F4EEFF;
           justify-content: flex-end;
         `}
 `;
@@ -34,17 +35,15 @@ export const Nav = styled.nav<StyledTopBarProps>`
 export const BackIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 10px;
-  cursor: pointer;
+  margin-left: 16px;
 `;
 
 export const RightIconsWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
+  margin-right: 16px;
 `;
-
 
 export const Label = styled.div`
   flex: 1;
