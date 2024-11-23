@@ -3,6 +3,6 @@
 import styled from 'styled-components';
 
 export const LayoutWrapper = styled.div`
-  padding: 40px 16px;
+  padding: 84px 16px;
   width: 100%;
 `;

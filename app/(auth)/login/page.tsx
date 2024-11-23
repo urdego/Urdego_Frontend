@@ -14,29 +14,29 @@ import SocialLogin from '@/components/Layout/Login/SNSLogos';
 
 const Login = () => {
   return (
-    <LoginWrapper>
-      <LoginLogo src="" />
-      <LoginTitle>Where am I?</LoginTitle>
-      <Input title="이메일" placeholder="이메일을 입력해주세요" />
-      <Input
-        title="비밀번호"
-        placeholder="비밀번호를 입력해주세요"
-        isButton
-        isHiddenPassword
-      />
-      <AutoLoginCheckbox />
-      <ButtonSignupWrapper>
-        <Button
-          buttonType="gray"
-          buttonSize="large"
-          buttonHeight="default"
-          styleType="coloredBackground"
-          label="로그인"
+      <LoginWrapper>
+        <LoginLogo src="" />
+        <LoginTitle>Where am I?</LoginTitle>
+        <Input title="이메일" placeholder="이메일을 입력해주세요" />
+        <Input
+          title="비밀번호"
+          placeholder="비밀번호를 입력해주세요"
+          isButton
+          isHiddenPassword
         />
-        <SignupTabs />
-      </ButtonSignupWrapper>
-      <SocialLogin />
-    </LoginWrapper>
+        <AutoLoginCheckbox />
+        <ButtonSignupWrapper>
+          <Button
+            buttonType="gray"
+            buttonSize="large"
+            buttonHeight="default"
+            styleType="coloredBackground"
+            label="로그인"
+          />
+          <SignupTabs />
+        </ButtonSignupWrapper>
+        <SocialLogin />
+      </LoginWrapper>
   );
 };
 
