@@ -10,4 +10,5 @@ export const Title = styled.div`
   text-align: center;
   line-height: 150%;
   margin-bottom: 40px;
+  padding-top:40px
 `;
