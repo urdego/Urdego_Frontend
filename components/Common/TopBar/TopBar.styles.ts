@@ -5,7 +5,7 @@ interface StyledTopBarProps {
 }
 
 export const Nav = styled.nav<StyledTopBarProps>`
-  position: relative;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
   width: 375px;

@@ -9,5 +9,6 @@ export const ChannelWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 80px;
 `;
 

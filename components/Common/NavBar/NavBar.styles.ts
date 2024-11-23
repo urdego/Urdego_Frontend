@@ -12,7 +12,9 @@ export const Nav = styled.nav`
   height: 100px;
   justify-content: space-evenly;
   align-items: flex-start;
-  background-color: #f8f9fa;
+  background-color: #FFF;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+  z-index: 100;
 `;
 
 export const IconPlaceholder = styled.div`
@@ -21,10 +23,10 @@ export const IconPlaceholder = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #4d4d4d; /* 아이콘 자리 표시용 */
   border-radius: 8px;
   margin-bottom: 4px;
   transition: background-color 0.3s ease;
+  
 `;
 
 export const NavBarText = styled.div`
