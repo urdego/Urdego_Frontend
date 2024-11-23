@@ -1,4 +1,4 @@
-'use client'; // 클라이언트 구성 요소로 선언
+'use client';
 
 import styled from 'styled-components';
 
