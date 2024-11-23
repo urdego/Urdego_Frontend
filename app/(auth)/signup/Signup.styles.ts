@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SignupWrapper = styled.div`
-  width: 343px;
+  width: 100%;
 `;
 
 export const Title = styled.div`

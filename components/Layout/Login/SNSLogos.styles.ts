@@ -5,7 +5,6 @@ export const SocialLoginWrapper = styled.div`
   gap: 43px;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 `;
 
 export const SocialButton = styled.button`
@@ -16,13 +15,11 @@ export const SocialButton = styled.button`
   cursor: pointer;
   background: transparent;
   transition: transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     transform: scale(1.1);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
   }
 `;
