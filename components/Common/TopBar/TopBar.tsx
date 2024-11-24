@@ -46,7 +46,7 @@ const TopBar = ({
   };
 
   return (
-    <Nav $NavType={NavType} isMapView={isMapView}>
+    <Nav $NavType={NavType}>
       {NavType === 'game' && (
         <>
           {isMapView &&

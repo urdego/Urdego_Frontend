@@ -7,6 +7,7 @@ import Button from '@/components/Common/Button/Button';
 import ProgressBar from '@/components/Layout/Game/ProgressBar';
 import { PageWrapper, Footer, TimerContainer, TimerText } from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
+import MapComponent from '@/components/Layout/Game/GoogleMap';
 
 const GamePage = ({ params }: { params: { round: string } }) => {
   const router = useRouter(); // useRouter 훅 사용
@@ -14,6 +15,7 @@ const GamePage = ({ params }: { params: { round: string } }) => {
   const [isMapView, setIsMapView] = useState(false); // 지도 화면 여부
   const [timeLeft, setTimeLeft] = useState(20); // 60초 타이머 상태(Test는 20초로 진행)
   const [showBackIcon, setShowBackIcon] = useState(false); // 뒤로가기 아이콘 표시 여부
+  const [maxRounds, setMaxRounds] = useState(3); // 최대 라운드 수(테스트 용 3라운드로 설정)
 
   // 타이머 로직
   useEffect(() => {
@@ -30,7 +32,7 @@ const GamePage = ({ params }: { params: { round: string } }) => {
   }, [currentRound]);
 
   const handleNextRound = () => {
-    if (currentRound < 3) {
+    if (currentRound < maxRounds) {
       const nextRound = currentRound + 1;
 
       // 먼저 setCurrentRound을 처리한 후, 라운드가 바뀐 후에 URL 변경
@@ -59,18 +61,24 @@ const GamePage = ({ params }: { params: { round: string } }) => {
     }
   };
 
-  return (
-    <PageWrapper>
-      <TopBar
-        NavType="game"
-        label={`${currentRound} 라운드`}
-        backIcon={showBackIcon} // 뒤로가기 아이콘 상태 전달
-        alarmIcon={false}
-        friendIcon={false}
-        isMapView={isMapView}
-        onBackClick={handleBackClick}
-      />
+  // isMapView 값이 변경될 때마다 콘솔 출력
+  useEffect(() => {
+    console.log('Show Map clicked! isMapView:', isMapView);
+  }, [isMapView]);
 
+  return (
+    <>
+      <PageWrapper>
+        <TopBar
+          NavType="game"
+          label={`${currentRound} 라운드`}
+          backIcon={showBackIcon} // 뒤로가기 아이콘 상태 전달
+          alarmIcon={false}
+          friendIcon={false}
+          isMapView={isMapView}
+          onBackClick={handleBackClick}
+        />
+      </PageWrapper>
       {/* 타이머와 게이지 */}
       <TimerContainer>
         <TimerText>{timeLeft}초</TimerText>
@@ -78,7 +86,7 @@ const GamePage = ({ params }: { params: { round: string } }) => {
       </TimerContainer>
 
       {/* 이미지 슬라이드 (처음에는 Swiper 컴포넌트로 이미지 띄우기) */}
-      {!isMapView && <SwiperComponent />}
+      {isMapView ? <MapComponent /> : <SwiperComponent />}
 
       {/* 하단 버튼 */}
       <Footer>
@@ -98,7 +106,7 @@ const GamePage = ({ params }: { params: { round: string } }) => {
           />
         )}
       </Footer>
-    </PageWrapper>
+    </>
   );
 };
 
