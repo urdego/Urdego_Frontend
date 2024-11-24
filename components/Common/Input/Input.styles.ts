@@ -35,14 +35,18 @@ export const Hr = styled.div`
   background-color: #909090;
 `;
 
-export const Button = styled.div<{ $isHiddenPassword: boolean | undefined }>`
+export const Button = styled.button`
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
 
-  background-color: ${(props) =>
-    props.$isHiddenPassword ? '#909090' : '#000000'};
-
   &:hover {
-    cursor: pointer;
+    opacity: 0.8;
   }
 `;

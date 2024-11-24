@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   Button,
   ContentInput,
@@ -7,6 +8,8 @@ import {
   InputWrapper,
   InputContainer,
 } from './Input.styles';
+import eyeClose from '@styles/Icon/EyeClose.svg';
+import eyeOpen from '@styles/Icon/EyeOpen.svg';
 
 interface InputProps {
   title: string;
@@ -40,10 +43,14 @@ const Input = ({
             onChange={(e) => onChange?.(e.target.value)}
           />
           {isButton && (
-            <Button
-              $isHiddenPassword={isHiddenPassword}
-              onClick={handleClick}
-            />
+            <Button onClick={handleClick}>
+              <Image
+                src={isHiddenPassword ? eyeClose : eyeOpen}
+                alt={isHiddenPassword ? 'Show password' : 'Hide password'}
+                width={24}
+                height={24}
+              />
+            </Button>
           )}
         </ContentWrapper>
         <Hr />
