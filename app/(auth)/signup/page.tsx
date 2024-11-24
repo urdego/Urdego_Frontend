@@ -6,6 +6,7 @@ import { PageWrapper } from '@/app/commonPage.styles';
 import { SignupWrapper, Title } from './Signup.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
+import Button from '@/components/Common/Button/Button';
 
 const Signup = () => {
   const [isHiddenPassword, setIsHiddenPassword] = useState({
@@ -105,6 +106,13 @@ const Signup = () => {
                 <ValidationMessage message="비밀번호가 일치하지 않습니다." />
               )
             }
+          />
+          <Button
+            buttonType="gray"
+            buttonSize="large"
+            buttonHeight="default"
+            styleType="coloredBackground"
+            label="회원가입"
           />
         </SignupWrapper>
       </PageWrapper>
