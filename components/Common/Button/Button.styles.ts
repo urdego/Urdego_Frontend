@@ -9,6 +9,11 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
+  // buttonHeight default에서 중앙 정렬을 위한 부분
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
   border-radius: 4px;
   padding: 16px;
@@ -59,6 +64,11 @@ export const StyledButton = styled.button<StyledButtonProps>`
 `;
 
 export const IconWrapper = styled.span`
+  // 이미지 중앙 정렬을 위한 부분
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   margin-right: 8px;
   vertical-align: middle;
 
