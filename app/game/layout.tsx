@@ -13,12 +13,10 @@ export default function InGameLayout({
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const handleScriptLoad = () => {
-    console.log('Google Maps script loaded successfully');
     setIsMapLoaded(true);
   };
 
   const handleScriptError = () => {
-    console.error('Failed to load Google Maps script');
     setLoadError('Google Maps를 로드하는 데 실패했습니다.');
   };
 
@@ -35,6 +33,7 @@ export default function InGameLayout({
         onError={handleScriptError}
       />
       <PageWrapper>
+        {/* TODO : Google Maps API 로드를 언제 처리할지 고민 필요 */}
         {isMapLoaded ? children : <div>Google Maps를 로딩 중입니다...</div>}
       </PageWrapper>
     </>

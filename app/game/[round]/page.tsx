@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; // useRouter 훅 사용
+import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import ProgressBar from '@/components/Layout/Game/ProgressBar';
@@ -9,13 +9,19 @@ import { PageWrapper, Footer, TimerContainer, TimerText } from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 
-const GamePage = ({ params }: { params: { round: string } }) => {
-  const router = useRouter(); // useRouter 훅 사용
+interface GamePageProps {
+  params: {
+    round: string;
+  };
+}
+
+const GamePage = ({ params }: GamePageProps) => {
+  const router = useRouter();
   const [currentRound, setCurrentRound] = useState(Number(params.round) || 1); // 현재 라운드 상태
   const [isMapView, setIsMapView] = useState(false); // 지도 화면 여부
   const [timeLeft, setTimeLeft] = useState(20); // 60초 타이머 상태(Test는 20초로 진행)
   const [showBackIcon, setShowBackIcon] = useState(false); // 뒤로가기 아이콘 표시 여부
-  const [maxRounds, setMaxRounds] = useState(3); // 최대 라운드 수(테스트 용 3라운드로 설정)
+  const [maxRounds, setMaxRounds] = useState(2); // 최대 라운드 수(테스트 용 3라운드로 설정)
 
   // 타이머 로직
   useEffect(() => {
@@ -33,18 +39,11 @@ const GamePage = ({ params }: { params: { round: string } }) => {
 
   const handleNextRound = () => {
     if (currentRound < maxRounds) {
-      const nextRound = currentRound + 1;
-
-      // 먼저 setCurrentRound을 처리한 후, 라운드가 바뀐 후에 URL 변경
-      setCurrentRound(nextRound);
-      setIsMapView(false); // 다음 라운드는 이미지 화면으로 시작
-      setShowBackIcon(false); // 뒤로가기 아이콘 숨김
-      setTimeLeft(60); // 새로운 라운드 시작 시 타이머 초기화
-
-      // 상태가 업데이트된 후, 라우팅 진행
-      setTimeout(() => {
-        router.push(`/game/${nextRound}`);
-      }, 0); // 0ms 후에 라우팅 호출, 상태가 업데이트된 후에 URL 변경
+      // 라운드가 끝나면 roundRank로 이동
+      router.push(`/game/${currentRound}/roundRank`);
+    } else {
+      // 마지막 라운드인 경우 totalRank로 이동
+      router.push('/game/totalRank');
     }
   };
 
@@ -60,11 +59,6 @@ const GamePage = ({ params }: { params: { round: string } }) => {
       setShowBackIcon(false); // 뒤로가기 아이콘 숨기기
     }
   };
-
-  // isMapView 값이 변경될 때마다 콘솔 출력
-  useEffect(() => {
-    console.log('Show Map clicked! isMapView:', isMapView);
-  }, [isMapView]);
 
   return (
     <>

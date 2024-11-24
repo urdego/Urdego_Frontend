@@ -24,13 +24,13 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
   useEffect(() => {
     if (!mapElementRef.current) {
-      console.error('Map container element not found');
+      console.error('지도 컨테이너 요소를 찾을 수 없습니다.');
       return;
     }
 
     try {
       if (!mapRef.current) {
-        console.log('Initializing new map instance');
+        console.log('새 지도 인스턴스를 초기화합니다.');
         const mapOptions: google.maps.MapOptions = {
           center,
           zoom,
@@ -46,17 +46,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
         };
 
         mapRef.current = new google.maps.Map(mapElementRef.current, mapOptions);
-        console.log('Map instance created successfully');
+        console.log('지도 인스턴스가 성공적으로 생성되었습니다.');
       } else {
-        console.log('Map instance already exists');
+        console.log('지도 인스턴스가 이미 존재합니다.');
       }
     } catch (error) {
-      console.error('Error creating map:', error);
+      console.error('지도 생성 중 오류가 발생했습니다:', error);
     }
 
-    return () => {
-      // Cleanup function if needed
-    };
+    return () => {};
   }, [center, zoom]);
 
   return <MapContainer ref={mapElementRef} />;
