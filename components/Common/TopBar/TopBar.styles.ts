@@ -1,4 +1,3 @@
-import { isMap } from 'util/types';
 import styled, { css } from 'styled-components';
 
 interface StyledTopBarProps {
@@ -11,16 +10,16 @@ export const Nav = styled.nav<StyledTopBarProps>`
   top: 44px;
   left: 50%;
   transform: translateX(-50%);
-  right: 0;
   width: 100%;
-  max-width: 430px; /* 최대 너비 설정 */
+  max-width: 430px;
   height: 40px;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* padding: 0 20px; */
 
-  ${({ $NavType, isMapView }) =>
+  ${({ $NavType }) =>
     $NavType === 'default'
       ? css`
           background-color: transparent;
@@ -33,13 +32,10 @@ export const Nav = styled.nav<StyledTopBarProps>`
           `
         : $NavType === 'game'
           ? css`
-              justify-content: ${isMapView ? 'space-between' : 'center'};
-              padding-right: ${isMapView ? '16px' : '0'};
-              box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+              box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
             `
           : css`
               background-color: #f4eeff;
-              justify-content: flex-end;
             `}
 `;
 
@@ -47,25 +43,36 @@ export const BackIconWrapper = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  position: relative;
-  left: 20px;
+  padding-left: 20px;
 
   &:active {
     opacity: 0.7;
   }
 `;
 
-export const RightIconsWrapper = styled.div`
+export const RightIconsWrapper = styled.div<StyledTopBarProps>`
   display: flex;
   align-items: center;
   gap: 10px;
-  position: relative;
-  right: 20px;
+  padding-right: 20px;
+
+  ${({ $NavType }) =>
+    $NavType === 'main' &&
+    css`
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      justify-content: flex-end;
+    `}
 `;
 
 export const Label = styled.div`
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  white-space: nowrap;
 `;

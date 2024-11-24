@@ -6,6 +6,7 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import ProgressBar from '@/components/Layout/Game/ProgressBar';
 import { PageWrapper, Footer, TimerContainer, TimerText } from './game.styles';
+import SwiperComponent from '@/components/Layout/Game/Swiper';
 
 const GamePage = ({ params }: { params: { round: string } }) => {
   const router = useRouter(); // useRouter 훅 사용
@@ -75,6 +76,9 @@ const GamePage = ({ params }: { params: { round: string } }) => {
         <TimerText>{timeLeft}초</TimerText>
         <ProgressBar progress={(timeLeft / 20) * 100} />
       </TimerContainer>
+
+      {/* 이미지 슬라이드 (처음에는 Swiper 컴포넌트로 이미지 띄우기) */}
+      {!isMapView && <SwiperComponent />}
 
       {/* 하단 버튼 */}
       <Footer>

@@ -46,7 +46,7 @@ const TopBar = ({
   };
 
   return (
-    <Nav $NavType={NavType}>
+    <Nav $NavType={NavType} isMapView={isMapView}>
       {NavType === 'game' && (
         <>
           {isMapView &&
@@ -76,14 +76,14 @@ const TopBar = ({
             </BackIconWrapper>
           )}
           <Label>{label}</Label>
-          <RightIconsWrapper>
+          <RightIconsWrapper $NavType={NavType}>
             {alarmIcon && <AlarmIcon />}
             {friendIcon && <FriendIcon />}
           </RightIconsWrapper>
         </>
       )}
       {NavType === 'main' && (
-        <RightIconsWrapper>
+        <RightIconsWrapper $NavType={NavType}>
           {alarmIcon && <AlarmIcon />}
           {friendIcon && <FriendIcon />}
         </RightIconsWrapper>
