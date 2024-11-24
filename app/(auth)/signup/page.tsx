@@ -1,5 +1,6 @@
 'use client';
 import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
 import Input from '@/components/Common/Input/Input';
 import { PageWrapper } from '@/app/commonPage.styles';
@@ -8,7 +9,20 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 import Button from '@/components/Common/Button/Button';
 
+interface SignUpFormData {
+  email: string;
+  password: string;
+  nickname: string;
+}
+
 const Signup = () => {
+  const router = useRouter();
+  const [formData, setFormData] = useState<SignUpFormData>({
+    email: '',
+    password: '',
+    nickname: '',
+  });
+
   const [isHiddenPassword, setIsHiddenPassword] = useState({
     origin: true,
     copy: true,
@@ -21,6 +35,8 @@ const Signup = () => {
     pattern: false,
     mismatch: false,
   });
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validatePassword = useCallback((value: string) => {
     const lengthValid = value.length >= 8;
@@ -43,6 +59,7 @@ const Signup = () => {
         ...prev,
         mismatch: !isMatch && confirmValue.length > 0,
       }));
+      return isMatch;
     },
     [password]
   );
@@ -54,6 +71,58 @@ const Signup = () => {
     }));
   };
 
+  const handleSignup = async () => {
+    // 폼 유효성 검사
+    if (!formData.email || !formData.password || !formData.nickname) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (!isNicknameValid) {
+      alert('닉네임 중복 확인이 필요합니다.');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      alert('비밀번호 형식을 확인해주세요.');
+      return;
+    }
+
+    if (!validatePasswordMatch(passwordConfirm)) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user-service/users`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        const userId = await response.text();
+        alert('회원가입이 완료되었습니다.');
+        router.push('/login'); // 로그인 페이지로 이동
+      } else {
+        const errorData = await response.text();
+        alert(`회원가입 실패: ${errorData}`);
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('회원가입 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <TopBar NavType="default" label="회원가입" />
@@ -62,8 +131,19 @@ const Signup = () => {
           <Title>
             어데고?!에서 사용할 <br /> 닉네임, 아이디, 비밀번호를 입력해주세요.
           </Title>
-          <NickNameInput />
-          <Input title="아이디" placeholder="아이디를 입력해주세요" />
+          <NickNameInput
+            onNicknameValidated={(nickname: string, isValid: boolean) => {
+              setFormData((prev) => ({ ...prev, nickname }));
+              setIsNicknameValid(isValid);
+            }}
+          />
+          <Input
+            title="아이디"
+            placeholder="아이디를 입력해주세요"
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, email: value }))
+            }
+          />
           <Input
             title="비밀번호"
             placeholder="비밀번호를 입력해주세요"
@@ -72,8 +152,8 @@ const Signup = () => {
             handleClick={() => handleClick('origin')}
             onChange={(value) => {
               setPassword(value);
+              setFormData((prev) => ({ ...prev, password: value }));
               validatePassword(value);
-              // 비밀번호가 변경될 때 비밀번호 확인란도 다시 검증
               if (passwordConfirm) {
                 validatePasswordMatch(passwordConfirm);
               }
@@ -113,6 +193,8 @@ const Signup = () => {
             buttonHeight="default"
             styleType="coloredBackground"
             label="회원가입"
+            onClick={handleSignup}
+            disabled={isSubmitting}
           />
         </SignupWrapper>
       </PageWrapper>

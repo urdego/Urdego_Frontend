@@ -1,35 +1,22 @@
-// NickNameInput.tsx
 import { useState } from 'react';
 import Input from '@/components/Common/Input/Input';
 import DuplicateCheckButton from '@layout/Signup/DuplicateCheckButton';
-import { NickNameWrapper } from './NickNameInput.styles';
+import { NickNameWrapper } from '@layout/Signup/NickNameInput.styles';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 
-interface NickNameCheckResponse {
-  status: number;
-  data: 'PERMIT' | 'DUPLICATED';
+interface NickNameInputProps {
+  onNicknameValidated: (nickname: string, isValid: boolean) => void;
 }
 
-const NickNameInput = () => {
+const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
   const [nickname, setNickname] = useState('');
   const [validationMessage, setValidationMessage] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
 
-  const validateNickname = (value: string) => {
-    const nicknameRegex = /^[A-Za-z][A-Za-z0-9]{4,9}$/;
-    return nicknameRegex.test(value);
-  };
-
   const checkNicknameDuplicate = async () => {
     if (!nickname) {
       setValidationMessage('닉네임을 입력해주세요.');
-      return;
-    }
-
-    if (!validateNickname(nickname)) {
-      setValidationMessage(
-        '닉네임은 5~10자의 영문 혹은 영문+숫자 조합이어야 합니다.'
-      );
+      onNicknameValidated('', false);
       return;
     }
 
@@ -51,16 +38,19 @@ const NickNameInput = () => {
       if (response.ok) {
         if (result === 'PERMIT') {
           setValidationMessage('사용 가능한 닉네임입니다.');
+          onNicknameValidated(nickname, true);
         } else if (result === 'DUPLICATED') {
           setValidationMessage('이미 사용 중인 닉네임입니다.');
+          onNicknameValidated(nickname, false);
         }
       } else {
         setValidationMessage('중복 확인 중 오류가 발생했습니다.');
-        console.error('Server error:', response.status);
+        onNicknameValidated(nickname, false);
       }
     } catch (error) {
+      console.error('Nickname check error:', error);
       setValidationMessage('중복 확인 중 오류가 발생했습니다.');
-      console.error('Network error:', error);
+      onNicknameValidated(nickname, false);
     } finally {
       setIsChecking(false);
     }
@@ -69,6 +59,7 @@ const NickNameInput = () => {
   const handleInputChange = (value: string) => {
     setNickname(value);
     setValidationMessage('');
+    onNicknameValidated(value, false); // 입력값이 변경되면 유효성 초기화
   };
 
   return (
