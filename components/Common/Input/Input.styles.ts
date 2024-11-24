@@ -1,8 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+
+export const InputContainer = styled.div`
+  padding-bottom: 32px;
+`;
 
 export const InputWrapper = styled.div`
-  padding-bottom: 32px;
-  flex-grow: 1;
+  width: 100%;
 `;
 
 export const Title = styled.div`
@@ -37,7 +40,7 @@ export const Button = styled.div<{ $isHiddenPassword: boolean | undefined }>`
   height: 24px;
 
   background-color: ${(props) =>
-    props.$isHiddenPassword ? "#909090" : "#000000"};
+    props.$isHiddenPassword ? '#909090' : '#000000'};
 
   &:hover {
     cursor: pointer;

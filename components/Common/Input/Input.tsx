@@ -5,7 +5,8 @@ import {
   ContentWrapper,
   Hr,
   InputWrapper,
-} from '@/components/Common/Input/Input.styles';
+  InputContainer,
+} from './Input.styles';
 
 interface InputProps {
   title: string;
@@ -13,6 +14,9 @@ interface InputProps {
   isButton?: boolean;
   isHiddenPassword?: boolean;
   handleClick?: () => void;
+  onChange?: (value: string) => void;
+  type?: string;
+  validation?: React.ReactNode;
 }
 
 const Input = ({
@@ -21,18 +25,31 @@ const Input = ({
   isButton = false,
   isHiddenPassword,
   handleClick,
+  onChange,
+  type = 'text',
+  validation,
 }: InputProps) => {
   return (
-    <InputWrapper>
-      <Title>{title}</Title>
-      <ContentWrapper>
-        <ContentInput placeholder={placeholder} />
-        {isButton && (
-          <Button $isHiddenPassword={isHiddenPassword} onClick={handleClick} />
-        )}
-      </ContentWrapper>
-      <Hr />
-    </InputWrapper>
+    <InputContainer>
+      <InputWrapper>
+        <Title>{title}</Title>
+        <ContentWrapper>
+          <ContentInput
+            placeholder={placeholder}
+            type={type}
+            onChange={(e) => onChange?.(e.target.value)}
+          />
+          {isButton && (
+            <Button
+              $isHiddenPassword={isHiddenPassword}
+              onClick={handleClick}
+            />
+          )}
+        </ContentWrapper>
+        <Hr />
+      </InputWrapper>
+      {validation}
+    </InputContainer>
   );
 };
 
