@@ -13,6 +13,7 @@ interface PlaceRegisterProps {
   title: string;
   currCount: number;
   totalCount: number;
+  handleClick?: () => void;
 }
 
 const PlaceRegister = ({
