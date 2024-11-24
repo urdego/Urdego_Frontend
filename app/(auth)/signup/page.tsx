@@ -138,8 +138,8 @@ const Signup = () => {
             }}
           />
           <Input
-            title="아이디"
-            placeholder="아이디를 입력해주세요"
+            title="이메일"
+            placeholder="이메일을 입력해주세요"
             onChange={(value) =>
               setFormData((prev) => ({ ...prev, email: value }))
             }
