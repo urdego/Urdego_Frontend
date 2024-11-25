@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const LoginWrapper = styled.div`
+  padding: 84px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;

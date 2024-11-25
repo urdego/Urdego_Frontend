@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SignupWrapper = styled.div`
   width: 100%;
@@ -10,5 +10,5 @@ export const Title = styled.div`
   text-align: center;
   line-height: 150%;
   margin-bottom: 40px;
-  padding-top:40px
+  padding-top: 40px;
 `;
