@@ -15,8 +15,8 @@ export const ButtonLayout = styled.div`
   align-items: center;
 
   width: 100%;
-  min-width: calc(340px);
-  max-width: calc(430px);
+  min-width: 340px;
+  max-width: 430px;
 
   bottom: 100px;
   left: 50%;

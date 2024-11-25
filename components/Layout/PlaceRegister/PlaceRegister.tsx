@@ -10,21 +10,28 @@ import {
 import { TrashIcon } from './PlaceRegisterIcon';
 import PlaceSearchButton from './PlaceSearchButton';
 import PulsIconSrc from '@styles/Icon/Plus.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 interface PlaceRegisterProps {
   title: string;
   setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
-const PlaceRegister = ({ title, setPostFiles }: PlaceRegisterProps) => {
+const PlaceRegister = ({
+  title,
+  setPostFiles,
+  setPostInfo,
+}: PlaceRegisterProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
+  const [locationTitle, setLocationTitle] = useState('');
+  const [locationHint, setLocationHint] = useState('');
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
-    setPostFiles(Array.from(fileList));
+    setPostFiles((prevFiles) => [...prevFiles, Array.from(fileList)]);
 
     const fileURLs: string[] = [];
     const fileReadPromises: Promise<string>[] = [];
@@ -49,8 +56,16 @@ const PlaceRegister = ({ title, setPostFiles }: PlaceRegisterProps) => {
     });
   };
 
+  useEffect(() => {
+    setPostInfo({
+      title: locationTitle,
+      hint: locationHint,
+    });
+  }, [locationTitle, locationHint, setPostInfo]);
+
   return (
     <PlaceRegisterWrapper>
+      <button onClick={() => console.log(locationHint)}>d</button>
       <PlaceRegistertext>
         <div>{title}</div>
         <TrashIcon />
@@ -72,9 +87,17 @@ const PlaceRegister = ({ title, setPostFiles }: PlaceRegisterProps) => {
           </PreviewImage>
         ))}
       </PlacePreview>
-      <PlaceInput placeholder="장소명" />
+      <PlaceInput
+        placeholder="장소명"
+        state={locationTitle}
+        setState={setLocationTitle}
+      />
       <PlaceSearchButton />
-      <PlaceInput placeholder="(선택) 힌트를 작성해주세요" />
+      <PlaceInput
+        placeholder="(선택) 힌트를 작성해주세요"
+        state={locationHint}
+        setState={setLocationHint}
+      />
       <Button
         buttonType="gray"
         buttonHeight="short"

@@ -8,11 +8,19 @@ import {
   PlaceRegisterWrapper,
 } from './PlaceRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/Common/Button/Button';
 
 const PlaceRegisterPage = () => {
   const [postFiles, setPostFiles] = useState<File[]>([]);
+  const [postInfo, setPostInfo] = useState<object>({
+    title: '',
+    hint: '',
+  });
+
+  useEffect(() => {
+    console.log(postInfo);
+  }, [postInfo]);
 
   const uploadFile = () => {
     console.log(postFiles);
@@ -25,11 +33,7 @@ const PlaceRegisterPage = () => {
     });
 
     // 장소명, 힌트 등록
-    const locationInfo = {
-      title: '국립현대 박물관 서울',
-      hint: '힌트입니다',
-    };
-    const locationInfoBlob = new Blob([JSON.stringify(locationInfo)], {
+    const locationInfoBlob = new Blob([JSON.stringify(postInfo)], {
       type: 'application/json',
     });
     formData.append('locationInfo', locationInfoBlob);
@@ -55,9 +59,21 @@ const PlaceRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            <PlaceRegister title="장소1" setPostFiles={setPostFiles} />
-            <PlaceRegister title="장소2" setPostFiles={setPostFiles} />
-            <PlaceRegister title="장소3" setPostFiles={setPostFiles} />
+            <PlaceRegister
+              title="장소1"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            />
+            {/* <PlaceRegister
+              title="장소2"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            />
+            <PlaceRegister
+              title="장소3"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            /> */}
           </PlaceLayout>
           <ButtonLayout>
             <Button buttonType="gray" label="작성 완료" onClick={uploadFile} />
