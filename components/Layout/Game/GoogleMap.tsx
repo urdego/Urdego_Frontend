@@ -1,23 +1,37 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const MapContainer = styled.div`
+interface MapContainerProps {
+  mode: 'game' | 'rank';
+}
+
+const MapContainer = styled.div<MapContainerProps>`
   width: 100%;
-  height: calc(100vh - 235px);
   position: relative;
   display: block;
+
+  ${({ mode }) =>
+    mode === 'game'
+      ? css`
+          height: calc(100vh - 235px);
+        `
+      : css`
+          height: 250px;
+        `}
 `;
 
 interface MapComponentProps {
   center?: google.maps.LatLngLiteral;
   zoom?: number;
+  mode: 'game' | 'rank';
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
   center = { lat: 36.5, lng: 127.5 },
   zoom = 6,
+  mode,
 }) => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const mapElementRef = useRef<HTMLDivElement>(null);
@@ -32,8 +46,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
       if (!mapRef.current) {
         console.log('새 지도 인스턴스를 초기화합니다.');
         const mapOptions: google.maps.MapOptions = {
-          center,
-          zoom,
+          center: mode === 'rank' ? { lat: 37.5665, lng: 126.978 } : center,
+          zoom: mode === 'rank' ? 15 : zoom, // Rank일때는 장소 근처, Game일떄는 한반도
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           disableDefaultUI: false,
           zoomControl: true,
@@ -57,7 +71,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     return () => {};
   }, [center, zoom]);
 
-  return <MapContainer ref={mapElementRef} />;
+  return <MapContainer ref={mapElementRef} mode={mode} />;
 };
 
 export default MapComponent;
