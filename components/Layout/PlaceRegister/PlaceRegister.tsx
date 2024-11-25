@@ -15,31 +15,29 @@ import Image from 'next/image';
 
 interface PlaceRegisterProps {
   title: string;
-  currCount: number;
-  totalCount: number;
+  setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const PlaceRegister = ({
-  title,
-  currCount,
-  totalCount,
-}: PlaceRegisterProps) => {
-  const [postFile, setPostFile] = useState([]);
-  const [previewFile, setPreviewFile] = useState([]);
+const PlaceRegister = ({ title, setPostFiles }: PlaceRegisterProps) => {
+  const [previewFile, setPreviewFile] = useState<string[]>([]);
 
-  const handleFilesChange = (e) => {
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-    setPostFile(Array.from(fileList));
+    if (!fileList) return;
+    setPostFiles(Array.from(fileList));
 
-    const fileURLs = [];
-    const fileReadPromises = [];
+    const fileURLs: string[] = [];
+    const fileReadPromises: Promise<string>[] = [];
 
     for (let i = 0; i < fileList.length; i++) {
       const fileReader = new FileReader();
-      const promise = new Promise((resolve) => {
+      const promise = new Promise<string>((resolve) => {
         fileReader.onload = () => {
-          fileURLs[i] = fileReader.result;
-          resolve();
+          const result = fileReader.result;
+          if (typeof result === 'string') {
+            fileURLs.push(result);
+            resolve(result);
+          }
         };
         fileReader.readAsDataURL(fileList[i]);
       });
@@ -61,7 +59,7 @@ const PlaceRegister = ({
         <ImageUpload
           handleFilesChange={handleFilesChange}
           currCount={previewFile.length}
-          totalCount={totalCount}
+          totalCount={3}
         />
         {previewFile.map((file, index) => (
           <PreviewImage key={index}>

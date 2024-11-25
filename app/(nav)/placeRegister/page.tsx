@@ -7,13 +7,12 @@ import { PageWrapper } from '@/app/commonPage.styles';
 import { useState } from 'react';
 
 const PlaceRegisterPage = () => {
-  const [postFiles, setPostFiles] = useState([]);
+  const [postFiles, setPostFiles] = useState<File[]>([]);
 
-  const uploadFile = (e) => {
-    // console.log(postFiles);
-    // console.log(previewFiles);
-
+  const uploadFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+
+    console.log(postFiles);
 
     const formData = new FormData();
 
@@ -51,8 +50,9 @@ const PlaceRegisterPage = () => {
       <TopBar NavType="default" label="장소 등록하기" />
       <PageWrapper>
         <PlaceRegisterWrapper>
-          <PlaceRegister title="장소1" currCount={0} totalCount={3} />
+          <PlaceRegister title="장소1" setPostFiles={setPostFiles} />
         </PlaceRegisterWrapper>
+        <button onClick={uploadFile}>d</button>
       </PageWrapper>
     </>
   );

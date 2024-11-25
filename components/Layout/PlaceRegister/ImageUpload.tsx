@@ -9,7 +9,7 @@ import { GalleryIcon } from './ImageUploadIcon';
 interface ImageUploadProps {
   currCount: number;
   totalCount: number;
-  handleFilesChange: (e) => void;
+  handleFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ImageUpload = ({
