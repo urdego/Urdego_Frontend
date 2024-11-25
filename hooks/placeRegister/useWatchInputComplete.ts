@@ -2,11 +2,13 @@ import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import { useEffect } from 'react';
 
 interface useWatchInputCompleteProps {
+  previewFile: string[];
   locationTitle: string;
   locationHint: string;
 }
 
 const useWatchInputComplete = ({
+  previewFile,
   locationTitle,
   locationHint,
 }: useWatchInputCompleteProps) => {
@@ -16,12 +18,12 @@ const useWatchInputComplete = ({
   );
 
   useEffect(() => {
-    if (locationTitle && locationHint) {
+    if (previewFile.length !== 0 && locationTitle && locationHint) {
       setIsInputComplete(true);
     } else {
       setIsInputComplete(false);
     }
-  }, [locationTitle, locationHint]);
+  }, [previewFile, locationTitle, locationHint, setIsInputComplete]);
 
   return {
     isInputComplete,

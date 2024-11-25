@@ -37,6 +37,7 @@ const PlaceRegister = ({
   } = useRegisterFiles({ setPostFiles, setPostInfo });
 
   const { isInputComplete, setIsInputComplete } = useWatchInputComplete({
+    previewFile,
     locationTitle,
     locationHint,
   });
