@@ -23,12 +23,14 @@ interface User {
 const RankList = ({
   rankData,
   handleToggle,
+  initialActiveButton,
 }: {
   rankData: User[];
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
+  initialActiveButton: 'thisRound' | 'totalRound';
 }) => {
   const [activeButton, setActiveButton] = useState<'thisRound' | 'totalRound'>(
-    'thisRound'
+    initialActiveButton
   );
 
   const handleButtonClick = (round: 'thisRound' | 'totalRound') => {

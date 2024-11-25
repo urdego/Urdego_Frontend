@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/Common/Button/Button';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import ProgressBar from '@/components/Layout/Game/ProgressBar';
-import { PageWrapper, TimerContainer, TimerText } from '../game.styles';
+import { PageWrapper, TimerContainer, TimerText, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 
 const RoundRank = ({ params }: { params: { round: string } }) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
-  const maxRounds = 3;
+  const maxRounds = 3; // TODO : prop으로 라운드 받아오기
   const [timeLeft, setTimeLeft] = useState(15);
 
   // 더미 데이터 (thisRound, totalRound)
@@ -29,14 +29,14 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
       { rank: 2, name: '나나나', score: 560 },
       { rank: 3, name: '다다다', score: 540 },
       { rank: 4, name: '라라라', score: 520 },
-      { rank: 5, name: '박민수', score: 500 },
+      { rank: 5, name: '마마마', score: 500 },
     ],
   };
 
   // 상태로 현재 라운드 선택 관리
   const [currentRoundData, setCurrentRoundData] = useState<
     'thisRound' | 'totalRound'
-  >('thisRound');
+  >(currentRound >= maxRounds ? 'totalRound' : 'thisRound');
 
   const handleToggle = (round: 'thisRound' | 'totalRound') => {
     setCurrentRoundData(round);
@@ -81,16 +81,21 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
       <RankList
         rankData={dummyData[currentRoundData]}
         handleToggle={handleToggle}
+        initialActiveButton={
+          currentRound >= maxRounds ? 'totalRound' : 'thisRound'
+        }
       />
 
       {/* 버튼: 마지막 라운드나 3라운드일 경우 '최종 점수 확인' */}
       {currentRound >= maxRounds && (
-        <Button
-          label={`${timeLeft}초 후 게임 종료`}
-          buttonSize="large"
-          onClick={handleNextRound}
-          styleType="coloredBackground"
-        />
+        <Footer>
+          <Button
+            label={`${timeLeft}초 후 게임 종료`}
+            buttonSize="large"
+            onClick={handleNextRound}
+            styleType="coloredBackground"
+          />
+        </Footer>
       )}
     </PageWrapper>
   );

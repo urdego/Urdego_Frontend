@@ -21,7 +21,7 @@ const GamePage = ({ params }: GamePageProps) => {
   const [isMapView, setIsMapView] = useState(false); // 지도 화면 여부
   const [timeLeft, setTimeLeft] = useState(60); // 60초 타이머 상태(Test는 20초로 진행)
   const [showBackIcon, setShowBackIcon] = useState(false); // 뒤로가기 아이콘 표시 여부
-  const [maxRounds, setMaxRounds] = useState(2); // 최대 라운드 수(테스트 용 3라운드로 설정)
+  const [maxRounds, setMaxRounds] = useState(3); // 최대 라운드 수(테스트 용 3 라운드로 설정)
 
   // 타이머 로직
   useEffect(() => {
