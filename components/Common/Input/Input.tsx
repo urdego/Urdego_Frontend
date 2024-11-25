@@ -20,6 +20,7 @@ interface InputProps {
   onChange?: (value: string) => void;
   type?: string;
   validation?: React.ReactNode;
+  autoComplete?: string;
 }
 
 const Input = ({
@@ -31,6 +32,7 @@ const Input = ({
   onChange,
   type = 'text',
   validation,
+  autoComplete,
 }: InputProps) => {
   return (
     <InputContainer>
@@ -41,6 +43,7 @@ const Input = ({
             placeholder={placeholder}
             type={type}
             onChange={(e) => onChange?.(e.target.value)}
+            autoComplete={autoComplete}
           />
           {isButton && (
             <Button onClick={handleClick}>

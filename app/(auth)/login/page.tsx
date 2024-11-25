@@ -53,7 +53,11 @@ const Login = () => {
     return isValid;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -74,11 +78,7 @@ const Login = () => {
       }
 
       const nickname = await response.text();
-
-      // 닉네임을 zustand store에 저장
       setNickname(nickname);
-
-      // 홈 페이지로 이동
       router.push('/home');
     } catch (error) {
       console.error('Login error:', error);
@@ -95,39 +95,42 @@ const Login = () => {
     <LoginWrapper>
       <LoginLogo src="" />
       <LoginTitle>Where am I?</LoginTitle>
-      <Input
-        title="이메일"
-        placeholder="이메일을 입력해주세요"
-        onChange={(value) => setEmail(value)}
-        validation={
-          errors.email && <ValidationMessage message={errors.email} />
-        }
-      />
-      <Input
-        title="비밀번호"
-        placeholder="비밀번호를 입력해주세요"
-        isButton={true}
-        isHiddenPassword={isHiddenPassword}
-        handleClick={handlePasswordVisibility}
-        onChange={(value) => setPassword(value)}
-        type={isHiddenPassword ? 'password' : 'text'}
-        validation={
-          errors.password && <ValidationMessage message={errors.password} />
-        }
-      />
-      <AutoLoginCheckbox />
-      <ButtonSignupWrapper>
-        <Button
-          buttonType="gray"
-          buttonSize="large"
-          buttonHeight="default"
-          styleType="coloredBackground"
-          label="로그인"
-          onClick={handleLogin}
-          disabled={isLoading}
+      <form onSubmit={handleLogin} autoComplete="off">
+        <Input
+          title="이메일"
+          placeholder="이메일을 입력해주세요"
+          onChange={(value) => setEmail(value)}
+          autoComplete="new-email"
+          validation={
+            errors.email && <ValidationMessage message={errors.email} />
+          }
         />
-        <SignupTabs />
-      </ButtonSignupWrapper>
+        <Input
+          title="비밀번호"
+          placeholder="비밀번호를 입력해주세요"
+          isButton={true}
+          isHiddenPassword={isHiddenPassword}
+          handleClick={handlePasswordVisibility}
+          onChange={(value) => setPassword(value)}
+          type={isHiddenPassword ? 'password' : 'text'}
+          autoComplete="new-password"
+          validation={
+            errors.password && <ValidationMessage message={errors.password} />
+          }
+        />
+        <AutoLoginCheckbox />
+        <ButtonSignupWrapper>
+          <Button
+            buttonType="gray"
+            buttonSize="large"
+            buttonHeight="default"
+            styleType="coloredBackground"
+            label="로그인"
+            disabled={isLoading}
+          />
+          <SignupTabs />
+        </ButtonSignupWrapper>
+      </form>
       <SocialLogin />
     </LoginWrapper>
   );
