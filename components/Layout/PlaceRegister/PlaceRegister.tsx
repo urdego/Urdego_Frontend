@@ -14,6 +14,7 @@ import {
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
+import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
 
 interface PlaceRegisterProps {
   title: string;
@@ -34,6 +35,11 @@ const PlaceRegister = ({
     setLocationHint,
     handleFilesChange,
   } = useRegisterFiles({ setPostFiles, setPostInfo });
+
+  const { isInputComplete, setIsInputComplete } = useWatchInputComplete({
+    locationTitle,
+    locationHint,
+  });
 
   return (
     <PlaceRegisterWrapper>
@@ -70,10 +76,11 @@ const PlaceRegister = ({
         setState={setLocationHint}
       />
       <Button
-        buttonType="gray"
+        buttonType={isInputComplete ? 'purple' : 'gray'}
         buttonHeight="short"
         label="장소추가"
         icon={PulsIconSrc}
+        onClick={() => setIsInputComplete(false)}
       />
     </PlaceRegisterWrapper>
   );

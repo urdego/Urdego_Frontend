@@ -16,7 +16,7 @@ import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 
 const PlaceRegisterPage = () => {
   const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
-  const { isSubmitReady } = usePlaceRegisterModeStore((state) => state);
+  const { isInputComplete } = usePlaceRegisterModeStore((state) => state);
 
   return (
     <>
@@ -42,9 +42,9 @@ const PlaceRegisterPage = () => {
           </PlaceLayout>
           <ButtonLayout>
             <Button
-              buttonType={isSubmitReady ? 'purple' : 'gray'}
+              buttonType={isInputComplete ? 'purple' : 'gray'}
               label="작성 완료"
-              onClick={isSubmitReady ? uploadFile : undefined}
+              onClick={isInputComplete ? uploadFile : undefined}
             />
           </ButtonLayout>
         </PlaceRegisterWrapper>
