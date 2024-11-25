@@ -108,7 +108,6 @@ const Signup = () => {
       );
 
       if (response.ok) {
-        const userId = await response.text();
         alert('회원가입이 완료되었습니다.');
         router.push('/login'); // 로그인 페이지로 이동
       } else {
