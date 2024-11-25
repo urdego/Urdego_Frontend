@@ -12,9 +12,11 @@ import {
 import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
+import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 
 const PlaceRegisterPage = () => {
   const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
+  const { isSubmitReady } = usePlaceRegisterModeStore((state) => state);
 
   return (
     <>
@@ -39,7 +41,11 @@ const PlaceRegisterPage = () => {
             /> */}
           </PlaceLayout>
           <ButtonLayout>
-            <Button buttonType="gray" label="작성 완료" onClick={uploadFile} />
+            <Button
+              buttonType={isSubmitReady ? 'purple' : 'gray'}
+              label="작성 완료"
+              onClick={isSubmitReady ? uploadFile : undefined}
+            />
           </ButtonLayout>
         </PlaceRegisterWrapper>
       </PageWrapper>

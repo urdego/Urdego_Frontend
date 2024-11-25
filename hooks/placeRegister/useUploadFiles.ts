@@ -8,8 +8,6 @@ const useUploadFiles = () => {
   });
 
   const uploadFile = () => {
-    console.log(postFiles);
-
     const formData = new FormData();
 
     // 이미지 등록
