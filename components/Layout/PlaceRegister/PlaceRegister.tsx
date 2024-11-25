@@ -75,7 +75,12 @@ const PlaceRegister = ({ title, setPostFiles }: PlaceRegisterProps) => {
       <PlaceInput placeholder="장소명" />
       <PlaceSearchButton />
       <PlaceInput placeholder="(선택) 힌트를 작성해주세요" />
-      <Button buttonType="gray" label="장소추가" icon={PulsIconSrc} />
+      <Button
+        buttonType="gray"
+        buttonHeight="short"
+        label="장소추가"
+        icon={PulsIconSrc}
+      />
     </PlaceRegisterWrapper>
   );
 };

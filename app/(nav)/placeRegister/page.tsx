@@ -2,16 +2,19 @@
 
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
-import { PlaceRegisterWrapper } from './PlaceRegister.styles';
+import {
+  ButtonLayout,
+  PlaceLayout,
+  PlaceRegisterWrapper,
+} from './PlaceRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
 import { useState } from 'react';
+import Button from '@/components/Common/Button/Button';
 
 const PlaceRegisterPage = () => {
   const [postFiles, setPostFiles] = useState<File[]>([]);
 
-  const uploadFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-
+  const uploadFile = () => {
     console.log(postFiles);
 
     const formData = new FormData();
@@ -45,14 +48,21 @@ const PlaceRegisterPage = () => {
     //     console.error(err);
     // });
   };
+
   return (
     <>
       <TopBar NavType="default" label="장소 등록하기" />
       <PageWrapper>
         <PlaceRegisterWrapper>
-          <PlaceRegister title="장소1" setPostFiles={setPostFiles} />
+          <PlaceLayout>
+            <PlaceRegister title="장소1" setPostFiles={setPostFiles} />
+            <PlaceRegister title="장소2" setPostFiles={setPostFiles} />
+            <PlaceRegister title="장소3" setPostFiles={setPostFiles} />
+          </PlaceLayout>
+          <ButtonLayout>
+            <Button buttonType="gray" label="작성 완료" onClick={uploadFile} />
+          </ButtonLayout>
         </PlaceRegisterWrapper>
-        <button onClick={uploadFile}>d</button>
       </PageWrapper>
     </>
   );
