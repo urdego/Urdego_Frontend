@@ -8,27 +8,50 @@ import { useState } from 'react';
 
 const PlaceRegisterPage = () => {
   const [postFiles, setPostFiles] = useState([]);
-  const [previewFiles, setPreviewFiles] = useState([]);
 
-  const uploadFiles = (e) => {
-    const fileList = e.target.files;
-    setPostFiles(Array.from(fileList)); //name, size, type(image/png)
+  const uploadFile = (e) => {
+    // console.log(postFiles);
+    // console.log(previewFiles);
 
-    // const fileURLs = [];
-    // const fileReader = new FileReader();
-    // fileReader.onload = function () {
-    //   setPreviewFiles(fileReader.result);
-    // };
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    // 이미지 등록
+    postFiles.map((file) => {
+      formData.append('files', file);
+    });
+
+    // 장소명, 힌트 등록
+    const locationInfo = {
+      title: '국립현대 박물관 서울',
+      hint: '힌트입니다',
+    };
+    const locationInfoBlob = new Blob([JSON.stringify(locationInfo)], {
+      type: 'application/json',
+    });
+    formData.append('locationInfo', locationInfoBlob);
+
+    console.log(Array.from(formData));
+
+    //axios post
+    // axios.post('http://localhost:3079/file/uploads', formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
+    // .then((res) => {
+    //     console.log(res.data);
+    // }).catch((err) => {
+    //     console.error(err);
+    // });
   };
   return (
     <>
       <TopBar NavType="default" label="장소 등록하기" />
       <PageWrapper>
-        <input type="file" multiple onChange={uploadFiles} />
         <PlaceRegisterWrapper>
           <PlaceRegister title="장소1" currCount={0} totalCount={3} />
-          <PlaceRegister title="장소2" currCount={0} totalCount={3} />
-          <PlaceRegister title="장소3" currCount={0} totalCount={3} />
         </PlaceRegisterWrapper>
       </PageWrapper>
     </>

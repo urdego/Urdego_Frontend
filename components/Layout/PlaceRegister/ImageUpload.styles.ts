@@ -2,6 +2,7 @@ import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const ImageUploadWrapper = styled.div`
+  position: relative;
   width: 60px;
   height: 60px;
   border-radius: 4px;
@@ -17,6 +18,16 @@ export const ImageUploadWrapper = styled.div`
 export const ImageUploadContainer = styled.div`
   text-align: center;
   padding: 4px 8px;
+`;
+
+export const ImageUploadInput = styled.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 `;
 
 export const ImageUploadCount = styled.div`
