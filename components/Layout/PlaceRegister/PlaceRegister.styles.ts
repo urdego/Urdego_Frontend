@@ -18,6 +18,10 @@ export const PlaceRegistertext = styled.div`
   line-height: 150%;
 `;
 
+export const PlaceContentResetButton = styled.div`
+  cursor: pointer;
+`;
+
 export const PlacePreview = styled.div`
   display: flex;
   flex-direction: row;

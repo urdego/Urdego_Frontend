@@ -50,6 +50,7 @@ const useRegisterFiles = ({
 
   return {
     previewFile,
+    setPreviewFile,
     locationTitle,
     setLocationTitle,
     locationHint,

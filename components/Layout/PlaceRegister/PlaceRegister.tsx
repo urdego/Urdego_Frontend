@@ -7,6 +7,7 @@ import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
 import { TrashIcon } from './PlaceRegisterIcon';
 import {
+  PlaceContentResetButton,
   PlacePreview,
   PlaceRegistertext,
   PlaceRegisterWrapper,
@@ -29,6 +30,7 @@ const PlaceRegister = ({
 }: PlaceRegisterProps) => {
   const {
     previewFile,
+    setPreviewFile,
     locationTitle,
     setLocationTitle,
     locationHint,
@@ -42,11 +44,20 @@ const PlaceRegister = ({
     locationHint,
   });
 
+  const resetPlaceInfo = () => {
+    setLocationTitle('');
+    setLocationHint('');
+    setPreviewFile([]);
+    // TODO: 서버 전송 state 초기화 필요
+  };
+
   return (
     <PlaceRegisterWrapper>
       <PlaceRegistertext>
         <div>{title}</div>
-        <TrashIcon />
+        <PlaceContentResetButton onClick={resetPlaceInfo}>
+          <TrashIcon />
+        </PlaceContentResetButton>
       </PlaceRegistertext>
       <PlacePreview>
         <ImageUpload
