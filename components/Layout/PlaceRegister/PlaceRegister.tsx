@@ -1,17 +1,19 @@
+import Image from 'next/image';
+import PulsIconSrc from '@styles/Icon/Plus.svg';
+
 import Button from '@/components/Common/Button/Button';
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
+import PlaceSearchButton from './PlaceSearchButton';
+import { TrashIcon } from './PlaceRegisterIcon';
 import {
   PlacePreview,
   PlaceRegistertext,
   PlaceRegisterWrapper,
   PreviewImage,
 } from './PlaceRegister.styles';
-import { TrashIcon } from './PlaceRegisterIcon';
-import PlaceSearchButton from './PlaceSearchButton';
-import PulsIconSrc from '@styles/Icon/Plus.svg';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+
+import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 
 interface PlaceRegisterProps {
   title: string;
@@ -24,48 +26,17 @@ const PlaceRegister = ({
   setPostFiles,
   setPostInfo,
 }: PlaceRegisterProps) => {
-  const [previewFile, setPreviewFile] = useState<string[]>([]);
-  const [locationTitle, setLocationTitle] = useState('');
-  const [locationHint, setLocationHint] = useState('');
-
-  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (!fileList) return;
-    setPostFiles((prevFiles) => [...prevFiles, Array.from(fileList)]);
-
-    const fileURLs: string[] = [];
-    const fileReadPromises: Promise<string>[] = [];
-
-    for (let i = 0; i < fileList.length; i++) {
-      const fileReader = new FileReader();
-      const promise = new Promise<string>((resolve) => {
-        fileReader.onload = () => {
-          const result = fileReader.result;
-          if (typeof result === 'string') {
-            fileURLs.push(result);
-            resolve(result);
-          }
-        };
-        fileReader.readAsDataURL(fileList[i]);
-      });
-      fileReadPromises.push(promise);
-    }
-
-    Promise.all(fileReadPromises).then(() => {
-      setPreviewFile([...fileURLs]);
-    });
-  };
-
-  useEffect(() => {
-    setPostInfo({
-      title: locationTitle,
-      hint: locationHint,
-    });
-  }, [locationTitle, locationHint, setPostInfo]);
+  const {
+    previewFile,
+    locationTitle,
+    setLocationTitle,
+    locationHint,
+    setLocationHint,
+    handleFilesChange,
+  } = useRegisterFiles({ setPostFiles, setPostInfo });
 
   return (
     <PlaceRegisterWrapper>
-      <button onClick={() => console.log(locationHint)}>d</button>
       <PlaceRegistertext>
         <div>{title}</div>
         <TrashIcon />
