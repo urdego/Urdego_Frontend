@@ -72,7 +72,6 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    // 폼 유효성 검사
     if (!formData.email || !formData.password || !formData.nickname) {
       alert('모든 필드를 입력해주세요.');
       return;
@@ -109,7 +108,7 @@ const Signup = () => {
 
       if (response.ok) {
         alert('회원가입이 완료되었습니다.');
-        router.push('/login'); // 로그인 페이지로 이동
+        router.push('/login');
       } else {
         const errorData = await response.text();
         alert(`회원가입 실패: ${errorData}`);
