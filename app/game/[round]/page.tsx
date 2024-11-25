@@ -19,7 +19,7 @@ const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
   const [currentRound, setCurrentRound] = useState(Number(params.round) || 1); // 현재 라운드 상태
   const [isMapView, setIsMapView] = useState(false); // 지도 화면 여부
-  const [timeLeft, setTimeLeft] = useState(20); // 60초 타이머 상태(Test는 20초로 진행)
+  const [timeLeft, setTimeLeft] = useState(100); // 60초 타이머 상태(Test는 20초로 진행)
   const [showBackIcon, setShowBackIcon] = useState(false); // 뒤로가기 아이콘 표시 여부
   const [maxRounds, setMaxRounds] = useState(2); // 최대 라운드 수(테스트 용 3라운드로 설정)
 
@@ -76,7 +76,7 @@ const GamePage = ({ params }: GamePageProps) => {
       {/* 타이머와 게이지 */}
       <TimerContainer>
         <TimerText>{timeLeft}초</TimerText>
-        <ProgressBar progress={(timeLeft / 20) * 100} />
+        <ProgressBar progress={(timeLeft / 100) * 100} />
       </TimerContainer>
 
       {/* 이미지 슬라이드 (처음에는 Swiper 컴포넌트로 이미지 띄우기) */}

@@ -33,8 +33,8 @@ export default function InGameLayout({
         onError={handleScriptError}
       />
       <PageWrapper>
-        {/* TODO : Google Maps API 로드를 언제 처리할지 고민 필요 */}
-        {isMapLoaded ? children : <div>Google Maps를 로딩 중입니다...</div>}
+        {/* TODO : 게임 로딩중일때 로딩 스피너 필요(google Map Load) */}
+        {isMapLoaded ? children : <div>게임 준비중입니다...</div>}
       </PageWrapper>
     </>
   );
