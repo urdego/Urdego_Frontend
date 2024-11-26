@@ -13,7 +13,7 @@ import AutoLoginCheckbox from '@layout/Login/AutoLogin';
 import Button from '@common/Button/Button';
 import SignupTabs from '@layout/Login/SignUpTabs';
 import SocialLogin from '@/components/Layout/Login/SNSLogos';
-import useUserStore from '@/store/useUserStore';
+import useUserStore from '@/stores/useUserStore';
 import ValidationMessage from '@common/ValidationMessage/ValidationMessage';
 
 interface LoginError {
