@@ -1,4 +1,5 @@
 'use client';
+
 import { useRef } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { PageWrapper } from '@/app/makeRoom/makeRoom.styles';
@@ -27,7 +28,7 @@ const MakeRoomPage = () => {
           buttonSize="large"
           buttonHeight="default"
           styleType="coloredBackground"
-          label="그룹 생성"
+          label="게임 방 생성"
         />
       </PageWrapper>
     </>
