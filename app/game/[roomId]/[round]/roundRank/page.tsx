@@ -9,7 +9,11 @@ import { PageWrapper, TimerContainer, TimerText, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 
-const RoundRank = ({ params }: { params: { round: string } }) => {
+const RoundRank = ({
+  params,
+}: {
+  params: { round: string; roomId: string };
+}) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
   const maxRounds = 3; // TODO : prop으로 라운드 받아오기
@@ -61,7 +65,7 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
     if (currentRound >= maxRounds) {
       router.push('/home');
     } else {
-      router.push(`/game/${currentRound + 1}`);
+      router.push(`/game/${params.roomId}/${currentRound + 1}`);
     }
   };
 
