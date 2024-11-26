@@ -63,7 +63,7 @@ const PlaceRegisterPage = () => {
           </PlaceLayout>
           <ButtonLayout>
             <Button
-              buttonType={isInputComplete ? 'purple' : 'lightGray'}
+              buttonType={isInputComplete ? 'purple' : 'gray'}
               label="작성 완료"
               onClick={isInputComplete ? uploadFile : undefined}
             />
