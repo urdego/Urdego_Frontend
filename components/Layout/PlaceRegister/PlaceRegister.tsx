@@ -51,13 +51,16 @@ const PlaceRegister = ({
     // TODO: 서버 전송 state 초기화 필요
   };
 
+  const placeIndex = Number(title.split(' ')[1]);
   return (
     <PlaceRegisterWrapper>
       <PlaceRegistertext>
         <div>{title}</div>
-        <PlaceContentResetButton onClick={resetPlaceInfo}>
-          <TrashIcon />
-        </PlaceContentResetButton>
+        {placeIndex !== 1 && (
+          <PlaceContentResetButton onClick={resetPlaceInfo}>
+            <TrashIcon />
+          </PlaceContentResetButton>
+        )}
       </PlaceRegistertext>
       <PlacePreview>
         <ImageUpload

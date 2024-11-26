@@ -44,7 +44,7 @@ const PlaceRegisterPage = () => {
             {[...Array(placeCount)].map((_elem, index) => (
               <PlaceRegister
                 key={index}
-                title={'장소' + (index + 1)}
+                title={'장소 ' + (index + 1)}
                 setPostFiles={setPostFiles}
                 setPostInfo={setPostInfo}
               />
