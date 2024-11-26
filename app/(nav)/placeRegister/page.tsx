@@ -13,10 +13,12 @@ import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
+import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 
 const PlaceRegisterPage = () => {
   const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
   const { isInputComplete } = usePlaceRegisterModeStore((state) => state);
+  const { placeCount } = usePlaceRegisterCountStore((state) => state);
 
   return (
     <>
@@ -24,21 +26,14 @@ const PlaceRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            <PlaceRegister
-              title="장소1"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
-            />
-            {/* <PlaceRegister
-              title="장소2"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
-            />
-            <PlaceRegister
-              title="장소3"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
-            /> */}
+            {[...Array(placeCount)].map((_elem, index) => (
+              <PlaceRegister
+                key={index}
+                title={'장소' + (index + 1)}
+                setPostFiles={setPostFiles}
+                setPostInfo={setPostInfo}
+              />
+            ))}
           </PlaceLayout>
           <ButtonLayout>
             <Button

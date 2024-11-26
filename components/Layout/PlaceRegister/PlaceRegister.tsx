@@ -16,6 +16,7 @@ import {
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
+import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 
 interface PlaceRegisterProps {
   title: string;
@@ -28,6 +29,7 @@ const PlaceRegister = ({
   setPostFiles,
   setPostInfo,
 }: PlaceRegisterProps) => {
+  // client state 불러오는 custom hook
   const {
     previewFile,
     setPreviewFile,
@@ -44,11 +46,22 @@ const PlaceRegister = ({
     locationHint,
   });
 
+  // store state 불러오는 로직
+  const { increasePlaceCount } = usePlaceRegisterCountStore(
+    (state) => state.actions
+  );
+
+  // client state 조작하는 로직
   const resetPlaceInfo = () => {
     setLocationTitle('');
     setLocationHint('');
     setPreviewFile([]);
     // TODO: 서버 전송 state 초기화 필요
+  };
+
+  const handleClick = () => {
+    increasePlaceCount();
+    setIsInputComplete(false);
   };
 
   return (
@@ -92,7 +105,7 @@ const PlaceRegister = ({
         buttonHeight="short"
         label="장소추가"
         icon={PulsIconSrc}
-        onClick={() => setIsInputComplete(false)}
+        onClick={isInputComplete ? handleClick : undefined}
       />
     </PlaceRegisterWrapper>
   );
