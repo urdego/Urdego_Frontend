@@ -9,52 +9,88 @@ import {
   CharacterWrapper,
   CharactersContainer,
   InfoWrapper,
+  Host,
   Level,
   NickName,
-  IsHost,
 } from './Character.styles';
 
-interface User {
-  id: number;
-  name: string;
-  isHost: boolean;
-}
+const positions = [
+  { top: '10%', left: '50%' },
+  { top: '30%', left: '80%' },
+  { top: '70%', left: '70%' },
+  { top: '90%', left: '30%' },
+  { top: '60%', left: '10%' },
+  { top: '20%', left: '20%' },
+];
 
-interface CharacterProps {
-  users: User[];
-}
-
-const Character = ({ users }: CharacterProps) => {
-  // 캐릭터 이미지 소스 설정
-  const characterImages = [
-    SnowMan1,
-    SnowMan2,
-    SnowMan3,
-    SnowMan4,
-    SnowMan5,
-    SnowMan6,
-  ];
-
-  // 유저 수에 맞춰 배치
-  const positions = [
-    { top: '10%', left: '50%' },
-    { top: '30%', left: '80%' },
-    { top: '70%', left: '70%' },
-    { top: '90%', left: '30%' },
-    { top: '60%', left: '10%' },
-    { top: '20%', left: '20%' },
+const Character = () => {
+  const characters = [
+    {
+      id: 1,
+      level: '레벨 1',
+      nickname: '눈사람',
+      src: SnowMan1,
+      alt: '1번 눈사람',
+      isHost: true,
+    },
+    {
+      id: 2,
+      level: '레벨 2',
+      nickname: '쪼꼬미',
+      src: SnowMan2,
+      alt: '2번 눈사람',
+      isHost: false,
+    },
+    {
+      id: 3,
+      level: '레벨 1',
+      nickname: '곽두팔씨',
+      src: SnowMan3,
+      alt: '3번 눈사람',
+      isHost: false,
+    },
+    {
+      id: 4,
+      level: '레벨 2',
+      nickname: '귀요미',
+      src: SnowMan4,
+      alt: '4번 눈사람',
+      isHost: false,
+    },
+    {
+      id: 5,
+      level: '레벨 3',
+      nickname: '군침이싹',
+      src: SnowMan5,
+      alt: '5번 눈사람',
+      isHost: false,
+    },
+    {
+      id: 6,
+      level: '레벨 1',
+      nickname: '강낭콩',
+      src: SnowMan6,
+      alt: '6번 눈사람',
+      isHost: false,
+    },
   ];
 
   return (
     <CharactersContainer>
-      {users.map((user: User, idx: number) => (
-        <CharacterWrapper key={user.id} style={positions[idx]}>
-          <IsHost>{user.isHost && '방장'}</IsHost>
+      {characters.map((char, idx) => (
+        <CharacterWrapper
+          key={char.id}
+          style={positions[idx]}
+          animation="slide"
+        >
           <InfoWrapper>
-            <Level>{'레벨 1'}</Level>
-            <NickName>{user.name}</NickName>
+            {char.isHost && <Host>방장</Host>}
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <Level>{char.level}</Level>
+              <NickName>{char.nickname}</NickName>
+            </div>
           </InfoWrapper>
-          <Image src={characterImages[idx]} alt={`${user.name} 캐릭터`} />
+          <Image src={char.src} alt={char.alt} />
         </CharacterWrapper>
       ))}
     </CharactersContainer>

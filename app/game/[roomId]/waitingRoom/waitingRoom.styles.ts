@@ -19,31 +19,6 @@ export const UserList = styled.ul`
   max-width: 400px;
 `;
 
-export const UserItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  margin-bottom: 8px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-`;
-
-export const StartButton = styled.button<{ disabled: boolean }>`
-  margin-top: 16px;
-  padding: 12px 24px;
-  font-size: 16px;
-  color: ${({ disabled }) => (disabled ? '#888' : '#fff')};
-  background-color: ${({ disabled }) => (disabled ? '#ccc' : '#007bff')};
-  border: none;
-  border-radius: 8px;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-
-  &:hover {
-    background-color: ${({ disabled }) => (disabled ? '#ccc' : '#0056b3')};
-  }
-`;
-
 export const Footer = styled.footer`
   display: flex;
   justify-content: center;

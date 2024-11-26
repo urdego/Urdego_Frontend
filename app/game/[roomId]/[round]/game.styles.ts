@@ -4,7 +4,7 @@ import colors from '@/styles/color/palette';
 
 export const PageWrapper = styled.div`
   background-color: ${colors.etc.white};
-  padding: 44px 16px 0px 16px;
+  padding-top: 44px;
   width: 100%;
   box-sizing: border-box;
   align-items: center;
@@ -14,8 +14,8 @@ export const TimerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  margin: 8px 0;
+  width: calc(100% - 32px);
+  margin: 8px 16px;
 `;
 
 export const TimerText = styled.div`
