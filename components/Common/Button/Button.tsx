@@ -12,6 +12,7 @@ interface ButtonProps {
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -22,6 +23,7 @@ const Button = ({
   label,
   icon,
   onClick,
+  disabled = false,
 }: ButtonProps) => {
   return (
     <StyledButton
@@ -30,6 +32,7 @@ const Button = ({
       $buttonHeight={buttonHeight}
       $styleType={styleType}
       onClick={onClick}
+      disabled={disabled}
     >
       {icon && (
         <IconWrapper>
