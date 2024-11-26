@@ -5,7 +5,7 @@ import {
 import { StaticImageData } from 'next/image';
 
 interface ButtonProps {
-  buttonType?: 'purple' | 'gray';
+  buttonType?: 'purple' | 'gray' | 'lightGray';
   buttonSize?: 'small' | 'large';
   buttonHeight?: 'default' | 'short';
   styleType?: 'whiteBackground' | 'coloredBackground';

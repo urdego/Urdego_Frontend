@@ -50,7 +50,9 @@ const PlaceRegisterPage = () => {
               />
             ))}
             <Button
-              buttonType={isInputComplete && placeCount < 3 ? 'purple' : 'gray'}
+              buttonType={
+                isInputComplete && placeCount < 3 ? 'purple' : 'lightGray'
+              }
               buttonHeight="short"
               label="장소추가"
               icon={PulsIconSrc}
@@ -61,7 +63,7 @@ const PlaceRegisterPage = () => {
           </PlaceLayout>
           <ButtonLayout>
             <Button
-              buttonType={isInputComplete ? 'purple' : 'gray'}
+              buttonType={isInputComplete ? 'purple' : 'lightGray'}
               label="작성 완료"
               onClick={isInputComplete ? uploadFile : undefined}
             />
