@@ -25,13 +25,16 @@ const PlaceRegisterPage = () => {
   const { setIsInputComplete } = usePlaceRegisterModeStore(
     (state) => state.actions
   );
-  const { placeCount } = usePlaceRegisterCountStore((state) => state);
-  const { increasePlaceCount } = usePlaceRegisterCountStore(
+  const { placeCount, placeCountList } = usePlaceRegisterCountStore(
+    (state) => state
+  );
+  const { increasePlaceCount, addPlaceCountList } = usePlaceRegisterCountStore(
     (state) => state.actions
   );
 
   const handleClick = () => {
     increasePlaceCount();
+    addPlaceCountList();
     setIsInputComplete(false);
   };
 
@@ -41,23 +44,28 @@ const PlaceRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            {[...Array(placeCount)].map((_elem, index) => (
+            {placeCountList.map((count, index) => (
               <PlaceRegister
-                key={index}
-                title={'장소 ' + (index + 1)}
+                key={count}
+                id={count}
+                title={'장소 ' + count + '/' + (index + 1)}
                 setPostFiles={setPostFiles}
                 setPostInfo={setPostInfo}
               />
             ))}
             <Button
               buttonType={
-                isInputComplete && placeCount < 3 ? 'purple' : 'lightGray'
+                isInputComplete && placeCountList.length < 3
+                  ? 'purple'
+                  : 'lightGray'
               }
               buttonHeight="short"
               label="장소추가"
               icon={PulsIconSrc}
               onClick={
-                isInputComplete && placeCount < 3 ? handleClick : undefined
+                isInputComplete && placeCountList.length < 3
+                  ? handleClick
+                  : undefined
               }
             />
           </PlaceLayout>

@@ -14,49 +14,48 @@ import {
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
+import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 
 interface PlaceRegisterProps {
+  id: number;
   title: string;
   setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
   setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
 const PlaceRegister = ({
+  id,
   title,
   setPostFiles,
   setPostInfo,
 }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const {
-    previewFile,
-    setPreviewFile,
-    locationTitle,
-    setLocationTitle,
-    locationHint,
-    setLocationHint,
-    handleFilesChange,
-  } = useRegisterFiles({ setPostFiles, setPostInfo });
-
-  useWatchInputComplete({
-    previewFile,
-    locationTitle,
-    locationHint,
+  const { previewFile, handleFilesChange } = useRegisterFiles({
+    setPostFiles,
+    setPostInfo,
   });
+
+  // useWatchInputComplete({
+  //   previewFile,
+  //   locationTitle,
+  //   locationHint,
+  // });
+
+  const { deletePlaceCountList } = usePlaceRegisterCountStore(
+    (state) => state.actions
+  );
 
   // client state 조작하는 로직
   const resetPlaceInfo = () => {
-    setLocationTitle('');
-    setLocationHint('');
-    setPreviewFile([]);
+    deletePlaceCountList(id);
     // TODO: 서버 전송 state 초기화 필요
   };
 
-  const placeIndex = Number(title.split(' ')[1]);
   return (
     <PlaceRegisterWrapper>
       <PlaceRegistertext>
         <div>{title}</div>
-        {placeIndex !== 1 && (
+        {id !== 1 && (
           <PlaceContentResetButton onClick={resetPlaceInfo}>
             <TrashIcon />
           </PlaceContentResetButton>

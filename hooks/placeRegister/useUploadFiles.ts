@@ -1,3 +1,4 @@
+import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 import { useState } from 'react';
 
 const useUploadFiles = () => {
@@ -6,9 +7,15 @@ const useUploadFiles = () => {
     title: '',
     hint: '',
   });
+  const { placeCount, placeCountList } = usePlaceRegisterCountStore(
+    (state) => state
+  );
 
   const uploadFile = () => {
     const formData = new FormData();
+    console.log('files', postFiles);
+    console.log('info', postInfo);
+    console.log(placeCount, placeCountList);
 
     // 이미지 등록
     postFiles.map((file) => {

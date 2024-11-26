@@ -13,10 +13,7 @@ interface PlaceInputProps {
 }
 
 const PlaceInput = ({ placeholder, state, setState }: PlaceInputProps) => {
-  const [inputValue, setInputValue] = useState('');
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
     setState(event.target.value);
   };
 
@@ -31,8 +28,9 @@ const PlaceInput = ({ placeholder, state, setState }: PlaceInputProps) => {
         placeholder={placeholder}
         value={state}
         onChange={handleChange}
+        maxLength={25}
       />
-      {inputValue && (
+      {state && (
         <ContentResetButton onClick={resetChange}>
           <ClearIcon />
         </ContentResetButton>

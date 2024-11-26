@@ -1,21 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface useUploadFilesProps {
   setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
   setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
-const useRegisterFiles = ({
-  setPostFiles,
-  setPostInfo,
-}: useUploadFilesProps) => {
+const useRegisterFiles = ({ setPostFiles }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
-  const [locationTitle, setLocationTitle] = useState('');
-  const [locationHint, setLocationHint] = useState('');
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
+    console.log(fileList);
     setPostFiles((prevFiles) => [...prevFiles, ...Array.from(fileList)]);
 
     const fileURLs: string[] = [];
@@ -41,20 +37,9 @@ const useRegisterFiles = ({
     });
   };
 
-  useEffect(() => {
-    setPostInfo({
-      title: locationTitle,
-      hint: locationHint,
-    });
-  }, [locationTitle, locationHint, setPostInfo]);
-
   return {
     previewFile,
     setPreviewFile,
-    locationTitle,
-    setLocationTitle,
-    locationHint,
-    setLocationHint,
     handleFilesChange,
   };
 };
