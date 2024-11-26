@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import PulsIconSrc from '@styles/Icon/Plus.svg';
+// import PulsIconSrc from '@styles/Icon/Plus.svg';
 
-import Button from '@/components/Common/Button/Button';
+// import Button from '@/components/Common/Button/Button';
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
@@ -15,8 +15,8 @@ import {
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
-import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
-import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
+// import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
+// import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 
 interface PlaceRegisterProps {
   title: string;
@@ -40,16 +40,16 @@ const PlaceRegister = ({
     handleFilesChange,
   } = useRegisterFiles({ setPostFiles, setPostInfo });
 
-  const { isInputComplete, setIsInputComplete } = useWatchInputComplete({
-    previewFile,
-    locationTitle,
-    locationHint,
-  });
+  // const { isInputComplete, setIsInputComplete } = useWatchInputComplete({
+  //   previewFile,
+  //   locationTitle,
+  //   locationHint,
+  // });
 
   // store state 불러오는 로직
-  const { increasePlaceCount } = usePlaceRegisterCountStore(
-    (state) => state.actions
-  );
+  // const { increasePlaceCount } = usePlaceRegisterCountStore(
+  //   (state) => state.actions
+  // );
 
   // client state 조작하는 로직
   const resetPlaceInfo = () => {
@@ -59,10 +59,10 @@ const PlaceRegister = ({
     // TODO: 서버 전송 state 초기화 필요
   };
 
-  const handleClick = () => {
-    increasePlaceCount();
-    setIsInputComplete(false);
-  };
+  // const handleClick = () => {
+  //   increasePlaceCount();
+  //   setIsInputComplete(false);
+  // };
 
   return (
     <PlaceRegisterWrapper>
@@ -100,13 +100,13 @@ const PlaceRegister = ({
         state={locationHint}
         setState={setLocationHint}
       />
-      <Button
+      {/* <Button
         buttonType={isInputComplete ? 'purple' : 'gray'}
         buttonHeight="short"
         label="장소추가"
         icon={PulsIconSrc}
         onClick={isInputComplete ? handleClick : undefined}
-      />
+      /> */}
     </PlaceRegisterWrapper>
   );
 };

@@ -3,6 +3,7 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
+import PulsIconSrc from '@styles/Icon/Plus.svg';
 
 import {
   ButtonLayout,
@@ -16,9 +17,23 @@ import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
 
 const PlaceRegisterPage = () => {
+  // client state 불러오는 custom hook
   const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
+
+  // store state 불러오는 로직
   const { isInputComplete } = usePlaceRegisterModeStore((state) => state);
+  const { setIsInputComplete } = usePlaceRegisterModeStore(
+    (state) => state.actions
+  );
   const { placeCount } = usePlaceRegisterCountStore((state) => state);
+  const { increasePlaceCount } = usePlaceRegisterCountStore(
+    (state) => state.actions
+  );
+
+  const handleClick = () => {
+    increasePlaceCount();
+    setIsInputComplete(false);
+  };
 
   return (
     <>
@@ -34,6 +49,15 @@ const PlaceRegisterPage = () => {
                 setPostInfo={setPostInfo}
               />
             ))}
+            <Button
+              buttonType={isInputComplete && placeCount < 3 ? 'purple' : 'gray'}
+              buttonHeight="short"
+              label="장소추가"
+              icon={PulsIconSrc}
+              onClick={
+                isInputComplete && placeCount < 3 ? handleClick : undefined
+              }
+            />
           </PlaceLayout>
           <ButtonLayout>
             <Button
