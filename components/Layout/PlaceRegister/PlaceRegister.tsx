@@ -13,50 +13,37 @@ import {
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
-import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
-import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
-
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 interface PlaceRegisterProps {
-  id: number;
+  index: number;
   title: string;
   setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
-const PlaceRegister = ({
-  id,
-  title,
-  setPostFiles,
-  setPostInfo,
-}: PlaceRegisterProps) => {
+const PlaceRegister = ({ index, title, setPostFiles }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
   const { previewFile, handleFilesChange } = useRegisterFiles({
     setPostFiles,
-    setPostInfo,
   });
 
-  // useWatchInputComplete({
-  //   previewFile,
-  //   locationTitle,
-  //   locationHint,
-  // });
+  const { placeList, setPlaceInput } = usePlaceRegisterStore();
 
-  const { deletePlaceCountList } = usePlaceRegisterCountStore(
-    (state) => state.actions
-  );
-
-  // client state 조작하는 로직
-  const resetPlaceInfo = () => {
-    deletePlaceCountList(id);
-    // TODO: 서버 전송 state 초기화 필요
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'title', e.target.value);
   };
+
+  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'hint', e.target.value);
+  };
+
+  const resetPlace = () => {};
 
   return (
     <PlaceRegisterWrapper>
       <PlaceRegistertext>
         <div>{title}</div>
-        {id !== 1 && (
-          <PlaceContentResetButton onClick={resetPlaceInfo}>
+        {index !== 0 && (
+          <PlaceContentResetButton onClick={resetPlace}>
             <TrashIcon />
           </PlaceContentResetButton>
         )}
@@ -80,14 +67,14 @@ const PlaceRegister = ({
       </PlacePreview>
       <PlaceInput
         placeholder="장소명"
-        state={locationTitle}
-        setState={setLocationTitle}
+        value={placeList[index].title}
+        onChange={handleTitleChange}
       />
       <PlaceSearchButton />
       <PlaceInput
         placeholder="(선택) 힌트를 작성해주세요"
-        state={locationHint}
-        setState={setLocationHint}
+        value={placeList[index].hint}
+        onChange={handleHintChange}
       />
     </PlaceRegisterWrapper>
   );

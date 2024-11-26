@@ -1,32 +1,25 @@
-import usePlaceRegisterCountStore from '@/stores/placeRegisterCountStore';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useState } from 'react';
 
 const useUploadFiles = () => {
   const [postFiles, setPostFiles] = useState<File[]>([]);
-  const [postInfo, setPostInfo] = useState<object>({
-    title: '',
-    hint: '',
-  });
-  const { placeCount, placeCountList } = usePlaceRegisterCountStore(
-    (state) => state
-  );
+  const { placeList } = usePlaceRegisterStore();
 
   const uploadFile = () => {
     const formData = new FormData();
-    console.log('files', postFiles);
-    console.log('info', postInfo);
-    console.log(placeCount, placeCountList);
+    console.log('file', postFiles);
+    console.log('placeInformation', placeList[0]);
 
     // 이미지 등록
     postFiles.map((file) => {
-      formData.append('locationFiles', file);
+      formData.append('file', file);
     });
 
-    // 장소명, 힌트 등록
-    const locationInfoBlob = new Blob([JSON.stringify(postInfo)], {
+    // 장소명, 장소 위경도, 힌트 등록
+    const locationInfoBlob = new Blob([JSON.stringify(placeList[0])], {
       type: 'application/json',
     });
-    formData.append('locationInfo', locationInfoBlob);
+    formData.append('placeInformation', locationInfoBlob);
 
     console.log(Array.from(formData));
 
@@ -45,7 +38,6 @@ const useUploadFiles = () => {
 
   return {
     setPostFiles,
-    setPostInfo,
     uploadFile,
   };
 };

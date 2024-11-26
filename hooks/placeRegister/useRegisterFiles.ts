@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 interface useUploadFilesProps {
   setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
 const useRegisterFiles = ({ setPostFiles }: useUploadFilesProps) => {
@@ -11,7 +10,6 @@ const useRegisterFiles = ({ setPostFiles }: useUploadFilesProps) => {
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
-    console.log(fileList);
     setPostFiles((prevFiles) => [...prevFiles, ...Array.from(fileList)]);
 
     const fileURLs: string[] = [];

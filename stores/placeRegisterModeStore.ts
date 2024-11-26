@@ -14,7 +14,7 @@ interface Actions {
 
 const usePlaceRegisterModeStore = create<State & Actions>((set) => ({
   isInputComplete: false,
-  isSubmitReady: false,
+  isSubmitReady: true,
   actions: {
     setIsInputComplete: (mode) => set(() => ({ isInputComplete: mode })),
     setIsSubmitReady: (mode) => set(() => ({ isSubmitReady: mode })),
