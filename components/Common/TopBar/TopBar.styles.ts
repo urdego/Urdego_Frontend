@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 interface StyledTopBarProps {
-  $NavType: 'default' | 'other' | 'main' | 'game';
+  $NavType: 'default' | 'other' | 'main' | 'game' | 'room';
   isMapView?: boolean;
 }
 
@@ -17,7 +17,6 @@ export const Nav = styled.nav<StyledTopBarProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* padding: 0 20px; */
 
   ${({ $NavType }) =>
     $NavType === 'default'
@@ -34,9 +33,15 @@ export const Nav = styled.nav<StyledTopBarProps>`
           ? css`
               box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
             `
-          : css`
-              background-color: #f4eeff;
-            `}
+          : $NavType === 'room'
+            ? css`
+                background-color: white;
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+                justify-content: end;
+              `
+            : css`
+                background-color: #f4eeff;
+              `}
 `;
 
 export const BackIconWrapper = styled.div`
@@ -75,4 +80,15 @@ export const Label = styled.div`
   font-size: 18px;
   font-weight: bold;
   white-space: nowrap;
+`;
+
+export const ExitButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-right: 20px;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;
