@@ -5,8 +5,9 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   /* min-height: calc(var(--vh, 1vh) * 100); */
-  min-width: 340px;
+  min-width: 375px;
   max-width: 430px;
+  min-height: 812px;
   background-color: #ffffff; /* 배경색 */
   color: black; /* 텍스트 색상 */
   display: flex;

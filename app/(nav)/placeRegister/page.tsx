@@ -2,18 +2,51 @@
 
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
-import { PlaceRegisterWrapper } from './PlaceRegister.styles';
+import Button from '@/components/Common/Button/Button';
+
+import {
+  ButtonLayout,
+  PlaceLayout,
+  PlaceRegisterWrapper,
+} from './PlaceRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
 
+import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
+import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
+
 const PlaceRegisterPage = () => {
+  const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
+  const { isInputComplete } = usePlaceRegisterModeStore((state) => state);
+
   return (
-  <>
-    <TopBar NavType="default" label="장소 등록하기" />
+    <>
+      <TopBar NavType="default" label="장소 등록하기" />
       <PageWrapper>
         <PlaceRegisterWrapper>
-          <PlaceRegister title="장소1" currCount={0} totalCount={3} />
-          <PlaceRegister title="장소2" currCount={0} totalCount={3} />
-          <PlaceRegister title="장소3" currCount={0} totalCount={3} />
+          <PlaceLayout>
+            <PlaceRegister
+              title="장소1"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            />
+            {/* <PlaceRegister
+              title="장소2"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            />
+            <PlaceRegister
+              title="장소3"
+              setPostFiles={setPostFiles}
+              setPostInfo={setPostInfo}
+            /> */}
+          </PlaceLayout>
+          <ButtonLayout>
+            <Button
+              buttonType={isInputComplete ? 'purple' : 'gray'}
+              label="작성 완료"
+              onClick={isInputComplete ? uploadFile : undefined}
+            />
+          </ButtonLayout>
         </PlaceRegisterWrapper>
       </PageWrapper>
     </>

@@ -8,24 +8,28 @@ import { ClearIcon } from './PlaceInputIcon';
 
 interface PlaceInputProps {
   placeholder: string;
+  state: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const PlaceInput = ({ placeholder }: PlaceInputProps) => {
+const PlaceInput = ({ placeholder, state, setState }: PlaceInputProps) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+    setState(event.target.value);
   };
 
   const resetChange = () => {
     setInputValue('');
+    setState('');
   };
 
   return (
     <PlaceInputWrapper>
       <ContentInput
         placeholder={placeholder}
-        value={inputValue}
+        value={state}
         onChange={handleChange}
       />
       {inputValue && (
