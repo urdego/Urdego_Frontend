@@ -17,3 +17,23 @@ export const PlaceRegistertext = styled.div`
   font-weight: 700;
   line-height: 150%;
 `;
+
+export const PlaceContentResetButton = styled.div`
+  cursor: pointer;
+`;
+
+export const PlacePreview = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+`;
+
+export const PreviewImage = styled.div`
+  position: relative;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  img {
+    border-radius: 4px;
+  }
+`;

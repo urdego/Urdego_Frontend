@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   Button,
   ContentInput,
@@ -5,7 +6,10 @@ import {
   ContentWrapper,
   Hr,
   InputWrapper,
-} from '@/components/Common/Input/Input.styles';
+  InputContainer,
+} from './Input.styles';
+import eyeClose from '@styles/Icon/EyeClose.svg';
+import eyeOpen from '@styles/Icon/EyeOpen.svg';
 
 interface InputProps {
   title: string;
@@ -13,6 +17,10 @@ interface InputProps {
   isButton?: boolean;
   isHiddenPassword?: boolean;
   handleClick?: () => void;
+  onChange?: (value: string) => void;
+  type?: string;
+  validation?: React.ReactNode;
+  autoComplete?: string;
 }
 
 const Input = ({
@@ -21,18 +29,37 @@ const Input = ({
   isButton = false,
   isHiddenPassword,
   handleClick,
+  onChange,
+  type = 'text',
+  validation,
+  autoComplete,
 }: InputProps) => {
   return (
-    <InputWrapper>
-      <Title>{title}</Title>
-      <ContentWrapper>
-        <ContentInput placeholder={placeholder} />
-        {isButton && (
-          <Button $isHiddenPassword={isHiddenPassword} onClick={handleClick} />
-        )}
-      </ContentWrapper>
-      <Hr />
-    </InputWrapper>
+    <InputContainer>
+      <InputWrapper>
+        <Title>{title}</Title>
+        <ContentWrapper>
+          <ContentInput
+            placeholder={placeholder}
+            type={type}
+            onChange={(e) => onChange?.(e.target.value)}
+            autoComplete={autoComplete}
+          />
+          {isButton && (
+            <Button onClick={handleClick}>
+              <Image
+                src={isHiddenPassword ? eyeClose : eyeOpen}
+                alt={isHiddenPassword ? 'Show password' : 'Hide password'}
+                width={24}
+                height={24}
+              />
+            </Button>
+          )}
+        </ContentWrapper>
+        <Hr />
+      </InputWrapper>
+      {validation}
+    </InputContainer>
   );
 };
 
