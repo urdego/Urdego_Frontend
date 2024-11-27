@@ -43,11 +43,12 @@ export const Input = styled.input`
   }
 `;
 
-export const InviteButton = styled.button`
+export const InviteButton = styled.button<{ isSelected: boolean }>`
   width: 80px;
   height: 46px;
   padding: 12px;
-  background-color: ${colors.purple[50]};
+  background-color: ${(props) =>
+    props.isSelected ? colors.purple[50] : colors.gray[70]};
   color: white;
   border: none;
   border-radius: 4px;
@@ -59,7 +60,6 @@ export const InviteButton = styled.button`
   box-sizing: border-box;
 `;
 
-// 나머지 스타일은 그대로 유지
 export const SearchResultList = styled.ul`
   position: absolute;
   top: 100%;
@@ -73,7 +73,7 @@ export const SearchResultList = styled.ul`
   list-style: none;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 100000;
 `;
 
 export const SearchResultItem = styled.li`
@@ -111,4 +111,26 @@ export const InvitedFriendsList = styled.ul`
 export const InvitedFriend = styled.li`
   color: ${colors.etc.black};
   font-size: 14px;
+`;
+
+export const InvitedFriendContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const CancelButton = styled.button`
+  color: ${colors.etc.black};
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  line-height: 1;
+  margin-left: 8px;
+
+  &:hover {
+    opacity: 0.8;
+    color: ${colors.alert[50]};
+  }
 `;
