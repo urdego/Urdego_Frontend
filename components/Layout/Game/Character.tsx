@@ -14,6 +14,15 @@ import {
   NickName,
 } from './Character.styles';
 
+interface CharacterProps {
+  users: {
+    id: number;
+    name: string;
+    isHost: boolean;
+    isReady: boolean;
+  }[];
+}
+
 const positions = [
   { top: '10%', left: '50%' },
   { top: '30%', left: '80%' },
@@ -23,57 +32,16 @@ const positions = [
   { top: '20%', left: '20%' },
 ];
 
-const Character = () => {
-  const characters = [
-    {
-      id: 1,
-      level: '레벨 1',
-      nickname: '눈사람',
-      src: SnowMan1,
-      alt: '1번 눈사람',
-      isHost: true,
-    },
-    {
-      id: 2,
-      level: '레벨 2',
-      nickname: '쪼꼬미',
-      src: SnowMan2,
-      alt: '2번 눈사람',
-      isHost: false,
-    },
-    {
-      id: 3,
-      level: '레벨 1',
-      nickname: '곽두팔씨',
-      src: SnowMan3,
-      alt: '3번 눈사람',
-      isHost: false,
-    },
-    {
-      id: 4,
-      level: '레벨 2',
-      nickname: '귀요미',
-      src: SnowMan4,
-      alt: '4번 눈사람',
-      isHost: false,
-    },
-    {
-      id: 5,
-      level: '레벨 3',
-      nickname: '군침이싹',
-      src: SnowMan5,
-      alt: '5번 눈사람',
-      isHost: false,
-    },
-    {
-      id: 6,
-      level: '레벨 1',
-      nickname: '강낭콩',
-      src: SnowMan6,
-      alt: '6번 눈사람',
-      isHost: false,
-    },
-  ];
+const Character = ({ users }: CharacterProps) => {
+  const characters = users.map((user, index) => ({
+    id: user.id,
+    level: `레벨 ${index + 1}`, // 임시 레벨 할당
+    nickname: user.name,
+    src: [SnowMan1, SnowMan2, SnowMan3, SnowMan4, SnowMan5, SnowMan6][index],
+    alt: `${index + 1}번 눈사람`,
+    isHost: user.isHost,
+    isReady: user.isReady,
+  }));
 
   return (
     <CharactersContainer>
@@ -84,7 +52,11 @@ const Character = () => {
           animation="slide"
         >
           <InfoWrapper>
-            {char.isHost && <Host>방장</Host>}
+            {char.isHost ? (
+              <Host>방장</Host>
+            ) : char.isReady ? (
+              <Host isReady>준비완료</Host>
+            ) : null}
             <div style={{ display: 'flex', gap: '4px' }}>
               <Level>{char.level}</Level>
               <NickName>{char.nickname}</NickName>
