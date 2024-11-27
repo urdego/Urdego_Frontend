@@ -8,6 +8,8 @@ import {
   DropdownItem,
   ArrowIcon,
 } from '@layout/MakeRoom/DataListForm.styles';
+import { minusIcon } from '@styles/Icon/minusIcon.svg';
+import { plusIcon } from '@styles/Icon/plusIcon.svg';
 
 interface DataListFormProps {
   type: 'people' | 'round';
@@ -15,7 +17,7 @@ interface DataListFormProps {
 }
 
 const DataListForm = forwardRef<HTMLSelectElement, DataListFormProps>(
-  ({ type, onChange }) => {
+  ({ type, onChange }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState<string | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
