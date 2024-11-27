@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Script from 'next/script';
-import { PageWrapper } from './[round]/game.styles';
+import { PageWrapper } from './[roomId]/[round]/game.styles';
 
 export default function InGameLayout({
   children,

@@ -33,14 +33,15 @@ export const Button = styled.button<{ active: boolean }>`
 export const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  padding: 8px 16px;
 `;
 
 export const UserRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
+  padding: 8px 16px;
   background-color: ${colors.etc.white};
   border-radius: 4px;
 

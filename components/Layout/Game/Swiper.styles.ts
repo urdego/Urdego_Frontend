@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { SwiperSlide } from 'swiper/react';
 
 export const SwiperContainer = styled.div`
-  width: 100%;
-  max-width: 375px;
+  width: calc(100% - 32px);
   margin: 0 auto;
   padding-top: 12px;
   padding-bottom: 50px;

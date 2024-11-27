@@ -9,6 +9,7 @@ interface ButtonProps {
   buttonSize?: 'small' | 'large';
   buttonHeight?: 'default' | 'short';
   styleType?: 'whiteBackground' | 'coloredBackground';
+  disabled?: boolean;
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;

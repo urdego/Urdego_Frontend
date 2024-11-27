@@ -9,27 +9,25 @@ import { PageWrapper, TimerContainer, TimerText, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 
-const RoundRank = ({ params }: { params: { round: string } }) => {
+const RoundRank = ({
+  params,
+}: {
+  params: { round: string; roomId: string };
+}) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
   const maxRounds = 3; // TODO : prop으로 라운드 받아오기
   const [timeLeft, setTimeLeft] = useState(15);
 
-  // 더미 데이터 (thisRound, totalRound)
-  const dummyData = {
-    thisRound: [
-      { rank: 1, name: '가가가', score: 120 },
-      { rank: 2, name: '나나나', score: 110 },
-      { rank: 3, name: '다다다', score: 100 },
-      { rank: 4, name: '라라라', score: 95 },
-      { rank: 5, name: '마마마', score: 90 },
-    ],
-    totalRound: [
-      { rank: 1, name: '가가가', score: 580 },
-      { rank: 2, name: '나나나', score: 560 },
-      { rank: 3, name: '다다다', score: 540 },
-      { rank: 4, name: '라라라', score: 520 },
-      { rank: 5, name: '마마마', score: 500 },
+  const MapDummyData = {
+    answerCoordinate: { lat: 37.5665, lng: 126.958 },
+    userCoordinates: [
+      { nickname: '가가가', lat: 37.5665, lng: 126.978, score: 120 },
+      { nickname: '나나나', lat: 37.5675, lng: 126.979, score: 110 },
+      { nickname: '다다다', lat: 37.5685, lng: 126.98, score: 100 },
+      { nickname: '라라라', lat: 37.5695, lng: 126.981, score: 90 },
+      { nickname: '마마마', lat: 37.5705, lng: 126.982, score: 80 },
+      { nickname: '바바바', lat: 37.5715, lng: 126.983, score: 70 },
     ],
   };
 
@@ -40,6 +38,25 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
 
   const handleToggle = (round: 'thisRound' | 'totalRound') => {
     setCurrentRoundData(round);
+  };
+
+  // 이번 라운드 점수 계산
+  const thisRoundData = MapDummyData.userCoordinates.map((user, index) => ({
+    rank: index + 1,
+    name: user.nickname,
+    score: user.score,
+  }));
+
+  // 총 점수 계산
+  const totalRoundData = MapDummyData.userCoordinates.map((user, index) => ({
+    rank: index + 1,
+    name: user.nickname,
+    score: user.score * currentRound, // 누적 점수 계산
+  }));
+
+  const dummyData = {
+    thisRound: thisRoundData,
+    totalRound: totalRoundData,
   };
 
   // 타이머 로직
@@ -61,7 +78,7 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
     if (currentRound >= maxRounds) {
       router.push('/home');
     } else {
-      router.push(`/game/${currentRound + 1}`);
+      router.push(`/game/${params.roomId}/${currentRound + 1}`);
     }
   };
 
@@ -72,12 +89,17 @@ const RoundRank = ({ params }: { params: { round: string } }) => {
       {/* 타이머와 게이지 */}
       {currentRound < maxRounds && (
         <TimerContainer>
-          <TimerText>{timeLeft}초</TimerText>
+          <TimerText>{timeLeft}초 후 시작</TimerText>
           <ProgressBar progress={(timeLeft / 15) * 100} />
         </TimerContainer>
       )}
 
-      <MapComponent mode="rank" />
+      <MapComponent
+        mode="rank"
+        answerCoordinate={MapDummyData.answerCoordinate}
+        userCoordinates={MapDummyData.userCoordinates}
+      />
+
       <RankList
         rankData={dummyData[currentRoundData]}
         handleToggle={handleToggle}
