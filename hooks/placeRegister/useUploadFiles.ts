@@ -20,22 +20,22 @@ const useUploadFiles = () => {
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    // axios
-    //   .post(
-    //     `${process.env.NEXT_PUBLIC_USER_CONTENT_API}/api/content-service/contents?${params.toString()}`,
-    //     formData,
-    //     {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_USER_CONTENT_API}/api/content-service/contents?${params.toString()}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return {
