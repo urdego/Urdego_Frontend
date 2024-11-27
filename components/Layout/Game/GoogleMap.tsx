@@ -15,7 +15,7 @@ interface MapComponentProps {
   zoom?: number;
   mode: 'game' | 'rank';
   onCoordinateSelect?: (coordinate: google.maps.LatLngLiteral | null) => void;
-  answerCoordinate: google.maps.LatLngLiteral;
+  answerCoordinate: google.maps.LatLngLiteral | null;
   userCoordinates?: {
     nickname: string;
     lat: number;
@@ -134,7 +134,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     }
 
     // 유저 좌표 마커 배치
-    if (userCoordinates) {
+    if (userCoordinates && answerCoordinate) {
       userCoordinates.forEach((user) => {
         const userMarker = new google.maps.Marker({
           position: { lat: user.lat, lng: user.lng },
