@@ -24,6 +24,7 @@ interface StyledInputProps {
 }
 
 export const StyledInput = styled.input<StyledInputProps>`
+  height: 46px;
   width: 100%;
   padding: 12px;
   border: 1px solid ${colors.gray[70]};
