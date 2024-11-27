@@ -19,7 +19,7 @@ import useControlButton from '@/hooks/placeRegister/useContorlButtons';
 
 const PlaceRegisterPage = () => {
   // client state 불러오는 custom hook
-  const { setPostFiles, uploadFile } = useUploadFiles();
+  const { uploadFile } = useUploadFiles();
   useControlButton();
 
   // store state 불러오는 로직
@@ -27,11 +27,6 @@ const PlaceRegisterPage = () => {
   const { placeList, addPlaceList } = usePlaceRegisterStore();
 
   const handleClick = () => {
-    // 추가 placeRegister 등록
-    // 기존 코드
-    // increasePlaceCount();
-    // addPlaceCountList();
-    // setIsInputComplete(false);
     addPlaceList();
   };
 
@@ -46,7 +41,6 @@ const PlaceRegisterPage = () => {
                 key={index}
                 index={index}
                 title={'장소 ' + (index + 1)}
-                setPostFiles={setPostFiles}
               />
             ))}
             <Button

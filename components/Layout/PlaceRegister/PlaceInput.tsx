@@ -3,7 +3,7 @@ import {
   ContentResetButton,
   PlaceInputWrapper,
 } from './PlaceInput.styles';
-import { ClearIcon } from './PlaceInputIcon';
+import { ClearIcon } from './PlaceRegisterIcon';
 
 interface PlaceInputProps {
   placeholder: string;

@@ -1,16 +1,19 @@
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useState } from 'react';
 
 interface useUploadFilesProps {
-  setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  index: number;
 }
 
-const useRegisterFiles = ({ setPostFiles }: useUploadFilesProps) => {
+const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
+  const { setPlaceInput } = usePlaceRegisterStore();
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
-    setPostFiles((prevFiles) => [...prevFiles, ...Array.from(fileList)]);
+
+    setPlaceInput(index, 'file', Array.from(fileList));
 
     const fileURLs: string[] = [];
     const fileReadPromises: Promise<string>[] = [];

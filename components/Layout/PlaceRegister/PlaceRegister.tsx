@@ -17,17 +17,18 @@ import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 interface PlaceRegisterProps {
   index: number;
   title: string;
-  setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const PlaceRegister = ({ index, title, setPostFiles }: PlaceRegisterProps) => {
+const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
   const { previewFile, handleFilesChange } = useRegisterFiles({
-    setPostFiles,
+    index,
   });
 
+  // store
   const { placeList, setPlaceInput } = usePlaceRegisterStore();
 
+  // event handler
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceInput(index, 'title', e.target.value);
   };
