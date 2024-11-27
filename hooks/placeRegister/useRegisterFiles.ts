@@ -8,17 +8,22 @@ interface useUploadFilesProps {
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
   const { setPlaceInput } = usePlaceRegisterStore();
+  const MAX_CONTENT_COUNT = 3;
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
 
-    setPlaceInput(index, 'file', Array.from(fileList));
+    setPlaceInput(
+      index,
+      'file',
+      Array.from(fileList).slice(0, MAX_CONTENT_COUNT)
+    );
 
     const fileURLs: string[] = [];
     const fileReadPromises: Promise<string>[] = [];
 
-    for (let i = 0; i < fileList.length; i++) {
+    for (let i = 0; i < MAX_CONTENT_COUNT; i++) {
       const fileReader = new FileReader();
       const promise = new Promise<string>((resolve) => {
         fileReader.onload = () => {
