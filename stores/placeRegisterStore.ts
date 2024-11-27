@@ -11,6 +11,7 @@ interface State {
 
 interface Actions {
   setPlaceInput: (targetIndex: number, title: string, hint: string) => void;
+  addPlaceList: () => void;
 }
 
 const usePlaceRegisterStore = create<State & Actions>((set) => ({
@@ -22,6 +23,10 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
       );
       return { placeList: updatePlace };
     }),
+  addPlaceList: () =>
+    set((state) => ({
+      placeList: [...state.placeList, { title: '', hint: '' }],
+    })),
 }));
 
 export default usePlaceRegisterStore;

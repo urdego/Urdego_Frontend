@@ -15,16 +15,16 @@ import { PageWrapper } from '@/app/commonPage.styles';
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import useControlButton from '@/hooks/placeRegister/useContorlButtons';
 
 const PlaceRegisterPage = () => {
   // client state 불러오는 custom hook
   const { setPostFiles, uploadFile } = useUploadFiles();
+  useControlButton();
 
   // store state 불러오는 로직
-  const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore(
-    (state) => state
-  );
-  const { placeList } = usePlaceRegisterStore((state) => state);
+  const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
+  const { placeList, addPlaceList } = usePlaceRegisterStore();
 
   const handleClick = () => {
     // 추가 placeRegister 등록
@@ -32,6 +32,7 @@ const PlaceRegisterPage = () => {
     // increasePlaceCount();
     // addPlaceCountList();
     // setIsInputComplete(false);
+    addPlaceList();
   };
 
   return (
@@ -40,7 +41,6 @@ const PlaceRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            <button onClick={() => console.log(placeList)}>a</button>
             {placeList.map((_, index) => (
               <PlaceRegister
                 key={index}
@@ -50,17 +50,11 @@ const PlaceRegisterPage = () => {
               />
             ))}
             <Button
-              buttonType={
-                isInputComplete && placeList.length < 3 ? 'purple' : 'lightGray'
-              }
+              buttonType={isInputComplete ? 'purple' : 'lightGray'}
               buttonHeight="short"
               label="장소추가"
               icon={PulsIconSrc}
-              onClick={
-                isInputComplete && placeList.length < 3
-                  ? handleClick
-                  : undefined
-              }
+              onClick={isInputComplete ? handleClick : undefined}
             />
           </PlaceLayout>
           <ButtonLayout>

@@ -1,4 +1,5 @@
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import axios from 'axios';
 import { useState } from 'react';
 
 const useUploadFiles = () => {
@@ -8,7 +9,7 @@ const useUploadFiles = () => {
   const uploadFile = () => {
     const formData = new FormData();
     console.log('file', postFiles);
-    console.log('placeInformation', placeList[0]);
+    console.log('placeInformation', placeList);
 
     // 이미지 등록
     postFiles.map((file) => {
@@ -16,24 +17,30 @@ const useUploadFiles = () => {
     });
 
     // 장소명, 장소 위경도, 힌트 등록
-    const locationInfoBlob = new Blob([JSON.stringify(placeList[0])], {
-      type: 'application/json',
-    });
-    formData.append('placeInformation', locationInfoBlob);
+    const params = new URLSearchParams();
+    params.append('userId', '1');
+    params.append('contentName', placeList[0].title);
+    params.append('hint', placeList[0].hint);
+    params.append('latitude', '123.1');
+    params.append('longitude', '123.1');
 
-    console.log(Array.from(formData));
-
-    //axios post
-    // axios.post('http://localhost:3079/file/uploads', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // })
-    // .then((res) => {
+    // 서버에게 정보 전송
+    // axios
+    //   .post(
+    //     `${process.env.NEXT_PUBLIC_USER_CONTENT_API}/api/content-service/contents?${params.toString()}`,
+    //     formData,
+    //     {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
     //     console.log(res.data);
-    // }).catch((err) => {
+    //   })
+    //   .catch((err) => {
     //     console.error(err);
-    // });
+    //   });
   };
 
   return {
