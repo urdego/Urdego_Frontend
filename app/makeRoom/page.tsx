@@ -49,7 +49,7 @@ const MakeRoomPage = () => {
 
   return (
     <>
-      <TopBar NavType="other" label="방 만들기" />
+      <TopBar label="방 만들기" NavType="room" exitIcon />
       <PageWrapper>
         <RoomTitleInput
           ref={titleInputRef}

@@ -55,7 +55,7 @@ const TopBar = ({
     if (onExitClick) {
       onExitClick();
     } else {
-      router.push('/home');
+      router.push('/groupList');
     }
   };
 
