@@ -3,6 +3,7 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
+import PulsIconSrc from '@styles/Icon/Plus.svg';
 
 import {
   ButtonLayout,
@@ -13,10 +14,21 @@ import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import useControlButton from '@/hooks/placeRegister/useContorlButtons';
 
 const PlaceRegisterPage = () => {
-  const { setPostFiles, setPostInfo, uploadFile } = useUploadFiles();
-  const { isInputComplete } = usePlaceRegisterModeStore((state) => state);
+  // client state 불러오는 custom hook
+  const { uploadFile } = useUploadFiles();
+  useControlButton();
+
+  // store state 불러오는 로직
+  const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
+  const { placeList, addPlaceList } = usePlaceRegisterStore();
+
+  const handleClick = () => {
+    addPlaceList();
+  };
 
   return (
     <>
@@ -24,27 +36,26 @@ const PlaceRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            <PlaceRegister
-              title="장소1"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
+            {placeList.map((_, index) => (
+              <PlaceRegister
+                key={index}
+                index={index}
+                title={'장소 ' + (index + 1)}
+              />
+            ))}
+            <Button
+              buttonType={isInputComplete ? 'purple' : 'lightGray'}
+              buttonHeight="short"
+              label="장소추가"
+              icon={PulsIconSrc}
+              onClick={isInputComplete ? handleClick : undefined}
             />
-            {/* <PlaceRegister
-              title="장소2"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
-            />
-            <PlaceRegister
-              title="장소3"
-              setPostFiles={setPostFiles}
-              setPostInfo={setPostInfo}
-            /> */}
           </PlaceLayout>
           <ButtonLayout>
             <Button
-              buttonType={isInputComplete ? 'purple' : 'gray'}
+              buttonType={isSubmitReady ? 'purple' : 'gray'}
               label="작성 완료"
-              onClick={isInputComplete ? uploadFile : undefined}
+              onClick={isSubmitReady ? uploadFile : undefined}
             />
           </ButtonLayout>
         </PlaceRegisterWrapper>

@@ -1,27 +1,31 @@
-import { useEffect, useState } from 'react';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import { useState } from 'react';
 
 interface useUploadFilesProps {
-  setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  setPostInfo: React.Dispatch<React.SetStateAction<object>>;
+  index: number;
 }
 
-const useRegisterFiles = ({
-  setPostFiles,
-  setPostInfo,
-}: useUploadFilesProps) => {
+const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
-  const [locationTitle, setLocationTitle] = useState('');
-  const [locationHint, setLocationHint] = useState('');
+  const { setPlaceInput } = usePlaceRegisterStore();
+  const MAX_CONTENT_COUNT = 3;
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
-    setPostFiles((prevFiles) => [...prevFiles, ...Array.from(fileList)]);
+
+    setPlaceInput(
+      index,
+      'file',
+      Array.from(fileList).slice(0, MAX_CONTENT_COUNT)
+    );
 
     const fileURLs: string[] = [];
     const fileReadPromises: Promise<string>[] = [];
 
-    for (let i = 0; i < fileList.length; i++) {
+    const fileListLength =
+      fileList.length < 3 ? fileList.length : MAX_CONTENT_COUNT;
+    for (let i = 0; i < fileListLength; i++) {
       const fileReader = new FileReader();
       const promise = new Promise<string>((resolve) => {
         fileReader.onload = () => {
@@ -41,20 +45,9 @@ const useRegisterFiles = ({
     });
   };
 
-  useEffect(() => {
-    setPostInfo({
-      title: locationTitle,
-      hint: locationHint,
-    });
-  }, [locationTitle, locationHint, setPostInfo]);
-
   return {
     previewFile,
     setPreviewFile,
-    locationTitle,
-    setLocationTitle,
-    locationHint,
-    setLocationHint,
     handleFilesChange,
   };
 };

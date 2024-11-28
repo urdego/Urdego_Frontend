@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import colors from '@styles/color/palette';
 
 interface StyledButtonProps {
-  $buttonType: 'purple' | 'gray';
+  $buttonType: 'purple' | 'gray' | 'lightGray';
   $buttonSize: 'small' | 'large';
   $buttonHeight: 'default' | 'short';
   $styleType: 'whiteBackground' | 'coloredBackground';
@@ -52,7 +52,9 @@ export const StyledButton = styled.button<StyledButtonProps>`
       : css`
           background-color: ${$buttonType === 'purple'
             ? colors.purple[50]
-            : colors.gray[70]};
+            : $buttonType === 'gray'
+              ? colors.gray[70]
+              : colors.gray[90]};
           border: none;
           color: ${colors.etc.white};
           font-weight: 700;

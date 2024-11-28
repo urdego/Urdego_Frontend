@@ -4,7 +4,7 @@ import {
   ImageUploadInput,
   ImageUploadWrapper,
 } from './ImageUpload.styles';
-import { GalleryIcon } from './ImageUploadIcon';
+import { GalleryIcon } from './PlaceRegisterIcon';
 
 interface ImageUploadProps {
   currCount: number;
@@ -22,7 +22,7 @@ const ImageUpload = ({
       <ImageUploadContainer>
         <ImageUploadInput
           type="file"
-          accept="video/*|image/*"
+          accept="image/*"
           multiple
           onChange={handleFilesChange}
         />
