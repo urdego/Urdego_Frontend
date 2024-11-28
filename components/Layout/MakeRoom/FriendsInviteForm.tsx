@@ -76,6 +76,15 @@ const FriendsInviteForm = ({
     setSearchResults([]);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    // 입력값이 selectedUser의 닉네임과 다르면 selectedUser를 null로 설정
+    if (value !== selectedUser?.nickname) {
+      setSelectedUser(null);
+    }
+  };
+
   const handleInvite = () => {
     if (
       selectedUser &&
@@ -83,7 +92,6 @@ const FriendsInviteForm = ({
         (friend) => friend.nickname === selectedUser.nickname
       )
     ) {
-      // 선택된 인원수 체크
       if (invitedFriends.length >= selectedNumber) {
         toast.error('인원수 보다 많은 친구 초대는 어렵습니다.', {
           duration: 2000,
@@ -113,7 +121,7 @@ const FriendsInviteForm = ({
         <Input
           type="text"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleInputChange}
           placeholder="닉네임을 입력해주세요"
         />
         {searchResults.length > 0 && (
