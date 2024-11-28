@@ -7,7 +7,12 @@ const useControlButton = () => {
   const { setIsInputComplete, setIsSubmitReady } = usePlaceRegisterModeStore();
 
   useEffect(() => {
-    if (placeList.every((place) => place.title !== '' && place.hint !== '')) {
+    if (
+      placeList.every(
+        (place) =>
+          place.title !== '' && place.hint !== '' && place.file.length !== 0
+      )
+    ) {
       if (placeList.length < 3) {
         setIsInputComplete(true);
       } else {
