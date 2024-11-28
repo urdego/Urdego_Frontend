@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import CountdownButton from '@/components/Layout/Game/CountdownButton';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Timer from '@/components/Layout/Game/Timer';
 import { PageWrapper, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
+import CountdownButton from '@/components/Layout/Game/CountdownButton';
 
 const RoundRank = ({
   params,
@@ -17,7 +17,6 @@ const RoundRank = ({
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
   const maxRounds = 3; // TODO : prop으로 라운드 받아오기
-  const [timeLeft, setTimeLeft] = useState(15);
 
   const MapDummyData = useMemo(() => {
     // TODO: 나중에 데이터를 가져와서 쓸땐 useMemo쓰기
@@ -86,7 +85,7 @@ const RoundRank = ({
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
 
       {/* 타이머와 게이지 */}
-      {currentRound < maxRounds && (
+      {currentRound >= maxRounds && (
         <Timer initialTime={15} onTimeEnd={handleNextRound} />
       )}
 
