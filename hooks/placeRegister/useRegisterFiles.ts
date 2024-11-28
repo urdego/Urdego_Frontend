@@ -5,11 +5,11 @@ interface useUploadFilesProps {
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput } = usePlaceRegisterStore();
+  const { setPlaceInput, deletePartPlaceFile } = usePlaceRegisterStore();
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
-  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
 
@@ -44,8 +44,13 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
   };
 
+  const handlePartFileRemove = (index: number, previewIndex: number) => {
+    deletePartPlaceFile(index, previewIndex);
+  };
+
   return {
-    handleFilesChange,
+    handleFilesUpload,
+    handlePartFileRemove,
   };
 };
 

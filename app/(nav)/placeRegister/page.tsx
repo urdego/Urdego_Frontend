@@ -3,7 +3,7 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
-import PulsIconSrc from '@styles/Icon/Plus.svg';
+import PlusIconSrc from '@styles/Icon/Plus.svg';
 
 import {
   ButtonLayout,
@@ -47,7 +47,7 @@ const PlaceRegisterPage = () => {
               buttonType={isInputComplete ? 'purple' : 'lightGray'}
               buttonHeight="short"
               label="장소추가"
-              icon={PulsIconSrc}
+              icon={PlusIconSrc}
               onClick={isInputComplete ? handleClick : undefined}
             />
           </PlaceLayout>

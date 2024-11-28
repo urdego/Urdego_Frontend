@@ -6,7 +6,6 @@ const useUploadFiles = () => {
 
   const uploadFile = () => {
     const formData = new FormData();
-    console.log('placeInformation', placeList);
 
     // 이미지 등록
     formData.append('file', placeList[0].file[0]);
@@ -20,7 +19,7 @@ const useUploadFiles = () => {
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    console.log(placeList);
+    console.log('placeRegister Result', placeList);
     // axios
     //   .post('/api/content', formData, {
     //     headers: {

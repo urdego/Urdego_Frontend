@@ -15,6 +15,7 @@ import {
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+
 interface PlaceRegisterProps {
   index: number;
   title: string;
@@ -22,7 +23,7 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const { handleFilesChange } = useRegisterFiles({
+  const { handleFilesUpload, handlePartFileRemove } = useRegisterFiles({
     index,
   });
 
@@ -54,13 +55,15 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
       </PlaceRegistertext>
       <PlacePreview>
         <ImageUpload
-          handleFilesChange={handleFilesChange}
+          handleFilesUpload={handleFilesUpload}
           currCount={placeList[index].previewFile.length}
           totalCount={3}
         />
-        {placeList[index].previewFile.map((file, index) => (
-          <PreviewImage key={index}>
-            <PreviewImageRemoveButton onClick={() => console.log('ok')}>
+        {placeList[index].previewFile.map((file, previewIndex) => (
+          <PreviewImage key={previewIndex}>
+            <PreviewImageRemoveButton
+              onClick={() => handlePartFileRemove(index, previewIndex)}
+            >
               <BlackClearIcon />
             </PreviewImageRemoveButton>
             <Image
