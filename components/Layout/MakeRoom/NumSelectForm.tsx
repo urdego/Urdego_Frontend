@@ -19,13 +19,13 @@ interface NumSelectFormProps {
   onChange?: (value: number) => void;
 }
 
-const NumSelectForm: React.FC<NumSelectFormProps> = ({
+const NumSelectForm = ({
   label,
   initialValue = 1,
   minValue = 1,
   maxValue,
   onChange,
-}) => {
+}: NumSelectFormProps) => {
   const [value, setValue] = useState(initialValue);
 
   const handleDecrease = () => {
