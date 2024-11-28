@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useGameState } from '@/hooks/useGameState';
-import { useGameSubmit } from '@/hooks/useGameSubmit';
+import { useGameState } from '@/hooks/inGame/useGameState';
+import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';

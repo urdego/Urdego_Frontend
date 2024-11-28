@@ -3,6 +3,7 @@ import {
   IconWrapper,
 } from '@/components/Common/Button/Button.styles';
 import { StaticImageData } from 'next/image';
+import Image from 'next/image';
 
 interface ButtonProps {
   buttonType?: 'purple' | 'gray' | 'lightGray';
@@ -13,7 +14,6 @@ interface ButtonProps {
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
-  disabled?: boolean;
 }
 
 const Button = ({
@@ -24,11 +24,12 @@ const Button = ({
   label,
   icon,
   onClick,
-  disabled = false,
+  disabled,
 }: ButtonProps) => {
+  const ActiveButtonType = disabled ? 'gray' : buttonType;
   return (
     <StyledButton
-      $buttonType={buttonType}
+      $buttonType={ActiveButtonType}
       $buttonSize={buttonSize}
       $buttonHeight={buttonHeight}
       $styleType={styleType}
@@ -38,9 +39,9 @@ const Button = ({
       {icon && (
         <IconWrapper>
           {typeof icon === 'string' ? (
-            <img src={icon} alt="" />
+            <Image src={icon} alt="" />
           ) : (
-            <img src={icon.src} alt="" />
+            <Image src={icon.src} alt="" />
           )}
         </IconWrapper>
       )}

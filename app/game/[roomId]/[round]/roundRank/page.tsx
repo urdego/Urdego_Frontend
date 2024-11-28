@@ -85,7 +85,7 @@ const RoundRank = ({
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
 
       {/* 타이머와 게이지 */}
-      {currentRound >= maxRounds && (
+      {currentRound < maxRounds && (
         <Timer initialTime={15} onTimeEnd={handleNextRound} />
       )}
 
