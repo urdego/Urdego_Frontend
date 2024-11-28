@@ -100,6 +100,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         url: UserMarker.src,
         scaledSize: new google.maps.Size(50, 53), // TODO: 사이즈 조절
       },
+      animation: google.maps.Animation.DROP,
     });
 
     markerRefs.current.push(marker);
@@ -131,6 +132,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
         },
       });
       markerRefs.current.push(answerMarker);
+
+      // 더 자연스러운 줌 애니메이션을 위한 순차적 실행
+      mapRef.current.setZoom(12); // 먼저 넓은 시야로 줌 아웃
+      setTimeout(() => {
+        mapRef.current?.panTo(answerCoordinate); // 위치로 이동
+        setTimeout(() => {
+          mapRef.current?.setZoom(15); // 부드럽게 줌인
+        }, 1000);
+      }, 100);
     }
 
     // 유저 좌표 마커 배치
@@ -143,8 +153,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
             url: UserMarker.src,
             scaledSize: new google.maps.Size(50, 53), // TODO: 사이즈 조절
           },
+          animation: google.maps.Animation.DROP,
         });
         markerRefs.current.push(userMarker);
+
         // 정답 좌표와 유저 좌표를 연결하는 선 추가
         const line = new google.maps.Polyline({
           path: [answerCoordinate, { lat: user.lat, lng: user.lng }],
@@ -173,6 +185,13 @@ const MapComponent: React.FC<MapComponentProps> = ({
   useEffect(() => {
     placeMarkers();
   }, [answerCoordinate, userCoordinates]);
+
+  // answerCoordinate가 변경될 때마다 실행되도록 useEffect 수정
+  useEffect(() => {
+    if (answerCoordinate) {
+      placeMarkers();
+    }
+  }, [answerCoordinate]);
 
   return <MapContainer ref={mapElementRef} mode={mode} />;
 };

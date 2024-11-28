@@ -14,7 +14,7 @@ const WaitingRoom = () => {
   // 더미 유저 데이터 (데이터 변경하면서 테스트)
   const dummyUsers = [
     { id: 1, name: '눈사람', isHost: true, isReady: true },
-    { id: 2, name: '쪼꼬미', isHost: false, isReady: false },
+    { id: 2, name: '쪼꼬미', isHost: false, isReady: true },
     { id: 3, name: '곽두팔씨', isHost: false, isReady: true },
     { id: 4, name: '귀요미', isHost: false, isReady: true },
     { id: 5, name: '군침이싹', isHost: false, isReady: true },
@@ -24,7 +24,7 @@ const WaitingRoom = () => {
   const [users, setUsers] = useState(dummyUsers);
 
   // 현재 로그인한 유저 (임시 설정)
-  const currentUser = { id: 2, name: '쪼꼬미' }; // TODO: 인증 데이터와 연동 필요
+  const currentUser = { id: 1, name: '눈사람' }; // TODO: 인증 데이터와 연동 필요
 
   // 현재 유저가 방장인지 확인
   const isHost = users.some(
