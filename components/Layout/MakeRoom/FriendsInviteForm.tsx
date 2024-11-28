@@ -108,7 +108,7 @@ const FriendsInviteForm = ({
       }
 
       // 인원수 체크
-      if (invitedFriends.length >= selectedNumber) {
+      if (invitedFriends.length >= selectedNumber - 1) {
         toast.error('인원수 보다 많은 친구 초대는 어렵습니다.', {
           duration: 2000,
           position: 'bottom-center',

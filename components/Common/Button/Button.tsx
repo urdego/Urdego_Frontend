@@ -13,7 +13,6 @@ interface ButtonProps {
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
-  disabled?: boolean;
 }
 
 const Button = ({
