@@ -11,7 +11,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-    if (!fileList) return;
+    if (!fileList || fileList?.length === 0) return;
 
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
     const totalMemory = selectedFileList.reduce(
