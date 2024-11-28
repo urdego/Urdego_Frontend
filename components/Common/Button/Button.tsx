@@ -26,10 +26,9 @@ const Button = ({
   onClick,
   disabled,
 }: ButtonProps) => {
-  const ActiveButtonType = disabled ? 'gray' : buttonType;
   return (
     <StyledButton
-      $buttonType={ActiveButtonType}
+      $buttonType={buttonType}
       $buttonSize={buttonSize}
       $buttonHeight={buttonHeight}
       $styleType={styleType}
