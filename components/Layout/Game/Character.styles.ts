@@ -80,3 +80,7 @@ export const IsHost = styled.span`
   font-weight: normal;
   color: ${colors.etc.black};
 `;
+export const NicknameContainer = styled.div`
+  display: flex;
+  gap: 4px;
+`;

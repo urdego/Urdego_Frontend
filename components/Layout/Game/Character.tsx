@@ -12,6 +12,7 @@ import {
   Host,
   Level,
   NickName,
+  NicknameContainer,
 } from './Character.styles';
 
 interface CharacterProps {
@@ -57,10 +58,10 @@ const Character = ({ users }: CharacterProps) => {
             ) : char.isReady ? (
               <Host isReady>준비완료</Host>
             ) : null}
-            <div style={{ display: 'flex', gap: '4px' }}>
+            <NicknameContainer>
               <Level>{char.level}</Level>
               <NickName>{char.nickname}</NickName>
-            </div>
+            </NicknameContainer>
           </InfoWrapper>
           <Image src={char.src} alt={char.alt} />
         </CharacterWrapper>
