@@ -27,20 +27,19 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
     index,
   });
 
-  // store
-  const { placeList, setPlaceInput, deletePlaceList } = usePlaceRegisterStore();
+  // store state 불러오는 로직
+  const { placeList, setPlaceInput, removePlaceList } = usePlaceRegisterStore();
 
   // event handler
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceInput(index, 'title', e.target.value);
   };
-
   const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceInput(index, 'hint', e.target.value);
   };
 
   const resetPlace = () => {
-    deletePlaceList(index);
+    removePlaceList(index);
   };
 
   return (

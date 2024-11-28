@@ -3,7 +3,7 @@ import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useEffect } from 'react';
 
 const useControlButton = () => {
-  const { placeList } = usePlaceRegisterStore();
+  const { placeList, addPlaceList } = usePlaceRegisterStore();
   const { setIsInputComplete, setIsSubmitReady } = usePlaceRegisterModeStore();
 
   useEffect(() => {
@@ -21,6 +21,14 @@ const useControlButton = () => {
       setIsSubmitReady(false);
     }
   }, [placeList, setIsInputComplete, setIsSubmitReady]);
+
+  const handleAddPlaceList = () => {
+    addPlaceList();
+  };
+
+  return {
+    handleAddPlaceList,
+  };
 };
 
 export default useControlButton;

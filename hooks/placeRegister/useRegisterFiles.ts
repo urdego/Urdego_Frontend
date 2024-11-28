@@ -5,7 +5,7 @@ interface useUploadFilesProps {
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput, deletePartPlaceFile } = usePlaceRegisterStore();
+  const { setPlaceInput, removePartPlaceFile } = usePlaceRegisterStore();
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
@@ -45,7 +45,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   };
 
   const handlePartFileRemove = (index: number, previewIndex: number) => {
-    deletePartPlaceFile(index, previewIndex);
+    removePartPlaceFile(index, previewIndex);
   };
 
   return {

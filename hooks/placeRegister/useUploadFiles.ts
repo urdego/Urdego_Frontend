@@ -4,7 +4,7 @@ import axios from 'axios';
 const useUploadFiles = () => {
   const { placeList } = usePlaceRegisterStore();
 
-  const uploadFile = () => {
+  const handleUploadFiles = () => {
     const formData = new FormData();
 
     // 이미지 등록
@@ -36,7 +36,7 @@ const useUploadFiles = () => {
   };
 
   return {
-    uploadFile,
+    handleUploadFiles,
   };
 };
 

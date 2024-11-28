@@ -17,9 +17,10 @@ interface Actions {
     filed: string,
     value: string | string[] | File[]
   ) => void;
+  initPlaceList: () => void;
   addPlaceList: () => void;
-  deletePlaceList: (targetIndex: number) => void;
-  deletePartPlaceFile: (
+  removePlaceList: (targetIndex: number) => void;
+  removePartPlaceFile: (
     targetPlaceIndex: number,
     targetFileIndex: number
   ) => void;
@@ -34,6 +35,10 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
       );
       return { placeList: updatePlace };
     }),
+  initPlaceList: () =>
+    set(() => ({
+      placeList: [{ title: '', hint: '', file: [], previewFile: [] }],
+    })),
   addPlaceList: () =>
     set((state) => ({
       placeList: [
@@ -41,11 +46,11 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
         { title: '', hint: '', file: [], previewFile: [] },
       ],
     })),
-  deletePlaceList: (targetIndex) =>
+  removePlaceList: (targetIndex) =>
     set((state) => ({
       placeList: state.placeList.filter((_, index) => targetIndex !== index),
     })),
-  deletePartPlaceFile: (targetPlaceIndex, targetFileIndex) => {
+  removePartPlaceFile: (targetPlaceIndex, targetFileIndex) => {
     set((state) => ({
       placeList: state.placeList.map((item, index) =>
         targetPlaceIndex === index
