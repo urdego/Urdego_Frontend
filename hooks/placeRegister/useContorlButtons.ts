@@ -8,10 +8,7 @@ const useControlButton = () => {
 
   useEffect(() => {
     if (
-      placeList.every(
-        (place) =>
-          place.title !== '' && place.hint !== '' && place.file.length !== 0
-      )
+      placeList.every((place) => place.title !== '' && place.file.length !== 0)
     ) {
       if (placeList.length < 3) {
         setIsInputComplete(true);
