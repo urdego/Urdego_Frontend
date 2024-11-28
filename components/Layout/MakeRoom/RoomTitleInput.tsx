@@ -10,10 +10,11 @@ interface RoomTitleInputProps {
   placeholder: string;
   label: string;
   variant?: 'default' | 'readonly';
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const RoomTitleInput = forwardRef<HTMLInputElement, RoomTitleInputProps>(
-  ({ placeholder, label, variant = 'default' }, ref) => {
+  ({ placeholder, label, variant = 'default', onChange }, ref) => {
     return (
       <InputContainer>
         <InputLabel>{label}</InputLabel>
@@ -24,6 +25,7 @@ const RoomTitleInput = forwardRef<HTMLInputElement, RoomTitleInputProps>(
             ref={ref}
             readOnly={variant === 'readonly'}
             $variant={variant}
+            onChange={onChange}
           />
         </InputWrapper>
       </InputContainer>

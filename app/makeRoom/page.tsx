@@ -16,15 +16,33 @@ interface UserInfo {
 const MakeRoomPage = () => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [invitedFriends, setInvitedFriends] = useState<UserInfo[]>([]);
+  const [selectedNumber, setSelectedNumber] = useState(2); // 선택된 인원 수 상태 추가
+  const [isRoomTitleEntered, setIsRoomTitleEntered] = useState(false); // 방 제목 입력 상태 추가
 
+  // 방 제목 입력 감지
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsRoomTitleEntered(!!e.target.value.trim());
+  };
+
+  // 인원 수 변경 감지
+  const handleNumberChange = (value: number) => {
+    setSelectedNumber(value);
+  };
+
+  // 초대된 친구 목록 변경
   const handleInvitedFriendsChange = (friends: UserInfo[]) => {
     setInvitedFriends(friends);
   };
+
+  // 버튼 활성화 조건 체크
+  const isButtonEnabled =
+    isRoomTitleEntered && invitedFriends.length === selectedNumber;
 
   const handleCreateRoom = () => {
     const roomData = {
       title: titleInputRef.current?.value,
       invitedFriends,
+      totalMembers: selectedNumber,
     };
     console.log('Room creation data:', roomData);
   };
@@ -37,12 +55,14 @@ const MakeRoomPage = () => {
           ref={titleInputRef}
           label="방 제목 설정"
           placeholder="방 제목을 설정해주세요"
+          onChange={handleTitleChange}
         />
         <NumSelectForm
           label="인원수 (최대 6명)"
           maxValue={6}
           minValue={2}
           initialValue={2}
+          onChange={handleNumberChange}
         />
         <NumSelectForm label="라운드 (최대 3라운드)" maxValue={3} />
         <RoomTitleInput
@@ -53,16 +73,18 @@ const MakeRoomPage = () => {
         <FriendsInviteForm
           onFriendsChange={handleInvitedFriendsChange}
           invitedFriends={invitedFriends}
+          selectedNumber={selectedNumber} // 추가된 prop
         />
       </PageWrapper>
       <Footer>
         <Button
-          buttonType="gray"
+          buttonType={isButtonEnabled ? 'purple' : 'gray'}
           buttonSize="large"
           buttonHeight="default"
           styleType="coloredBackground"
           label="그룹 생성"
           onClick={handleCreateRoom}
+          disabled={!isButtonEnabled}
         />
       </Footer>
     </>

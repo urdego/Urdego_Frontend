@@ -14,6 +14,7 @@ import {
   InvitedFriendContainer,
   CancelButton,
 } from './FriendsInviteForm.styles';
+import toast from 'react-hot-toast';
 
 interface UserInfo {
   id: number;
@@ -23,11 +24,13 @@ interface UserInfo {
 interface FriendsInviteFormProps {
   onFriendsChange: (friends: UserInfo[]) => void;
   invitedFriends: UserInfo[];
+  selectedNumber: number;
 }
 
 const FriendsInviteForm = ({
   onFriendsChange,
   invitedFriends,
+  selectedNumber,
 }: FriendsInviteFormProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<UserInfo[]>([]);
@@ -50,10 +53,8 @@ const FriendsInviteForm = ({
 
           if (response.status === 200) {
             const data = await response.json();
-            console.log('API 응답 데이터:', data); // API 데이터 확인
             setSearchResults(Array.isArray(data) ? data : []);
           } else {
-            console.error('API 호출 실패:', response.status);
             setSearchResults([]);
           }
         } catch (error) {
@@ -82,6 +83,15 @@ const FriendsInviteForm = ({
         (friend) => friend.nickname === selectedUser.nickname
       )
     ) {
+      // 선택된 인원수 체크
+      if (invitedFriends.length >= selectedNumber) {
+        toast.error('인원수 보다 많은 친구 초대는 어렵습니다.', {
+          duration: 2000,
+          position: 'bottom-center',
+        });
+        return;
+      }
+
       const newInvitedFriends = [...invitedFriends, selectedUser];
       onFriendsChange(newInvitedFriends);
       setSelectedUser(null);
