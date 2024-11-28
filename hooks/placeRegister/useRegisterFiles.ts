@@ -9,23 +9,31 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
   const { setPlaceInput } = usePlaceRegisterStore();
   const MAX_CONTENT_COUNT = 3;
+  const MAX_MEMORY = 30 * 1024 * 1024;
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (!fileList) return;
 
-    setPlaceInput(
-      index,
-      'file',
-      Array.from(fileList).slice(0, MAX_CONTENT_COUNT)
+    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
+    const totalMemory = selectedFileList.reduce(
+      (acc, file) => acc + file.size,
+      0
     );
+
+    if (totalMemory > MAX_MEMORY) {
+      setPlaceInput(index, 'file', []);
+      setPreviewFile([]);
+      alert('30MB를 초과하실 수 없습니다!');
+      return;
+    }
+
+    setPlaceInput(index, 'file', selectedFileList);
 
     const fileURLs: string[] = [];
     const fileReadPromises: Promise<string>[] = [];
 
-    const fileListLength =
-      fileList.length < 3 ? fileList.length : MAX_CONTENT_COUNT;
-    for (let i = 0; i < fileListLength; i++) {
+    for (let i = 0; i < selectedFileList.length; i++) {
       const fileReader = new FileReader();
       const promise = new Promise<string>((resolve) => {
         fileReader.onload = () => {
@@ -35,7 +43,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
             resolve(result);
           }
         };
-        fileReader.readAsDataURL(fileList[i]);
+        fileReader.readAsDataURL(selectedFileList[i]);
       });
       fileReadPromises.push(promise);
     }
