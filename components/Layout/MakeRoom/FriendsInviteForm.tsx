@@ -4,7 +4,6 @@ import {
   Title,
   SearchContainer,
   Input,
-  InviteButton,
   SearchResultList,
   SearchResultItem,
   InvitedFriendsContainer,
@@ -16,6 +15,7 @@ import {
 } from './FriendsInviteForm.styles';
 import toast from 'react-hot-toast';
 import useUserStore from '@stores/useUserStore';
+import InviteButton from '@layout/MakeRoom/InviteButton';
 
 interface UserInfo {
   id: number;
@@ -92,7 +92,7 @@ const FriendsInviteForm = ({
     }
   };
 
-  const handleInvite = () => {
+  const handleInvite = async () => {
     if (selectedUser) {
       // 이미 초대된 친구인지 체크
       if (
@@ -104,7 +104,7 @@ const FriendsInviteForm = ({
           duration: 2000,
           position: 'bottom-center',
         });
-        return;
+        return false;
       }
 
       // 인원수 체크
@@ -113,14 +113,16 @@ const FriendsInviteForm = ({
           duration: 2000,
           position: 'bottom-center',
         });
-        return;
+        return false;
       }
 
       const newInvitedFriends = [...invitedFriends, selectedUser];
       onFriendsChange(newInvitedFriends);
       setSelectedUser(null);
       setSearchTerm('');
+      return true; // 성공적으로 초대된 경우
     }
+    return false;
   };
 
   const handleCancelInvite = (friendToRemove: UserInfo) => {
@@ -152,14 +154,8 @@ const FriendsInviteForm = ({
             ))}
           </SearchResultList>
         )}
-        <InviteButton
-          onClick={handleInvite}
-          $isSelected={selectedUser !== null}
-        >
-          초대완료!
-        </InviteButton>
+        <InviteButton onClick={handleInvite} selectedUser={selectedUser} />
       </SearchContainer>
-
       <InvitedFriendsContainer>
         <InvitedFriendsTitle>초대된 친구 목록</InvitedFriendsTitle>
         <InvitedFriendsList>

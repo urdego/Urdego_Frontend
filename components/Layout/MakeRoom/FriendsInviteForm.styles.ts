@@ -71,7 +71,7 @@ export const SearchResultList = styled.ul`
   background: white;
   border: 1px solid ${colors.gray[70]};
   border-radius: 4px;
-  margin: 3px 0 0; /* 상단 간격을 3px로 설정 */
+  margin: 3px 0 0;
   padding: 0;
   list-style: none;
   max-height: 200px;
@@ -85,7 +85,7 @@ export const SearchResultItem = styled.li`
   color: ${colors.etc.black};
 
   &:hover {
-    background-color: ${colors.gray[70]}20;
+    background-color: ${colors.gray[70]};
   }
 `;
 
