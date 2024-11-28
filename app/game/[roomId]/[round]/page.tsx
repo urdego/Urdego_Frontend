@@ -1,14 +1,14 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useGameTimer } from '@/hooks/useGameTimer';
 import { useGameState } from '@/hooks/useGameState';
 import { useGameSubmit } from '@/hooks/useGameSubmit';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
-import ProgressBar from '@/components/Layout/Game/ProgressBar';
-import { PageWrapper, Footer, TimerContainer, TimerText } from './game.styles';
+import Timer from '@/components/Layout/Game/Timer';
+import { PageWrapper, Footer } from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
+import { useCallback } from 'react';
 
 interface GamePageProps {
   params: {
@@ -31,12 +31,11 @@ const GamePage = ({ params }: GamePageProps) => {
     handleBackClick,
   } = useGameState(Number(params.round));
 
-  const handleNextRound = () => {
+  const handleNextRound = useCallback(() => {
     router.push(`/game/${params.roomId}/${currentRound}/roundRank`);
     setCurrentSelectedCoordinate(null);
-  };
+  }, [router, params.roomId, currentRound, setCurrentSelectedCoordinate]);
 
-  const { timeLeft } = useGameTimer(10, handleNextRound);
   const { submitAnswer, isSubmitting } = useGameSubmit();
 
   const handleCoordinateSelect = (
@@ -75,10 +74,7 @@ const GamePage = ({ params }: GamePageProps) => {
           isMapView={isMapView}
           onBackClick={handleBackClick}
         />
-        <TimerContainer>
-          <TimerText>{timeLeft}초</TimerText>
-          <ProgressBar progress={(timeLeft / 10) * 100} />
-        </TimerContainer>
+        <Timer initialTime={10} onTimeEnd={handleNextRound} />
 
         {isMapView ? (
           <MapComponent
