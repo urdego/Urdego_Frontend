@@ -144,7 +144,10 @@ const FriendsInviteForm = ({
             ))}
           </SearchResultList>
         )}
-        <InviteButton onClick={handleInvite} isSelected={selectedUser !== null}>
+        <InviteButton
+          onClick={handleInvite}
+          $isSelected={selectedUser !== null}
+        >
           초대완료!
         </InviteButton>
       </SearchContainer>

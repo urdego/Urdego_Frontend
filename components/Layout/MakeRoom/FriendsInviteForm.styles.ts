@@ -46,12 +46,12 @@ export const Input = styled.input`
   }
 `;
 
-export const InviteButton = styled.button<{ isSelected: boolean }>`
+export const InviteButton = styled.button<{ $isSelected: boolean }>`
   width: 80px;
   height: 46px;
   padding: 12px;
   background-color: ${(props) =>
-    props.isSelected ? colors.purple[50] : colors.gray[70]};
+    props.$isSelected ? colors.purple[50] : colors.gray[70]};
   color: white;
   border: none;
   border-radius: 4px;
