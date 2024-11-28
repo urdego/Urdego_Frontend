@@ -3,13 +3,14 @@ import Image from 'next/image';
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
-import { TrashIcon } from './PlaceRegisterIcon';
+import { BlackClearIcon, TrashIcon } from './PlaceRegisterIcon';
 import {
   PlaceContentResetButton,
   PlacePreview,
   PlaceRegistertext,
   PlaceRegisterWrapper,
   PreviewImage,
+  PreviewImageRemoveButton,
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
@@ -59,6 +60,9 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
         />
         {placeList[index].previewFile.map((file, index) => (
           <PreviewImage key={index}>
+            <PreviewImageRemoveButton onClick={() => console.log('ok')}>
+              <BlackClearIcon />
+            </PreviewImageRemoveButton>
             <Image
               src={file}
               alt="Preview Image"
