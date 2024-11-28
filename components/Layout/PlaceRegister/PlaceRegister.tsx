@@ -1,7 +1,5 @@
 import Image from 'next/image';
-import PulsIconSrc from '@styles/Icon/Plus.svg';
 
-import Button from '@/components/Common/Button/Button';
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
@@ -15,49 +13,41 @@ import {
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
-import useWatchInputComplete from '@/hooks/placeRegister/useWatchInputComplete';
-
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 interface PlaceRegisterProps {
+  index: number;
   title: string;
-  setPostFiles: React.Dispatch<React.SetStateAction<File[]>>;
-  setPostInfo: React.Dispatch<React.SetStateAction<object>>;
 }
 
-const PlaceRegister = ({
-  title,
-  setPostFiles,
-  setPostInfo,
-}: PlaceRegisterProps) => {
-  const {
-    previewFile,
-    setPreviewFile,
-    locationTitle,
-    setLocationTitle,
-    locationHint,
-    setLocationHint,
-    handleFilesChange,
-  } = useRegisterFiles({ setPostFiles, setPostInfo });
-
-  const { isInputComplete, setIsInputComplete } = useWatchInputComplete({
-    previewFile,
-    locationTitle,
-    locationHint,
+const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
+  // client state 불러오는 custom hook
+  const { previewFile, handleFilesChange } = useRegisterFiles({
+    index,
   });
 
-  const resetPlaceInfo = () => {
-    setLocationTitle('');
-    setLocationHint('');
-    setPreviewFile([]);
-    // TODO: 서버 전송 state 초기화 필요
+  // store
+  const { placeList, setPlaceInput } = usePlaceRegisterStore();
+
+  // event handler
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'title', e.target.value);
   };
+
+  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'hint', e.target.value);
+  };
+
+  const resetPlace = () => {};
 
   return (
     <PlaceRegisterWrapper>
       <PlaceRegistertext>
         <div>{title}</div>
-        <PlaceContentResetButton onClick={resetPlaceInfo}>
-          <TrashIcon />
-        </PlaceContentResetButton>
+        {index !== 0 && (
+          <PlaceContentResetButton onClick={resetPlace}>
+            <TrashIcon />
+          </PlaceContentResetButton>
+        )}
       </PlaceRegistertext>
       <PlacePreview>
         <ImageUpload
@@ -78,21 +68,14 @@ const PlaceRegister = ({
       </PlacePreview>
       <PlaceInput
         placeholder="장소명"
-        state={locationTitle}
-        setState={setLocationTitle}
+        value={placeList[index].title}
+        onChange={handleTitleChange}
       />
       <PlaceSearchButton />
       <PlaceInput
         placeholder="(선택) 힌트를 작성해주세요"
-        state={locationHint}
-        setState={setLocationHint}
-      />
-      <Button
-        buttonType={isInputComplete ? 'purple' : 'gray'}
-        buttonHeight="short"
-        label="장소추가"
-        icon={PulsIconSrc}
-        onClick={() => setIsInputComplete(false)}
+        value={placeList[index].hint}
+        onChange={handleHintChange}
       />
     </PlaceRegisterWrapper>
   );

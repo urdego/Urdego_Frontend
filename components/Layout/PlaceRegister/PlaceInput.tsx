@@ -1,38 +1,30 @@
-import { useState } from 'react';
 import {
   ContentInput,
   ContentResetButton,
   PlaceInputWrapper,
 } from './PlaceInput.styles';
-import { ClearIcon } from './PlaceInputIcon';
+import { ClearIcon } from './PlaceRegisterIcon';
 
 interface PlaceInputProps {
   placeholder: string;
-  state: string;
-  setState: React.Dispatch<React.SetStateAction<string>>;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PlaceInput = ({ placeholder, state, setState }: PlaceInputProps) => {
-  const [inputValue, setInputValue] = useState('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    setState(event.target.value);
-  };
-
+const PlaceInput = ({ placeholder, value, onChange }: PlaceInputProps) => {
   const resetChange = () => {
-    setInputValue('');
-    setState('');
+    onChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
   };
 
   return (
     <PlaceInputWrapper>
       <ContentInput
         placeholder={placeholder}
-        value={state}
-        onChange={handleChange}
+        value={value}
+        onChange={onChange}
+        maxLength={25}
       />
-      {inputValue && (
+      {value && (
         <ContentResetButton onClick={resetChange}>
           <ClearIcon />
         </ContentResetButton>

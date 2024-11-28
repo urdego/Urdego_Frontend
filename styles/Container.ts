@@ -14,7 +14,7 @@ const Container = styled.div`
   justify-content: center;
   margin: 0 auto; /* 화면 가운데 정렬 */
   /* padding-bottom: 80px; */
-  overflow-x: hidden; 
+  overflow-x: hidden;
 `;
 
 export default Container;
