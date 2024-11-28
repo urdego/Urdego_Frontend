@@ -21,7 +21,7 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const { previewFile, handleFilesChange } = useRegisterFiles({
+  const { handleFilesChange } = useRegisterFiles({
     index,
   });
 
@@ -54,10 +54,10 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
       <PlacePreview>
         <ImageUpload
           handleFilesChange={handleFilesChange}
-          currCount={previewFile.length}
+          currCount={placeList[index].previewFile.length}
           totalCount={3}
         />
-        {previewFile.map((file, index) => (
+        {placeList[index].previewFile.map((file, index) => (
           <PreviewImage key={index}>
             <Image
               src={file}
