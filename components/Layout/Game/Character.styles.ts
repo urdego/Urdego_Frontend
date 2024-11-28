@@ -49,10 +49,18 @@ export const InfoWrapper = styled.div`
   gap: 4px;
 `;
 
-export const Host = styled.span`
+/* export const Host = styled.span`
   font-size: 12px;
   font-weight: 700;
   color: ${colors.purple[50]};
+  
+`; */
+export const Host = styled.div<{ isReady?: boolean }>`
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: ${({ isReady }) =>
+    isReady ? `${colors.purple[50]}` : `${colors.purple[50]}`};
 `;
 
 export const Level = styled.span`
@@ -71,4 +79,8 @@ export const IsHost = styled.span`
   font-size: 12px;
   font-weight: normal;
   color: ${colors.etc.black};
+`;
+export const NicknameContainer = styled.div`
+  display: flex;
+  gap: 4px;
 `;
