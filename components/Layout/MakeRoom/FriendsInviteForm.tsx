@@ -15,6 +15,7 @@ import {
   CancelButton,
 } from './FriendsInviteForm.styles';
 import toast from 'react-hot-toast';
+import useUserStore from '@stores/useUserStore';
 
 interface UserInfo {
   id: number;
@@ -35,6 +36,7 @@ const FriendsInviteForm = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<UserInfo[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
+  const currentUserNickname = useUserStore((state) => state.nickname);
 
   useEffect(() => {
     const searchUsers = async () => {
@@ -53,7 +55,13 @@ const FriendsInviteForm = ({
 
           if (response.status === 200) {
             const data = await response.json();
-            setSearchResults(Array.isArray(data) ? data : []);
+            // 현재 사용자의 닉네임을 제외한 결과만 필터링
+            const filteredResults = data.filter(
+              (user: UserInfo) => user.nickname !== currentUserNickname
+            );
+            setSearchResults(
+              Array.isArray(filteredResults) ? filteredResults : []
+            );
           } else {
             setSearchResults([]);
           }
@@ -68,7 +76,7 @@ const FriendsInviteForm = ({
 
     const debounceTimeout = setTimeout(searchUsers, 300);
     return () => clearTimeout(debounceTimeout);
-  }, [searchTerm]);
+  }, [searchTerm, currentUserNickname]);
 
   const handleUserSelect = (user: UserInfo) => {
     setSelectedUser(user);

@@ -23,6 +23,7 @@
       "@common/*": ["./components/Common/*"],
       "@layout/*": ["./components/Layout/*"],
       "@styles/*": ["./styles/*"],
+      "@stores/*": ["./stores/*"],
       "@lib/*": ["./lib/*"]
     }
   },
