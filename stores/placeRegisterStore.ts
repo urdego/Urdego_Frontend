@@ -17,6 +17,7 @@ interface Actions {
     value: string | File[]
   ) => void;
   addPlaceList: () => void;
+  deletePlaceList: (targetIndex: number) => void;
 }
 
 const usePlaceRegisterStore = create<State & Actions>((set) => ({
@@ -31,6 +32,10 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
   addPlaceList: () =>
     set((state) => ({
       placeList: [...state.placeList, { title: '', hint: '', file: [] }],
+    })),
+  deletePlaceList: (targetIndex) =>
+    set((state) => ({
+      placeList: state.placeList.filter((_, index) => targetIndex !== index),
     })),
 }));
 

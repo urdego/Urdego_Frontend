@@ -9,7 +9,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const [previewFile, setPreviewFile] = useState<string[]>([]);
   const { setPlaceInput } = usePlaceRegisterStore();
   const MAX_CONTENT_COUNT = 3;
-  const MAX_MEMORY = 30 * 1024 * 1024;
+  const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
@@ -21,7 +21,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       0
     );
 
-    if (totalMemory > MAX_MEMORY) {
+    if (totalMemory >= MAX_MEMORY) {
       setPlaceInput(index, 'file', []);
       setPreviewFile([]);
       alert('30MB를 초과하실 수 없습니다!');

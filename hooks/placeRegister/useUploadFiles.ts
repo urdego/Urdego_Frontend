@@ -20,19 +20,20 @@ const useUploadFiles = () => {
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    axios
-      .post('/api/content', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        params: params,
-      })
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    console.log(placeList);
+    // axios
+    //   .post('/api/content', formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //     params: params,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.status);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   };
 
   return {

@@ -26,7 +26,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   });
 
   // store
-  const { placeList, setPlaceInput } = usePlaceRegisterStore();
+  const { placeList, setPlaceInput, deletePlaceList } = usePlaceRegisterStore();
 
   // event handler
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +37,9 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
     setPlaceInput(index, 'hint', e.target.value);
   };
 
-  const resetPlace = () => {};
+  const resetPlace = () => {
+    deletePlaceList(index);
+  };
 
   return (
     <PlaceRegisterWrapper>
