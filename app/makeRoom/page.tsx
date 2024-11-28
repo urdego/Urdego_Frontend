@@ -36,7 +36,7 @@ const MakeRoomPage = () => {
 
   // 버튼 활성화 조건 체크
   const isButtonEnabled =
-    isRoomTitleEntered && invitedFriends.length === selectedNumber;
+    isRoomTitleEntered && invitedFriends.length === selectedNumber - 1;
 
   const handleCreateRoom = () => {
     const roomData = {
