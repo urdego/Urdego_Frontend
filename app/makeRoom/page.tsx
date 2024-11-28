@@ -16,8 +16,8 @@ interface UserInfo {
 const MakeRoomPage = () => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [invitedFriends, setInvitedFriends] = useState<UserInfo[]>([]);
-  const [selectedNumber, setSelectedNumber] = useState(2); // 선택된 인원 수 상태 추가
-  const [isRoomTitleEntered, setIsRoomTitleEntered] = useState(false); // 방 제목 입력 상태 추가
+  const [selectedNumber, setSelectedNumber] = useState(2);
+  const [isRoomTitleEntered, setIsRoomTitleEntered] = useState(false);
 
   // 방 제목 입력 감지
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +73,7 @@ const MakeRoomPage = () => {
         <FriendsInviteForm
           onFriendsChange={handleInvitedFriendsChange}
           invitedFriends={invitedFriends}
-          selectedNumber={selectedNumber} // 추가된 prop
+          selectedNumber={selectedNumber}
         />
       </PageWrapper>
       <Footer>

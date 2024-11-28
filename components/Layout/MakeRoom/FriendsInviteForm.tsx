@@ -79,19 +79,27 @@ const FriendsInviteForm = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-    // 입력값이 selectedUser의 닉네임과 다르면 selectedUser를 null로 설정
     if (value !== selectedUser?.nickname) {
       setSelectedUser(null);
     }
   };
 
   const handleInvite = () => {
-    if (
-      selectedUser &&
-      !invitedFriends.find(
-        (friend) => friend.nickname === selectedUser.nickname
-      )
-    ) {
+    if (selectedUser) {
+      // 이미 초대된 친구인지 체크
+      if (
+        invitedFriends.find(
+          (friend) => friend.nickname === selectedUser.nickname
+        )
+      ) {
+        toast.error('이미 초대한 친구 입니다.', {
+          duration: 2000,
+          position: 'bottom-center',
+        });
+        return;
+      }
+
+      // 인원수 체크
       if (invitedFriends.length >= selectedNumber) {
         toast.error('인원수 보다 많은 친구 초대는 어렵습니다.', {
           duration: 2000,

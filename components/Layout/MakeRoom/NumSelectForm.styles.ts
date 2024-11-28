@@ -18,6 +18,9 @@ export const FormContainer = styled.div`
 export const Label = styled.span`
   font-size: 16px;
   font-weight: 600;
+  height: 48px;
+  display: flex;
+  align-items: center;
   color: ${colors.etc.black};
 `;
 

@@ -11,6 +11,9 @@ export const Container = styled.div`
 
 export const Title = styled.h2`
   color: ${colors.etc.black};
+  height: 24px;
+  display: flex;
+  align-items: center;
   font-size: 16px;
   margin: 0;
 `;
@@ -68,7 +71,7 @@ export const SearchResultList = styled.ul`
   background: white;
   border: 1px solid ${colors.gray[70]};
   border-radius: 4px;
-  margin: 0;
+  margin: 3px 0 0; /* 상단 간격을 3px로 설정 */
   padding: 0;
   list-style: none;
   max-height: 200px;
@@ -95,6 +98,9 @@ export const InvitedFriendsContainer = styled.div`
 
 export const InvitedFriendsTitle = styled.h3`
   color: ${colors.etc.black};
+  height: 24px;
+  display: flex;
+  align-items: center;
   font-size: 16px;
   margin: 0;
 `;

@@ -12,7 +12,10 @@ export const InputContainer = styled.div`
 export const InputLabel = styled.label`
   font-size: 16px;
   font-weight: 600;
+  height: 24px;
   color: ${colors.etc.black};
+  display: flex;
+  align-items: center;
 `;
 
 export const InputWrapper = styled.div`
