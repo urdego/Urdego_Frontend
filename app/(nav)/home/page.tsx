@@ -4,13 +4,13 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
 import { HomeTitle, ChannelWrapper } from './Home.styles';
-import { PageWrapper } from '@/app/homePage.styles';
+import { HomePageWrapper } from '@/app/commonPage.styles';
 
 const Home = () => {
   return (
     <>
       <TopBar NavType="main" />
-      <PageWrapper>
+      <HomePageWrapper>
         <MainBanner />
         <ChannelWrapper>
           <HomeTitle>게임채널</HomeTitle>
@@ -19,7 +19,7 @@ const Home = () => {
           </Link>
           <ChannelButton title="랭킹 게임" />
         </ChannelWrapper>
-      </PageWrapper>
+      </HomePageWrapper>
     </>
   );
 };
