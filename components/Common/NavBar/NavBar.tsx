@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Nav,
@@ -16,9 +16,16 @@ import {
   MypageIcon,
   MypageColorIcon,
 } from '@/components/Common/NavBar/NavIcon';
+import { usePathname } from 'next/navigation';
 
 const NavBar = () => {
   const [selected, setSelected] = useState<string>('home');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // URL에서 '/' 다음 경로를 추출해서 가져오기
+    setSelected(pathname.split('/')[1]);
+  }, [pathname]);
 
   return (
     <Nav>
