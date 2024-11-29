@@ -3,13 +3,11 @@ import styled from 'styled-components';
 export const BannerWrapper = styled.div`
   position: relative;
   top: 0;
-  width: calc(100% + 46px);
+  width: calc(100%);
   left: 0;
-  transform: translateX(-23px);
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top:280px; */
   height: 280px;
   background-color: #f4eeff;
 `;
@@ -27,4 +25,3 @@ export const LevelWrapper = styled.div`
   bottom: 10px;
   left: 10px;
 `;
-

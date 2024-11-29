@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Nav = styled.nav`
   position: fixed;
@@ -9,10 +9,10 @@ export const Nav = styled.nav`
   width: 100%;
   min-width: 340px;
   max-width: 430px;
-  height: 100px;
+  height: 80px;
   justify-content: space-evenly;
   align-items: flex-start;
-  background-color: #FFF;
+  background-color: #fff;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
   z-index: 100;
 `;
@@ -26,7 +26,6 @@ export const IconPlaceholder = styled.div`
   border-radius: 8px;
   margin-bottom: 4px;
   transition: background-color 0.3s ease;
-  
 `;
 
 export const NavBarText = styled.div`
