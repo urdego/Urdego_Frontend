@@ -13,7 +13,6 @@ export const Nav = styled.nav<StyledTopBarProps>`
   width: 100%;
   max-width: 430px;
   height: 40px;
-  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;

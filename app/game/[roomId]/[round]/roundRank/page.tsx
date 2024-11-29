@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/Common/Button/Button';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import ProgressBar from '@/components/Layout/Game/ProgressBar';
-import { PageWrapper, TimerContainer, TimerText, Footer } from '../game.styles';
+import Timer from '@/components/Layout/Game/Timer';
+import { PageWrapper, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
+import CountdownButton from '@/components/Layout/Game/CountdownButton';
 
 const RoundRank = ({
   params,
@@ -17,23 +17,6 @@ const RoundRank = ({
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
   const maxRounds = 3; // TODO : prop으로 라운드 받아오기
-  const timeLeftRef = useRef(15); // 타이머 상태를 useRef로 변경하여 리렌더링 방지!
-  const [, forceUpdate] = useState({});
-
-  // 타이머 로직
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (timeLeftRef.current > 0) {
-        timeLeftRef.current -= 1;
-        forceUpdate({}); // 타이머 표시만 업데이트
-      } else {
-        clearInterval(timer);
-        handleNextRound();
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   const MapDummyData = useMemo(() => {
     // TODO: 나중에 데이터를 가져와서 쓸땐 useMemo쓰기
@@ -89,13 +72,13 @@ const RoundRank = ({
   );
 
   // 다음 라운드로 이동하거나 /home으로 리디렉션
-  const handleNextRound = () => {
+  const handleNextRound = useCallback(() => {
     if (currentRound >= maxRounds) {
       router.push('/home');
     } else {
       router.push(`/game/${params.roomId}/${currentRound + 1}`);
     }
-  };
+  }, [router, params.roomId, currentRound]);
 
   return (
     <PageWrapper>
@@ -103,10 +86,7 @@ const RoundRank = ({
 
       {/* 타이머와 게이지 */}
       {currentRound < maxRounds && (
-        <TimerContainer>
-          <TimerText>{timeLeftRef.current}초 후 시작</TimerText>
-          <ProgressBar progress={(timeLeftRef.current / 15) * 100} />
-        </TimerContainer>
+        <Timer initialTime={15} onTimeEnd={handleNextRound} />
       )}
 
       <MapComponent
@@ -126,12 +106,7 @@ const RoundRank = ({
       {/* 버튼: 마지막 라운드나 3라운드일 경우 '최종 점수 확인' */}
       {currentRound >= maxRounds && (
         <Footer>
-          <Button
-            label={`${timeLeftRef.current}초 후 게임 종료`}
-            buttonSize="large"
-            onClick={handleNextRound}
-            styleType="coloredBackground"
-          />
+          <CountdownButton initialTime={15} onTimeEnd={handleNextRound} />
         </Footer>
       )}
     </PageWrapper>

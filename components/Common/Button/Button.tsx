@@ -3,6 +3,7 @@ import {
   IconWrapper,
 } from '@/components/Common/Button/Button.styles';
 import { StaticImageData } from 'next/image';
+import Image from 'next/image';
 
 interface ButtonProps {
   buttonType?: 'purple' | 'gray' | 'lightGray';
@@ -23,7 +24,7 @@ const Button = ({
   label,
   icon,
   onClick,
-  disabled = false,
+  disabled,
 }: ButtonProps) => {
   return (
     <StyledButton
@@ -37,9 +38,9 @@ const Button = ({
       {icon && (
         <IconWrapper>
           {typeof icon === 'string' ? (
-            <img src={icon} alt="" />
+            <Image src={icon} alt="" width={12} height={12} />
           ) : (
-            <img src={icon.src} alt="" />
+            <Image src={icon.src} alt="" width={12} height={12} />
           )}
         </IconWrapper>
       )}

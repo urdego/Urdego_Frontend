@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import SnowMan1 from '@/styles/Icon/SnowMan1.svg';
-import SnowMan2 from '@/styles/icon/snowman2.svg';
-import SnowMan3 from '@/styles/icon/snowman3.svg';
-import SnowMan4 from '@/styles/icon/snowman4.svg';
-import SnowMan5 from '@/styles/icon/snowman5.svg';
-import SnowMan6 from '@/styles/icon/snowman6.svg';
+import SnowMan2 from '@/styles/Icon/snowman2.svg';
+import SnowMan3 from '@/styles/Icon/snowman3.svg';
+import SnowMan4 from '@/styles/Icon/snowman4.svg';
+import SnowMan5 from '@/styles/Icon/snowman5.svg';
+import SnowMan6 from '@/styles/Icon/snowman6.svg';
 import {
   CharacterWrapper,
   CharactersContainer,

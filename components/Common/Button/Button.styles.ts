@@ -63,6 +63,10 @@ export const StyledButton = styled.button<StyledButtonProps>`
   &:hover {
     opacity: 0.8;
   }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `;
 
 export const IconWrapper = styled.span`
