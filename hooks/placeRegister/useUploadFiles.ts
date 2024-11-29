@@ -4,9 +4,8 @@ import axios from 'axios';
 const useUploadFiles = () => {
   const { placeList } = usePlaceRegisterStore();
 
-  const uploadFile = () => {
+  const handleUploadFiles = () => {
     const formData = new FormData();
-    console.log('placeInformation', placeList);
 
     // 이미지 등록
     formData.append('file', placeList[0].file[0]);
@@ -20,23 +19,24 @@ const useUploadFiles = () => {
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    axios
-      .post('/api/content', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        params: params,
-      })
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    console.log('placeRegister Result', placeList);
+    // axios
+    //   .post('/api/content', formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //     params: params,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.status);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   };
 
   return {
-    uploadFile,
+    handleUploadFiles,
   };
 };
 

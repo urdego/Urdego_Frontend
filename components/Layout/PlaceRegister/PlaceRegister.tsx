@@ -3,17 +3,19 @@ import Image from 'next/image';
 import ImageUpload from './ImageUpload';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
-import { TrashIcon } from './PlaceRegisterIcon';
+import { BlackClearIcon, TrashIcon } from './PlaceRegisterIcon';
 import {
   PlaceContentResetButton,
   PlacePreview,
   PlaceRegistertext,
   PlaceRegisterWrapper,
   PreviewImage,
+  PreviewImageRemoveButton,
 } from './PlaceRegister.styles';
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+
 interface PlaceRegisterProps {
   index: number;
   title: string;
@@ -21,23 +23,24 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const { previewFile, handleFilesChange } = useRegisterFiles({
+  const { handleFilesUpload, handlePartFileRemove } = useRegisterFiles({
     index,
   });
 
-  // store
-  const { placeList, setPlaceInput } = usePlaceRegisterStore();
+  // store state 불러오는 로직
+  const { placeList, setPlaceInput, removePlaceList } = usePlaceRegisterStore();
 
   // event handler
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceInput(index, 'title', e.target.value);
   };
-
   const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaceInput(index, 'hint', e.target.value);
   };
 
-  const resetPlace = () => {};
+  const resetPlace = () => {
+    removePlaceList(index);
+  };
 
   return (
     <PlaceRegisterWrapper>
@@ -51,12 +54,17 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
       </PlaceRegistertext>
       <PlacePreview>
         <ImageUpload
-          handleFilesChange={handleFilesChange}
-          currCount={previewFile.length}
+          handleFilesUpload={handleFilesUpload}
+          currCount={placeList[index].previewFile.length}
           totalCount={3}
         />
-        {previewFile.map((file, index) => (
-          <PreviewImage key={index}>
+        {placeList[index].previewFile.map((file, previewIndex) => (
+          <PreviewImage key={previewIndex}>
+            <PreviewImageRemoveButton
+              onClick={() => handlePartFileRemove(index, previewIndex)}
+            >
+              <BlackClearIcon />
+            </PreviewImageRemoveButton>
             <Image
               src={file}
               alt="Preview Image"
