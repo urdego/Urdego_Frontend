@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import ValidationMessage from '@/components/Common/ValidationMessage/validationMessage';
+import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 
 const meta = {
   title: 'Common/ValidationMessage',

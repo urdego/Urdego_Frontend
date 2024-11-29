@@ -14,7 +14,7 @@ import Button from '@common/Button/Button';
 import SignupTabs from '@layout/Login/SignUpTabs';
 import SocialLogin from '@/components/Layout/Login/SNSLogos';
 import useUserStore from '@/stores/useUserStore';
-import ValidationMessage from '@common/ValidationMessage/ValidationMessage';
+import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 
 interface LoginError {
   email: string;
