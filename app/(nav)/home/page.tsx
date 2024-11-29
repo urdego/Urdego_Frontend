@@ -10,10 +10,10 @@ const Home = () => {
   return (
     <>
       <TopBar NavType="main" />
-      <MainBanner />
       <PageWrapper>
-        <HomeTitle>게임채널</HomeTitle>
+        <MainBanner />
         <ChannelWrapper>
+          <HomeTitle>게임채널</HomeTitle>
           <Link href="/groupList">
             <ChannelButton title="그룹 게임" />
           </Link>

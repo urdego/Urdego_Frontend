@@ -8,7 +8,7 @@ export const BannerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 280px;
+  height: 220px;
   background-color: #f4eeff;
 `;
 

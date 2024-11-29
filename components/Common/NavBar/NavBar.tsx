@@ -1,7 +1,11 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Nav, NavItem, NavBarText } from '@/components/Common/NavBar/NavBar.styles';
+import {
+  Nav,
+  NavItem,
+  NavBarText,
+} from '@/components/Common/NavBar/NavBar.styles';
 import {
   HomeIcon,
   HomeColorIcon,
@@ -37,7 +41,7 @@ const NavBar = () => {
         </NavItem>
       </Link>
       <Link href="/mypage" passHref>
-        <NavItem onClick={() => setSelected('myPage')}>
+        <NavItem onClick={() => setSelected('mypage')}>
           {selected === 'mypage' ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>
         </NavItem>
