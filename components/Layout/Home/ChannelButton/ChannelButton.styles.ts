@@ -9,7 +9,7 @@ export const ChannelWrapper = styled.div<ChannelProps>`
   flex-direction: row;
   justify-content: space-between;
   align-items: start;
-  width: 21.5rem;
+  width: 100%;
   height: ${({ $title }) => ($title === '그룹 게임' ? '8.75rem' : 'auto')};
   background: ${({ $title }) =>
     $title === '그룹 게임' ? '#2F3131' : '#767777'};

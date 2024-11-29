@@ -6,21 +6,21 @@ interface StyledTopBarProps {
 }
 
 export const Nav = styled.nav<StyledTopBarProps>`
-  position: fixed;
-  top: 44px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
   max-width: 430px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 100;
 
   ${({ $NavType }) =>
     $NavType === 'default'
       ? css`
-          background-color: transparent;
+          background-color: white;
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
         `
       : $NavType === 'other'

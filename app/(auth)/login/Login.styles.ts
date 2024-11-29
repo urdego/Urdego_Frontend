@@ -2,10 +2,7 @@ import styled from 'styled-components';
 
 export const LoginWrapper = styled.div`
   width: 100%;
-  padding: 84px 16px 40px 16px;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+  padding: 40px 16px;
 
   /* Input 컴포넌트들과 AutoLoginCheckbox 컴포넌트 가운데 정렬에서 제외 */
   & > div[class*='Input'],
@@ -13,6 +10,13 @@ export const LoginWrapper = styled.div`
     align-self: flex-start;
     width: 100%;
   }
+`;
+
+export const LogoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const LoginTitle = styled.div`

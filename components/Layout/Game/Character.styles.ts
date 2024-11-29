@@ -29,7 +29,6 @@ export const CharactersContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 400px;
-  height: 500px;
   margin: 0 auto;
   position: relative;
 `;

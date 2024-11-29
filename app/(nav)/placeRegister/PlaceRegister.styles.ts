@@ -1,10 +1,7 @@
 import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
-export const PlaceRegisterWrapper = styled.div`
-  width: 343px;
-  margin-bottom: 159px;
-`;
+export const PlaceRegisterWrapper = styled.div``;
 
 export const PlaceLayout = styled.div``;
 
@@ -15,10 +12,11 @@ export const ButtonLayout = styled.div`
   align-items: center;
 
   width: 100%;
-  min-width: 340px;
+  min-width: 375px;
   max-width: 430px;
+  margin: 0 auto;
 
-  bottom: 100px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 16px;
