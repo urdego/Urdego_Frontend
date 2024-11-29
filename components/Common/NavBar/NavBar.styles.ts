@@ -9,7 +9,7 @@ export const Nav = styled.nav`
   width: 100%;
   min-width: 340px;
   max-width: 430px;
-  height: 100px;
+  height: 80px;
   justify-content: space-evenly;
   align-items: flex-start;
   background-color: #fff;

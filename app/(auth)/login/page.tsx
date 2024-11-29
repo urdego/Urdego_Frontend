@@ -6,6 +6,7 @@ import {
   LoginWrapper,
   LoginTitle,
   ButtonSignupWrapper,
+  LogoContainer,
 } from '@/app/(auth)/login/Login.styles';
 import LoginLogo from '@layout/Login/LoginLogo';
 import Input from '@common/Input/Input';
@@ -93,8 +94,10 @@ const Login = () => {
 
   return (
     <LoginWrapper>
-      <LoginLogo src="" />
-      <LoginTitle>Where am I?</LoginTitle>
+      <LogoContainer>
+        <LoginLogo src="" />
+        <LoginTitle>Where am I?</LoginTitle>
+      </LogoContainer>
       <form onSubmit={handleLogin} autoComplete="off">
         <Input
           title="이메일"

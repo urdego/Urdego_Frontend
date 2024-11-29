@@ -2,11 +2,12 @@
 
 import { useRef, useState } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import { PageWrapper, Footer } from '@/app/makeRoom/makeRoom.styles';
+import { Footer } from '@/app/makeRoom/makeRoom.styles';
 import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
 import Button from '@common/Button/Button';
 import NumSelectForm from '@layout/MakeRoom/NumSelectForm';
 import FriendsInviteForm from '@layout/MakeRoom/FriendsInviteForm';
+import { PageWrapper } from '../commonPage.styles';
 
 interface UserInfo {
   id: number;

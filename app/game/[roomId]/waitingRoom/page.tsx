@@ -52,8 +52,8 @@ const WaitingRoom = () => {
 
   return (
     <>
+      <TopBar label="게임 대기방" NavType="room" exitIcon />
       <WaitingWrapper>
-        <TopBar label="게임 대기방" NavType="room" exitIcon />
         <UserList>
           <Character users={users} />
         </UserList>

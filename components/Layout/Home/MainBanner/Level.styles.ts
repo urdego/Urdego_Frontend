@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 12px;
   left: 28px;
   display: flex;
@@ -29,15 +29,15 @@ export const UserName = styled.div`
 
 export const ProgressBarContainer = styled.div`
   width: 192px;
-  background-color: #C6C6C7;
+  background-color: #c6c6c7;
   border-radius: 5px;
   overflow: hidden;
   margin-top: 4px;
 `;
 
 export const ProgressBar = styled.div<{ progress: number }>`
-  width: ${({ progress }) => `${progress}%`}; 
+  width: ${({ progress }) => `${progress}%`};
   height: 10px;
-  background-color: #947DFF;
+  background-color: #947dff;
   transition: width 0.3s ease;
 `;

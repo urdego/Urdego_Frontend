@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const SignupWrapper = styled.div`
   width: 100%;
-  padding: 84px 16px 40px 16px;
+  padding: 0 16px;
+  min-height: 100vh;
 `;
 
 export const Title = styled.div`
@@ -12,4 +13,8 @@ export const Title = styled.div`
   line-height: 150%;
   margin-bottom: 40px;
   padding-top: 40px;
+`;
+
+export const SignupButton = styled.div`
+  padding-top: 8px;
 `;
