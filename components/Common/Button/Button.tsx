@@ -38,9 +38,9 @@ const Button = ({
       {icon && (
         <IconWrapper>
           {typeof icon === 'string' ? (
-            <Image src={icon} alt="" />
+            <Image src={icon} alt="" width={12} height={12} />
           ) : (
-            <Image src={icon.src} alt="" />
+            <Image src={icon.src} alt="" width={12} height={12} />
           )}
         </IconWrapper>
       )}

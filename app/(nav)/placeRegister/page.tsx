@@ -3,7 +3,7 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
-import PulsIconSrc from '@styles/Icon/Plus.svg';
+import PulsIconSrc from '@/styles/Icon/Plus.svg';
 
 import {
   ButtonLayout,
