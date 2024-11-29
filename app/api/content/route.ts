@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const res = await axios.post(
-      `${process.env.USER_CONTENT_API}/api/content-service/contents`,
+      `${process.env.USER_CONTENT_API}/api/content-service/contents/multiple`,
       formData,
       {
         headers: {
