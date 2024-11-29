@@ -1,54 +1,56 @@
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
-import { useState } from 'react';
 
 interface useUploadFilesProps {
   index: number;
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const [previewFile, setPreviewFile] = useState<string[]>([]);
-  const { setPlaceInput } = usePlaceRegisterStore();
+  const { setPlaceInput, removePartPlaceFile } = usePlaceRegisterStore();
   const MAX_CONTENT_COUNT = 3;
+  const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
-  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
-    if (!fileList) return;
+    if (!fileList || fileList?.length === 0) return;
 
-    setPlaceInput(
-      index,
-      'file',
-      Array.from(fileList).slice(0, MAX_CONTENT_COUNT)
+    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
+    const totalMemory = selectedFileList.reduce(
+      (acc, file) => acc + file.size,
+      0
     );
 
-    const fileURLs: string[] = [];
-    const fileReadPromises: Promise<string>[] = [];
-
-    const fileListLength =
-      fileList.length < 3 ? fileList.length : MAX_CONTENT_COUNT;
-    for (let i = 0; i < fileListLength; i++) {
-      const fileReader = new FileReader();
-      const promise = new Promise<string>((resolve) => {
-        fileReader.onload = () => {
-          const result = fileReader.result;
-          if (typeof result === 'string') {
-            fileURLs.push(result);
-            resolve(result);
-          }
-        };
-        fileReader.readAsDataURL(fileList[i]);
-      });
-      fileReadPromises.push(promise);
+    if (totalMemory >= MAX_MEMORY) {
+      setPlaceInput(index, 'file', []);
+      setPlaceInput(index, 'previewFile', []);
+      alert('30MB를 초과하실 수 없습니다!');
+      return;
     }
 
-    Promise.all(fileReadPromises).then(() => {
-      setPreviewFile([...fileURLs]);
+    setPlaceInput(index, 'file', selectedFileList);
+
+    const previewPromises = selectedFileList.map((file) => {
+      return new Promise<string>((resolve) => {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          const result = fileReader.result;
+          resolve(typeof result === 'string' ? result : '');
+        };
+        fileReader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(previewPromises).then((previewURLs) => {
+      setPlaceInput(index, 'previewFile', previewURLs);
     });
   };
 
+  const handlePartFileRemove = (index: number, previewIndex: number) => {
+    removePartPlaceFile(index, previewIndex);
+  };
+
   return {
-    previewFile,
-    setPreviewFile,
-    handleFilesChange,
+    handleFilesUpload,
+    handlePartFileRemove,
   };
 };
 

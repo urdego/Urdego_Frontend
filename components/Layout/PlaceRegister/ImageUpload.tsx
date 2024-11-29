@@ -9,13 +9,13 @@ import { GalleryIcon } from './PlaceRegisterIcon';
 interface ImageUploadProps {
   currCount: number;
   totalCount: number;
-  handleFilesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFilesUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ImageUpload = ({
   currCount,
   totalCount,
-  handleFilesChange,
+  handleFilesUpload,
 }: ImageUploadProps) => {
   return (
     <ImageUploadWrapper>
@@ -24,7 +24,7 @@ const ImageUpload = ({
           type="file"
           accept="image/*"
           multiple
-          onChange={handleFilesChange}
+          onChange={handleFilesUpload}
         />
         <GalleryIcon />
         <ImageUploadCount>
