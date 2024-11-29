@@ -11,13 +11,15 @@ const Home = () => {
     <>
       <TopBar NavType="main" />
       <MainBanner />
-      <HomeTitle>게임채널</HomeTitle>
-      <ChannelWrapper>
-        <Link href="/groupList">
-          <ChannelButton title="그룹 게임" />
-        </Link>
-        <ChannelButton title="랭킹 게임" />
-      </ChannelWrapper>
+      <PageWrapper>
+        <HomeTitle>게임채널</HomeTitle>
+        <ChannelWrapper>
+          <Link href="/groupList">
+            <ChannelButton title="그룹 게임" />
+          </Link>
+          <ChannelButton title="랭킹 게임" />
+        </ChannelWrapper>
+      </PageWrapper>
     </>
   );
 };
