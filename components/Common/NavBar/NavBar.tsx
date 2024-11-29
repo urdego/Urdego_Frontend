@@ -24,14 +24,19 @@ const NavBar = () => {
 
   useEffect(() => {
     // URL에서 '/' 다음 경로를 추출해서 가져오기
-    setSelected(pathname.split('/')[1]);
+    const path = pathname.split('/')[1];
+    setSelected(path === 'groupList' ? 'home' : path);
   }, [pathname]);
 
   return (
     <Nav>
       <Link href="/home" passHref>
         <NavItem onClick={() => setSelected('home')}>
-          {selected === 'home' ? <HomeColorIcon /> : <HomeIcon />}
+          {selected === 'home' || selected === 'groupList' ? (
+            <HomeColorIcon />
+          ) : (
+            <HomeIcon />
+          )}
           <NavBarText>홈</NavBarText>
         </NavItem>
       </Link>
