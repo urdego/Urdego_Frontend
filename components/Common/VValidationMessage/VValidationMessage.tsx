@@ -1,4 +1,4 @@
-import { StyledMessage } from '@/components/Common/ValidationMessage/validationMessage.styles';
+import { StyledMessage } from '@/components/Common/ValidationMessage/ValidationMessage.styles';
 
 interface ValidationMessageProps {
   message: string;
