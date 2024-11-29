@@ -3,7 +3,6 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
 import Input from '@/components/Common/Input/Input';
-import { PageWrapper } from '@/app/commonPage.styles';
 import { SignupWrapper, Title } from './Signup.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
