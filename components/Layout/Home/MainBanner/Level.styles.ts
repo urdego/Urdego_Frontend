@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const Container = styled.div`
   position: absolute;
@@ -36,8 +36,19 @@ export const ProgressBarContainer = styled.div`
 `;
 
 export const ProgressBar = styled.div<{ progress: number }>`
-  width: ${({ progress }) => `${progress}%`};
+  position: relative;
   height: 10px;
   background-color: #947dff;
-  transition: width 0.3s ease;
+  border-radius: 4px;
+  width: 0;
+  animation: fillProgress 1s ease-out forwards;
+
+  @keyframes fillProgress {
+    from {
+      width: 0;
+    }
+    to {
+      width: ${(props) => props.progress}%;
+    }
+  }
 `;
