@@ -27,4 +27,3 @@ export const LevelWrapper = styled.div`
   bottom: 10px;
   left: 10px;
 `;
-
