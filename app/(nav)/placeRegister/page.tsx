@@ -65,4 +65,5 @@ const PlaceRegisterPage = () => {
     </>
   );
 };
+
 export default PlaceRegisterPage;
