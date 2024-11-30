@@ -5,7 +5,7 @@ import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
-import { PageWrapper, Footer } from './game.styles';
+import { PageWrapper, Footer, HintText } from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState } from 'react';
@@ -28,6 +28,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
+    hint,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -44,13 +45,46 @@ const GamePage = ({ params }: GamePageProps) => {
     console.log('선택된 좌표:', coordinate);
     setCurrentSelectedCoordinate(coordinate);
   };
+  // TODO: 백엔드 연동 시 사용
+  // const handleSubmitAnswer = async () => {
+  //   if (hasSubmitted || !currentSelectedCoordinate) {
+  //     console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
+  //     return;
+  //   }
 
+  //   const submitData = {
+  //     roomId: params.roomId,
+  //     nickname,
+  //     round: currentRound,
+  //     coordinate: currentSelectedCoordinate,
+  //   };
+
+  //   // 제출 시작과 동시에 버튼 비활성화
+  //   setHasSubmitted(true);
+  //   console.log('제출 시작:', submitData);
+
+  //   try {
+  //     const success = await submitAnswer(submitData);
+  //     console.log('제출 결과:', success);
+
+  //     if (!success) {
+  //       console.warn('제출 실패');
+  //       setHasSubmitted(false); // 실패시에만 다시 활성화
+  //       return;
+  //     }
+
+  //     setCurrentSelectedCoordinate(null);
+  //     console.log('제출 완료');
+  //   } catch (error) {
+  //     console.error('제출 중 에러 발생:', error);
+  //     setHasSubmitted(false); // 에러 발생시에도 다시 활성화
+  //   }
+  // };
+
+  // 클라이언트 테스트 용
   const handleSubmitAnswer = async () => {
     if (hasSubmitted || !currentSelectedCoordinate) {
-      console.log('이미 제출됨 또는 좌표 미선택:', {
-        hasSubmitted,
-        currentSelectedCoordinate,
-      });
+      console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
       return;
     }
 
@@ -61,31 +95,28 @@ const GamePage = ({ params }: GamePageProps) => {
       coordinate: currentSelectedCoordinate,
     };
 
-    console.log('제출 시작:', { submitData, isSubmitting });
+    // 제출 시작과 동시에 버튼 비활성화
+    setHasSubmitted(true);
+    console.log('제출 시작:', submitData);
 
+    // API 호출 대신 setTimeout으로 테스트
     try {
-      const success = await submitAnswer(submitData);
-      console.log('제출 응답:', {
-        success,
-        isSubmitting,
-        submitData,
-        type: typeof success,
-      });
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1초 딜레이
+      const mockSuccess = true; // 테스트용 성공 응답
 
-      if (!success) {
-        console.warn('제출은 완료되었으나 success가 false 반환됨');
-        // 필요한 경우 여기서 에러 처리
+      console.log('제출 결과:', mockSuccess);
+
+      if (!mockSuccess) {
+        console.warn('제출 실패');
+        setHasSubmitted(false);
         return;
       }
 
-      setHasSubmitted(true);
       setCurrentSelectedCoordinate(null);
-      console.log('상태 업데이트 완료:', {
-        hasSubmitted: true,
-        currentSelectedCoordinate: null,
-      });
+      console.log('제출 완료');
     } catch (error) {
       console.error('제출 중 에러 발생:', error);
+      setHasSubmitted(false);
     }
   };
 
@@ -101,7 +132,7 @@ const GamePage = ({ params }: GamePageProps) => {
           isMapView={isMapView}
           onBackClick={handleBackClick}
         />
-        <Timer initialTime={10} onTimeEnd={handleNextRound} />
+        <Timer initialTime={60} onTimeEnd={handleNextRound} />
 
         {isMapView ? (
           <MapComponent
@@ -110,7 +141,10 @@ const GamePage = ({ params }: GamePageProps) => {
             answerCoordinate={null} // 게임 모드에서는 정답 좌표를 숨기기 위해 null
           />
         ) : (
-          <SwiperComponent />
+          <>
+            <SwiperComponent />
+            {hint && <HintText>힌트: {hint}</HintText>}
+          </>
         )}
 
         <Footer>
@@ -120,7 +154,11 @@ const GamePage = ({ params }: GamePageProps) => {
             buttonSize="large"
             onClick={isMapView ? handleSubmitAnswer : handleShowMap}
             styleType="coloredBackground"
-            disabled={(isMapView && !currentSelectedCoordinate) || isSubmitting}
+            disabled={
+              (isMapView && !currentSelectedCoordinate) ||
+              isSubmitting ||
+              hasSubmitted
+            }
           />
         </Footer>
       </PageWrapper>

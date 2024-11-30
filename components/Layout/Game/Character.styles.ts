@@ -5,40 +5,34 @@ interface CharacterWrapperProps {
   animation?: string;
 }
 
-// const slideAnimation = keyframes`
-// 0% {
-//     transform: translateX(0) translateY(0) rotate(0deg);
-//   }
-//   25% {
-//     transform: translateX(30px) translateY(50px) rotate(30deg);
-//   }
-//   50% {
-//     transform: translateX(-40px) translateY(80px) rotate(-30deg);
-//   }
-//   75% {
-//     transform: translateX(20px) translateY(-60px) rotate(60deg);
-//   }
-//   100% {
-//     transform: translateX(0) translateY(0) rotate(0deg);
-//   }
-// `;
-
 export const CharactersContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  margin: 0 auto;
   position: relative;
+  width: 100%;
+  aspect-ratio: 1.2;
+  max-width: 430px;
+  height: calc(100vh - 500px);
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export const CharacterWrapper = styled.div<CharacterWrapperProps>`
+export const CharacterWrapper = styled.div<{ animation?: string }>`
   position: absolute;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 0.5rem;
+  transition: all 0.3s ease-in-out;
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: 80px;
+    max-height: 80px;
+  }
 `;
 
 export const InfoWrapper = styled.div`
@@ -48,12 +42,6 @@ export const InfoWrapper = styled.div`
   gap: 4px;
 `;
 
-/* export const Host = styled.span`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${colors.purple[50]};
-  
-`; */
 export const Host = styled.div<{ isReady?: boolean }>`
   padding: 4px 8px;
   font-size: 12px;
@@ -66,12 +54,14 @@ export const Level = styled.span`
   font-size: 12px;
   font-weight: 700;
   color: ${colors.etc.black};
+  flex-shrink: 0;
 `;
 
 export const NickName = styled.span`
   font-size: 12px;
   font-weight: 700;
   color: ${colors.etc.black};
+  flex-shrink: 0;
 `;
 
 export const IsHost = styled.span`

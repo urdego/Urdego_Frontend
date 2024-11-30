@@ -32,3 +32,13 @@ export const Footer = styled.footer`
   background-color: ${colors.etc.white};
   box-shadow: 0px -4px 24px rgba(0, 0, 0, 0.1);
 `;
+
+export const HintText = styled.p`
+  padding: 12px 16px;
+  margin: 8px 16px;
+  background-color: ${colors.purple[98]};
+  border-radius: 8px;
+  font-size: 14px;
+  color: ${colors.etc.black};
+  text-align: center;
+`;
