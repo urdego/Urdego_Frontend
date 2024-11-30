@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   baseURL: process.env.API_URL,
 });
 
-// // 요청/응답 인터셉터
+// 요청/응답 인터셉터
 // axiosInstance.interceptors.request.use(
 //   (config) => {
 //     // 요청 전 수행할 작업

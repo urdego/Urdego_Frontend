@@ -1,25 +1,23 @@
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
-const PORT = 8082;
-const CONTENT_POST_URL = '/api/content-service/contents/multiple';
+const PORT = 8081;
+const SIGNUP_POST_URL = '/api/user-service/users';
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const params = request.nextUrl.searchParams;
+  const data = await request.json();
 
   try {
     const res = await axiosInstance.post(
-      `${axiosInstance.defaults.baseURL}:${PORT}${CONTENT_POST_URL}`,
-      formData,
+      `${axiosInstance.defaults.baseURL}:${PORT}${SIGNUP_POST_URL}`,
+      data,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
-        params: Object.fromEntries(params),
       }
     );
-    return NextResponse.json(res.data);
+    return NextResponse.json(res);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

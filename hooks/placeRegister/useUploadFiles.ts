@@ -30,9 +30,6 @@ const useUploadFiles = () => {
     // 서버에게 정보 전송
     await axiosInstance
       .post('/api/content/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         params: params,
       })
       .then((res) => {
