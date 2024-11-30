@@ -113,11 +113,6 @@ const GamePage = ({ params }: GamePageProps) => {
 
       setCurrentSelectedCoordinate(null);
       console.log('제출 완료');
-
-      // 테스트용: 3초 후 다음 라운드로 이동
-      setTimeout(() => {
-        handleNextRound();
-      }, 3000);
     } catch (error) {
       console.error('제출 중 에러 발생:', error);
       setHasSubmitted(false);
@@ -136,7 +131,7 @@ const GamePage = ({ params }: GamePageProps) => {
           isMapView={isMapView}
           onBackClick={handleBackClick}
         />
-        <Timer initialTime={1000} onTimeEnd={handleNextRound} />
+        <Timer initialTime={60} onTimeEnd={handleNextRound} />
 
         {isMapView ? (
           <MapComponent
