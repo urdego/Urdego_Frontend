@@ -25,4 +25,5 @@ export const ButtonLayout = styled.div`
   background: ${colors.etc.white};
 
   box-sizing: border-box;
+  z-index: 10;
 `;

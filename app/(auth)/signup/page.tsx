@@ -187,17 +187,16 @@ const Signup = () => {
           }
         />
         <SignupButton>
-        <Button
-          buttonType="gray"
-          buttonSize="large"
-          buttonHeight="default"
-          styleType="coloredBackground"
-          label="회원가입"
-          onClick={handleSignup}
-          disabled={isSubmitting}
-        />
+          <Button
+            buttonType="gray"
+            buttonSize="large"
+            buttonHeight="default"
+            styleType="coloredBackground"
+            label="회원가입"
+            onClick={handleSignup}
+            disabled={isSubmitting}
+          />
         </SignupButton>
-
       </SignupWrapper>
     </>
   );

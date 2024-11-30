@@ -4,13 +4,13 @@ import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
 const useUploadFiles = () => {
   const { placeList } = usePlaceRegisterStore();
 
-  const handleUploadFiles = () => {
-    placeList.map((place) => {
-      handleUploadPartFile(place);
-    });
+  const handleUploadFiles = async () => {
+    for (const place of placeList) {
+      await handleUploadPartFile(place);
+    }
   };
 
-  const handleUploadPartFile = (place: Place) => {
+  const handleUploadPartFile = async (place: Place) => {
     const formData = new FormData();
 
     // 이미지 등록
@@ -23,12 +23,12 @@ const useUploadFiles = () => {
     params.append('userId', '1');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
+    params.append('address', '');
     params.append('latitude', '123.1');
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    console.log(place);
-    axiosInstance
+    await axiosInstance
       .post('/api/content/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
