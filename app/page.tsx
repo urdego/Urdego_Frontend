@@ -22,14 +22,18 @@ import SnowMan4 from '@/styles/Icon/SnowMan4.svg';
 const OnBoarding = () => {
   const router = useRouter();
 
+  // TODO : 마지막 슬라이드에서 첫번째 슬라이드로 넘어갈 때 끊어지는 이슈
   const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    autoplay: false,
+    dots: true, // 네비게이션 버튼
+    infinite: true, // 무한 반복
+    speed: 500, // 슬라이드 이동 속도
+    slidesToShow: 1, // 한 번에 보여줄 슬라이드 개수
+    slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 개수
+    arrows: false, // 좌우 버튼 숨김
+    autoplay: true, // 자동 재생 활성화
+    autoplaySpeed: 3000, // 3초마다 슬라이드 변경
+    pauseOnHover: true, // 마우스 호버시 일시정지
+    cssEase: 'linear', // 부드러운 전환
   };
 
   const slides = [

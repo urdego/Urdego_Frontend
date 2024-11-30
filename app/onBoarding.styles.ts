@@ -36,6 +36,14 @@ export const SlideContainer = styled.div`
   flex: 1;
   width: 100%;
 
+  // 자동 슬라이드 기능
+  .slick-slider {
+    .slick-track,
+    .slick-list {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
   .slick-dots {
     bottom: 28px;
     li {

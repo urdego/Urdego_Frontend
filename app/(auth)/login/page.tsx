@@ -134,7 +134,7 @@ const Login = () => {
           <SignupTabs />
         </ButtonSignupWrapper>
       </form>
-      <SocialLogin />
+      {/* <SocialLogin /> */}
     </LoginWrapper>
   );
 };
