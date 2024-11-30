@@ -15,12 +15,16 @@ const LocationRegister = () => {
     <>
       <TopBar NavType="default" label="위치 추가하기" />
       <LocationRegisterWrapper>
-        <GoogleMap setIsLocationSelected={setIsLocationSelected} />
+        <GoogleMap
+          isLocationSelected={isLocationSelected}
+          setIsLocationSelected={setIsLocationSelected}
+        />
         <ButtonLayout>
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             styleType="whiteBackground"
             label="취소하기"
+            onClick={() => setIsLocationSelected(false)}
           />
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
