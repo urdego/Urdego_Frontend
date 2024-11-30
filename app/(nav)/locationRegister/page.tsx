@@ -7,14 +7,15 @@ import {
   LocationRegisterWrapper,
 } from './locationRegister.styles';
 import { useState } from 'react';
+import GoogleMap from '@/components/Layout/LocationRegister/GoogleMap';
 
 const LocationRegister = () => {
-  const [isLocationSelected, setIsLocationSelected] = useState(true);
+  const [isLocationSelected, setIsLocationSelected] = useState(false);
   return (
     <>
       <TopBar NavType="default" label="위치 추가하기" />
       <LocationRegisterWrapper>
-        {/* Google Map */}
+        <GoogleMap setIsLocationSelected={setIsLocationSelected} />
         <ButtonLayout>
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
