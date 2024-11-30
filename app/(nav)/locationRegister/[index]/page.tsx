@@ -9,15 +9,29 @@ import {
 import { useState } from 'react';
 import GoogleMap from '@/components/Layout/LocationRegister/GoogleMap';
 import { useRouter } from 'next/navigation';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 
-const LocationRegister = () => {
-  const [isLocationSelected, setIsLocationSelected] = useState(false);
+interface LocationRegister {
+  params: {
+    index: string;
+  };
+}
+const LocationRegister = ({ params }: LocationRegister) => {
   const router = useRouter();
+  const [isLocationSelected, setIsLocationSelected] = useState(false);
+  const { placeList } = usePlaceRegisterStore();
+
+  const handleSelectLocation = () => {
+    console.log(placeList);
+    // if (isLocationSelected) router.push('/placeRegister');
+  };
+
   return (
     <>
       <TopBar NavType="default" label="위치 추가하기" />
       <LocationRegisterWrapper>
         <GoogleMap
+          index={Number(params.index)}
           isLocationSelected={isLocationSelected}
           setIsLocationSelected={setIsLocationSelected}
         />
@@ -31,7 +45,7 @@ const LocationRegister = () => {
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             label="선택하기"
-            onClick={() => isLocationSelected && router.push('/placeRegister')}
+            onClick={handleSelectLocation}
           />
         </ButtonLayout>
       </LocationRegisterWrapper>

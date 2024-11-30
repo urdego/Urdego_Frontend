@@ -5,6 +5,9 @@ export interface Place {
   hint: string;
   file: File[];
   previewFile: string[];
+  lat: number;
+  lng: number;
+  address: string | null;
 }
 
 interface State {
@@ -15,7 +18,7 @@ interface Actions {
   setPlaceInput: (
     targetIndex: number,
     filed: string,
-    value: string | string[] | File[]
+    value: string | number | string[] | File[]
   ) => void;
   initPlaceList: () => void;
   addPlaceList: () => void;
@@ -27,7 +30,17 @@ interface Actions {
 }
 
 const usePlaceRegisterStore = create<State & Actions>((set) => ({
-  placeList: [{ title: '', hint: '', file: [], previewFile: [] }],
+  placeList: [
+    {
+      title: '',
+      hint: '',
+      file: [],
+      previewFile: [],
+      lat: 0,
+      lng: 0,
+      address: null,
+    },
+  ],
   setPlaceInput: (targetIndex, filed, value) =>
     set((state) => {
       const updatePlace = state.placeList.map((place, index) =>
@@ -37,13 +50,31 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
     }),
   initPlaceList: () =>
     set(() => ({
-      placeList: [{ title: '', hint: '', file: [], previewFile: [] }],
+      placeList: [
+        {
+          title: '',
+          hint: '',
+          file: [],
+          previewFile: [],
+          lat: 0,
+          lng: 0,
+          address: null,
+        },
+      ],
     })),
   addPlaceList: () =>
     set((state) => ({
       placeList: [
         ...state.placeList,
-        { title: '', hint: '', file: [], previewFile: [] },
+        {
+          title: '',
+          hint: '',
+          file: [],
+          previewFile: [],
+          lat: 0,
+          lng: 0,
+          address: null,
+        },
       ],
     })),
   removePlaceList: (targetIndex) =>

@@ -1,3 +1,4 @@
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import {
   AdvancedMarker,
   APIProvider,
@@ -7,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 
 interface GoogleMapProps {
+  index: number;
   isLocationSelected: boolean;
   setIsLocationSelected: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -17,6 +19,7 @@ interface MarkerPosition {
 }
 
 const GoogleMap = ({
+  index,
   isLocationSelected,
   setIsLocationSelected,
 }: GoogleMapProps) => {
@@ -25,23 +28,42 @@ const GoogleMap = ({
     lat: 0,
     lng: 0,
   });
+  const [roadAddress, setRoadAddress] = useState<string | null>(null);
+  const { setPlaceInput } = usePlaceRegisterStore();
 
   useEffect(() => {
+    // 마커의 위치와 도로명 주소 초기화
     if (isLocationSelected === false) {
-      setMarkerPosition({
-        lat: 0,
-        lng: 0,
-      });
+      setMarkerPosition({ lat: 0, lng: 0 });
+      setRoadAddress(null);
     }
   }, [isLocationSelected]);
 
   const handleMapClick = (e: MapMouseEvent) => {
     const { latLng } = e.detail;
     if (latLng) {
+      // 클릭한 위치를 마커의 위치로 저장
       const newPosition = { lat: latLng.lat, lng: latLng.lng };
-      setMarkerPosition(newPosition);
       console.log('Clicked position:', newPosition);
+      setMarkerPosition(newPosition);
+
+      // 역지오코딩으로 도로명 주소 반환
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === 'OK' && results) {
+          const address = results[0].formatted_address;
+          setRoadAddress(address);
+          console.log('Road address:', address);
+          setPlaceInput(index, 'address', address); // 비동기 처리에 의해 함수 내에서 선언
+        } else {
+          console.error('Geocoding failed:', status);
+          setRoadAddress('주소 저장에 실패했습니다! 😱');
+        }
+      });
+
       setIsLocationSelected(true);
+      setPlaceInput(index, 'lat', latLng.lat);
+      setPlaceInput(index, 'lng', latLng.lng);
     }
   };
 
@@ -72,6 +94,18 @@ const GoogleMap = ({
           <div>로딩중...</div>
         )}
       </APIProvider>
+      {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
+        <div
+          style={{ padding: '10px', background: '#f5f5f5', marginTop: '10px' }}
+        >
+          <p>
+            <strong>위경도:</strong> {markerPosition.lat}, {markerPosition.lng}
+          </p>
+          <p>
+            <strong>도로명 주소:</strong> {roadAddress || '로드 중...'}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

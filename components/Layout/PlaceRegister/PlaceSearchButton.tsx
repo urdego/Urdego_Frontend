@@ -5,10 +5,16 @@ import {
 } from './PlaceSearchButton.styles';
 import { SearchIcon } from './PlaceSearchButtonIcon';
 
-const PlaceSearchButton = () => {
+interface PlaceSearchButtonProps {
+  index: number;
+}
+
+const PlaceSearchButton = ({ index }: PlaceSearchButtonProps) => {
   const router = useRouter();
   return (
-    <PlaceSearchButtonWrapper onClick={() => router.push('/locationRegister')}>
+    <PlaceSearchButtonWrapper
+      onClick={() => router.push(`/locationRegister/${index}`)}
+    >
       <SearchIcon />
       <PlaceSearchText>위치 추가하기</PlaceSearchText>
     </PlaceSearchButtonWrapper>

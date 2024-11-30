@@ -11,6 +11,7 @@ const useUploadFiles = () => {
   };
 
   const handleUploadPartFile = async (place: Place) => {
+    console.log(place);
     const formData = new FormData();
 
     // 이미지 등록
@@ -28,16 +29,16 @@ const useUploadFiles = () => {
     params.append('longitude', '123.1');
 
     // 서버에게 정보 전송
-    await axiosInstance
-      .post('/api/content/', formData, {
-        params: params,
-      })
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    // await axiosInstance
+    //   .post('/api/content/', formData, {
+    //     params: params,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.status);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   };
 
   return {
