@@ -3,21 +3,19 @@ import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const params = request.nextUrl.searchParams;
+  const data = await request.json();
 
   try {
     const res = await axiosInstance.post(
-      `${axiosInstance.defaults.baseURL}:${API_PORT_CONFIG.CONTENT}${API_URL_CONFIG.CONTENT.POST_MULTIPLE}`,
-      formData,
+      `${axiosInstance.defaults.baseURL}:${API_PORT_CONFIG.AUTH}${API_URL_CONFIG.AUTH.SIGNUP}`,
+      data,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
-        params: Object.fromEntries(params),
       }
     );
-    return NextResponse.json(res.data);
+    return NextResponse.json(res);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
