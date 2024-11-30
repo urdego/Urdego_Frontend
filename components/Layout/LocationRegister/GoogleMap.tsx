@@ -11,15 +11,17 @@ interface GoogleMapProps {
   setIsLocationSelected: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface MarkerPosition {
+  lat: number;
+  lng: number;
+}
+
 const GoogleMap = ({
   isLocationSelected,
   setIsLocationSelected,
 }: GoogleMapProps) => {
   const [isMapLoad, setIsMapLoad] = useState(false);
-  const [markerPosition, setMarkerPosition] = useState<{
-    lat: number;
-    lng: number;
-  }>({
+  const [markerPosition, setMarkerPosition] = useState<MarkerPosition>({
     lat: 0,
     lng: 0,
   });
@@ -46,7 +48,10 @@ const GoogleMap = ({
   return (
     <div>
       <APIProvider
-        apiKey={process.env.NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY}
+        apiKey={
+          process.env
+            .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
+        }
         onLoad={() => setIsMapLoad(true)}
       >
         {isMapLoad ? (
@@ -57,13 +62,10 @@ const GoogleMap = ({
             defaultZoom={8}
             gestureHandling={'greedy'}
             disableDefaultUI={true}
-            onClick={handleMapClick} // 지도 클릭 이벤트 처리
+            onClick={handleMapClick}
           >
             {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-              <AdvancedMarker
-                position={markerPosition} // 마커 위치
-                clickable={true}
-              />
+              <AdvancedMarker position={markerPosition} clickable={true} />
             )}
           </Map>
         ) : (
