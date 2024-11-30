@@ -1,8 +1,6 @@
+import { API_PORT_CONFIG, API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
-
-const PORT = 8082;
-const CONTENT_POST_URL = '/api/content-service/contents/multiple';
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
@@ -10,7 +8,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const res = await axiosInstance.post(
-      `${axiosInstance.defaults.baseURL}:${PORT}${CONTENT_POST_URL}`,
+      `${axiosInstance.defaults.baseURL}:${API_PORT_CONFIG.CONTENT}${API_URL_CONFIG.CONTENT.POST_MULTIPLE}`,
       formData,
       {
         headers: {
