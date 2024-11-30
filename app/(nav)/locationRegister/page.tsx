@@ -8,9 +8,11 @@ import {
 } from './locationRegister.styles';
 import { useState } from 'react';
 import GoogleMap from '@/components/Layout/LocationRegister/GoogleMap';
+import { useRouter } from 'next/navigation';
 
 const LocationRegister = () => {
   const [isLocationSelected, setIsLocationSelected] = useState(false);
+  const router = useRouter();
   return (
     <>
       <TopBar NavType="default" label="위치 추가하기" />
@@ -29,6 +31,7 @@ const LocationRegister = () => {
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             label="선택하기"
+            onClick={() => isLocationSelected && router.push('/placeRegister')}
           />
         </ButtonLayout>
       </LocationRegisterWrapper>

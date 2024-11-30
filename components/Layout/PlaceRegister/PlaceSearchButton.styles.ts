@@ -8,6 +8,7 @@ export const PlaceSearchButtonWrapper = styled.div`
   border-radius: 4px;
   border: 1px solid ${colors.gray[70]};
   padding: 12px;
+  cursor: pointer;
 `;
 
 export const PlaceSearchText = styled.div`
