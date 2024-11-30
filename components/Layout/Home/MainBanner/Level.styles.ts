@@ -35,7 +35,7 @@ export const ProgressBarContainer = styled.div`
   margin-top: 4px;
 `;
 
-export const ProgressBar = styled.div<{ progress: number }>`
+export const ProgressBar = styled.div<{ $progress: number }>`
   position: relative;
   height: 10px;
   background-color: #947dff;
@@ -48,7 +48,7 @@ export const ProgressBar = styled.div<{ progress: number }>`
       width: 0;
     }
     to {
-      width: ${(props) => props.progress}%;
+      width: ${(props) => props.$progress}%;
     }
   }
 `;
