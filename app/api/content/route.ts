@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -6,8 +6,8 @@ export async function POST(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   try {
-    const res = await axios.post(
-      `${process.env.USER_CONTENT_API}/api/content-service/contents/multiple`,
+    const res = await axiosInstance.post(
+      '/api/content-service/contents/multiple',
       formData,
       {
         headers: {

@@ -1,5 +1,5 @@
+import axiosInstance from '@/lib/axios';
 import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
-import axios from 'axios';
 
 const useUploadFiles = () => {
   const { placeList } = usePlaceRegisterStore();
@@ -28,7 +28,7 @@ const useUploadFiles = () => {
 
     // 서버에게 정보 전송
     console.log(place);
-    axios
+    axiosInstance
       .post('/api/content/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
