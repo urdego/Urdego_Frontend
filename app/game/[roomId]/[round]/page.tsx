@@ -5,7 +5,7 @@ import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
-import { PageWrapper, Footer } from './game.styles';
+import { PageWrapper, Footer, HintText } from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState } from 'react';
@@ -28,6 +28,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
+    hint,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -140,7 +141,10 @@ const GamePage = ({ params }: GamePageProps) => {
             answerCoordinate={null} // 게임 모드에서는 정답 좌표를 숨기기 위해 null
           />
         ) : (
-          <SwiperComponent />
+          <>
+            <SwiperComponent />
+            {hint && <HintText>힌트: {hint}</HintText>}
+          </>
         )}
 
         <Footer>
