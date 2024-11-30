@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface Place {
+export interface Place {
   title: string;
   hint: string;
   file: File[];
