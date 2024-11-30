@@ -6,7 +6,7 @@ interface StyledTopBarProps {
 }
 
 export const Nav = styled.nav<StyledTopBarProps>`
-  position: sticky;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
