@@ -1,7 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Nav, NavItem, NavBarText } from '@/components/Common/NavBar/NavBar.styles';
+import {
+  Nav,
+  NavItem,
+  NavBarText,
+} from '@/components/Common/NavBar/NavBar.styles';
 import {
   HomeIcon,
   HomeColorIcon,
@@ -12,15 +16,27 @@ import {
   MypageIcon,
   MypageColorIcon,
 } from '@/components/Common/NavBar/NavIcon';
+import { usePathname } from 'next/navigation';
 
 const NavBar = () => {
   const [selected, setSelected] = useState<string>('home');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // URL에서 '/' 다음 경로를 추출해서 가져오기
+    const path = pathname.split('/')[1];
+    setSelected(path === 'groupList' ? 'home' : path);
+  }, [pathname]);
 
   return (
     <Nav>
       <Link href="/home" passHref>
         <NavItem onClick={() => setSelected('home')}>
-          {selected === 'home' ? <HomeColorIcon /> : <HomeIcon />}
+          {selected === 'home' || selected === 'groupList' ? (
+            <HomeColorIcon />
+          ) : (
+            <HomeIcon />
+          )}
           <NavBarText>홈</NavBarText>
         </NavItem>
       </Link>
@@ -37,7 +53,7 @@ const NavBar = () => {
         </NavItem>
       </Link>
       <Link href="/mypage" passHref>
-        <NavItem onClick={() => setSelected('myPage')}>
+        <NavItem onClick={() => setSelected('mypage')}>
           {selected === 'mypage' ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>
         </NavItem>
