@@ -8,14 +8,14 @@ export const BannerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 280px;
+  height: 220px;
   background-color: #f4eeff;
 `;
 
 export const ButtonWrapper = styled.div`
   position: absolute;
   bottom: 8px;
-  right: 32px;
+  right: 25px;
   display: flex;
   flex-direction: column;
   gap: 8px;
