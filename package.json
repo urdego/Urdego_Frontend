@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@types/google.maps": "^3.58.1",
     "axios": "^1.7.8",
     "date-fns": "^4.1.0",
@@ -20,6 +21,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^7.0.1",
+    "sockjs-client": "^1.6.1",
     "storybook": "^8.4.4",
     "styled-components": "^6.1.13",
     "swiper": "^11.1.15",
