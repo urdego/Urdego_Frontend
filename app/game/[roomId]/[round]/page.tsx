@@ -5,7 +5,13 @@ import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
-import { PageWrapper, Footer, HintText } from './game.styles';
+import {
+  PageWrapper,
+  Footer,
+  HintText,
+  HintWrapper,
+  HintIcon,
+} from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState } from 'react';
@@ -143,7 +149,18 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent />
-            {hint && <HintText>힌트: {hint}</HintText>}
+            {/* 클라이언트 테스트용 힌트 표시 */}
+            <HintWrapper>
+              <HintIcon>힌트</HintIcon>
+              <HintText>문화생활을 할 수 있는 장소</HintText>
+            </HintWrapper>
+            {/* 개발용 힌트 표시 */}
+            {/* {hint && (
+              <HintWrapper>
+                <HintIcon>힌트</HintIcon>
+                <HintText> {hint}</HintText>
+              </HintWrapper>
+            )} */}
           </>
         )}
 

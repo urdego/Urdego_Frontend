@@ -12,9 +12,9 @@ export default function InGameLayout({
   const setLoading = useLoadingStore((state) => state.setLoading);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoading(true);
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  // }, []);
 
   const handleScriptLoad = () => {
     setLoading(false);
@@ -24,6 +24,11 @@ export default function InGameLayout({
     setLoadError('Google Maps를 로드하는 데 실패했습니다.');
     setLoading(false);
   };
+
+  // const handleScriptLoad = async () => {
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+  //   setLoading(false);
+  // };
 
   if (loadError) {
     return <div>Error: {loadError}</div>;

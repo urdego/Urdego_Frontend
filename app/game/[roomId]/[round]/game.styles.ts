@@ -34,11 +34,30 @@ export const Footer = styled.footer`
 `;
 
 export const HintText = styled.p`
-  padding: 12px 16px;
-  margin: 8px 16px;
-  background-color: ${colors.purple[98]};
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   color: ${colors.etc.black};
   text-align: center;
+`;
+
+export const HintWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+  padding-top: 8px;
+`;
+export const HintIcon = styled.div`
+  display: flex;
+  width: 36px;
+  height: 28px;
+  font-size: 16px;
+  font-weight: 400;
+  color: ${colors.etc.white};
+  background-color: ${colors.purple[50]};
+  padding: 2px 4px;
+  border-radius: 4px;
+  text-align: center;
+  align-items: center;
 `;
