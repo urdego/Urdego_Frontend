@@ -14,12 +14,64 @@ import Button from '@common/Button/Button';
 import SignupTabs from '@layout/Login/SignUpTabs';
 import SocialLogin from '@/components/Layout/Login/SNSLogos';
 import useUserStore from '@/stores/useUserStore';
+import useSSEStore from '@/stores/useSSEStore';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
+import { toast } from 'react-hot-toast';
 
 interface LoginError {
   email: string;
   password: string;
 }
+
+const connectSSE = (userId: string) => {
+  const { setEventSource } = useSSEStore.getState();
+  let retryCount = 0;
+  const MAX_RETRIES = 3;
+
+  const connect = () => {
+    try {
+      const url = new URL(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notification-service/sse/${userId}`
+      );
+
+      const eventSource = new EventSource(url.toString(), {
+        withCredentials: true,
+      });
+
+      eventSource.onopen = () => {
+        console.log('SSE connection established');
+        retryCount = 0;
+      };
+
+      eventSource.onerror = (error: Event) => {
+        console.error('SSE connection error:', error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+          eventSource.close();
+          setEventSource(null);
+
+          if (retryCount < MAX_RETRIES) {
+            retryCount++;
+            const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
+            console.log(
+              `Attempting reconnection in ${delay / 1000} seconds...`
+            );
+            setTimeout(connect, delay);
+          } else {
+            console.error('Max retry attempts reached for SSE connection');
+          }
+        }
+      };
+
+      setEventSource(eventSource);
+      return eventSource;
+    } catch (error) {
+      console.error('Failed to initialize SSE:', error);
+      return null;
+    }
+  };
+
+  return connect();
+};
 
 const Login = () => {
   const router = useRouter();
@@ -77,8 +129,38 @@ const Login = () => {
         throw new Error('로그인에 실패했습니다.');
       }
 
+      // 닉네임 받아오기
       const nickname = await response.text();
+
+      localStorage.setItem('userId', email);
       setNickname(nickname);
+
+      // SSE 연결 시도
+      try {
+        const eventSource = connectSSE(email);
+        if (!eventSource) {
+          toast(
+            '실시간 알림 연결에 실패했습니다. 일부 기능이 제한될 수 있습니다.',
+            {
+              duration: 3000,
+              style: {
+                background: '#ffffff',
+                color: '#000000',
+                fontSize: '14px',
+                padding: '12px 20px',
+                borderRadius: '4px',
+                maxWidth: '280px',
+              },
+            }
+          );
+        }
+      } catch (sseError) {
+        console.error('SSE connection failed:', sseError);
+        toast(
+          '실시간 알림 연결에 실패했습니다. 일부 기능이 제한될 수 있습니다.'
+        );
+      }
+
       router.push('/home');
     } catch (error) {
       console.error('Login error:', error);
