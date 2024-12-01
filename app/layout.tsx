@@ -5,6 +5,8 @@ import Container from '@/styles/Container';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Toaster } from 'react-hot-toast';
 import colors from '@styles/color/palette';
+import LoadingSpinnerComponent from '@/components/Common/LoadingSpinner/LoadingSpinner';
+import RouteChangeHandler from '@/hooks/Loading/RouteChangeHandler';
 
 export { metadata };
 
@@ -18,7 +20,11 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <GlobalStyle />
-          <Container>{children}</Container>
+          <Container>
+            <LoadingSpinnerComponent />
+            <RouteChangeHandler />
+            {children}
+          </Container>
           <Toaster
             position="bottom-center"
             toastOptions={{

@@ -6,9 +6,11 @@ import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Character from '@/components/Layout/Game/Character';
+import useLoadingStore from '@/stores/loadingStore';
 
 const WaitingRoom = () => {
   const router = useRouter();
+  const setLoading = useLoadingStore((state) => state.setLoading);
   const { roomId } = useParams();
 
   // 더미 유저 데이터 (데이터 변경하면서 테스트)
@@ -46,6 +48,7 @@ const WaitingRoom = () => {
   // 게임 시작 핸들러 (방장만 가능)
   const startGame = () => {
     if (isHost && users.length >= 2 && allPlayersReady) {
+      setLoading(true);
       router.push(`/game/${roomId}/1`); // 게임 화면으로 이동
     }
   };
