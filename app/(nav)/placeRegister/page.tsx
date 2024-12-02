@@ -43,7 +43,6 @@ const PlaceRegisterPage = () => {
       <TopBar NavType="default" label="장소 등록하기" />
       <PageWrapper>
         <PlaceRegisterWrapper>
-          <button onClick={() => console.log(placeList)}>a</button>
           <PlaceLayout>
             {placeList.map((_, index) => (
               <PlaceRegister
