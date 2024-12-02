@@ -24,9 +24,9 @@ const useUploadFiles = () => {
     params.append('userId', '1');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
-    params.append('address', place.address);
-    params.append('latitude', place.lat);
-    params.append('longitude', place.lng);
+    params.append('address', place.address || '');
+    params.append('latitude', String(place.lat));
+    params.append('longitude', String(place.lng));
 
     // 서버에게 정보 전송
     await axiosInstance
