@@ -31,6 +31,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<LoginError>({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const handlePasswordVisibility = () => {
     setIsHiddenPassword((prev) => !prev);
@@ -59,6 +60,7 @@ const Login = () => {
     }
 
     setErrors(newErrors);
+    setIsFormValid(isValid);
     return isValid;
   };
 
@@ -96,6 +98,7 @@ const Login = () => {
         email: '',
         password: '이메일 또는 비밀번호가 올바르지 않습니다.',
       });
+      setIsFormValid(false);
     } finally {
       setIsLoading(false);
     }
@@ -112,7 +115,19 @@ const Login = () => {
         ...prev,
         email: '이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)',
       }));
+      setIsFormValid(false);
+    } else {
+      // 이메일이 유효하고 비밀번호가 있으면 폼 유효
+      setIsFormValid(!!value && !!password);
     }
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    setErrors({ ...errors, password: '' });
+
+    // 비밀번호가 있고 이메일이 유효하면 폼 유효
+    setIsFormValid(!!value && !!email && validateEmail(email));
   };
 
   return (
@@ -139,10 +154,7 @@ const Login = () => {
           isButton={true}
           isHiddenPassword={isHiddenPassword}
           handleClick={handlePasswordVisibility}
-          onChange={(value) => {
-            setPassword(value);
-            setErrors({ ...errors, password: '' });
-          }}
+          onChange={handlePasswordChange}
           type={isHiddenPassword ? 'password' : 'text'}
           autoComplete="new-password"
           validation={
@@ -154,7 +166,7 @@ const Login = () => {
         <AutoLoginCheckbox />
         <ButtonSignupWrapper>
           <Button
-            buttonType="gray"
+            buttonType={isFormValid ? 'purple' : 'gray'}
             buttonSize="large"
             buttonHeight="default"
             styleType="coloredBackground"
