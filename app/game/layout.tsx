@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Script from 'next/script';
-import { PageWrapper } from './[roomId]/[round]/game.styles';
 
 export default function InGameLayout({
   children,
@@ -32,10 +31,10 @@ export default function InGameLayout({
         onLoad={handleScriptLoad}
         onError={handleScriptError}
       />
-      <PageWrapper>
+      <>
         {/* TODO : 게임 로딩중일때 로딩 스피너 필요(google Map Load) */}
         {isMapLoaded ? children : <div>게임 준비중입니다...</div>}
-      </PageWrapper>
+      </>
     </>
   );
 }

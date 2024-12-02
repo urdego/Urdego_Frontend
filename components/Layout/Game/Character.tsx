@@ -34,24 +34,32 @@ const positions = [
 ];
 
 const Character = ({ users }: CharacterProps) => {
-  const characters = users.map((user, index) => ({
-    id: user.id,
-    level: `레벨 ${index + 1}`, // 임시 레벨 할당
-    nickname: user.name,
-    src: [SnowMan1, SnowMan2, SnowMan3, SnowMan4, SnowMan5, SnowMan6][index],
-    alt: `${index + 1}번 눈사람`,
-    isHost: user.isHost,
-    isReady: user.isReady,
-  }));
+  const characters = users.map((user, index) => {
+    // 타원형 배치를 위한 계산
+    const angle = (index * 360) / users.length;
+    const horizontalRadius = 35; // 가로 반지름 (더 작게)
+    const verticalRadius = 45; // 세로 반지름 (더 크게)
+
+    // 타원형 좌표 계산
+    const x = 50 + horizontalRadius * Math.cos((angle * Math.PI) / 180);
+    const y = 50 + verticalRadius * Math.sin((angle * Math.PI) / 180);
+
+    return {
+      id: user.id,
+      level: `레벨 ${index + 1}`,
+      nickname: user.name,
+      src: [SnowMan1, SnowMan2, SnowMan3, SnowMan4, SnowMan5, SnowMan6][index],
+      alt: `${index + 1}번 눈사람`,
+      isHost: user.isHost,
+      isReady: user.isReady,
+      position: { left: `${x}%`, top: `${y}%` },
+    };
+  });
 
   return (
     <CharactersContainer>
-      {characters.map((char, idx) => (
-        <CharacterWrapper
-          key={char.id}
-          style={positions[idx]}
-          animation="slide"
-        >
+      {characters.map((char) => (
+        <CharacterWrapper key={char.id} style={char.position} animation="slide">
           <InfoWrapper>
             {char.isHost ? (
               <Host>방장</Host>

@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 
 export const PageWrapper = styled.div`
-  background-color: #ffffff;
-  padding: 120px 8px 50px 8px;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 16px 199px 16px;
+`;
+
+export const HomePageWrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 0 80px 0;
 `;

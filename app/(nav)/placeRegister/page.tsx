@@ -1,10 +1,11 @@
 'use client';
+import { useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
 import PlusIconSrc from '@styles/Icon/Plus.svg';
-
 import {
   ButtonLayout,
   PlaceLayout,
@@ -13,16 +14,21 @@ import {
 import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
+import useControlButton from '@/hooks/placeRegister/useContorlButtons';
+
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
-import useControlButton from '@/hooks/placeRegister/useContorlButtons';
-import { useEffect } from 'react';
 
 const PlaceRegisterPage = () => {
-  // placeRegister 들어오면 PlaceList 정보 초기화
+  const searchParams = useSearchParams();
+  const source = searchParams.get('source');
+
   useEffect(() => {
-    initPlaceList();
-  }, []);
+    // placeRegister 들어오면 PlaceList 정보 초기화
+    if (source !== 'locationRegister') {
+      initPlaceList();
+    }
+  }, [searchParams]);
 
   // client state 불러오는 custom hook
   const { handleUploadFiles } = useUploadFiles();
@@ -65,4 +71,5 @@ const PlaceRegisterPage = () => {
     </>
   );
 };
+
 export default PlaceRegisterPage;

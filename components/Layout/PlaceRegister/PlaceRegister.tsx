@@ -79,7 +79,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
         value={placeList[index].title}
         onChange={handleTitleChange}
       />
-      <PlaceSearchButton />
+      <PlaceSearchButton index={index} value={placeList[index].address} />
       <PlaceInput
         placeholder="(선택) 힌트를 작성해주세요"
         value={placeList[index].hint}

@@ -15,6 +15,7 @@ export const Title = styled.h2`
   display: flex;
   align-items: center;
   font-size: 16px;
+  font-weight: 600;
   margin: 0;
 `;
 
@@ -102,6 +103,7 @@ export const InvitedFriendsTitle = styled.h3`
   display: flex;
   align-items: center;
   font-size: 16px;
+  font-weight: 600;
   margin: 0;
 `;
 

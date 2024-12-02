@@ -10,17 +10,21 @@ interface NickNameInputProps {
 
 const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
   const [nickname, setNickname] = useState('');
-  const [validationMessage, setValidationMessage] = useState<string>('');
-  const [isChecking, setIsChecking] = useState(false);
+  const [validationMessage, setValidationMessage] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
 
   const checkNicknameDuplicate = async () => {
     if (!nickname) {
-      setValidationMessage('닉네임을 입력해주세요.');
+      setValidationMessage({
+        message: '닉네임을 입력해주세요.',
+        type: 'error',
+      });
       onNicknameValidated('', false);
       return;
     }
 
-    setIsChecking(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/user-service/nickname`,
@@ -37,28 +41,38 @@ const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
 
       if (response.ok) {
         if (result === 'PERMIT') {
-          setValidationMessage('사용 가능한 닉네임입니다.');
+          setValidationMessage({
+            message: '사용 가능한 닉네임입니다.',
+            type: 'success',
+          });
           onNicknameValidated(nickname, true);
         } else if (result === 'DUPLICATED') {
-          setValidationMessage('이미 사용 중인 닉네임입니다.');
+          setValidationMessage({
+            message: '이미 사용 중인 닉네임입니다.',
+            type: 'error',
+          });
           onNicknameValidated(nickname, false);
         }
       } else {
-        setValidationMessage('중복 확인 중 오류가 발생했습니다.');
+        setValidationMessage({
+          message: '중복 확인 중 오류가 발생했습니다.',
+          type: 'error',
+        });
         onNicknameValidated(nickname, false);
       }
     } catch (error) {
       console.error('Nickname check error:', error);
-      setValidationMessage('중복 확인 중 오류가 발생했습니다.');
+      setValidationMessage({
+        message: '중복 확인 중 오류가 발생했습니다.',
+        type: 'error',
+      });
       onNicknameValidated(nickname, false);
-    } finally {
-      setIsChecking(false);
     }
   };
 
   const handleInputChange = (value: string) => {
     setNickname(value);
-    setValidationMessage('');
+    setValidationMessage(null);
     onNicknameValidated(value, false); // 입력값이 변경되면 유효성 초기화
   };
 
@@ -71,7 +85,10 @@ const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
           onChange={handleInputChange}
           validation={
             validationMessage && (
-              <ValidationMessage message={validationMessage} />
+              <ValidationMessage
+                message={validationMessage.message}
+                type={validationMessage.type}
+              />
             )
           }
         />

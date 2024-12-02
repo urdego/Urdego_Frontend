@@ -1,12 +1,12 @@
-import Image from "next/image";
-import HomeIconSrc from "@/styles/Icon/Home.svg";
-import HomeColorIconSrc from "@/styles/Icon/HomeColor.svg";
-import MapIconSrc from "@/styles/Icon/Map.svg";
-import MapColorIconSrc from "@/styles/Icon/MapColor.svg";
-import StarIconSrc from "@/styles/Icon/Star.svg";
-import StarColorIconSrc from "@/styles/Icon/StarColor.svg";
-import MypageIconSrc from "@/styles/Icon/Mypage.svg";
-import MypageColorIconSrc from "@/styles/Icon/MypageColor.svg";
+import Image from 'next/image';
+import HomeIconSrc from '@/styles/Icon/Home.svg';
+import HomeColorIconSrc from '@/styles/Icon/HomeColor.svg';
+import MapIconSrc from '@/styles/Icon/Map.svg';
+import MapColorIconSrc from '@/styles/Icon/MapColor.svg';
+import StarIconSrc from '@/styles/Icon/Star.svg';
+import StarColorIconSrc from '@/styles/Icon/StarColor.svg';
+import MypageIconSrc from '@/styles/Icon/Mypage.svg';
+import MypageColorIconSrc from '@/styles/Icon/MypageColor.svg';
 
 export const HomeIcon = () => <Image src={HomeIconSrc} alt="Home Icon" />;
 export const HomeColorIcon = () => (

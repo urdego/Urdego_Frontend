@@ -31,7 +31,7 @@ const MapContainer = styled.div<MapContainerProps>`
   ${({ mode }) =>
     mode === 'game'
       ? css`
-          height: calc(100vh - 235px);
+          height: calc(100vh - 165px);
         `
       : css`
           height: 250px;
@@ -63,7 +63,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
         center: answerCoordinate || center || { lat: 36.5, lng: 127.5 },
         zoom: mode === 'rank' ? 15 : zoom,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: false,
+
+        mapTypeControl: false, // 지도 타입 컨트롤 비활성화
+        streetViewControl: false, // 스트리트뷰 컨트롤 비활성화
+        fullscreenControl: false, // 전체화면 컨트롤 비활성화
       };
 
       mapRef.current = new google.maps.Map(mapElementRef.current, mapOptions);
