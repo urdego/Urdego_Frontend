@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
@@ -139,7 +140,7 @@ const Signup = () => {
           onChange={(value) =>
             setFormData((prev) => ({ ...prev, email: value }))
           }
-          autoComplete="off" // 자동완성 방지
+          autoComplete="off"
         />
         <Input
           title="비밀번호"
@@ -156,14 +157,20 @@ const Signup = () => {
             }
           }}
           type={isHiddenPassword.origin ? 'password' : 'text'}
-          autoComplete="new-password" // 자동완성 방지
+          autoComplete="new-password"
           validation={
             <>
               {errors.length && (
-                <ValidationMessage message="비밀번호는 8자리 이상이어야 합니다." />
+                <ValidationMessage
+                  message="비밀번호는 8자리 이상이어야 합니다."
+                  type="error"
+                />
               )}
               {errors.pattern && (
-                <ValidationMessage message="비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다." />
+                <ValidationMessage
+                  message="비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다."
+                  type="error"
+                />
               )}
             </>
           }
@@ -179,10 +186,13 @@ const Signup = () => {
             validatePasswordMatch(value);
           }}
           type={isHiddenPassword.copy ? 'password' : 'text'}
-          autoComplete="new-password" // 자동완성 방지
+          autoComplete="new-password"
           validation={
             errors.mismatch && (
-              <ValidationMessage message="비밀번호가 일치하지 않습니다." />
+              <ValidationMessage
+                message="비밀번호가 일치하지 않습니다."
+                type="error"
+              />
             )
           }
         />

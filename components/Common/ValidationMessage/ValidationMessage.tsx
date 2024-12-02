@@ -2,10 +2,11 @@ import { StyledMessage } from '@/components/Common/ValidationMessage/ValidationM
 
 interface ValidationMessageProps {
   message: string;
+  type: 'success' | 'error'; // 'success'는 green, 'error'는 alert 색상
 }
 
-const ValidationMessage = ({ message }: ValidationMessageProps) => {
-  return <StyledMessage>{message}</StyledMessage>;
+const ValidationMessage = ({ message, type }: ValidationMessageProps) => {
+  return <StyledMessage type={type}>{message}</StyledMessage>;
 };
 
 export default ValidationMessage;

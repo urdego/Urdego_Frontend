@@ -13,7 +13,6 @@ import Input from '@common/Input/Input';
 import AutoLoginCheckbox from '@layout/Login/AutoLogin';
 import Button from '@common/Button/Button';
 import SignupTabs from '@layout/Login/SignUpTabs';
-import SocialLogin from '@/components/Layout/Login/SNSLogos';
 import useUserStore from '@/stores/useUserStore';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 
@@ -105,7 +104,9 @@ const Login = () => {
           onChange={(value) => setEmail(value)}
           autoComplete="new-email"
           validation={
-            errors.email && <ValidationMessage message={errors.email} />
+            errors.email && (
+              <ValidationMessage message={errors.email} type="error" />
+            )
           }
         />
         <Input
@@ -118,7 +119,9 @@ const Login = () => {
           type={isHiddenPassword ? 'password' : 'text'}
           autoComplete="new-password"
           validation={
-            errors.password && <ValidationMessage message={errors.password} />
+            errors.password && (
+              <ValidationMessage message={errors.password} type="error" />
+            )
           }
         />
         <AutoLoginCheckbox />
@@ -134,7 +137,6 @@ const Login = () => {
           <SignupTabs />
         </ButtonSignupWrapper>
       </form>
-      {/* <SocialLogin /> */}
     </LoginWrapper>
   );
 };
