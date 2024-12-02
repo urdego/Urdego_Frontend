@@ -11,8 +11,15 @@ export const PlaceSearchButtonWrapper = styled.div`
   cursor: pointer;
 `;
 
-export const PlaceSearchText = styled.div`
+export const LocationRegisterText = styled.div`
   color: ${colors.gray[70]};
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+`;
+
+export const LocationText = styled.div`
+  color: ${colors.etc.black};
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
