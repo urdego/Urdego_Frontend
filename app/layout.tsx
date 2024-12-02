@@ -1,12 +1,13 @@
 import StyledComponentsRegistry from '@/lib/registry';
 import { ReactNode } from 'react';
-import { metadata } from '@/app/metadata';
+import { metadata, viewport } from '@/app/metadata';
 import Container from '@/styles/Container';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Toaster } from 'react-hot-toast';
 import colors from '@styles/color/palette';
 
 export { metadata };
+export { viewport };
 
 export default function RootLayout({
   children,
