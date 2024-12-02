@@ -77,18 +77,6 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       // 도로명 주소 저장
       // 역지오코딩으로 도로명 주소 반환
-      // const geocoder = new google.maps.Geocoder();
-      // geocoder.geocode(
-      //   { location: { lat: gps.latitude, lng: gps.longitude } },
-      //   (results, status) => {
-      //     if (status === 'OK' && results) {
-      //       const address = results[0].formatted_address;
-      //       setPlaceInput(index, 'address', address);
-      //     } else {
-      //       console.error('Geocoding failed:', status);
-      //     }
-      //   }
-      // );
       handleReverseGeocoding({
         index,
         latLng: { lat: gps.latitude, lng: gps.longitude },
