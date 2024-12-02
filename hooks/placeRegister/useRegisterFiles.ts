@@ -15,17 +15,11 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const fileList = e.target.files;
     if (!fileList || fileList?.length === 0) return;
 
-    // 용량 제한 로직
+    // 불러온 파일 최대 3개로 제한
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
-    const totalMemory = selectedFileList.reduce(
-      (acc, file) => acc + file.size,
-      0
-    );
 
-    if (totalMemory >= MAX_MEMORY) {
-      setPlaceInput(index, 'file', []);
-      setPlaceInput(index, 'previewFile', []);
-      alert('30MB를 초과하실 수 없습니다!');
+    // 용량 제한 로직
+    if (isOverMemory(selectedFileList)) {
       return;
     }
 
@@ -54,6 +48,21 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   const handlePartFileRemove = (index: number, previewIndex: number) => {
     removePartPlaceFile(index, previewIndex);
+  };
+
+  const isOverMemory = (selectedFileList: File[]) => {
+    const totalMemory = selectedFileList.reduce(
+      (acc, file) => acc + file.size,
+      0
+    );
+
+    if (totalMemory >= MAX_MEMORY) {
+      setPlaceInput(index, 'file', []);
+      setPlaceInput(index, 'previewFile', []);
+      alert('30MB를 초과하실 수 없습니다!');
+      return true;
+    }
+    return false;
   };
 
   const exportMetadata = async (fileList: File[]) => {
