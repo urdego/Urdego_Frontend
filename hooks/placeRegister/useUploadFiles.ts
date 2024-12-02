@@ -11,6 +11,7 @@ const useUploadFiles = () => {
   };
 
   const handleUploadPartFile = async (place: Place) => {
+    console.log(place);
     const formData = new FormData();
 
     // 이미지 등록
@@ -23,9 +24,9 @@ const useUploadFiles = () => {
     params.append('userId', '1');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
-    params.append('address', '');
-    params.append('latitude', '123.1');
-    params.append('longitude', '123.1');
+    params.append('address', place.address || '');
+    params.append('latitude', String(place.lat));
+    params.append('longitude', String(place.lng));
 
     // 서버에게 정보 전송
     await axiosInstance
