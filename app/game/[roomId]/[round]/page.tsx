@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
 import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
+import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
@@ -25,7 +26,9 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const playerId = 1; // TODO: 실제 플레이어 ID를 전역 상태나 세션에서 가져오도록 수정 필요
+  const nickname = useUserStore(
+    (state: { nickname: string | null }) => state.nickname
+  );
   const { submitAnswer, isSubmitting } = useGameSubmit();
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -34,7 +37,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
-    // hint,
+    hint,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -60,7 +63,7 @@ const GamePage = ({ params }: GamePageProps) => {
     }
 
     const submitData = {
-      playerId: playerId,
+      nickname: nickname || '',
       roundId: Number(params.round),
       coordinate: [
         currentSelectedCoordinate.lat,
@@ -152,18 +155,14 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent />
-            {/* 클라이언트 테스트용 힌트 표시 */}
-            <HintWrapper>
-              <HintIcon>힌트</HintIcon>
-              <HintText>문화생활을 할 수 있는 장소</HintText>
-            </HintWrapper>
-            {/* 개발용 힌트 표시 */}
-            {/* {hint && (
+            {/* TODO: 백엔드 연동 시 사용 */}
+            {/* <SwiperComponent images={images} /> */}
+            {hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
                 <HintText> {hint}</HintText>
               </HintWrapper>
-            )} */}
+            )}
           </>
         )}
 

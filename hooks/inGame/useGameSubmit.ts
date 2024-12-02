@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 interface SubmitData {
-  playerId: number;
+  nickname: string;
   roundId: number;
   coordinate: number[] | null;
 }
@@ -12,16 +12,13 @@ export const useGameSubmit = () => {
   const submitAnswer = async (data: SubmitData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch(
-        `${process.env.API_URL}/api/game-service/submissions`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch('/api/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error('좌표 전송 실패');

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface GameData {
   images: string[];
@@ -37,6 +37,23 @@ export const useGameState = (initialRound: number) => {
     console.log('Selected coordinate:', coordinate);
     setCurrentSelectedCoordinate(coordinate);
   };
+
+  useEffect(() => {
+    const fetchRoundData = async () => {
+      try {
+        const response = await fetch(`/api/game/round/${initialRound}`);
+        const data = await response.json();
+
+        setImages(data.images);
+        setHint(data.hint);
+        setAnswerCoordinate(data.answerCoordinate);
+      } catch (error) {
+        console.error('라운드 데이터 가져오기 실패:', error);
+      }
+    };
+
+    fetchRoundData();
+  }, [initialRound]);
 
   return {
     currentRound,
