@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
@@ -38,9 +38,15 @@ const Signup = () => {
     length: false,
     pattern: false,
     mismatch: false,
+    email: false,
   });
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const validatePassword = useCallback((value: string) => {
     const lengthValid = value.length >= 8;
@@ -75,9 +81,34 @@ const Signup = () => {
     }));
   };
 
+  // 모든 폼의 유효성 상태를 확인하는 함수
+  const isFormValid = useMemo(() => {
+    return (
+      formData.email !== '' &&
+      formData.password !== '' &&
+      formData.nickname !== '' &&
+      validateEmail(formData.email) &&
+      isNicknameValid &&
+      validatePassword(password) &&
+      validatePasswordMatch(passwordConfirm)
+    );
+  }, [
+    formData,
+    isNicknameValid,
+    password,
+    passwordConfirm,
+    validatePassword,
+    validatePasswordMatch,
+  ]);
+
   const handleSignup = async () => {
     if (!formData.email || !formData.password || !formData.nickname) {
       alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      alert('이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)');
       return;
     }
 
@@ -142,10 +173,22 @@ const Signup = () => {
         <Input
           title="이메일"
           placeholder="이메일을 입력해주세요"
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, email: value }))
-          }
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, email: value }));
+            setErrors((prev) => ({
+              ...prev,
+              email: !validateEmail(value) && value.length > 0,
+            }));
+          }}
           autoComplete="off"
+          validation={
+            errors.email && (
+              <ValidationMessage
+                message="이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)"
+                type="error"
+              />
+            )
+          }
         />
         <Input
           title="비밀번호"
@@ -203,13 +246,13 @@ const Signup = () => {
         />
         <SignupButton>
           <Button
-            buttonType="gray"
+            buttonType={isFormValid ? 'purple' : 'gray'}
             buttonSize="large"
             buttonHeight="default"
             styleType="coloredBackground"
             label="회원가입"
             onClick={handleSignup}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isFormValid}
           />
         </SignupButton>
       </SignupWrapper>
