@@ -1,3 +1,4 @@
+import useConvertLocationToAddress from '@/hooks/placeRegister/useConvertLocationToAddress';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import {
   AdvancedMarker,
@@ -29,6 +30,7 @@ const GoogleMap = ({
     lng: 0,
   });
   const { setPlaceInput } = usePlaceRegisterStore();
+  const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   useEffect(() => {
     // 마커의 위치와 도로명 주소 초기화
@@ -46,15 +48,7 @@ const GoogleMap = ({
       setMarkerPosition(newPosition);
 
       // 역지오코딩으로 도로명 주소 반환
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: latLng }, (results, status) => {
-        if (status === 'OK' && results) {
-          const address = results[0].formatted_address;
-          setPlaceInput(index, 'address', address); // 비동기 처리에 의해 함수 내에서 선언
-        } else {
-          console.error('Geocoding failed:', status);
-        }
-      });
+      handleReverseGeocoding({ index, latLng });
 
       setIsLocationSelected(true);
       setPlaceInput(index, 'lat', latLng.lat);

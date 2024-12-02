@@ -1,5 +1,6 @@
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import exifr from 'exifr';
+import useConvertLocationToAddress from './useConvertLocationToAddress';
 
 interface useUploadFilesProps {
   index: number;
@@ -7,6 +8,8 @@ interface useUploadFilesProps {
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const { setPlaceInput, removePartPlaceFile } = usePlaceRegisterStore();
+  const { handleReverseGeocoding } = useConvertLocationToAddress();
+
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
@@ -74,18 +77,22 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       // 도로명 주소 저장
       // 역지오코딩으로 도로명 주소 반환
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode(
-        { location: { lat: gps.latitude, lng: gps.longitude } },
-        (results, status) => {
-          if (status === 'OK' && results) {
-            const address = results[0].formatted_address;
-            setPlaceInput(index, 'address', address);
-          } else {
-            console.error('Geocoding failed:', status);
-          }
-        }
-      );
+      // const geocoder = new google.maps.Geocoder();
+      // geocoder.geocode(
+      //   { location: { lat: gps.latitude, lng: gps.longitude } },
+      //   (results, status) => {
+      //     if (status === 'OK' && results) {
+      //       const address = results[0].formatted_address;
+      //       setPlaceInput(index, 'address', address);
+      //     } else {
+      //       console.error('Geocoding failed:', status);
+      //     }
+      //   }
+      // );
+      handleReverseGeocoding({
+        index,
+        latLng: { lat: gps.latitude, lng: gps.longitude },
+      });
     }
   };
 
