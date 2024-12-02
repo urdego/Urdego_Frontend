@@ -68,8 +68,24 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const exportMetadata = async (fileList: File[]) => {
     const gps = await exifr.gps(fileList[0]);
     if (gps) {
+      // 위경도 저장
       setPlaceInput(index, 'lat', gps.latitude);
       setPlaceInput(index, 'lng', gps.longitude);
+
+      // 도로명 주소 저장
+      // 역지오코딩으로 도로명 주소 반환
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode(
+        { location: { lat: gps.latitude, lng: gps.longitude } },
+        (results, status) => {
+          if (status === 'OK' && results) {
+            const address = results[0].formatted_address;
+            setPlaceInput(index, 'address', address);
+          } else {
+            console.error('Geocoding failed:', status);
+          }
+        }
+      );
     }
   };
 
