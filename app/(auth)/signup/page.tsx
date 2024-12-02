@@ -1,12 +1,15 @@
 'use client';
-import { useState, useCallback } from 'react';
+
+import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
 import Input from '@/components/Common/Input/Input';
 import { SignupButton, SignupWrapper, Title } from './Signup.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 import Button from '@/components/Common/Button/Button';
+import useUserStore from '@/stores/useUserStore';
 
 interface SignUpFormData {
   email: string;
@@ -16,6 +19,8 @@ interface SignUpFormData {
 
 const Signup = () => {
   const router = useRouter();
+  const setNickname = useUserStore((state) => state.setNickname);
+
   const [formData, setFormData] = useState<SignUpFormData>({
     email: '',
     password: '',
@@ -33,9 +38,15 @@ const Signup = () => {
     length: false,
     pattern: false,
     mismatch: false,
+    email: false,
   });
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const validatePassword = useCallback((value: string) => {
     const lengthValid = value.length >= 8;
@@ -70,9 +81,34 @@ const Signup = () => {
     }));
   };
 
+  // 모든 폼의 유효성 상태를 확인하는 함수
+  const isFormValid = useMemo(() => {
+    return (
+      formData.email !== '' &&
+      formData.password !== '' &&
+      formData.nickname !== '' &&
+      validateEmail(formData.email) &&
+      isNicknameValid &&
+      validatePassword(password) &&
+      validatePasswordMatch(passwordConfirm)
+    );
+  }, [
+    formData,
+    isNicknameValid,
+    password,
+    passwordConfirm,
+    validatePassword,
+    validatePasswordMatch,
+  ]);
+
   const handleSignup = async () => {
     if (!formData.email || !formData.password || !formData.nickname) {
       alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      alert('이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)');
       return;
     }
 
@@ -106,7 +142,8 @@ const Signup = () => {
       );
 
       if (response.ok) {
-        alert('회원가입이 완료되었습니다.');
+        setNickname(formData.nickname);
+        toast('회원가입에 성공하셨습니다!');
         router.push('/login');
       } else {
         const errorData = await response.text();
@@ -136,10 +173,22 @@ const Signup = () => {
         <Input
           title="이메일"
           placeholder="이메일을 입력해주세요"
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, email: value }))
+          onChange={(value) => {
+            setFormData((prev) => ({ ...prev, email: value }));
+            setErrors((prev) => ({
+              ...prev,
+              email: !validateEmail(value) && value.length > 0,
+            }));
+          }}
+          autoComplete="off"
+          validation={
+            errors.email && (
+              <ValidationMessage
+                message="이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)"
+                type="error"
+              />
+            )
           }
-          autoComplete="off" // 자동완성 방지
         />
         <Input
           title="비밀번호"
@@ -156,14 +205,20 @@ const Signup = () => {
             }
           }}
           type={isHiddenPassword.origin ? 'password' : 'text'}
-          autoComplete="new-password" // 자동완성 방지
+          autoComplete="new-password"
           validation={
             <>
               {errors.length && (
-                <ValidationMessage message="비밀번호는 8자리 이상이어야 합니다." />
+                <ValidationMessage
+                  message="비밀번호는 8자리 이상이어야 합니다."
+                  type="error"
+                />
               )}
               {errors.pattern && (
-                <ValidationMessage message="비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다." />
+                <ValidationMessage
+                  message="비밀번호는 숫자, 영문, 특수문자를 포함해야 합니다."
+                  type="error"
+                />
               )}
             </>
           }
@@ -179,22 +234,25 @@ const Signup = () => {
             validatePasswordMatch(value);
           }}
           type={isHiddenPassword.copy ? 'password' : 'text'}
-          autoComplete="new-password" // 자동완성 방지
+          autoComplete="new-password"
           validation={
             errors.mismatch && (
-              <ValidationMessage message="비밀번호가 일치하지 않습니다." />
+              <ValidationMessage
+                message="비밀번호가 일치하지 않습니다."
+                type="error"
+              />
             )
           }
         />
         <SignupButton>
           <Button
-            buttonType="gray"
+            buttonType={isFormValid ? 'purple' : 'gray'}
             buttonSize="large"
             buttonHeight="default"
             styleType="coloredBackground"
             label="회원가입"
             onClick={handleSignup}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isFormValid}
           />
         </SignupButton>
       </SignupWrapper>
