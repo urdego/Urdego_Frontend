@@ -143,7 +143,7 @@ const Signup = () => {
 
       if (response.ok) {
         setNickname(formData.nickname);
-        toast(`안녕하세요 ${formData.nickname}님`);
+        toast('회원가입에 성공하셨습니다!');
         router.push('/login');
       } else {
         const errorData = await response.text();
