@@ -24,21 +24,21 @@ const useUploadFiles = () => {
     params.append('userId', '1');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
-    params.append('address', '');
-    params.append('latitude', '123.1');
-    params.append('longitude', '123.1');
+    params.append('address', place.address);
+    params.append('latitude', place.lat);
+    params.append('longitude', place.lng);
 
     // 서버에게 정보 전송
-    // await axiosInstance
-    //   .post('/api/content/', formData, {
-    //     params: params,
-    //   })
-    //   .then((res) => {
-    //     console.log(res.status);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    await axiosInstance
+      .post('/api/content/', formData, {
+        params: params,
+      })
+      .then((res) => {
+        console.log(res.status);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return {

@@ -94,18 +94,6 @@ const GoogleMap = ({
           <div>로딩중...</div>
         )}
       </APIProvider>
-      {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-        <div
-          style={{ padding: '10px', background: '#f5f5f5', marginTop: '10px' }}
-        >
-          <p>
-            <strong>위경도:</strong> {markerPosition.lat}, {markerPosition.lng}
-          </p>
-          <p>
-            <strong>도로명 주소:</strong> {roadAddress || '로드 중...'}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
