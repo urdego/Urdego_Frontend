@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import {
   LoginWrapper,
   LoginTitle,
@@ -31,16 +32,34 @@ const Login = () => {
   const [errors, setErrors] = useState<LoginError>({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePasswordVisibility = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handlePasswordVisibility = () => {
     setIsHiddenPassword((prev) => !prev);
   };
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const validateForm = (): boolean => {
-    if (email && password) {
-      return true;
+    let isValid = true;
+    const newErrors = { email: '', password: '' };
+
+    // 이메일 검증
+    if (email) {
+      if (!validateEmail(email)) {
+        newErrors.email = '이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)';
+        isValid = false;
+      }
     }
-    return false;
+
+    // 기존 빈 값 검증
+    if (!email || !password) {
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -69,6 +88,7 @@ const Login = () => {
 
       const nickname = await response.text();
       setNickname(nickname);
+      toast(`안녕하세요 ${nickname}님 환영합니다!`);
       router.push('/home');
     } catch (error) {
       console.error('Login error:', error);
@@ -78,6 +98,20 @@ const Login = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (errors.email) {
+      setErrors({ ...errors, email: '' });
+    }
+
+    if (value && !validateEmail(value)) {
+      setErrors((prev) => ({
+        ...prev,
+        email: '이메일 형식이 올바르지 않습니다 (예: xxx@xxx.com)',
+      }));
     }
   };
 
@@ -91,10 +125,7 @@ const Login = () => {
         <Input
           title="이메일"
           placeholder="이메일을 입력해주세요"
-          onChange={(value) => {
-            setEmail(value);
-            setErrors({ ...errors, email: '' });
-          }}
+          onChange={handleEmailChange}
           autoComplete="new-email"
           validation={
             errors.email ? (

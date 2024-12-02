@@ -2,12 +2,14 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import NickNameInput from '@/components/Layout/Signup/NickNameInput';
 import Input from '@/components/Common/Input/Input';
 import { SignupButton, SignupWrapper, Title } from './Signup.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 import Button from '@/components/Common/Button/Button';
+import useUserStore from '@/stores/useUserStore';
 
 interface SignUpFormData {
   email: string;
@@ -17,6 +19,8 @@ interface SignUpFormData {
 
 const Signup = () => {
   const router = useRouter();
+  const setNickname = useUserStore((state) => state.setNickname);
+
   const [formData, setFormData] = useState<SignUpFormData>({
     email: '',
     password: '',
@@ -107,7 +111,8 @@ const Signup = () => {
       );
 
       if (response.ok) {
-        alert('회원가입이 완료되었습니다.');
+        setNickname(formData.nickname);
+        toast(`안녕하세요 ${formData.nickname}님`);
         router.push('/login');
       } else {
         const errorData = await response.text();
