@@ -6,6 +6,8 @@ import {
   PageWrapper,
   OnBoardingWrapper,
   ButtonContainer,
+  TextWrapper,
+  ImageWrapper,
   SlideContainer,
   SlideContent,
   SlideTitle,
@@ -15,9 +17,9 @@ import {
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import SnowMan1 from '@/styles/Icon/SnowMan1.svg';
-import SnowMan2 from '@/styles/Icon/SnowMan2.svg';
-import SnowMan3 from '@/styles/Icon/SnowMan3.svg';
-import SnowMan4 from '@/styles/Icon/SnowMan4.svg';
+import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
+import OnBoarding3 from '@/styles/Icon/OnBoarding3.svg';
+import OnBoarding4 from '@/styles/Icon/OnBoarding4.svg';
 
 const OnBoarding = () => {
   const router = useRouter();
@@ -38,24 +40,29 @@ const OnBoarding = () => {
 
   const slides = [
     {
-      title: '어서오세요 👋',
-      description: '어데고에 오신 것을 환영합니다!',
+      title: '“어데고?!”',
+      description: `가족, 커플, 친구들과 함께 방문했던 장소를 
+새롭게 추억하며 위치를 맞춰보세요!`,
       image: SnowMan1,
     },
     {
-      title: '내가 등록한 사진과 동영상으로',
-      description: '추억할 장소를 저장하고',
-      image: SnowMan2,
+      title: '장소 등록하기',
+      description: '하단의 네비게이션 바의 ‘장소등록’을 탭해주세요.',
+      image: OnBoarding2,
+      width: 300,
+      height: 500,
     },
     {
-      title: '저장한 장소를 통해',
-      description: '함께한 장소를 추측해보세요!',
-      image: SnowMan3,
+      title: '장소 등록하기',
+      description: `장소 사진, 장소명, 위치추가하기, 힌트 작성을 해주세요.
+장소는 한 번에 최대 3개씩 등록이 가능합니다.`,
+      image: OnBoarding3,
     },
     {
-      title: '이제 시작해볼까요?',
-      description: '어데고와 함께 추억을 공유해봐요 🚩',
-      image: SnowMan4,
+      title: '정답 제출하기',
+      description: `추억이 담긴 장소에 대해 유추를 하며,
+함께 장소의 위치를 찾으며 얻는 “재미”를 느껴보세요!`,
+      image: OnBoarding4,
     },
   ];
 
@@ -66,14 +73,16 @@ const OnBoarding = () => {
           <Slider {...settings}>
             {slides.map((slide, index) => (
               <SlideContent key={index}>
-                <SlideTitle>{slide.title}</SlideTitle>
-                <SlideDescription>{slide.description}</SlideDescription>
-                <SlideImage
-                  src={slide.image}
-                  alt={`온보딩 이미지 ${index + 1}`}
-                  width={300}
-                  height={300}
-                />
+                <ImageWrapper isSecondSlide={index === 1}>
+                  <SlideImage
+                    src={slide.image}
+                    alt={`온보딩 이미지 ${index + 1}`}
+                  />
+                </ImageWrapper>
+                <TextWrapper isFirstSlide={index === 0}>
+                  <SlideTitle>{slide.title}</SlideTitle>
+                  <SlideDescription>{slide.description}</SlideDescription>
+                </TextWrapper>
               </SlideContent>
             ))}
           </Slider>

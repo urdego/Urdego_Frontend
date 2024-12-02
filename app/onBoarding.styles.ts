@@ -4,8 +4,7 @@ import colors from '@/styles/color/palette';
 
 export const PageWrapper = styled.div`
   width: 100%;
-  min-height: 100vh;
-  padding: 0 0 80px 0;
+  min-height: calc(100vh - 60px);
 `;
 
 export const OnBoardingWrapper = styled.div`
@@ -17,27 +16,16 @@ export const OnBoardingWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const ButtonWrapper = styled.div`
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-width: 375px;
-  max-width: 430px;
-  margin: 0 auto;
-  bottom: 78px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 16px;
-`;
-
 export const SlideContainer = styled.div`
   flex: 1;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 
   // 자동 슬라이드 기능
   .slick-slider {
+    flex: 1;
     .slick-track,
     .slick-list {
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -45,7 +33,11 @@ export const SlideContainer = styled.div`
   }
 
   .slick-dots {
-    bottom: 28px;
+    position: fixed;
+    bottom: 189px;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     li {
       margin: 0 2px;
 
@@ -64,37 +56,74 @@ export const SlideContainer = styled.div`
 `;
 
 export const SlideContent = styled.div`
-  display: flex;
+  display: fixed;
+  width: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: calc(100vh - 120px);
-  padding-top: 200px;
+  justify-content: flex-start; // 상단 정렬로 변경
   text-align: center;
+  padding: 80px 0 0 0; // 상단 패딩만 지정
+  height: 100%; // 전체 높이 사용
+`;
+
+export const ImageWrapper = styled.div<{ isSecondSlide?: boolean }>`
+  width: 100%;
+  padding-top: ${({ isSecondSlide }) => (isSecondSlide ? '110px' : '0')};
+`;
+
+export const TextWrapper = styled.div<{ isFirstSlide?: boolean }>`
+  width: 100%;
+  max-width: 430px;
+  padding: 0;
+  text-align: ${({ isFirstSlide }) => (isFirstSlide ? 'center' : 'left')};
+  box-sizing: border-box;
+  margin-left: ${({ isFirstSlide }) => (isFirstSlide ? 'auto' : '0')};
+  margin-right: ${({ isFirstSlide }) => (isFirstSlide ? 'auto' : '0')};
 `;
 
 export const SlideTitle = styled.h2`
+  padding-top: 61px;
   font-size: 24px;
   font-weight: 700;
-  margin: 10px 12px;
+  line-height: 150%;
+  letter-spacing: -0.24px;
   color: ${colors.etc.black};
 `;
 
 export const SlideDescription = styled.p`
   font-size: 16px;
   color: ${colors.gray[70]};
-  line-height: 1.5;
+  line-height: 150%;
+  letter-spacing: -0.16px;
+  white-space: pre-line;
 `;
 
 export const SlideImage = styled(Image)`
-  display: block;
-  margin: 20px auto;
-  width: 200px;
-  height: 200px;
-  max-width: 80%;
+  width: 100%;
+
+  max-height: 400px;
+  height: 100%;
   object-fit: contain;
 `;
 
 export const ButtonContainer = styled.div`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
+  min-width: 375px;
+  max-width: 430px;
+  margin: 0 auto;
+
+  bottom: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+
+  background: transparent;
+
+  box-sizing: border-box;
+  z-index: 10;
 `;
