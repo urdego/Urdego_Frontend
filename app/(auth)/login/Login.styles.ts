@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const LoginWrapper = styled.div`
   width: 100%;
-  padding: 40px 16px;
+  padding: 40px 16px 0 16px;
 
   /* Input 컴포넌트들과 AutoLoginCheckbox 컴포넌트 가운데 정렬에서 제외 */
   & > div[class*='Input'],
