@@ -31,34 +31,24 @@ const Login = () => {
   const [errors, setErrors] = useState<LoginError>({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handlePasswordVisibility = () => {
+  const handlePasswordVisibility = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsHiddenPassword((prev) => !prev);
   };
 
   const validateForm = (): boolean => {
-    const newErrors = { email: '', password: '' };
-    let isValid = true;
-
-    if (!email) {
-      newErrors.email = '이메일을 입력해주세요.';
-      isValid = false;
+    if (email && password) {
+      return true;
     }
-
-    if (!password) {
-      newErrors.password = '비밀번호를 입력해주세요.';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
+    return false;
   };
 
-  const handleLogin = async (e?: React.FormEvent) => {
-    if (e) {
-      e.preventDefault();
-    }
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -101,12 +91,15 @@ const Login = () => {
         <Input
           title="이메일"
           placeholder="이메일을 입력해주세요"
-          onChange={(value) => setEmail(value)}
+          onChange={(value) => {
+            setEmail(value);
+            setErrors({ ...errors, email: '' });
+          }}
           autoComplete="new-email"
           validation={
-            errors.email && (
+            errors.email ? (
               <ValidationMessage message={errors.email} type="error" />
-            )
+            ) : null
           }
         />
         <Input
@@ -115,13 +108,16 @@ const Login = () => {
           isButton={true}
           isHiddenPassword={isHiddenPassword}
           handleClick={handlePasswordVisibility}
-          onChange={(value) => setPassword(value)}
+          onChange={(value) => {
+            setPassword(value);
+            setErrors({ ...errors, password: '' });
+          }}
           type={isHiddenPassword ? 'password' : 'text'}
           autoComplete="new-password"
           validation={
-            errors.password && (
+            errors.password ? (
               <ValidationMessage message={errors.password} type="error" />
-            )
+            ) : null
           }
         />
         <AutoLoginCheckbox />
