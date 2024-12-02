@@ -9,8 +9,8 @@ export const LoadingOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(1.5px);
+  background-color: rgba(26, 28, 28, 0.9);
+  backdrop-filter: blur(0.8px);
   z-index: 9999;
 `;
 
