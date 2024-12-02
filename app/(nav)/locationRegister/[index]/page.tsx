@@ -38,7 +38,10 @@ const LocationRegister = ({ params }: LocationRegister) => {
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             label="선택하기"
-            onClick={() => isLocationSelected && router.push('/placeRegister')}
+            onClick={() =>
+              isLocationSelected &&
+              router.push('/placeRegister?source=locationRegister')
+            }
           />
         </ButtonLayout>
       </LocationRegisterWrapper>
