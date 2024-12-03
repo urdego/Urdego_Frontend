@@ -73,7 +73,7 @@ const GoogleMap = ({
         {isMapLoad ? (
           <Map
             mapId={'LocationRegisterPage'}
-            style={{ height: '100vh' }}
+            style={{ height: `calc(100vh - 40px)` }}
             defaultCenter={{ lat: 36.5, lng: 127.5 }}
             defaultZoom={8}
             gestureHandling={'greedy'}

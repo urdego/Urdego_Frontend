@@ -20,6 +20,8 @@ export const StyledButton = styled.button<StyledButtonProps>`
   user-select: none;
   font-size: 16px;
 
+  transition: 0.5s ease;
+
   ${({ $buttonSize }) =>
     $buttonSize === 'small'
       ? css`
