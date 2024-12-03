@@ -7,7 +7,8 @@ interface useUploadFilesProps {
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput, removePartPlaceFile } = usePlaceRegisterStore();
+  const { setPlaceInput, removePartPlaceFile, removePlaceList } =
+    usePlaceRegisterStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
@@ -25,28 +26,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       return;
     }
 
-    // 서버에 전송할 파일 저장 로직
-    // storeFile(selectedFileList); //TODO: 테스트 필요
-    setPlaceInput(index, 'file', selectedFileList);
-
     exportMetadata(selectedFileList);
 
-    // 미리보기 파일 저장 로직
-    // storePreviewFile(selectedFileList); //TODO: 테스트 필요
-    const previewPromises = selectedFileList.map((file) => {
-      return new Promise<string>((resolve) => {
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-          const result = fileReader.result;
-          resolve(typeof result === 'string' ? result : '');
-        };
-        fileReader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(previewPromises).then((previewURLs) => {
-      setPlaceInput(index, 'previewFile', previewURLs);
-    });
+    storeFile(selectedFileList);
+    storePreviewFile(selectedFileList);
   };
 
   // 용량 제한 로직
@@ -82,10 +65,12 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     }
   };
 
+  // 서버에 전송할 파일 저장 로직
   const storeFile = (selectedFileList: File[]) => {
     setPlaceInput(index, 'file', selectedFileList);
   };
 
+  // 미리보기 파일 저장 로직
   const storePreviewFile = (selectedFileList: File[]) => {
     const previewPromises = selectedFileList.map((file) => {
       return new Promise<string>((resolve) => {
@@ -103,13 +88,28 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
   };
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'title', e.target.value);
+  };
+
+  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'hint', e.target.value);
+  };
+
   const handlePartFileRemove = (index: number, previewIndex: number) => {
     removePartPlaceFile(index, previewIndex);
   };
 
+  const handlePlaceRemove = () => {
+    removePlaceList(index);
+  };
+
   return {
     handleFilesUpload,
+    handleTitleChange,
+    handleHintChange,
     handlePartFileRemove,
+    handlePlaceRemove,
   };
 };
 
