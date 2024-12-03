@@ -5,7 +5,7 @@ import axiosInstance from '@/lib/axios';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log('Receiving login request:', body); // 디버깅용
+    console.log('Receiving login request:', body);
 
     const response = await axiosInstance.post(
       `${API_BASE_URL.DNS}${API_URL_CONFIG.AUTH.LOGIN}`,
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    console.log('Login response:', response.data); // 디버깅용
+    console.log('Login response:', response.data);
     return NextResponse.json(response.data);
   } catch (error) {
     console.error('Login error in API route:', error);

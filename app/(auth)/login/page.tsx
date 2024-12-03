@@ -31,21 +31,42 @@ const connectSSE = (userId: string) => {
 
   const connect = () => {
     try {
-      const url = new URL(
-        `${process.env.NEXT_PUBLIC_NOTIFICATION_URL}/api/notification-service/sse/${userId}`
-      );
+      const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;
+      console.log('Connecting to SSE:', url);
 
-      const eventSource = new EventSource(url.toString(), {
+      const eventSource = new EventSource(url, {
         withCredentials: true,
       });
 
       eventSource.onopen = () => {
         console.log('SSE connection established');
+        console.log('Connection details:', {
+          readyState: eventSource.readyState,
+          url: eventSource.url,
+        });
         retryCount = 0;
       };
 
-      eventSource.onerror = (error: Event) => {
-        console.error('SSE connection error:', error);
+      eventSource.onmessage = (event) => {
+        console.log('Received SSE message:', event.data);
+        try {
+          const data = JSON.parse(event.data);
+          // 메시지 처리 로직
+          console.log('Parsed message data:', data);
+        } catch (error) {
+          console.error('Error parsing SSE message:', error);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('SSE Connection Error:', error);
+        console.error('Error details:', {
+          type: error.type,
+          eventPhase: error.eventPhase,
+          target: error.target,
+          readyState: eventSource?.readyState,
+        });
+
         if (eventSource.readyState === EventSource.CLOSED) {
           eventSource.close();
           setEventSource(null);
@@ -54,7 +75,7 @@ const connectSSE = (userId: string) => {
             retryCount++;
             const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
             console.log(
-              `Attempting reconnection in ${delay / 1000} seconds...`
+              `Attempting reconnection in ${delay / 1000} seconds... (Attempt ${retryCount} of ${MAX_RETRIES})`
             );
             setTimeout(connect, delay);
           } else {

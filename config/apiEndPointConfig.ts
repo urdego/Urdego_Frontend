@@ -14,6 +14,9 @@ export const API_URL_CONFIG = Object.freeze({
     SIGNUP: '/api/auth/user-service/users',
     LOGIN: '/api/user-service/login',
   },
+  NOTIFICATION: {
+    SSE: '/api/notification-service/sse/connect/',
+  },
 });
 
 export const API_BASE_URL = Object.freeze({
