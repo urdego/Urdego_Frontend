@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const res = await axiosInstance.post(
-      `${axiosInstance.defaults.baseURL}:${API_PORT_CONFIG.GAME}${API_URL_CONFIG.GAME.SUBMIT_ANSWER}`,
+      `${axiosInstance.defaults.baseURL}${API_URL_CONFIG.GAME.SUBMIT_ANSWER}`,
       data,
       {
         headers: {
