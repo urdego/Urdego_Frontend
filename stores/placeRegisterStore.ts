@@ -18,7 +18,7 @@ interface Actions {
   setPlaceInput: (
     targetIndex: number,
     filed: string,
-    value: string | number | string[] | File[]
+    value: null | string | number | string[] | File[]
   ) => void;
   initPlaceList: () => void;
   addPlaceList: () => void;

@@ -8,6 +8,7 @@ import {
 } from './PlaceSearchButton.styles';
 import { SearchIcon } from './PlaceSearchButtonIcon';
 import { ClearIcon } from './PlaceRegisterIcon';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 
 interface PlaceSearchButtonProps {
   index: number;
@@ -16,14 +17,19 @@ interface PlaceSearchButtonProps {
 
 const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   const router = useRouter();
+  const { setPlaceInput } = usePlaceRegisterStore();
 
   return (
     <>
       {value ? (
         <PlaceTexthButtonWrapper>
-          <LocationText>{value}</LocationText>
-          <PlaceResetButton
+          <LocationText
             onClick={() => router.push(`/locationRegister/${index}`)}
+          >
+            {value}
+          </LocationText>
+          <PlaceResetButton
+            onClick={() => setPlaceInput(index, 'address', null)}
           >
             <ClearIcon />
           </PlaceResetButton>

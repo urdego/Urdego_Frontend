@@ -40,4 +40,5 @@ export const LocationText = styled.div`
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
+  cursor: pointer;
 `;
