@@ -14,6 +14,8 @@ import { PageWrapper } from '../commonPage.styles';
 import useUserStore from '@/stores/useUserStore';
 import useGameStore from '@/stores/useGameStores';
 import toast from 'react-hot-toast';
+import axiosInstance from '@/lib/axios';
+import axios from 'axios';
 
 interface UserInfo {
   id: number;
@@ -107,40 +109,28 @@ const MakeRoomPage = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_GROUP_URL}/api/group-service/group`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            title: titleInputRef.current.value,
-            maxPlayers: selectedNumber,
-            rounds: rounds,
-            timer: 60,
-            host: nickname,
-            invitedFriends: invitedFriends.map((friend) => ({
-              nickname: friend.nickname,
-            })),
-          }),
-        }
-      );
+      const requestData = {
+        title: titleInputRef.current.value,
+        maxPlayers: selectedNumber,
+        rounds,
+        timer: 60,
+        host: nickname,
+        invitedFriends: invitedFriends.map((friend) => friend.nickname),
+      };
 
-      if (!response.ok) {
-        throw new Error('방 생성에 실패했습니다.');
-      }
+      console.log('Sending request with data:', requestData);
+      const { data } = await axiosInstance.post('/api/makeRoom', requestData);
 
-      const data = await response.json();
-
-      // groupId, gameId 저장
       setGameInfo(data.groupId, data.gameId);
-
-      // WebSocket 연결
       await connectWebSocket(data.groupId);
-    } catch (error) {
-      console.error('Error creating room:', error);
-      toast.error('방 생성에 실패했습니다.');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error details:', error.response?.data);
+        toast.error(error.response?.data?.error || '방 생성에 실패했습니다.');
+      } else {
+        console.error('Unknown error:', error);
+        toast.error('방 생성에 실패했습니다.');
+      }
     } finally {
       setIsLoading(false);
     }

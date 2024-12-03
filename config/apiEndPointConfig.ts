@@ -17,6 +17,10 @@ export const API_URL_CONFIG = Object.freeze({
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',
   },
+  GROUP: {
+    CREATE: '/api/group-service/groups',
+    CONNECT: '/group-service/connect',
+  },
 });
 
 export const API_BASE_URL = Object.freeze({
