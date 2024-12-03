@@ -10,7 +10,7 @@ export default function PlaceRegisterLayout({
     <>
       <Script
         id="google-maps-script"
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY}&libraries=places&loading=async`}
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.LOCATION_REGISTER_GOOGLE_MAPS_API_KEY}&libraries=places&loading=async`}
       />
       <>{children}</>
     </>
