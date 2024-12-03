@@ -7,7 +7,9 @@ import {
   Map,
   MapMouseEvent,
 } from '@vis.gl/react-google-maps';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import UserMarkerSrc from '@styles/Icon/UserMarker.svg';
 
 interface GoogleMapProps {
   index: number;
@@ -81,7 +83,14 @@ const GoogleMap = ({
             onClick={handleMapClick}
           >
             {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-              <AdvancedMarker position={markerPosition} clickable={true} />
+              <AdvancedMarker position={markerPosition} clickable={true}>
+                <Image
+                  src={UserMarkerSrc}
+                  width={50}
+                  height={53}
+                  alt="UserMarker Icon"
+                />
+              </AdvancedMarker>
             )}
           </Map>
         ) : (
