@@ -37,7 +37,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
-    hint,
+    roundState,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -93,45 +93,6 @@ const GamePage = ({ params }: GamePageProps) => {
     }
   };
 
-  // 클라이언트 테스트 용
-  // const handleSubmitAnswer = async () => {
-  //   if (hasSubmitted || !currentSelectedCoordinate) {
-  //     console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
-  //     return;
-  //   }
-
-  //   const submitData = {
-  //     roomId: params.roomId,
-  //     nickname,
-  //     round: currentRound,
-  //     coordinate: currentSelectedCoordinate,
-  //   };
-
-  //   // 제출 시작과 동시에 버튼 비활성화
-  //   setHasSubmitted(true);
-  //   console.log('제출 시작:', submitData);
-
-  //   // API 호출 대신 setTimeout으로 테스트
-  //   try {
-  //     await new Promise((resolve) => setTimeout(resolve, 1000)); // 1초 딜레이
-  //     const mockSuccess = true; // 테스트용 성공 응답
-
-  //     console.log('제출 결과:', mockSuccess);
-
-  //     if (!mockSuccess) {
-  //       console.warn('제출 실패');
-  //       setHasSubmitted(false);
-  //       return;
-  //     }
-
-  //     setCurrentSelectedCoordinate(null);
-  //     console.log('제출 완료');
-  //   } catch (error) {
-  //     console.error('제출 중 에러 발생:', error);
-  //     setHasSubmitted(false);
-  //   }
-  // };
-
   return (
     <>
       <PageWrapper>
@@ -156,11 +117,11 @@ const GamePage = ({ params }: GamePageProps) => {
           <>
             <SwiperComponent />
             {/* TODO: 백엔드 연동 시 사용 */}
-            {/* <SwiperComponent images={images} /> */}
-            {hint && (
+            {/* <SwiperComponent images={roundState.contentUrls} /> */}
+            {roundState.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
-                <HintText> {hint}</HintText>
+                <HintText> {roundState.hint}</HintText>
               </HintWrapper>
             )}
           </>
