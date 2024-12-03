@@ -56,7 +56,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
         {placeList[index].previewFile.map((file, previewIndex) => (
           <PreviewImage key={previewIndex}>
             <PreviewImageRemoveButton
-              onClick={() => handlePartFileRemove(index, previewIndex)}
+              onClick={() => handlePartFileRemove(previewIndex)}
             >
               <BlackClearIcon />
             </PreviewImageRemoveButton>
