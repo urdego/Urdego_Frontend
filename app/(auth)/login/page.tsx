@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import axiosInstance from '@/lib/axios';
 import {
   LoginWrapper,
   LoginTitle,
@@ -17,7 +18,6 @@ import SignupTabs from '@layout/Login/SignUpTabs';
 import useUserStore from '@/stores/useUserStore';
 import useSSEStore from '@/stores/useSSEStore';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
-import { toast } from 'react-hot-toast';
 
 interface LoginError {
   email: string;
@@ -32,7 +32,7 @@ const connectSSE = (userId: string) => {
   const connect = () => {
     try {
       const url = new URL(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/notification-service/sse/${userId}`
+        `${process.env.NEXT_PUBLIC_NOTIFICATION_URL}/api/notification-service/sse/${userId}`
       );
 
       const eventSource = new EventSource(url.toString(), {
@@ -125,23 +125,12 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user-service/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await axiosInstance.post('/api/login', {
+        email,
+        password,
+      });
 
-      if (!response.ok) {
-        throw new Error('로그인에 실패했습니다.');
-      }
-
-      // 닉네임 받아오기
-      const nickname = await response.text();
+      const nickname = response.data;
 
       localStorage.setItem('userId', email);
       setNickname(nickname);

@@ -53,7 +53,7 @@ const MakeRoomPage = () => {
 
   const connectWebSocket = async (groupId: number) => {
     const socket = new SockJS(
-      `${process.env.NEXT_PUBLIC_API_URL}/group-service/connect`
+      `${process.env.NEXT_PUBLIC_GROUP_URL}/group-service/connect`
     );
     const stompClient = new Client({
       webSocketFactory: () => socket,
@@ -108,7 +108,7 @@ const MakeRoomPage = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/group-service/group`,
+        `${process.env.NEXT_PUBLIC_GROUP_URL}/api/group-service/group`,
         {
           method: 'POST',
           headers: {
