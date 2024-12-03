@@ -1,3 +1,4 @@
+import LoadingSpinnerComponent from '@/components/Common/LoadingSpinner/LoadingSpinner';
 import useConvertLocationToAddress from '@/hooks/placeRegister/useConvertLocationToAddress';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import {
@@ -59,8 +60,15 @@ const GoogleMap = ({
   return (
     <div>
       <APIProvider
-        apiKey={process.env.LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string}
-        onLoad={() => setIsMapLoad(true)}
+        apiKey={
+          process.env
+            .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
+        }
+        onLoad={() =>
+          setTimeout(() => {
+            setIsMapLoad(true);
+          }, 1000)
+        }
       >
         {isMapLoad ? (
           <Map
@@ -77,7 +85,7 @@ const GoogleMap = ({
             )}
           </Map>
         ) : (
-          <div>로딩중...</div>
+          <LoadingSpinnerComponent />
         )}
       </APIProvider>
     </div>
