@@ -12,17 +12,27 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     message: '비밀번호는 8자리 이상이어야 합니다.',
+    type: 'error',
+  },
+};
+
+export const ProperValidation: Story = {
+  args: {
+    message: '올바른 형식입니다.',
+    type: 'success',
   },
 };
 
 export const EmailValidation: Story = {
   args: {
     message: '올바른 이메일 형식이 아닙니다.',
+    type: 'error',
   },
 };
 
 export const RequiredField: Story = {
   args: {
     message: '필수 입력 항목입니다.',
+    type: 'error',
   },
 };
