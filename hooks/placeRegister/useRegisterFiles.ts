@@ -1,6 +1,7 @@
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import exifr from 'exifr';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
+import toast from 'react-hot-toast';
 
 interface useUploadFilesProps {
   index: number;
@@ -22,9 +23,19 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 불러오는 로직
     const fileList = e.target.files;
-    if (!fileList || fileList?.length === 0) return;
 
-    // 불러온 파일 최대 3개로 제한
+    if (!fileList || fileList?.length === 0) {
+      toast('선택된 사진이 없어요', {
+        icon: '😮',
+      });
+      return;
+    }
+
+    if (fileList.length > MAX_CONTENT_COUNT) {
+      toast('최대 3개의 사진만 업로드가 가능해요', {
+        icon: '😱',
+      });
+    }
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
@@ -35,6 +46,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
     storeFile(selectedFileList);
     storePreviewFile(selectedFileList);
+
+    toast('사진 등록이 완료되었어요!', {
+      icon: '👍',
+    });
   };
 
   // 용량 제한 로직

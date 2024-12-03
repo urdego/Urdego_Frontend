@@ -3,17 +3,29 @@ import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
 import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
-  const { placeList } = usePlaceRegisterStore();
+  const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
 
   const handleUploadFiles = async () => {
     try {
+      // 장소 등록 진행
+      const loadingToast = toast.loading('장소를 등록하는 중입니다...');
+
       for (const place of placeList) {
         await handleUploadPartFile(place);
       }
-      toast('장소 등록이 완료되었어요! 👍');
+
+      // 장소 등록 완료
+      toast.remove(loadingToast);
+      toast('장소 등록이 완료되었어요!', {
+        icon: '👍',
+      });
+
+      initEntirePlaceList();
     } catch (error) {
       console.error(`장소 등록하기에서 발생한 에러: ${error}`);
-      toast('일부 장소가 등록되지 않았어요 😱');
+      toast('일부 장소가 등록되지 않았어요', {
+        icon: '😱',
+      });
     }
   };
 
