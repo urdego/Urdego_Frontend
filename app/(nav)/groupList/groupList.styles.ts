@@ -15,6 +15,8 @@ export const ListTitle = styled.h2`
 
 export const RoomButtonGrid = styled.div`
   display: grid;
+  place-items: center;
+  /* padding-left: 16px; */
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   width: 100%;

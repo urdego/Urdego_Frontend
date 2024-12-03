@@ -1,4 +1,4 @@
-import { API_PORT_CONFIG } from '@/config/apiEndPointConfig';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -7,8 +7,8 @@ export async function GET(
   { params }: { params: { roundId: string } }
 ) {
   try {
-    const res = await axiosInstance.get(
-      `${axiosInstance.defaults.baseURL}${API_PORT_CONFIG.GAME}/api/game-service/rounds/${params.roundId}`
+    const res = await axiosInstance.post(
+      `${axiosInstance.defaults.baseURL}${API_URL_CONFIG.GAME.SUBMIT_ANSWER}`
     );
     return NextResponse.json(res.data);
   } catch (error) {

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import CardBackground from '@/styles/Icon/CardBackGround.svg';
 
 export const RoomButtonWrapper = styled.div`
-  width: 10.25rem;
-  height: 9.375rem;
+  width: 163px;
+  height: 139px;
   border-radius: 12px;
-  background: #2f3131;
+  background-image: url(${CardBackground.src});
 `;
 
 export const RoomButtonLayout = styled.div`
