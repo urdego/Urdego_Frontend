@@ -38,7 +38,9 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
 
   return (
     <PlaceRegisterWrapper>
-      <button onClick={() => console.log(placeList)}>a</button>
+      {/* <button onClick={() => console.log(placeList)}>
+        placeList 확인용 버튼
+      </button> */}
       <PlaceRegistertext>
         <div>{title}</div>
         {index !== 0 && (
