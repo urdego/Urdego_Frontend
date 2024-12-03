@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const res = await axiosInstance.get(
-      `${axiosInstance.defaults.baseURL}:${API_PORT_CONFIG.GAME}/api/game-service/rounds/${params.roundId}`
+      `${axiosInstance.defaults.baseURL}${API_PORT_CONFIG.GAME}/api/game-service/rounds/${params.roundId}`
     );
     return NextResponse.json(res.data);
   } catch (error) {

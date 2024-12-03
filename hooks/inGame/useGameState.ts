@@ -55,9 +55,7 @@ export const useGameState = (initialRound: number) => {
   useEffect(() => {
     // TODO : 게임소켓 전역으로 설정된 것으로 사용하기
     // 웹소켓 연결 설정
-    const socket = new SockJS(
-      `${process.env.NEXT_PUBLIC_WS_URL}/game-service/connect`
-    );
+    const socket = new SockJS('/game-service');
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str: string) => {
