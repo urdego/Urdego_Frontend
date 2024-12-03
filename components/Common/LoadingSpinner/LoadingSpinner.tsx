@@ -5,9 +5,15 @@ import Image from 'next/image';
 import LoadingSpinner from '@/styles/Icon/LoadingSpinner.gif';
 import { LoadingOverlay, SpinnerWrapper } from './LoadingSpinner.style';
 
-const LoadingSpinnerComponent: React.FC = () => {
+interface LoadingSpinnerComponentProps {
+  isLocationRegister?: boolean;
+}
+
+const LoadingSpinnerComponent: React.FC<LoadingSpinnerComponentProps> = ({
+  isLocationRegister = false,
+}) => {
   return (
-    <LoadingOverlay>
+    <LoadingOverlay $isLocationRegister={isLocationRegister}>
       <SpinnerWrapper>
         <Image
           src={LoadingSpinner}

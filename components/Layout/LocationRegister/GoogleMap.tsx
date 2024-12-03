@@ -67,7 +67,7 @@ const GoogleMap = ({
         onLoad={() =>
           setTimeout(() => {
             setIsMapLoad(true);
-          }, 1000)
+          }, 500)
         }
       >
         {isMapLoad ? (
@@ -85,7 +85,7 @@ const GoogleMap = ({
             )}
           </Map>
         ) : (
-          <LoadingSpinnerComponent />
+          <LoadingSpinnerComponent isLocationRegister={true} />
         )}
       </APIProvider>
     </div>
