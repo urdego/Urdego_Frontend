@@ -23,6 +23,7 @@ const RoomButton = ({
   maxMemberCount,
 }: RoomButtonProps) => {
   return (
+    // TODO: 이미지 로딩 추가
     <RoomButtonWrapper>
       <RoomButtonLayout>
         <RoomTopContainer>
