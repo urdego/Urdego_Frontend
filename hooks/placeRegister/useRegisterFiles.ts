@@ -9,7 +9,6 @@ interface useUploadFilesProps {
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const {
     placeList,
-    initEntirePlaceList,
     initPlaceList,
     setPlaceInput,
     removePartPlaceFile,

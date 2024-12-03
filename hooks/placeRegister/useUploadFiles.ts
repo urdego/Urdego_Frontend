@@ -1,12 +1,19 @@
 import axiosInstance from '@/lib/axios';
 import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
+import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList } = usePlaceRegisterStore();
 
   const handleUploadFiles = async () => {
-    for (const place of placeList) {
-      await handleUploadPartFile(place);
+    try {
+      for (const place of placeList) {
+        await handleUploadPartFile(place);
+      }
+      toast('장소 등록이 완료되었어요! 👍');
+    } catch (error) {
+      console.error(`장소 등록하기에서 발생한 에러: ${error}`);
+      toast('일부 장소가 등록되지 않았어요 😱');
     }
   };
 
@@ -33,11 +40,11 @@ const useUploadFiles = () => {
       .post('/api/content/', formData, {
         params: params,
       })
-      .then((res) => {
-        console.log(res.status);
+      .then((response) => {
+        console.log(`장소 등록하기의 서버 통신 상태:${response.status}`);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        throw new Error(error);
       });
   };
 
