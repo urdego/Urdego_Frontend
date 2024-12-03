@@ -64,11 +64,11 @@ const GoogleMap = ({
           process.env
             .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
         }
-        onLoad={() =>
+        onLoad={() => {
           setTimeout(() => {
             setIsMapLoad(true);
-          }, 500)
-        }
+          }, 500);
+        }}
       >
         {isMapLoad ? (
           <Map
