@@ -59,10 +59,7 @@ const GoogleMap = ({
   return (
     <div>
       <APIProvider
-        apiKey={
-          process.env
-            .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
-        }
+        apiKey={process.env.LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string}
         onLoad={() => setIsMapLoad(true)}
       >
         {isMapLoad ? (
