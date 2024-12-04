@@ -34,7 +34,7 @@ export const SlideContainer = styled.div`
 
   .slick-dots {
     position: fixed;
-    bottom: 110px;
+    bottom: 148px;
     width: 100%;
     left: 50%;
     transform: translateX(-50%);
@@ -56,19 +56,19 @@ export const SlideContainer = styled.div`
 `;
 
 export const SlideContent = styled.div`
-  display: fixed;
+  display: flex;
   width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; // 상단 정렬로 변경
   text-align: center;
-  padding: 80px 0 0 0; // 상단 패딩만 지정
+  padding-top: 40px;
   height: 100%; // 전체 높이 사용
 `;
 
 export const ImageWrapper = styled.div<{ $isSecondSlide?: boolean }>`
   width: 100%;
-  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '110px' : '0')};
+  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '60px' : '0')};
 `;
 
 export const TextWrapper = styled.div<{ $isFirstSlide?: boolean }>`
@@ -82,7 +82,7 @@ export const TextWrapper = styled.div<{ $isFirstSlide?: boolean }>`
 `;
 
 export const SlideTitle = styled.h2`
-  padding-top: 61px;
+  padding-top: 30px;
   font-size: 24px;
   font-weight: 700;
   line-height: 150%;
@@ -100,23 +100,30 @@ export const SlideDescription = styled.p`
 
 export const SlideImage = styled(Image)`
   width: 100%;
-  max-height: 400px;
+
+  max-height: 350px;
   height: 100%;
   object-fit: contain;
 `;
 
 export const ButtonContainer = styled.div`
   position: fixed;
-  bottom: 0;
-  left: 50%;
   display: flex;
-  transform: translateX(-50%);
+  justify-content: center;
+  align-items: center;
+
   width: 100%;
-  min-width: 340px;
+  min-width: 375px;
   max-width: 430px;
-  height: 80px;
-  justify-content: space-evenly;
-  align-items: flex-start;
-  padding: 0 16px;
-  z-index: 100;
+  margin: 0 auto;
+
+  bottom: 78px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 16px;
+
+  background: transparent;
+
+  box-sizing: border-box;
+  z-index: 10;
 `;
