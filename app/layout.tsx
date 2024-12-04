@@ -5,7 +5,6 @@ import Container from '@/styles/Container';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { Toaster } from 'react-hot-toast';
 import colors from '@styles/color/palette';
-import RouteChangeHandler from '@/hooks/Loading/RouteChangeHandler';
 
 export { metadata };
 export { viewport };
@@ -20,10 +19,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <StyledComponentsRegistry>
           <GlobalStyle />
-          <Container>
-            <RouteChangeHandler />
-            {children}
-          </Container>
+          <Container>{children}</Container>
           <Toaster
             position="bottom-center"
             toastOptions={{

@@ -6,8 +6,7 @@ import {
   LocationRegisterText,
   LocationText,
 } from './PlaceSearchButton.styles';
-import { SearchIcon } from './PlaceSearchButtonIcon';
-import { ClearIcon } from './PlaceRegisterIcon';
+import { ClearIcon, SearchIcon } from './PlaceRegisterIcon';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 
 interface PlaceSearchButtonProps {
@@ -19,13 +18,15 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   const router = useRouter();
   const { setPlaceInput } = usePlaceRegisterStore();
 
+  const handleMoveToLocationRegister = () => {
+    router.push(`/locationRegister/${index}`);
+  };
+
   return (
     <>
       {value ? (
         <PlaceTexthButtonWrapper>
-          <LocationText
-            onClick={() => router.push(`/locationRegister/${index}`)}
-          >
+          <LocationText onClick={handleMoveToLocationRegister}>
             {value}
           </LocationText>
           <PlaceResetButton
@@ -35,9 +36,7 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
           </PlaceResetButton>
         </PlaceTexthButtonWrapper>
       ) : (
-        <PlaceSearchButtonWrapper
-          onClick={() => router.push(`/locationRegister/${index}`)}
-        >
+        <PlaceSearchButtonWrapper onClick={handleMoveToLocationRegister}>
           <SearchIcon />
           <LocationRegisterText>위치 추가하기</LocationRegisterText>
         </PlaceSearchButtonWrapper>
