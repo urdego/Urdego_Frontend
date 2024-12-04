@@ -55,7 +55,7 @@ const TopBar = ({
     if (onExitClick) {
       onExitClick();
     } else {
-      router.push('/groupList');
+      router.back(); // 뒤로가기로 변경
     }
   };
 
