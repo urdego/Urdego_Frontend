@@ -54,7 +54,7 @@ const MakeRoomPage = () => {
 
   const connectWebSocket = async (groupId: number) => {
     const stompClient = new Client({
-      brokerURL: `ws://urdego.com:8083/group-service/connect`,
+      brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
       debug: (str) => {
         console.log(str);
       },
