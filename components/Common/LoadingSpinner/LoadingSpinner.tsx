@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import LoadingSpinner from '@/styles/Icon/LoadingSpinner.gif';
+import LoadingSpinnerGif from '@/styles/Icon/LoadingSpinner.gif';
 import { LoadingOverlay, SpinnerWrapper } from './LoadingSpinner.style';
 
 interface LoadingSpinnerComponentProps {
@@ -16,11 +16,11 @@ const LoadingSpinnerComponent: React.FC<LoadingSpinnerComponentProps> = ({
     <LoadingOverlay $isLocationRegister={isLocationRegister}>
       <SpinnerWrapper>
         <Image
-          src={LoadingSpinner}
+          src={LoadingSpinnerGif}
           alt="로딩 중..."
           width={185}
           height={185}
-          priority
+          loading="lazy"
         />
       </SpinnerWrapper>
     </LoadingOverlay>
