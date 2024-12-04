@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { Footer } from '@/app/makeRoom/makeRoom.styles';
@@ -54,24 +53,27 @@ const MakeRoomPage = () => {
     isRoomTitleEntered && invitedFriends.length === selectedNumber - 1;
 
   const connectWebSocket = async (groupId: number) => {
-    const socket = new SockJS(
-      `${process.env.NEXT_PUBLIC_GROUP_URL}/group-service/connect`
-    );
     const stompClient = new Client({
-      webSocketFactory: () => socket,
+      brokerURL: `ws://urdego.com:8083/group-service/connect`,
       debug: (str) => {
         console.log(str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      reconnectDelay: 5000, // 연결 끊김 시 5초 후 재연결
+      heartbeatIncoming: 4000, // 서버에서 수신되는 heartbeat
+      heartbeatOutgoing: 4000, // 클라이언트에서 전송되는 heartbeat
     });
 
+    // STOMP 연결 성공 시 실행
     stompClient.onConnect = () => {
+      console.log('Connected to the broker.');
+
       // 1. 그룹 채널 구독
-      stompClient.subscribe(`/subscribe/group/${groupId}`, (message) => {
-        console.log('Received message:', message.body);
-      });
+      stompClient.subscribe(
+        `/group-service/subscribe/group/${groupId}`,
+        (message) => {
+          console.log('Received message:', message.body);
+        }
+      );
 
       // 2. 참여 이벤트 발행
       if (nickname) {
@@ -84,24 +86,33 @@ const MakeRoomPage = () => {
         };
 
         stompClient.publish({
-          destination: `/publish/group${groupId}`,
+          destination: `/group-service/publish/group/${groupId}`,
           body: JSON.stringify(participantEvent),
         });
 
-        // 3. 대기방으로 이동
+        // 3. 대기방으로 이동 (발행 후 이동)
         router.push(`/game/${groupId}/waitingRoom`);
       } else {
         toast.error('닉네임 정보를 찾을 수 없습니다.');
+        stompClient.deactivate(); // 닉네임이 없으면 연결 종료
+        return;
       }
     };
 
+    // STOMP 에러 발생 시 처리
     stompClient.onStompError = (frame) => {
       console.error('Broker reported error:', frame.headers['message']);
       console.error('Additional details:', frame.body);
       toast.error('웹소켓 연결에 실패했습니다.');
+      stompClient.deactivate(); // 연결 종료
     };
 
-    stompClient.activate();
+    // WebSocket 활성화 (중복 연결 방지)
+    if (!stompClient.active) {
+      stompClient.activate();
+    } else {
+      console.warn('WebSocket is already active.');
+    }
   };
 
   const handleCreateRoom = async () => {
