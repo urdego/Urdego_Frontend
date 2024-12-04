@@ -29,7 +29,7 @@ const Home = () => {
           toastId={t.id}
         />
       ),
-      { position: 'top-center', duration: 5000 } // TODO: toast 시간  UI에 활용하기
+      { position: 'top-center', duration: Infinity } // TODO: toast 시간  UI에 활용하기
     );
   };
   return (
