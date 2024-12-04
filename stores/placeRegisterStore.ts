@@ -18,9 +18,10 @@ interface Actions {
   setPlaceInput: (
     targetIndex: number,
     filed: string,
-    value: string | number | string[] | File[]
+    value: null | string | number | string[] | File[]
   ) => void;
-  initPlaceList: () => void;
+  initEntirePlaceList: () => void;
+  initPlaceList: (targetIndex: number) => void;
   addPlaceList: () => void;
   removePlaceList: (targetIndex: number) => void;
   removePartPlaceFile: (
@@ -48,7 +49,7 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
       );
       return { placeList: updatePlace };
     }),
-  initPlaceList: () =>
+  initEntirePlaceList: () =>
     set(() => ({
       placeList: [
         {
@@ -62,6 +63,23 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
         },
       ],
     })),
+  initPlaceList: (targetIndex) =>
+    set((state) => {
+      const updatePlace = state.placeList.map((place, index) =>
+        targetIndex === index
+          ? {
+              title: '',
+              hint: '',
+              file: [],
+              previewFile: [],
+              lat: 0,
+              lng: 0,
+              address: null,
+            }
+          : place
+      );
+      return { placeList: updatePlace };
+    }),
   addPlaceList: () =>
     set((state) => ({
       placeList: [

@@ -66,19 +66,19 @@ export const SlideContent = styled.div`
   height: 100%; // 전체 높이 사용
 `;
 
-export const ImageWrapper = styled.div<{ isSecondSlide?: boolean }>`
+export const ImageWrapper = styled.div<{ $isSecondSlide?: boolean }>`
   width: 100%;
-  padding-top: ${({ isSecondSlide }) => (isSecondSlide ? '110px' : '0')};
+  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '110px' : '0')};
 `;
 
-export const TextWrapper = styled.div<{ isFirstSlide?: boolean }>`
+export const TextWrapper = styled.div<{ $isFirstSlide?: boolean }>`
   width: 100%;
   max-width: 430px;
   padding: 0;
-  text-align: ${({ isFirstSlide }) => (isFirstSlide ? 'center' : 'left')};
+  text-align: ${({ $isFirstSlide }) => ($isFirstSlide ? 'center' : 'left')};
   box-sizing: border-box;
-  margin-left: ${({ isFirstSlide }) => (isFirstSlide ? 'auto' : '0')};
-  margin-right: ${({ isFirstSlide }) => (isFirstSlide ? 'auto' : '0')};
+  margin-left: ${({ $isFirstSlide }) => ($isFirstSlide ? 'auto' : '0')};
+  margin-right: ${({ $isFirstSlide }) => ($isFirstSlide ? 'auto' : '0')};
 `;
 
 export const SlideTitle = styled.h2`

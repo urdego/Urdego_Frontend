@@ -73,13 +73,13 @@ const OnBoarding = () => {
           <Slider {...settings}>
             {slides.map((slide, index) => (
               <SlideContent key={index}>
-                <ImageWrapper isSecondSlide={index === 1}>
+                <ImageWrapper $isSecondSlide={index === 1}>
                   <SlideImage
                     src={slide.image}
                     alt={`온보딩 이미지 ${index + 1}`}
                   />
                 </ImageWrapper>
-                <TextWrapper isFirstSlide={index === 0}>
+                <TextWrapper $isFirstSlide={index === 0}>
                   <SlideTitle>{slide.title}</SlideTitle>
                   <SlideDescription>{slide.description}</SlideDescription>
                 </TextWrapper>

@@ -26,7 +26,7 @@ const PlaceRegisterPage = () => {
   useEffect(() => {
     // placeRegister 들어오면 PlaceList 정보 초기화
     if (source !== 'locationRegister') {
-      initPlaceList();
+      initEntirePlaceList();
     }
   }, [searchParams]);
 
@@ -36,7 +36,7 @@ const PlaceRegisterPage = () => {
 
   // store state 불러오는 로직
   const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
-  const { placeList, initPlaceList } = usePlaceRegisterStore();
+  const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
 
   return (
     <>

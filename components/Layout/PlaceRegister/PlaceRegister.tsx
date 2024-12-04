@@ -23,31 +23,28 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const { handleFilesUpload, handlePartFileRemove } = useRegisterFiles({
+  const {
+    handleFilesUpload,
+    handleTitleChange,
+    handleHintChange,
+    handlePartFileRemove,
+    handlePlaceRemove,
+  } = useRegisterFiles({
     index,
   });
 
   // store state 불러오는 로직
-  const { placeList, setPlaceInput, removePlaceList } = usePlaceRegisterStore();
-
-  // event handler
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceInput(index, 'title', e.target.value);
-  };
-  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceInput(index, 'hint', e.target.value);
-  };
-
-  const resetPlace = () => {
-    removePlaceList(index);
-  };
+  const { placeList } = usePlaceRegisterStore();
 
   return (
     <PlaceRegisterWrapper>
+      {/* <button onClick={() => console.log(placeList)}>
+        placeList 확인용 버튼
+      </button> */}
       <PlaceRegistertext>
         <div>{title}</div>
         {index !== 0 && (
-          <PlaceContentResetButton onClick={resetPlace}>
+          <PlaceContentResetButton onClick={handlePlaceRemove}>
             <TrashIcon />
           </PlaceContentResetButton>
         )}
@@ -61,7 +58,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
         {placeList[index].previewFile.map((file, previewIndex) => (
           <PreviewImage key={previewIndex}>
             <PreviewImageRemoveButton
-              onClick={() => handlePartFileRemove(index, previewIndex)}
+              onClick={() => handlePartFileRemove(previewIndex)}
             >
               <BlackClearIcon />
             </PreviewImageRemoveButton>

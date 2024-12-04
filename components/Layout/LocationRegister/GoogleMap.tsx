@@ -7,7 +7,9 @@ import {
   Map,
   MapMouseEvent,
 } from '@vis.gl/react-google-maps';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import UserMarkerSrc from '@styles/Icon/UserMarker.svg';
 
 interface GoogleMapProps {
   index: number;
@@ -64,16 +66,16 @@ const GoogleMap = ({
           process.env
             .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
         }
-        onLoad={() =>
+        onLoad={() => {
           setTimeout(() => {
             setIsMapLoad(true);
-          }, 1000)
-        }
+          }, 500);
+        }}
       >
         {isMapLoad ? (
           <Map
             mapId={'LocationRegisterPage'}
-            style={{ height: '100vh' }}
+            style={{ height: `calc(100vh - 40px)` }}
             defaultCenter={{ lat: 36.5, lng: 127.5 }}
             defaultZoom={8}
             gestureHandling={'greedy'}
@@ -81,11 +83,18 @@ const GoogleMap = ({
             onClick={handleMapClick}
           >
             {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-              <AdvancedMarker position={markerPosition} clickable={true} />
+              <AdvancedMarker position={markerPosition} clickable={true}>
+                <Image
+                  src={UserMarkerSrc}
+                  width={50}
+                  height={53}
+                  alt="UserMarker Icon"
+                />
+              </AdvancedMarker>
             )}
           </Map>
         ) : (
-          <LoadingSpinnerComponent />
+          <LoadingSpinnerComponent isLocationRegister={true} />
         )}
       </APIProvider>
     </div>

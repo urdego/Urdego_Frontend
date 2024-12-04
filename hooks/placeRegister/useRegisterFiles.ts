@@ -1,13 +1,20 @@
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import exifr from 'exifr';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
+import toast from 'react-hot-toast';
 
 interface useUploadFilesProps {
   index: number;
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput, removePartPlaceFile } = usePlaceRegisterStore();
+  const {
+    placeList,
+    initPlaceList,
+    setPlaceInput,
+    removePartPlaceFile,
+    removePlaceList,
+  } = usePlaceRegisterStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
@@ -16,36 +23,32 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 불러오는 로직
     const fileList = e.target.files;
-    if (!fileList || fileList?.length === 0) return;
 
-    // 불러온 파일 최대 3개로 제한
+    if (!fileList || fileList?.length === 0) {
+      toast('선택된 사진이 없어요', {
+        icon: '😮',
+      });
+      return;
+    }
+
+    if (fileList.length > MAX_CONTENT_COUNT) {
+      toast('최대 3개의 사진만 업로드가 가능해요', {
+        icon: '😱',
+      });
+    }
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
       return;
     }
 
-    // 서버에 전송할 파일 저장 로직
-    // storeFile(selectedFileList); //TODO: 테스트 필요
-    setPlaceInput(index, 'file', selectedFileList);
-
     exportMetadata(selectedFileList);
 
-    // 미리보기 파일 저장 로직
-    // storePreviewFile(selectedFileList); //TODO: 테스트 필요
-    const previewPromises = selectedFileList.map((file) => {
-      return new Promise<string>((resolve) => {
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-          const result = fileReader.result;
-          resolve(typeof result === 'string' ? result : '');
-        };
-        fileReader.readAsDataURL(file);
-      });
-    });
+    storeFile(selectedFileList);
+    storePreviewFile(selectedFileList);
 
-    Promise.all(previewPromises).then((previewURLs) => {
-      setPlaceInput(index, 'previewFile', previewURLs);
+    toast('사진 등록이 완료되었어요!', {
+      icon: '👍',
     });
   };
 
@@ -82,10 +85,12 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     }
   };
 
+  // 서버에 전송할 파일 저장 로직
   const storeFile = (selectedFileList: File[]) => {
     setPlaceInput(index, 'file', selectedFileList);
   };
 
+  // 미리보기 파일 저장 로직
   const storePreviewFile = (selectedFileList: File[]) => {
     const previewPromises = selectedFileList.map((file) => {
       return new Promise<string>((resolve) => {
@@ -103,13 +108,32 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
   };
 
-  const handlePartFileRemove = (index: number, previewIndex: number) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'title', e.target.value);
+  };
+
+  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceInput(index, 'hint', e.target.value);
+  };
+
+  const handlePartFileRemove = (previewIndex: number) => {
+    if (placeList[index].file.length === 1) {
+      initPlaceList(index);
+      return;
+    }
     removePartPlaceFile(index, previewIndex);
+  };
+
+  const handlePlaceRemove = () => {
+    removePlaceList(index);
   };
 
   return {
     handleFilesUpload,
+    handleTitleChange,
+    handleHintChange,
     handlePartFileRemove,
+    handlePlaceRemove,
   };
 };
 

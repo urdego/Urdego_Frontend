@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
-export const LoadingOverlay = styled.div`
+export const LoadingOverlay = styled.div<{ $isLocationRegister?: boolean }>`
   /* position: fixed;
   top: 0;
   left: 0; */
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 40px);
+  min-height: ${(props) =>
+    props.$isLocationRegister ? 'calc(100vh - 192px)' : '100vh'};
   display: flex;
   justify-content: center;
   align-items: center;
