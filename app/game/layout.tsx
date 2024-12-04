@@ -1,8 +1,8 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Script from 'next/script';
 import useLoadingStore from '@/stores/loadingStore';
+import LoadingSpinnerComponent from '@/components/Common/LoadingSpinner/LoadingSpinner';
 
 export default function InGameLayout({
   children,
@@ -10,14 +10,12 @@ export default function InGameLayout({
   children: React.ReactNode;
 }) {
   const setLoading = useLoadingStore((state) => state.setLoading);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  // }, []);
-
   const handleScriptLoad = () => {
-    setLoading(false);
+    setIsMapLoaded(true);
+    setLoading(false); // 지도 로딩 완료 시 로딩 상태 해제
   };
 
   const handleScriptError = () => {
@@ -25,10 +23,9 @@ export default function InGameLayout({
     setLoading(false);
   };
 
-  // const handleScriptLoad = async () => {
-  //   await new Promise((resolve) => setTimeout(resolve, 2000));
-  //   setLoading(false);
-  // };
+  useEffect(() => {
+    setLoading(true); // 초기 로딩 상태 설정
+  }, [setLoading]);
 
   if (loadError) {
     return <div>Error: {loadError}</div>;
@@ -42,7 +39,7 @@ export default function InGameLayout({
         onLoad={handleScriptLoad}
         onError={handleScriptError}
       />
-      <>{children}</>
+      <>{isMapLoaded ? children : <LoadingSpinnerComponent />}</>
     </>
   );
 }

@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
 import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
+import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
@@ -25,7 +26,9 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const playerId = 1; // TODO: 실제 플레이어 ID를 전역 상태나 세션에서 가져오도록 수정 필요
+  const nickname = useUserStore(
+    (state: { nickname: string | null }) => state.nickname
+  );
   const { submitAnswer, isSubmitting } = useGameSubmit();
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -34,7 +37,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
-    // hint,
+    roundState,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -60,7 +63,7 @@ const GamePage = ({ params }: GamePageProps) => {
     }
 
     const submitData = {
-      playerId: playerId,
+      nickname: nickname || '',
       roundId: Number(params.round),
       coordinate: [
         currentSelectedCoordinate.lat,
@@ -90,45 +93,6 @@ const GamePage = ({ params }: GamePageProps) => {
     }
   };
 
-  // 클라이언트 테스트 용
-  // const handleSubmitAnswer = async () => {
-  //   if (hasSubmitted || !currentSelectedCoordinate) {
-  //     console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
-  //     return;
-  //   }
-
-  //   const submitData = {
-  //     roomId: params.roomId,
-  //     nickname,
-  //     round: currentRound,
-  //     coordinate: currentSelectedCoordinate,
-  //   };
-
-  //   // 제출 시작과 동시에 버튼 비활성화
-  //   setHasSubmitted(true);
-  //   console.log('제출 시작:', submitData);
-
-  //   // API 호출 대신 setTimeout으로 테스트
-  //   try {
-  //     await new Promise((resolve) => setTimeout(resolve, 1000)); // 1초 딜레이
-  //     const mockSuccess = true; // 테스트용 성공 응답
-
-  //     console.log('제출 결과:', mockSuccess);
-
-  //     if (!mockSuccess) {
-  //       console.warn('제출 실패');
-  //       setHasSubmitted(false);
-  //       return;
-  //     }
-
-  //     setCurrentSelectedCoordinate(null);
-  //     console.log('제출 완료');
-  //   } catch (error) {
-  //     console.error('제출 중 에러 발생:', error);
-  //     setHasSubmitted(false);
-  //   }
-  // };
-
   return (
     <>
       <PageWrapper>
@@ -152,18 +116,14 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent />
-            {/* 클라이언트 테스트용 힌트 표시 */}
-            <HintWrapper>
-              <HintIcon>힌트</HintIcon>
-              <HintText>문화생활을 할 수 있는 장소</HintText>
-            </HintWrapper>
-            {/* 개발용 힌트 표시 */}
-            {/* {hint && (
+            {/* TODO: 백엔드 연동 시 사용 */}
+            {/* <SwiperComponent images={roundState.contentUrls} /> */}
+            {roundState.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
-                <HintText> {hint}</HintText>
+                <HintText> {roundState.hint}</HintText>
               </HintWrapper>
-            )} */}
+            )}
           </>
         )}
 

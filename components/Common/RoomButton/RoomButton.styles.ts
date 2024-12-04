@@ -1,16 +1,16 @@
 import styled from 'styled-components';
+import CardBackground from '@/styles/Icon/CardBackGround.png';
 
 export const RoomButtonWrapper = styled.div`
-  width: 10.25rem;
-  height: 9.375rem;
+  width: 163px;
+  height: 139px;
   border-radius: 12px;
-  background: #2f3131;
+  background-image: url(${CardBackground.src});
 `;
 
 export const RoomButtonLayout = styled.div`
   height: calc(100% - 0.2rem);
-  padding: 1rem 1rem 1.2rem 1rem;
-  display: flex;
+  padding: 20px;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -34,12 +34,11 @@ export const RoomPerson = styled.div`
   font-weight: 400;
 `;
 
-export const RoomTopContainer = styled.div``;
-
-export const RoomBottomContainer = styled.div`
+export const PersonCount = styled.div`
   color: #fdf8ff;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 400;
+  padding-top: 10px;
 `;
 
 export const PersonBox = styled.div``;

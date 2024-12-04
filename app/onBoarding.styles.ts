@@ -34,7 +34,7 @@ export const SlideContainer = styled.div`
 
   .slick-dots {
     position: fixed;
-    bottom: 189px;
+    bottom: 110px;
     width: 100%;
     left: 50%;
     transform: translateX(-50%);
@@ -100,7 +100,6 @@ export const SlideDescription = styled.p`
 
 export const SlideImage = styled(Image)`
   width: 100%;
-
   max-height: 400px;
   height: 100%;
   object-fit: contain;
@@ -108,22 +107,16 @@ export const SlideImage = styled(Image)`
 
 export const ButtonContainer = styled.div`
   position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  min-width: 375px;
-  max-width: 430px;
-  margin: 0 auto;
-
-  bottom: 108px;
+  bottom: 0;
   left: 50%;
+  display: flex;
   transform: translateX(-50%);
-  padding: 12px 16px;
-
-  background: transparent;
-
-  box-sizing: border-box;
-  z-index: 10;
+  width: 100%;
+  min-width: 340px;
+  max-width: 430px;
+  height: 80px;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding: 0 16px;
+  z-index: 100;
 `;
