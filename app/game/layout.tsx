@@ -1,23 +1,31 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Script from 'next/script';
+import useLoadingStore from '@/stores/loadingStore';
+import LoadingSpinnerComponent from '@/components/Common/LoadingSpinner/LoadingSpinner';
 
 export default function InGameLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const setLoading = useLoadingStore((state) => state.setLoading);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const handleScriptLoad = () => {
     setIsMapLoaded(true);
+    setLoading(false); // 지도 로딩 완료 시 로딩 상태 해제
   };
 
   const handleScriptError = () => {
     setLoadError('Google Maps를 로드하는 데 실패했습니다.');
+    setLoading(false);
   };
+
+  useEffect(() => {
+    setLoading(true); // 초기 로딩 상태 설정
+  }, [setLoading]);
 
   if (loadError) {
     return <div>Error: {loadError}</div>;
@@ -31,10 +39,7 @@ export default function InGameLayout({
         onLoad={handleScriptLoad}
         onError={handleScriptError}
       />
-      <>
-        {/* TODO : 게임 로딩중일때 로딩 스피너 필요(google Map Load) */}
-        {isMapLoaded ? children : <div>게임 준비중입니다...</div>}
-      </>
+      <>{isMapLoaded ? children : <LoadingSpinnerComponent />}</>
     </>
   );
 }

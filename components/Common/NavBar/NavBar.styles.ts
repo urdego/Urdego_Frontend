@@ -1,3 +1,4 @@
+import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
@@ -12,7 +13,7 @@ export const Nav = styled.nav`
   height: 80px;
   justify-content: space-evenly;
   align-items: flex-start;
-  background-color: #fff;
+  background-color: ${colors.etc.white};
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
   z-index: 100;
 `;

@@ -13,3 +13,7 @@ export const ChannelWrapper = styled.div`
   gap: 12px;
   padding: 0 16px;
 `;
+// 임시 초대 토스트 보기 버튼 (TODO: 삭제 필요)
+export const Button = styled.button`
+  padding: 6px 12px;
+`;

@@ -2,10 +2,17 @@
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
 import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
+import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
-import { PageWrapper, Footer, HintText } from './game.styles';
+import {
+  PageWrapper,
+  Footer,
+  HintText,
+  HintWrapper,
+  HintIcon,
+} from './game.styles';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState } from 'react';
@@ -19,7 +26,9 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const nickname = '어데고'; // TODO: 추후 전역 상태 관리
+  const nickname = useUserStore(
+    (state: { nickname: string | null }) => state.nickname
+  );
   const { submitAnswer, isSubmitting } = useGameSubmit();
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -28,7 +37,7 @@ const GamePage = ({ params }: GamePageProps) => {
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
-    hint,
+    roundState,
     setCurrentSelectedCoordinate,
     handleShowMap,
     handleBackClick,
@@ -45,43 +54,8 @@ const GamePage = ({ params }: GamePageProps) => {
     console.log('선택된 좌표:', coordinate);
     setCurrentSelectedCoordinate(coordinate);
   };
+
   // TODO: 백엔드 연동 시 사용
-  // const handleSubmitAnswer = async () => {
-  //   if (hasSubmitted || !currentSelectedCoordinate) {
-  //     console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
-  //     return;
-  //   }
-
-  //   const submitData = {
-  //     roomId: params.roomId,
-  //     nickname,
-  //     round: currentRound,
-  //     coordinate: currentSelectedCoordinate,
-  //   };
-
-  //   // 제출 시작과 동시에 버튼 비활성화
-  //   setHasSubmitted(true);
-  //   console.log('제출 시작:', submitData);
-
-  //   try {
-  //     const success = await submitAnswer(submitData);
-  //     console.log('제출 결과:', success);
-
-  //     if (!success) {
-  //       console.warn('제출 실패');
-  //       setHasSubmitted(false); // 실패시에만 다시 활성화
-  //       return;
-  //     }
-
-  //     setCurrentSelectedCoordinate(null);
-  //     console.log('제출 완료');
-  //   } catch (error) {
-  //     console.error('제출 중 에러 발생:', error);
-  //     setHasSubmitted(false); // 에러 발생시에도 다시 활성화
-  //   }
-  // };
-
-  // 클라이언트 테스트 용
   const handleSubmitAnswer = async () => {
     if (hasSubmitted || !currentSelectedCoordinate) {
       console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
@@ -89,26 +63,25 @@ const GamePage = ({ params }: GamePageProps) => {
     }
 
     const submitData = {
-      roomId: params.roomId,
-      nickname,
-      round: currentRound,
-      coordinate: currentSelectedCoordinate,
+      nickname: nickname || '',
+      roundId: Number(params.round),
+      coordinate: [
+        currentSelectedCoordinate.lat,
+        currentSelectedCoordinate.lng,
+      ],
     };
 
     // 제출 시작과 동시에 버튼 비활성화
     setHasSubmitted(true);
     console.log('제출 시작:', submitData);
 
-    // API 호출 대신 setTimeout으로 테스트
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1초 딜레이
-      const mockSuccess = true; // 테스트용 성공 응답
+      const success = await submitAnswer(submitData);
+      console.log('제출 결과:', success);
 
-      console.log('제출 결과:', mockSuccess);
-
-      if (!mockSuccess) {
+      if (!success) {
         console.warn('제출 실패');
-        setHasSubmitted(false);
+        setHasSubmitted(false); // 실패시에만 다시 활성화
         return;
       }
 
@@ -116,7 +89,7 @@ const GamePage = ({ params }: GamePageProps) => {
       console.log('제출 완료');
     } catch (error) {
       console.error('제출 중 에러 발생:', error);
-      setHasSubmitted(false);
+      setHasSubmitted(false); // 에러 발생시에도 다시 활성화
     }
   };
 
@@ -143,7 +116,14 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent />
-            {hint && <HintText>힌트: {hint}</HintText>}
+            {/* TODO: 백엔드 연동 시 사용 */}
+            {/* <SwiperComponent images={roundState.contentUrls} /> */}
+            {roundState.hint && (
+              <HintWrapper>
+                <HintIcon>힌트</HintIcon>
+                <HintText> {roundState.hint}</HintText>
+              </HintWrapper>
+            )}
           </>
         )}
 

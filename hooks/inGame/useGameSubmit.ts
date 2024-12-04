@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
 interface SubmitData {
-  roomId: string;
-  round: number;
   nickname: string;
-  coordinate: google.maps.LatLngLiteral | null;
+  roundId: number;
+  coordinate: number[] | null;
 }
 
 export const useGameSubmit = () => {
@@ -13,7 +12,7 @@ export const useGameSubmit = () => {
   const submitAnswer = async (data: SubmitData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('http://localhost:5000/game/coordinates', {
+      const response = await fetch('/api/game', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

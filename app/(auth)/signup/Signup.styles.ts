@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SignupWrapper = styled.div`
   width: 100%;
   padding: 0 16px;
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
 `;
 
 export const Title = styled.div`

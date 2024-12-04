@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const LocationRegisterWrapper = styled.div`
   width: 100%;
+  height: 100%;
 `;
 
 export const ButtonLayout = styled.div`
@@ -13,7 +14,7 @@ export const ButtonLayout = styled.div`
   gap: 12px;
 
   width: 100%;
-  min-width: 375px;
+  min-width: 340px;
   max-width: 430px;
   margin: 0 auto;
 
@@ -25,6 +26,5 @@ export const ButtonLayout = styled.div`
   box-shadow: 0px -4px 24px 0px rgba(0, 0, 0, 0.1);
   background: ${colors.etc.white};
 
-  box-sizing: border-box;
   z-index: 10;
 `;

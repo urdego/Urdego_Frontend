@@ -4,11 +4,16 @@ import { useEffect } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
-import { HomeTitle, ChannelWrapper } from './Home.styles';
+import { HomeTitle, ChannelWrapper, Button } from './Home.styles';
 import { HomePageWrapper } from '@/app/commonPage.styles';
 import useSSEStore from '@/stores/useSSEStore';
 import { toast } from 'react-hot-toast';
 import type { NotificationMessage } from '@/lib/types/notification';
+import { InviteToast } from '@/components/Layout/Home/InviteToast/InviteToast';
+import { useRouter } from 'next/navigation';
+
+const hostName = '어데고';
+const gameId = '1';
 
 const Home = () => {
   const { eventSource } = useSSEStore();
@@ -46,6 +51,25 @@ const Home = () => {
     };
   }, [eventSource]);
 
+  const router = useRouter();
+
+  const showInviteToast = () => {
+    toast.custom(
+      (t) => (
+        <InviteToast
+          message={`${hostName}님이 당신을 초대했습니다. 수락하시겠습니까?`}
+          onAccept={() => {
+            router.push(`/game/${gameId}/waitingRoom`);
+          }}
+          onReject={() => {
+            console.log('거절됨');
+          }}
+          toastId={t.id}
+        />
+      ),
+      { position: 'top-center', duration: Infinity } // TODO: toast 시간  UI에 활용하기
+    );
+  };
   return (
     <>
       <TopBar NavType="main" />
@@ -58,6 +82,8 @@ const Home = () => {
           </Link>
           <ChannelButton title="랭킹 게임" />
         </ChannelWrapper>
+        {/* 임시 초대 토스트 보기 버튼 */}
+        <Button onClick={showInviteToast}>초대 토스트 보기</Button>
       </HomePageWrapper>
       <MainBanner />
       <HomeTitle>게임채널</HomeTitle>

@@ -1,6 +1,7 @@
 export const API_PORT_CONFIG = Object.freeze({
   AUTH: 8081,
   CONTENT: 8082,
+  GAME: 8084,
   GROUP: 8083,
   NOTIFICATION: 8085,
 });
@@ -20,6 +21,9 @@ export const API_URL_CONFIG = Object.freeze({
   GROUP: {
     CREATE: '/api/group-service/groups',
     CONNECT: '/group-service/connect',
+  },
+  GAME: {
+    SUBMIT_ANSWER: '/api/game-service/submissions',
   },
 });
 
