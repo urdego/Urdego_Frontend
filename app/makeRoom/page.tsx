@@ -1,6 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { Footer } from '@/app/makeRoom/makeRoom.styles';
 import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
@@ -8,6 +10,11 @@ import Button from '@common/Button/Button';
 import NumSelectForm from '@layout/MakeRoom/NumSelectForm';
 import FriendsInviteForm from '@layout/MakeRoom/FriendsInviteForm';
 import { PageWrapper } from '../commonPage.styles';
+import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStores';
+import toast from 'react-hot-toast';
+import axiosInstance from '@/lib/axios';
+import axios from 'axios';
 
 interface UserInfo {
   id: number;
@@ -18,34 +25,126 @@ const MakeRoomPage = () => {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const [invitedFriends, setInvitedFriends] = useState<UserInfo[]>([]);
   const [selectedNumber, setSelectedNumber] = useState(2);
+  const [rounds, setRounds] = useState(1);
   const [isRoomTitleEntered, setIsRoomTitleEntered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 방 제목 입력 감지
+  const router = useRouter();
+  const nickname = useUserStore((state) => state.nickname);
+  const setGameInfo = useGameStore((state) => state.setGameInfo);
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRoomTitleEntered(!!e.target.value.trim());
   };
 
-  // 인원 수 변경 감지
   const handleNumberChange = (value: number) => {
     setSelectedNumber(value);
   };
 
-  // 초대된 친구 목록 변경
+  const handleRoundsChange = (value: number) => {
+    setRounds(value);
+  };
+
   const handleInvitedFriendsChange = (friends: UserInfo[]) => {
     setInvitedFriends(friends);
   };
 
-  // 버튼 활성화 조건 체크
   const isButtonEnabled =
     isRoomTitleEntered && invitedFriends.length === selectedNumber - 1;
 
-  const handleCreateRoom = () => {
-    const roomData = {
-      title: titleInputRef.current?.value,
-      invitedFriends,
-      totalMembers: selectedNumber,
+  const connectWebSocket = async (groupId: number) => {
+    const stompClient = new Client({
+      brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
+      debug: (str) => {
+        console.log(str);
+      },
+      reconnectDelay: 5000, // 연결 끊김 시 5초 후 재연결
+      heartbeatIncoming: 4000, // 서버에서 수신되는 heartbeat
+      heartbeatOutgoing: 4000, // 클라이언트에서 전송되는 heartbeat
+    });
+
+    // STOMP 연결 성공 시 실행
+    stompClient.onConnect = () => {
+      console.log('Connected to the broker.');
+
+      // 1. 그룹 채널 구독
+      stompClient.subscribe(
+        `/group-service/subscribe/group/${groupId}`,
+        (message) => {
+          console.log('Received message:', message.body);
+        }
+      );
+
+      // 2. 참여 이벤트 발행
+      if (nickname) {
+        const participantEvent = {
+          eventType: 'PARTICIPANT',
+          data: {
+            nickname: nickname,
+            role: 'MANAGER',
+          },
+        };
+
+        stompClient.publish({
+          destination: `/group-service/publish/group/${groupId}`,
+          body: JSON.stringify(participantEvent),
+        });
+
+        // 3. 대기방으로 이동 (발행 후 이동)
+        router.push(`/game/${groupId}/waitingRoom`);
+      } else {
+        toast.error('닉네임 정보를 찾을 수 없습니다.');
+        stompClient.deactivate(); // 닉네임이 없으면 연결 종료
+        return;
+      }
     };
-    console.log('Room creation data:', roomData);
+
+    // STOMP 에러 발생 시 처리
+    stompClient.onStompError = (frame) => {
+      console.error('Broker reported error:', frame.headers['message']);
+      console.error('Additional details:', frame.body);
+      toast.error('웹소켓 연결에 실패했습니다.');
+      stompClient.deactivate(); // 연결 종료
+    };
+
+    // WebSocket 활성화 (중복 연결 방지)
+    if (!stompClient.active) {
+      stompClient.activate();
+    } else {
+      console.warn('WebSocket is already active.');
+    }
+  };
+
+  const handleCreateRoom = async () => {
+    if (!titleInputRef.current?.value || !nickname) return;
+
+    setIsLoading(true);
+    try {
+      const requestData = {
+        title: titleInputRef.current.value,
+        maxPlayers: selectedNumber,
+        rounds,
+        timer: 60,
+        host: nickname,
+        invitedFriends: invitedFriends.map((friend) => friend.nickname),
+      };
+
+      console.log('Sending request with data:', requestData);
+      const { data } = await axiosInstance.post('/api/makeRoom', requestData);
+
+      setGameInfo(data.groupId, data.gameId);
+      await connectWebSocket(data.groupId);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error details:', error.response?.data);
+        toast.error(error.response?.data?.error || '방 생성에 실패했습니다.');
+      } else {
+        console.error('Unknown error:', error);
+        toast.error('방 생성에 실패했습니다.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,7 +164,13 @@ const MakeRoomPage = () => {
           initialValue={2}
           onChange={handleNumberChange}
         />
-        <NumSelectForm label="라운드 (최대 3라운드)" maxValue={3} />
+        <NumSelectForm
+          label="라운드 (최대 3라운드)"
+          maxValue={3}
+          minValue={1}
+          initialValue={1}
+          onChange={handleRoundsChange}
+        />
         <RoomTitleInput
           label="타이머"
           placeholder="1분 (변경불가)"
@@ -83,9 +188,9 @@ const MakeRoomPage = () => {
           buttonSize="large"
           buttonHeight="default"
           styleType="coloredBackground"
-          label="그룹 생성"
+          label={isLoading ? '생성 중...' : '그룹 생성'}
           onClick={handleCreateRoom}
-          disabled={!isButtonEnabled}
+          disabled={!isButtonEnabled || isLoading}
         />
       </Footer>
     </>

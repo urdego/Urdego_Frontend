@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import axiosInstance from '@/lib/axios';
 import {
   LoginWrapper,
   LoginTitle,
@@ -15,12 +16,84 @@ import AutoLoginCheckbox from '@layout/Login/AutoLogin';
 import Button from '@common/Button/Button';
 import SignupTabs from '@layout/Login/SignUpTabs';
 import useUserStore from '@/stores/useUserStore';
+import useSSEStore from '@/stores/useSSEStore';
 import ValidationMessage from '@/components/Common/ValidationMessage/ValidationMessage';
 
 interface LoginError {
   email: string;
   password: string;
 }
+
+const connectSSE = (userId: string) => {
+  const { setEventSource } = useSSEStore.getState();
+  let retryCount = 0;
+  const MAX_RETRIES = 3;
+
+  const connect = () => {
+    try {
+      const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;
+      console.log('Connecting to SSE:', url);
+
+      const eventSource = new EventSource(url, {
+        withCredentials: true,
+      });
+
+      eventSource.onopen = () => {
+        console.log('SSE connection established');
+        console.log('Connection details:', {
+          readyState: eventSource.readyState,
+          url: eventSource.url,
+        });
+        retryCount = 0;
+      };
+
+      eventSource.onmessage = (event) => {
+        console.log('Received SSE message:', event.data);
+        try {
+          const data = JSON.parse(event.data);
+          // 메시지 처리 로직
+          console.log('Parsed message data:', data);
+        } catch (error) {
+          console.error('Error parsing SSE message:', error);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('SSE Connection Error:', error);
+        console.error('Error details:', {
+          type: error.type,
+          eventPhase: error.eventPhase,
+          target: error.target,
+          readyState: eventSource?.readyState,
+        });
+
+        if (eventSource.readyState === EventSource.CLOSED) {
+          eventSource.close();
+          setEventSource(null);
+
+          if (retryCount < MAX_RETRIES) {
+            retryCount++;
+            const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
+            console.log(
+              `Attempting reconnection in ${delay / 1000} seconds... (Attempt ${retryCount} of ${MAX_RETRIES})`
+            );
+            setTimeout(connect, delay);
+          } else {
+            console.error('Max retry attempts reached for SSE connection');
+          }
+        }
+      };
+
+      setEventSource(eventSource);
+      return eventSource;
+    } catch (error) {
+      console.error('Failed to initialize SSE:', error);
+      return null;
+    }
+  };
+
+  return connect();
+};
 
 const Login = () => {
   const router = useRouter();
@@ -73,24 +146,43 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user-service/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await axiosInstance.post('/api/login', {
+        email,
+        password,
+      });
 
-      if (!response.ok) {
-        throw new Error('로그인에 실패했습니다.');
-      }
+      const nickname = response.data;
 
-      const nickname = await response.text();
+      localStorage.setItem('userId', email);
       setNickname(nickname);
       toast(`안녕하세요 ${nickname}님 환영합니다!`);
+
+      // SSE 연결 시도
+      try {
+        const eventSource = connectSSE(email);
+        if (!eventSource) {
+          toast(
+            '실시간 알림 연결에 실패했습니다. 일부 기능이 제한될 수 있습니다.',
+            {
+              duration: 3000,
+              style: {
+                background: '#ffffff',
+                color: '#000000',
+                fontSize: '14px',
+                padding: '12px 20px',
+                borderRadius: '4px',
+                maxWidth: '280px',
+              },
+            }
+          );
+        }
+      } catch (sseError) {
+        console.error('SSE connection failed:', sseError);
+        toast(
+          '실시간 알림 연결에 실패했습니다. 일부 기능이 제한될 수 있습니다.'
+        );
+      }
+
       router.push('/home');
     } catch (error) {
       console.error('Login error:', error);
