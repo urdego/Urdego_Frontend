@@ -32,6 +32,7 @@ const LocationListBottomSheet = ({
           <BottomSheet
             initial={{ x: '-50%' }}
             animate={{ y: isVisible ? '0%' : '100%' }}
+            style={{ height: isExpand ? '100vh' : '50vh' }}
             transition={{ type: 'tween' }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
@@ -39,7 +40,10 @@ const LocationListBottomSheet = ({
             onDragEnd={(event, info) => {
               const shouldClose = info.velocity.y > 5 || info.offset.y > 150;
               if (shouldClose) {
+                setIsExpand(false);
                 setLocationListVisible(false);
+              } else {
+                setIsExpand(true);
               }
             }}
           >

@@ -32,7 +32,6 @@ export const BottomSheet = styled(motion.div)`
   max-width: 430px;
   margin: 0 auto;
 
-  height: 50vh;
   background: ${colors.etc.white};
   border-radius: 4px 4px 0px 0px;
   padding: 12px 0 21px 0;
