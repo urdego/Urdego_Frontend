@@ -8,10 +8,8 @@ export async function GET(
   console.log('SSE Route Handler - Started');
   const userId = params.userId.replace('%40', '@');
   const sseUrl = `${API_BASE_URL.DNS}${API_URL_CONFIG.NOTIFICATION.SSE}${userId}`;
-  console.log('SSE URL:', sseUrl);
 
   try {
-    console.log('Attempting to connect to backend SSE');
     const response = await fetch(sseUrl, {
       headers: {
         Accept: 'text/event-stream',
@@ -20,12 +18,6 @@ export async function GET(
       },
       cache: 'no-store',
     });
-
-    console.log('Backend Response Status:', response.status);
-    console.log(
-      'Backend Response Headers:',
-      Object.fromEntries(response.headers)
-    );
 
     if (!response.ok) {
       throw new Error(`SSE connection failed: ${response.status}`);
@@ -42,6 +34,7 @@ export async function GET(
         const reader = response.body.getReader();
         const textDecoder = new TextDecoder();
         const textEncoder = new TextEncoder();
+        let buffer = '';
 
         try {
           while (true) {
@@ -52,13 +45,17 @@ export async function GET(
               break;
             }
 
-            const text = textDecoder.decode(value);
-            console.log('Received data from backend:', text);
+            buffer += textDecoder.decode(value, { stream: true });
 
-            // JSON 데이터를 SSE 형식으로 변환
-            // SSE 프로토콜은 'data: ' 접두사와 '\n\n' 종결자를 필요로 함
-            const sseMessage = `data: ${text}\n\n`;
-            controller.enqueue(textEncoder.encode(sseMessage));
+            const messages = buffer.split('\n\n');
+            buffer = messages.pop() || '';
+
+            for (const message of messages) {
+              if (message.trim()) {
+                const formattedMessage = formatSSEMessage(message);
+                controller.enqueue(textEncoder.encode(formattedMessage));
+              }
+            }
           }
         } catch (error) {
           console.error('Error while reading stream:', error);
@@ -78,12 +75,27 @@ export async function GET(
     });
   } catch (error) {
     console.error('SSE Route Handler - Error:', error);
-    return new Response('error: SSE connection failed\n\n', {
+    return new Response('event: error\ndata: SSE connection failed\n\n', {
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
       },
     });
+  }
+}
+
+function formatSSEMessage(message: string): string {
+  if (!message.trim()) return '';
+
+  if (message.startsWith('data: ') || message.startsWith('event: ')) {
+    return message + '\n\n';
+  }
+
+  try {
+    const parsed = JSON.parse(message);
+    return `data: ${JSON.stringify(parsed)}\n\n`;
+  } catch {
+    return `data: ${message}\n\n`;
   }
 }

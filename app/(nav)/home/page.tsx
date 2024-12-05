@@ -1,4 +1,3 @@
-// src/app/home/page.tsx
 'use client';
 
 import { useEffect } from 'react';
@@ -13,6 +12,7 @@ import useSSEStore from '@/stores/useSSEStore';
 import useUserStore from '@/stores/useUserStore';
 import { toast } from 'react-hot-toast';
 import type { NotificationMessage } from '@/lib/types/notification';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 interface InviteToastProps {
   message: string;
@@ -43,10 +43,54 @@ const InviteToast = ({ message, onAccept, onReject }: InviteToastProps) => {
   );
 };
 
+const handleRegularNotification = (notification: NotificationMessage) => {
+  toast(
+    `${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`,
+    {
+      duration: 3000,
+      position: 'bottom-center',
+      style: {
+        background: '#ffffff',
+        color: '#000000',
+        fontSize: '14px',
+        padding: '12px 20px',
+        borderRadius: '4px',
+        maxWidth: '280px',
+      },
+    }
+  );
+};
+
+const handleInvitation = (
+  notification: NotificationMessage,
+  router: AppRouterInstance
+) => {
+  toast.custom(
+    (t) => (
+      <InviteToast
+        message={`${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`}
+        onAccept={() => {
+          router.push(`/game/${notification.groupId}/waitingRoom`);
+          toast.dismiss(t.id);
+        }}
+        onReject={() => {
+          toast.dismiss(t.id);
+        }}
+        toastId={t.id}
+      />
+    ),
+    {
+      position: 'top-center',
+      duration: 30000,
+    }
+  );
+};
+
 const connectSSE = (userId: string) => {
   const { setEventSource } = useSSEStore.getState();
   let retryCount = 0;
   const MAX_RETRIES = 3;
+  let retryTimeout: NodeJS.Timeout;
 
   const connect = () => {
     try {
@@ -59,10 +103,6 @@ const connectSSE = (userId: string) => {
 
       eventSource.onopen = () => {
         console.log('SSE 연결 성공');
-        console.log('연결 상태:', {
-          readyState: eventSource.readyState,
-          url: eventSource.url,
-        });
         retryCount = 0;
       };
 
@@ -79,7 +119,9 @@ const connectSSE = (userId: string) => {
             console.log(
               `재연결 시도 ${retryCount}/${MAX_RETRIES} (${delay / 1000}초 후)`
             );
-            setTimeout(connect, delay);
+
+            clearTimeout(retryTimeout);
+            retryTimeout = setTimeout(connect, delay);
           } else {
             console.error('최대 재시도 횟수 도달');
             toast.error('실시간 알림 연결에 실패했습니다');
@@ -87,12 +129,6 @@ const connectSSE = (userId: string) => {
         }
       };
 
-      eventSource.onmessage = (event) => {
-        console.log('hello this is event');
-        console.log('SSE 메시지 수신:', event.data);
-      };
-
-      setEventSource(eventSource);
       return eventSource;
     } catch (error) {
       console.error('SSE 초기화 실패:', error);
@@ -108,86 +144,64 @@ const Home = () => {
   const { email } = useUserStore();
   const { eventSource, setEventSource } = useSSEStore();
 
-  // SSE 연결 설정
   useEffect(() => {
-    if (!email || eventSource) return;
+    let mounted = true;
 
-    const newEventSource = connectSSE(email);
+    const initializeSSE = async () => {
+      if (!email || eventSource) return;
+
+      try {
+        const newEventSource = connectSSE(email);
+
+        if (!mounted) {
+          newEventSource?.close();
+          return;
+        }
+
+        if (newEventSource) {
+          newEventSource.onmessage = (event) => {
+            try {
+              if (
+                event.data === 'Connect to notification service' ||
+                event.data.includes('event:Connect')
+              ) {
+                console.log('SSE 연결 확인:', event.data);
+                return;
+              }
+
+              if (event.data.startsWith('event:notification')) {
+                const jsonStr = event.data
+                  .replace('event:notification', '')
+                  .trim();
+                const notification: NotificationMessage = JSON.parse(jsonStr);
+
+                if (notification.action?.includes('초대')) {
+                  handleInvitation(notification, router);
+                } else {
+                  handleRegularNotification(notification);
+                }
+              }
+            } catch (error) {
+              console.error('SSE 메시지 처리 중 에러:', error);
+            }
+          };
+        }
+      } catch (error) {
+        console.error('SSE 초기화 실패:', error);
+      }
+    };
+
+    initializeSSE();
 
     return () => {
-      if (newEventSource) {
+      mounted = false;
+      if (eventSource) {
         console.log('SSE 연결 정리');
-        newEventSource.close();
+        eventSource.close();
         setEventSource(null);
       }
     };
-  }, [email, eventSource, setEventSource]);
-
-  // SSE 메시지 처리
-  useEffect(() => {
-    if (!eventSource) return;
-
-    const handleInvitation = (notification: NotificationMessage) => {
-      toast.custom(
-        (t) => (
-          <InviteToast
-            message={`${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`}
-            onAccept={() => {
-              // 수락 처리 API 호출
-              router.push(`/group/${notification.groupId}`);
-              toast.dismiss(t.id);
-            }}
-            onReject={() => {
-              // 거절 처리 API 호출
-              toast.dismiss(t.id);
-            }}
-            toastId={t.id}
-          />
-        ),
-        {
-          position: 'top-center',
-          duration: 30000,
-        }
-      );
-    };
-
-    const messageHandler = (event: MessageEvent) => {
-      try {
-        const notification: NotificationMessage = JSON.parse(event.data);
-        console.log('SSE 메시지 수신:', notification);
-
-        // action에 따른 처리
-        if (notification.action.includes('초대')) {
-          handleInvitation(notification);
-        } else {
-          // 다른 종류의 알림 처리
-          toast(
-            `${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`,
-            {
-              duration: 3000,
-              position: 'bottom-center',
-              style: {
-                background: '#ffffff',
-                color: '#000000',
-                fontSize: '14px',
-                padding: '12px 20px',
-                borderRadius: '4px',
-                maxWidth: '280px',
-              },
-            }
-          );
-        }
-      } catch (error) {
-        console.error('SSE 메시지 파싱 에러:', error);
-      }
-    };
-
-    eventSource.onmessage = messageHandler;
-
-    return () => {
-      eventSource.onmessage = null;
-    };
-  }, [eventSource, router]);
+  }, [email]);
 
   return (
     <>
