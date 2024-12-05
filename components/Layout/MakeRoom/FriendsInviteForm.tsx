@@ -16,7 +16,6 @@ import {
 import toast from 'react-hot-toast';
 import useUserStore from '@stores/useUserStore';
 import InviteButton from '@layout/MakeRoom/InviteButton';
-import { API_BASE_URL } from '@/config/apiEndPointConfig';
 
 interface UserInfo {
   id: number;
@@ -44,15 +43,12 @@ const FriendsInviteForm = ({
       if (searchTerm.trim()) {
         try {
           const queryString = encodeURIComponent(searchTerm.trim());
-          const response = await fetch(
-            `${API_BASE_URL.DNS}/api/user-service/nickname?string=${queryString}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          const response = await fetch(`/api/invite?string=${queryString}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
           if (response.status === 200) {
             const data = await response.json();
