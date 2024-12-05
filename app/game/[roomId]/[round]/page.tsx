@@ -22,9 +22,6 @@ import {
   HintIcon,
 } from './game.styles';
 
-import SwiperComponent from '@/components/Layout/Game/Swiper';
-import { useCallback, useState } from 'react';
-
 interface GamePageProps {
   params: {
     roomId: string;
@@ -67,7 +64,6 @@ const GamePage = ({ params }: GamePageProps) => {
     console.log('선택된 좌표:', coordinate);
     setCurrentSelectedCoordinate(coordinate);
   };
-
 
   // TODO: 백엔드 연동 시 사용
   // const handleSubmitAnswer = async () => {
@@ -194,6 +190,7 @@ const GamePage = ({ params }: GamePageProps) => {
             <HintIcon>힌트</HintIcon>
             <HintText> {roundState.hint}</HintText>
           </HintWrapper>
+        )}
         {isMapView ? (
           <MapComponent
             mode="game"
@@ -222,7 +219,6 @@ const GamePage = ({ params }: GamePageProps) => {
             buttonSize="large"
             onClick={toggleBottomSheet}
             styleType="coloredBackground"
-            disabled={hasSubmitted}
             disabled={(isMapView && !currentSelectedCoordinate) || hasSubmitted}
           />
         </Footer>
