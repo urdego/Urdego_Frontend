@@ -10,7 +10,7 @@ export const CharactersContainer = styled.div`
   width: 100%;
   aspect-ratio: 1.2;
   max-width: 430px;
-  height: calc(100vh - 450px);
+  height: calc(100vh - 500px);
   margin: 0 auto;
   padding: 1rem;
   display: flex;
@@ -30,8 +30,8 @@ export const CharacterWrapper = styled.div<{ animation?: string }>`
   img {
     width: auto;
     height: auto;
-    min-width: 120px;
-    min-height: 120px;
+    max-width: 120px;
+    max-height: 120px;
   }
 `;
 
