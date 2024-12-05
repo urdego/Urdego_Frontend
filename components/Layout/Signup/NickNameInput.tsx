@@ -26,18 +26,15 @@ const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user-service/nickname`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ nickname }),
-        }
-      );
+      const response = await fetch('/api/nickname', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nickname }),
+      });
 
-      const result = await response.text();
+      const result = await response.json();
 
       if (response.ok) {
         if (result === 'PERMIT') {
@@ -73,7 +70,7 @@ const NickNameInput = ({ onNicknameValidated }: NickNameInputProps) => {
   const handleInputChange = (value: string) => {
     setNickname(value);
     setValidationMessage(null);
-    onNicknameValidated(value, false); // 입력값이 변경되면 유효성 초기화
+    onNicknameValidated(value, false);
   };
 
   return (

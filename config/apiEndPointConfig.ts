@@ -12,8 +12,9 @@ export const API_URL_CONFIG = Object.freeze({
     POST_SINGLE: '/api/content-service/contents/',
   },
   AUTH: {
-    SIGNUP: '/api/auth/user-service/users',
+    SIGNUP: '/api/user-service/users',
     LOGIN: '/api/user-service/login',
+    NICKNAME: '/api/user-service/nickname',
   },
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',

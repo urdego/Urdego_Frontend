@@ -1,13 +1,13 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { API_URL_CONFIG, API_BASE_URL } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
-
   try {
-    const res = await axiosInstance.post(
-      `${API_BASE_URL.DNS}${API_URL_CONFIG.AUTH.SIGNUP}`,
+    const data = await request.json();
+
+    const response = await axiosInstance.post(
+      `${API_BASE_URL.DNS}${API_URL_CONFIG.AUTH.NICKNAME}`,
       data,
       {
         headers: {
@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
         },
       }
     );
-    return NextResponse.json(res.data);
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error(error);
+    console.error('Nickname check error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch data' },
+      { error: 'Failed to check nickname' },
       { status: 500 }
     );
   }
