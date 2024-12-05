@@ -106,11 +106,14 @@ const Container = styled.div`
 `;
 
 const SwitchContainer = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0.5rem;
   right: 0.5rem;
   z-index: 50;
   cursor: pointer;
+  margin: 0 auto;
+  z-index: 2000;
+
   &:active {
     outline: 2px solid red; /* 클릭 테스트 */
   }

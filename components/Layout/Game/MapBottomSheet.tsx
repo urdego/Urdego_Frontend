@@ -52,6 +52,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         height: '80vh',
         zIndex: 1000,
         touchAction: 'none',
+        margin: '0 auto',
+        maxWidth: '430px',
       }}
     >
       <BottomSheetWrapper>
