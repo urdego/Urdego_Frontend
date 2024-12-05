@@ -8,6 +8,7 @@ import {
   HeaderWrapper,
   HeaderHandler,
 } from './LocationListBottonSheetStyles';
+import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 
 interface LocationListBottomSheetProps {
   isVisible: boolean;
@@ -49,19 +50,17 @@ const LocationListBottomSheet = ({
             <ContentWrapper>
               <ContentHeader>저장한 장소 (999)</ContentHeader>
               <ContentContainer>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div> <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
-                <div>내용</div>
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
+                <LocationList />
               </ContentContainer>
             </ContentWrapper>
           </BottomSheet>

@@ -78,7 +78,7 @@ export const ContentContainer = styled(motion.div)`
   align-items: flex-start;
   width: 100%;
   height: 40vh;
-  gap: 50px;
+  gap: 12px;
   font-size: 14px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
