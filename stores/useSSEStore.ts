@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-interface SSEStore {
- eventSource: EventSource | null;
- setEventSource: (eventSource: EventSource | null) => void;
+interface SSEState {
+  eventSource: EventSource | null;
+  setEventSource: (eventSource: EventSource | null) => void;
 }
 
-const useSSEStore = create<SSEStore>((set) => ({
- eventSource: null,
- setEventSource: (eventSource) => set({ eventSource }),
+const useSSEStore = create<SSEState>((set) => ({
+  eventSource: null,
+  setEventSource: (eventSource) => set({ eventSource }),
 }));
 
 export default useSSEStore;
