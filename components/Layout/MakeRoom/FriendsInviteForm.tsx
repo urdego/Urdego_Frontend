@@ -45,7 +45,7 @@ const FriendsInviteForm = ({
         try {
           const queryString = encodeURIComponent(searchTerm.trim());
           const response = await fetch(
-            `${API_BASE_URL.OAUTH}/api/user-service/nickname?string=${queryString}`,
+            `${API_BASE_URL.DNS}/api/user-service/nickname?string=${queryString}`,
             {
               method: 'GET',
               headers: {
