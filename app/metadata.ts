@@ -6,6 +6,9 @@ export const metadata: Metadata = {
     default: 'Urdego?!',
   },
   description: 'Where am I? Urdego!',
+  icons: {
+    icon: '/favicon-face(transparent).svg',
+  },
 };
 
 export const viewport: Viewport = {

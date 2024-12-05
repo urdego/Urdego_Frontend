@@ -43,15 +43,12 @@ const FriendsInviteForm = ({
       if (searchTerm.trim()) {
         try {
           const queryString = encodeURIComponent(searchTerm.trim());
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_OAUTH_URL}/api/user-service/nickname?string=${queryString}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          const response = await fetch(`/api/invite?string=${queryString}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
           if (response.status === 200) {
             const data = await response.json();

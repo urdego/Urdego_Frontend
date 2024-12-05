@@ -1,12 +1,19 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
-// import { useGameSubmit } from '@/hooks/inGame/useGameSubmit';
+
 import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
+
 import MapBottomSheet from '@/components/Layout/Game/MapBottomSheet';
+
+import SwiperComponent from '@/components/Layout/Game/Swiper';
+import MapComponent from '@/components/Layout/Game/GoogleMap';
+import { useCallback, useState, useEffect } from 'react';
+import { useWebSocket } from '@/hooks/inGame/useWebSocket';
+
 import {
   PageWrapper,
   Footer,
@@ -14,6 +21,7 @@ import {
   HintWrapper,
   HintIcon,
 } from './game.styles';
+
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import { useCallback, useState } from 'react';
 
@@ -29,8 +37,14 @@ const GamePage = ({ params }: GamePageProps) => {
   const nickname = useUserStore(
     (state: { nickname: string | null }) => state.nickname
   );
+
   // const { submitAnswer, isSubmitting } = useGameSubmit();
   const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  // WebSocket
+  const { gameState, submitAnswer, createRound } = useWebSocket(
+    Number(params.roomId)
+  );
 
   const {
     currentRound,
@@ -53,6 +67,7 @@ const GamePage = ({ params }: GamePageProps) => {
     console.log('선택된 좌표:', coordinate);
     setCurrentSelectedCoordinate(coordinate);
   };
+
 
   // TODO: 백엔드 연동 시 사용
   // const handleSubmitAnswer = async () => {
@@ -93,6 +108,7 @@ const GamePage = ({ params }: GamePageProps) => {
   // };
 
   // 클라이언트 테스트 용
+
   const handleSubmitAnswer = async () => {
     if (hasSubmitted || !currentSelectedCoordinate) {
       console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
@@ -105,12 +121,10 @@ const GamePage = ({ params }: GamePageProps) => {
       coordinate: [
         currentSelectedCoordinate.lat,
         currentSelectedCoordinate.lng,
-      ],
+      ] as [number, number],
     };
 
-    // 제출 시작과 동시에 버튼 비활성화
     setHasSubmitted(true);
-    console.log('제출 시작:', submitData);
 
     // API 호출 대신 setTimeout으로 테스트
     try {
@@ -124,6 +138,8 @@ const GamePage = ({ params }: GamePageProps) => {
         setHasSubmitted(false);
         return;
       }
+
+      submitAnswer(submitData);
 
       setCurrentSelectedCoordinate(null);
       console.log('제출 완료');
@@ -143,6 +159,19 @@ const GamePage = ({ params }: GamePageProps) => {
       setIsBottomSheetOpen(true);
     }
   };
+
+  useEffect(() => {
+    // 라운드 시작시 라운드 생성 요청
+    createRound(Number(params.round));
+  }, [createRound, params.round]);
+
+  // gameState에서 라운드 정보 활용
+  useEffect(() => {
+    if (gameState.roundState) {
+      // 라운드 상태 업데이트시 처리
+      console.log('새로운 라운드 정보:', gameState.roundState);
+    }
+  }, [gameState.roundState]);
 
   return (
     <>
@@ -165,6 +194,25 @@ const GamePage = ({ params }: GamePageProps) => {
             <HintIcon>힌트</HintIcon>
             <HintText> {roundState.hint}</HintText>
           </HintWrapper>
+        {isMapView ? (
+          <MapComponent
+            mode="game"
+            onCoordinateSelect={handleCoordinateSelect}
+            answerCoordinate={null} // 게임 모드에서는 정답 좌표를 숨기기 위해 null
+          />
+        ) : (
+          <>
+            <SwiperComponent />
+            {/* TODO: 백엔드 연동 시 사용 */}
+            {/* <SwiperComponent images={gameState.roundState?.contentUrls || []} /> */}
+            {roundState.hint && (
+              <HintWrapper>
+                <HintIcon>힌트</HintIcon>
+                <HintText> {roundState.hint}</HintText>
+                {/* <HintText>{gameState.roundState.hint}</HintText> */}
+              </HintWrapper>
+            )}
+          </>
         )}
 
         <Footer>
@@ -175,6 +223,7 @@ const GamePage = ({ params }: GamePageProps) => {
             onClick={toggleBottomSheet}
             styleType="coloredBackground"
             disabled={hasSubmitted}
+            disabled={(isMapView && !currentSelectedCoordinate) || hasSubmitted}
           />
         </Footer>
       </PageWrapper>
