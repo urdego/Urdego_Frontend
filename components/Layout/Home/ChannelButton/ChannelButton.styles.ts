@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import channelPrivate from '@/styles/Icon/channel-private.png';
+import GroupGame from '@/styles/Icon/ChannelButton/channel-bg.svg';
 
 interface ChannelProps {
   $title: '그룹 게임' | '랭킹 게임';
@@ -15,7 +15,7 @@ export const ChannelWrapper = styled.div<ChannelProps>`
   background-color: ${({ $title }) =>
     $title === '그룹 게임' ? '#2F3131' : '#767777'};
   background-image: ${({ $title }) =>
-    $title === '그룹 게임' ? `url(${channelPrivate.src})` : 'none'};
+    $title === '그룹 게임' ? `url(${GroupGame.src})` : 'none'};
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
