@@ -5,14 +5,13 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ) {
-  console.log('API Route - Received SSE request for user:', params.userId);
-
+  console.log('SSE Route Handler - Started');
   const userId = params.userId.replace('%40', '@');
   const sseUrl = `${API_BASE_URL.DNS}${API_URL_CONFIG.NOTIFICATION.SSE}${userId}`;
-
-  console.log('API Route - Forwarding to SSE URL:', sseUrl);
+  console.log('SSE URL:', sseUrl);
 
   try {
+    console.log('Attempting to connect to backend SSE');
     const response = await fetch(sseUrl, {
       headers: {
         Accept: 'text/event-stream',
@@ -35,31 +34,35 @@ export async function GET(
     const stream = new ReadableStream({
       async start(controller) {
         if (!response.body) {
-          console.error('API Route - No response body from backend');
+          console.error('No response body received from backend');
           controller.close();
           return;
         }
 
         const reader = response.body.getReader();
         const textDecoder = new TextDecoder();
+        const textEncoder = new TextEncoder();
 
         try {
           while (true) {
             const { done, value } = await reader.read();
 
             if (done) {
-              console.log('API Route - Stream complete');
+              console.log('Stream complete');
               break;
             }
 
-            const text = textDecoder.decode(value, { stream: true });
-            console.log('API Route - Received data:', text);
-            controller.enqueue(new TextEncoder().encode(text));
+            const text = textDecoder.decode(value);
+            console.log('Received data from backend:', text);
+
+            // JSON 데이터를 SSE 형식으로 변환
+            // SSE 프로토콜은 'data: ' 접두사와 '\n\n' 종결자를 필요로 함
+            const sseMessage = `data: ${text}\n\n`;
+            controller.enqueue(textEncoder.encode(sseMessage));
           }
         } catch (error) {
-          console.error('API Route - Stream reading error:', error);
+          console.error('Error while reading stream:', error);
         } finally {
-          console.log('API Route - Closing stream');
           reader.releaseLock();
           controller.close();
         }
@@ -74,7 +77,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('API Route - SSE Error:', error);
+    console.error('SSE Route Handler - Error:', error);
     return new Response('error: SSE connection failed\n\n', {
       headers: {
         'Content-Type': 'text/event-stream',

@@ -1,23 +1,17 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 interface UserState {
-  nickname: string | null;
+  email: string;
+  nickname: string;
+  setEmail: (email: string) => void;
   setNickname: (nickname: string) => void;
-  clearNickname: () => void;
 }
 
-const useUserStore = create<UserState>()(
-  persist(
-    (set) => ({
-      nickname: null,
-      setNickname: (nickname: string) => set({ nickname }),
-      clearNickname: () => set({ nickname: null }),
-    }),
-    {
-      name: 'user-storage',
-    }
-  )
-);
+const useUserStore = create<UserState>((set) => ({
+  email: '',
+  nickname: '',
+  setEmail: (email: string) => set({ email }),
+  setNickname: (nickname: string) => set({ nickname }),
+}));
 
 export default useUserStore;
