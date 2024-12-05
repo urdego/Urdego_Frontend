@@ -8,12 +8,14 @@ import { PageWrapper, Footer } from '../game.styles';
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import CountdownButton from '@/components/Layout/Game/CountdownButton';
+import { useWebSocket } from '@/hooks/inGame/useWebSocket';
 
 const RoundRank = ({
   params,
 }: {
   params: { round: string; roomId: string };
 }) => {
+  const { gameState } = useWebSocket(Number(params.roomId)); // TODO: 라운드 데이터 받아오기
   const router = useRouter();
   const currentRound = Number(params.round) || 1; // 기본값 설정
   const maxRounds = 3; // TODO : prop으로 라운드 받아오기
@@ -32,6 +34,68 @@ const RoundRank = ({
       ],
     };
   }, []);
+
+  // TODO: ws 연동 시 사용
+  // // 이번 라운드 점수 기준 정렬
+  // const thisRoundRankData = useMemo(() => {
+  //   if (!gameState.scoreState?.submitCoordinates) return [];
+
+  //   return [...gameState.scoreState.submitCoordinates]
+  //     .sort((a, b) => b.score - a.score) // 점수 내림차순 정렬
+  //     .map((coord, index) => ({
+  //       rank: index + 1,
+  //       name: coord.nickname,
+  //       score: coord.score,
+  //       totalScore: coord.totalScore
+  //     }));
+  // }, [gameState.scoreState]);
+
+  // // 누적 점수 기준 정렬
+  // const totalRoundRankData = useMemo(() => {
+  //   if (!gameState.scoreState?.submitCoordinates) return [];
+
+  //   return [...gameState.scoreState.submitCoordinates]
+  //     .sort((a, b) => b.totalScore - a.totalScore) // 총점 내림차순 정렬
+  //     .map((coord, index) => ({
+  //       rank: index + 1,
+  //       name: coord.nickname,
+  //       score: coord.score,
+  //       totalScore: coord.totalScore
+  //     }));
+  // }, [gameState.scoreState]);
+
+  // // 동점자 처리 로직
+  // const assignRankWithTies = (sortedData: any[]) => {
+  //   let currentRank = 1;
+  //   let currentScore = -1;
+  //   let sameRankCount = 0;
+
+  //   return sortedData.map((item, index) => {
+  //     const score = currentRoundData === 'thisRound' ? item.score : item.totalScore;
+
+  //     if (score !== currentScore) {
+  //       currentRank = index + 1;
+  //       currentScore = score;
+  //       sameRankCount = 0;
+  //     } else {
+  //       sameRankCount++;
+  //     }
+
+  //     return {
+  //       ...item,
+  //       rank: currentRank
+  //     };
+  //   });
+  // };
+
+  // // 현재 보여줄 데이터 선택
+  // const displayRankData = useMemo(() => {
+  //   const rawData = currentRoundData === 'thisRound'
+  //     ? thisRoundRankData
+  //     : totalRoundRankData;
+
+  //   return assignRankWithTies(rawData);
+  // }, [currentRoundData, thisRoundRankData, totalRoundRankData]);
 
   // 상태로 현재 라운드 선택 관리
   const [currentRoundData, setCurrentRoundData] = useState<
@@ -80,21 +144,37 @@ const RoundRank = ({
     }
   }, [router, params.roomId, currentRound]);
 
+  // TODO: ws 연동 시 사용
+  // gameState.scoreState를 사용하여 실제 데이터 활용
+  // const rankData = useMemo(() => {
+  //   if (!gameState.scoreState) return [];
+
+  //   return gameState.scoreState.submitCoordinates.map((coord, index) => ({
+  //     rank: index + 1,
+  //     name: coord.nickname,
+  //     score: coord.score,
+  //     totalScore: coord.totalScore
+  //   }));
+  // }, [gameState.scoreState]);
+
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-
       {/* 타이머와 게이지 */}
       {currentRound < maxRounds && (
         <Timer initialTime={15} onTimeEnd={handleNextRound} />
       )}
-
       <MapComponent
         mode="rank"
         answerCoordinate={MapDummyData.answerCoordinate}
         userCoordinates={MapDummyData.userCoordinates}
       />
-
+      {/* TODO: ws 연동 시 사용 */}
+      {/* <MapComponent
+      mode="rank"
+      answerCoordinate={gameState.scoreState?.answerCoordinate}
+      userCoordinates={gameState.scoreState?.submitCoordinates}
+    /> */}
       <RankList
         rankData={dummyData[currentRoundData]}
         handleToggle={handleToggle}
@@ -102,7 +182,12 @@ const RoundRank = ({
           currentRound >= maxRounds ? 'totalRound' : 'thisRound'
         }
       />
-
+      {/* TODO: ws 연동 시 사용 */}
+      {/* <RankList
+        rankData={displayRankData}
+        handleToggle={handleToggle}
+        initialActiveButton={currentRound >= maxRounds ? 'totalRound' : 'thisRound'}
+      /> */}
       {/* 버튼: 마지막 라운드나 3라운드일 경우 '최종 점수 확인' */}
       {currentRound >= maxRounds && (
         <Footer>
