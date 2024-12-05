@@ -24,7 +24,7 @@ import OnBoarding4 from '@/styles/Icon/OnBoarding4.svg';
 const OnBoarding = () => {
   const router = useRouter();
 
-  // TODO : 마지막 슬라이드에서 첫번째 슬라이드로 넘어갈 때 끊어지는 이슈
+  // TODO : 마지막 슬라이드에서 첫번째 슬라이드로 넘어갈 때 끊어지는 이슈 (fade 옵션으로 해결!)
   const settings = {
     dots: true, // 네비게이션 버튼
     infinite: true, // 무한 반복
@@ -36,6 +36,7 @@ const OnBoarding = () => {
     autoplaySpeed: 3000, // 3초마다 슬라이드 변경
     pauseOnHover: true, // 마우스 호버시 일시정지
     cssEase: 'linear', // 부드러운 전환
+    fade: true,
   };
 
   const slides = [

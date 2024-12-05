@@ -5,6 +5,7 @@ export const SwiperContainer = styled.div`
   width: calc(100% - 32px);
   margin: 0 auto;
   padding-top: 12px;
+  position: relative;
 `;
 
 export const StyledSwiperSlide = styled(SwiperSlide)`

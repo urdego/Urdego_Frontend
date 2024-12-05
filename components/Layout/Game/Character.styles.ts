@@ -30,8 +30,8 @@ export const CharacterWrapper = styled.div<{ animation?: string }>`
   img {
     width: auto;
     height: auto;
-    max-width: 80px;
-    max-height: 80px;
+    max-width: 120px;
+    max-height: 120px;
   }
 `;
 
@@ -47,7 +47,11 @@ export const Host = styled.div<{ isReady?: boolean }>`
   font-size: 12px;
   font-weight: 700;
   color: ${({ isReady }) =>
-    isReady ? `${colors.purple[50]}` : `${colors.purple[50]}`};
+    isReady ? `${colors.etc.white}` : `${colors.purple[50]}`};
+  background-color: ${({ isReady }) =>
+    isReady ? `${colors.purple[50]}` : `none`};
+  border-radius: 4px;
+  letter-spacing: -0.12px;
 `;
 
 export const Level = styled.span`

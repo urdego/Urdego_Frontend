@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 
 export const WaitingWrapper = styled.div`
-  background-color: ${colors.purple[98]};
+  background-color: ${colors.purple[95]};
   height: 100vh;
 `;
 

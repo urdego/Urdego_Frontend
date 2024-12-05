@@ -1,9 +1,8 @@
-import styled from "styled-components";
-import Image from 'next/image';
+import styled from 'styled-components';
 
-export const StyledImage = styled(Image)`
+export const StyledImage = styled.div`
   position: absolute;
-  bottom: 12px;
+  bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
 `;
