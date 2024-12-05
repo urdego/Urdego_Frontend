@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import SnowMan1 from '@/styles/Icon/SnowMan1.svg';
-import SnowMan2 from '@/styles/Icon/SnowMan2.svg';
-import SnowMan3 from '@/styles/Icon/SnowMan3.svg';
-import SnowMan4 from '@/styles/Icon/SnowMan4.svg';
-import SnowMan5 from '@/styles/Icon/SnowMan5.svg';
-import SnowMan6 from '@/styles/Icon/SnowMan6.svg';
+import Character0 from '@/styles/Icon/Character/character-0.svg';
+import Character1 from '@/styles/Icon/Character/character-1.svg';
+import Character2 from '@/styles/Icon/Character/character-2.svg';
+import Character3 from '@/styles/Icon/Character/character-3.svg';
+import Character4 from '@/styles/Icon/Character/character-4.svg';
+import Character5 from '@/styles/Icon/Character/character-5.svg';
 import {
   CharacterWrapper,
   CharactersContainer,
@@ -48,7 +48,14 @@ const Character = ({ users }: CharacterProps) => {
       id: user.id,
       level: `레벨 ${index + 1}`,
       nickname: user.name,
-      src: [SnowMan1, SnowMan2, SnowMan3, SnowMan4, SnowMan5, SnowMan6][index],
+      src: [
+        Character0,
+        Character1,
+        Character2,
+        Character3,
+        Character4,
+        Character5,
+      ][index],
       alt: `${index + 1}번 눈사람`,
       isHost: user.isHost,
       isReady: user.isReady,
@@ -65,7 +72,9 @@ const Character = ({ users }: CharacterProps) => {
               <Host>방장</Host>
             ) : char.isReady ? (
               <Host isReady>준비완료</Host>
-            ) : null}
+            ) : (
+              <Host>준비중..</Host>
+            )}
             <NicknameContainer>
               <Level>{char.level}</Level>
               <NickName>{char.nickname}</NickName>

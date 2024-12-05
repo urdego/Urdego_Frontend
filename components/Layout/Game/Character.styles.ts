@@ -10,7 +10,7 @@ export const CharactersContainer = styled.div`
   width: 100%;
   aspect-ratio: 1.2;
   max-width: 430px;
-  height: calc(100vh - 500px);
+  height: calc(100vh - 450px);
   margin: 0 auto;
   padding: 1rem;
   display: flex;
@@ -30,8 +30,8 @@ export const CharacterWrapper = styled.div<{ animation?: string }>`
   img {
     width: auto;
     height: auto;
-    max-width: 80px;
-    max-height: 80px;
+    min-width: 120px;
+    min-height: 120px;
   }
 `;
 
@@ -47,7 +47,11 @@ export const Host = styled.div<{ isReady?: boolean }>`
   font-size: 12px;
   font-weight: 700;
   color: ${({ isReady }) =>
-    isReady ? `${colors.purple[50]}` : `${colors.purple[50]}`};
+    isReady ? `${colors.etc.white}` : `${colors.purple[50]}`};
+  background-color: ${({ isReady }) =>
+    isReady ? `${colors.purple[50]}` : `none`};
+  border-radius: 4px;
+  letter-spacing: -0.12px;
 `;
 
 export const Level = styled.span`
