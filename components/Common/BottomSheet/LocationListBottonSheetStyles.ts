@@ -18,7 +18,7 @@ export const BackgroundOverlay = styled(motion.div)`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const BottomSheet = styled(motion.div)`
+export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -32,8 +32,10 @@ export const BottomSheet = styled(motion.div)`
   max-width: 430px;
   margin: 0 auto;
 
+  height: ${({ $isExpand }) => ($isExpand ? '100vh' : '50vh')};
+
   background: ${colors.etc.white};
-  border-radius: 4px 4px 0px 0px;
+  border-radius: ${({ $isExpand }) => ($isExpand ? '0' : '4px 4px 0px 0px')};
   padding: 12px 0 21px 0;
 
   will-change: transform;
@@ -71,12 +73,12 @@ export const ContentHeader = styled.div`
   line-height: 150%;
 `;
 
-export const ContentContainer = styled.div`
+export const ContentContainer = styled.div<{ $isExpand: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  height: 40vh;
+  height: ${({ $isExpand }) => ($isExpand ? `88vh` : '40vh')};
   gap: 12px;
   font-size: 14px;
   overflow-y: scroll;

@@ -52,9 +52,9 @@ const LocationListBottomSheet = ({
             animate={{ opacity: isVisible ? 1 : 0 }}
           />
           <BottomSheet
+            $isExpand={isExpand}
             initial={{ x: '-50%' }}
             animate={{ y: isVisible ? '0%' : '100%' }}
-            style={{ height: isExpand ? '100vh' : '50vh' }}
             transition={{ type: 'tween' }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
@@ -76,7 +76,7 @@ const LocationListBottomSheet = ({
             </HeaderWrapper>
             <ContentWrapper>
               <ContentHeader>저장한 장소 (999)</ContentHeader>
-              <ContentContainer>
+              <ContentContainer $isExpand={isExpand}>
                 <LocationList />
                 <LocationList />
                 <LocationList />
