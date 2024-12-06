@@ -9,8 +9,6 @@ import {
   HeaderHandler,
 } from './LocationListBottonSheetStyles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
-import axiosInstance from '@/lib/axios';
-import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
 interface LocationListBottomSheetProps {
   isVisible: boolean;
@@ -37,8 +35,8 @@ const LocationListBottomSheet = ({
         console.log('데이터를 가져오는 것에 실패했습니다!');
         return;
       }
-      console.log(data);
-      setLocationList(data);
+      console.log(data.userContents);
+      setLocationList(data.userContents);
     };
     if (isVisible) {
       getLocationList();
