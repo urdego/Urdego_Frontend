@@ -38,11 +38,13 @@ const LocationListBottomSheet = ({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.2}
             onDragEnd={(event, info) => {
-              const shouldClose = info.velocity.y > 5 || info.offset.y > 150;
-              if (shouldClose) {
+              const isScrollToBottom = info.delta.y > 5 || info.offset.y > 150;
+              if (isScrollToBottom) {
+                // 스크롤 아래로 내리는 경우
                 setIsExpand(false);
                 setLocationListVisible(false);
               } else {
+                // 스크롤 위로 올리는 경우
                 setIsExpand(true);
               }
             }}
@@ -50,7 +52,6 @@ const LocationListBottomSheet = ({
             <HeaderWrapper>
               <HeaderHandler />
             </HeaderWrapper>
-
             <ContentWrapper>
               <ContentHeader>저장한 장소 (999)</ContentHeader>
               <ContentContainer>

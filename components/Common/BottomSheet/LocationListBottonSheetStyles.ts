@@ -40,7 +40,7 @@ export const BottomSheet = styled(motion.div)`
   z-index: 999;
 `;
 
-export const ContentWrapper = styled(motion.div)`
+export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -55,7 +55,7 @@ export const HeaderWrapper = styled.div`
   align-items: center;
 `;
 
-export const HeaderHandler = styled(motion.div)`
+export const HeaderHandler = styled.div`
   width: 40px;
   height: 4px;
   border-radius: 100px;
@@ -71,7 +71,7 @@ export const ContentHeader = styled.div`
   line-height: 150%;
 `;
 
-export const ContentContainer = styled(motion.div)`
+export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
