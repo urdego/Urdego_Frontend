@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -9,6 +9,8 @@ import {
   HeaderHandler,
 } from './LocationListBottonSheetStyles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
+import axiosInstance from '@/lib/axios';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
 interface LocationListBottomSheetProps {
   isVisible: boolean;
@@ -20,6 +22,27 @@ const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
+  const [locationList, setLocationList] = useState({});
+
+  useEffect(() => {
+    const getLocationList = async () => {
+      const params = new URLSearchParams();
+      params.append('limit', (5).toString());
+      console.log(params.toString());
+
+      const nickname = 'min';
+      const response = await fetch(`/api/content/${nickname}?${params}`);
+      const data = await response.json();
+      if (!data) {
+        console.log('데이터를 가져오는 것에 실패했습니다!');
+        return;
+      }
+      setLocationList(data);
+    };
+    if (isVisible) {
+      getLocationList();
+    }
+  }, [isVisible]);
 
   return (
     <>
