@@ -17,6 +17,7 @@ export const LogoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 40px 0;
 `;
 
 export const LoginTitle = styled.div`

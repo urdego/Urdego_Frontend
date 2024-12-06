@@ -16,10 +16,10 @@ import {
 } from './onBoarding.styles';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import SnowMan1 from '@/styles/Icon/SnowMan1.svg';
+import OnBoarding1 from '@/styles/Icon/OnBoarding/OnBoarding1.svg';
 import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
-import OnBoarding3 from '@/styles/Icon/OnBoarding3.svg';
-import OnBoarding4 from '@/styles/Icon/OnBoarding4.svg';
+import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoarding3.gif';
+import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoarding4.gif';
 
 const OnBoarding = () => {
   const router = useRouter();
@@ -33,7 +33,7 @@ const OnBoarding = () => {
     slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 개수
     arrows: false, // 좌우 버튼 숨김
     autoplay: true, // 자동 재생 활성화
-    autoplaySpeed: 3000, // 3초마다 슬라이드 변경
+    autoplaySpeed: 10000, // 10초마다 슬라이드 변경
     pauseOnHover: true, // 마우스 호버시 일시정지
     cssEase: 'linear', // 부드러운 전환
     fade: true,
@@ -44,7 +44,7 @@ const OnBoarding = () => {
       title: '“어데고?!”',
       description: `가족, 커플, 친구들과 함께 방문했던 장소를 
 새롭게 추억하며 위치를 맞춰보세요!`,
-      image: SnowMan1,
+      image: OnBoarding1,
     },
     {
       title: '장소 등록하기',

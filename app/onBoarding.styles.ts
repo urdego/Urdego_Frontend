@@ -100,7 +100,6 @@ export const SlideDescription = styled.p`
 
 export const SlideImage = styled(Image)`
   width: 100%;
-
   max-height: 350px;
   height: 100%;
   object-fit: contain;
