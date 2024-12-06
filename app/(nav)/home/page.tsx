@@ -13,6 +13,8 @@ import useUserStore from '@/stores/useUserStore';
 import { toast } from 'react-hot-toast';
 import type { NotificationMessage } from '@/lib/types/notification';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Client } from '@stomp/stompjs';
+import useWebSocketStore from '@/stores/useWebSocketStore';
 
 interface InviteToastProps {
   message: string;
@@ -60,18 +62,142 @@ const handleRegularNotification = (notification: NotificationMessage) => {
     }
   );
 };
+//   notification: NotificationMessage,
+//   router: AppRouterInstance,
+//   addMessageFn: (message: any) => void
+// ) => {
+//   toast.custom(
+//     (t) => (
+//       <InviteToast
+//         message={`${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`}
+//         onAccept={async () => {
+//           const stompClient = new Client({
+//             brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
+//           });
+
+//           // 연결 시도 전에 이벤트 핸들러 설정
+//           stompClient.onConnect = () => {
+//             console.log('WebSocket 연결 성공');
+
+//             // 구독 설정
+//             const subscription = stompClient.subscribe(
+//               `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${notification.groupId}`,
+//               (message: { body: string }) => {
+//                 console.log('Received message:', message.body);
+//                 const parsedMessage = JSON.parse(message.body);
+//                 addMessageFn({
+//                   ...parsedMessage,
+//                   timestamp: Date.now(),
+//                 });
+//               }
+//             );
+//             console.log('구독 설정 완료');
+//           };
+
+//           stompClient.onConnect = () => {
+//             stompClient.subscribe(
+//               `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${notification.groupId}`,
+//               (message: { body: string }) => {
+//                 console.log('Received message:', message.body);
+//                 const parsedMessage = JSON.parse(message.body);
+//                 addMessageFn({
+//                   ...parsedMessage,
+//                   timestamp: Date.now(),
+//                 });
+//               }
+//             );
+//           };
+//           stompClient.activate();
+//           router.push(`/game/${notification.groupId}/waitingRoom`);
+//           toast.dismiss(t.id);
+//         }}
+//         onReject={() => {
+//           toast.dismiss(t.id);
+//         }}
+//         toastId={t.id}
+//       />
+//     ),
+//     {
+//       position: 'top-center',
+//       duration: 30000,
+//     }
+//   );
+// };
+// ... existing code ...
 
 const handleInvitation = (
   notification: NotificationMessage,
-  router: AppRouterInstance
+  router: AppRouterInstance,
+  addMessageFn: (message: any) => void
 ) => {
   toast.custom(
     (t) => (
       <InviteToast
         message={`${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`}
-        onAccept={() => {
-          router.push(`/game/${notification.groupId}/waitingRoom`);
-          toast.dismiss(t.id);
+        onAccept={async () => {
+          const stompClient = new Client({
+            brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
+            debug: (str) => {
+              console.log(str);
+            },
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+          });
+
+          stompClient.onConnect = () => {
+            console.log('Connected to the broker.');
+
+            // waitingRoom과 동일한 방식으로 구독 좀 해~~~
+            stompClient.subscribe(
+              `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${notification.groupId}`,
+              (message) => {
+                console.log('Received message:', message.body);
+                const parsedMessage = JSON.parse(message.body);
+                addMessageFn({
+                  ...parsedMessage,
+                  timestamp: Date.now(),
+                });
+              }
+            );
+
+            // 참가자 입장 이벤트 발행
+            const nickname = useUserStore.getState().nickname;
+            if (nickname) {
+              const participantEvent = {
+                eventType: 'PARTICIPANT',
+                data: {
+                  nickname: nickname,
+                  role: 'MEMBER',
+                },
+              };
+
+              stompClient.publish({
+                destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${notification.groupId}`,
+                body: JSON.stringify(participantEvent),
+              });
+            }
+          };
+
+          stompClient.onStompError = (frame) => {
+            console.error('Broker reported error:', frame.headers['message']);
+            console.error('Additional details:', frame.body);
+            toast.error('웹소켓 연결에 실패했습니다.');
+            stompClient.deactivate();
+          };
+
+          try {
+            if (!stompClient.active) {
+              await stompClient.activate();
+              console.log('WebSocket 활성화 성공');
+              router.push(`/game/${notification.groupId}/waitingRoom`);
+              toast.dismiss(t.id);
+            } else {
+              console.warn('WebSocket is already active.');
+            }
+          } catch (error) {
+            console.error('WebSocket 활성화 실패:', error);
+          }
         }}
         onReject={() => {
           toast.dismiss(t.id);
@@ -143,6 +269,7 @@ const Home = () => {
   const router = useRouter();
   const { email } = useUserStore();
   const { eventSource, setEventSource } = useSSEStore();
+  const addMessage = useWebSocketStore((state) => state.addMessage);
 
   useEffect(() => {
     let mounted = true;
@@ -176,7 +303,7 @@ const Home = () => {
                 const notification: NotificationMessage = JSON.parse(jsonStr);
 
                 if (notification.action?.includes('초대')) {
-                  handleInvitation(notification, router);
+                  handleInvitation(notification, router, addMessage);
                 } else {
                   handleRegularNotification(notification);
                 }
@@ -201,7 +328,7 @@ const Home = () => {
         setEventSource(null);
       }
     };
-  }, [email]);
+  }, [email, eventSource, router, setEventSource, addMessage]);
 
   return (
     <>
