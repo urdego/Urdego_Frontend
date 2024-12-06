@@ -1,32 +1,61 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Character from '@/components/Layout/Game/Character';
 import useLoadingStore from '@/stores/loadingStore';
+import useWebSocketStore, { User } from '@/stores/useWebSocketStore';
 
 const WaitingRoom = () => {
   const router = useRouter();
   const setLoading = useLoadingStore((state) => state.setLoading);
   const { roomId } = useParams();
+  const messages = useWebSocketStore((state) => state.messages);
+  const latestMessage = messages[messages.length - 1];
 
-  // 더미 유저 데이터 (데이터 변경하면서 테스트)
-  const dummyUsers = [
-    { id: 1, name: '눈사람', isHost: true, isReady: true },
-    { id: 2, name: '쪼꼬미', isHost: false, isReady: true },
-    { id: 3, name: '곽두팔씨', isHost: false, isReady: true },
-    { id: 4, name: '귀요미', isHost: false, isReady: true },
-    { id: 5, name: '군침이싹', isHost: false, isReady: true },
-    { id: 6, name: '강낭콩', isHost: false, isReady: true },
-  ];
+  const convertParticipants = (
+    participants: {
+      nickname: string;
+      status: string;
+      id: number;
+      isHost?: boolean;
+      ready?: boolean;
+    }[]
+  ) => {
+    return participants.map((participant, index: number) => ({
+      id: index + 1,
+      name: participant.nickname,
+      isHost: participant.isHost || false,
+      isReady: participant.ready || false,
+    }));
+  };
 
-  const [users, setUsers] = useState(dummyUsers);
+  useEffect(() => {
+    console.log('WebSocket Messages:', messages);
+    if (messages.length > 0) {
+      console.log(
+        '현재 참가 인원 리스트:',
+        messages[messages.length - 1].data.waitingRoomParticipants
+      );
+    }
+  }, [messages]);
+
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (latestMessage?.data.waitingRoomParticipants) {
+      const convertedUsers = convertParticipants(
+        latestMessage.data.waitingRoomParticipants
+      );
+      setUsers(convertedUsers);
+    }
+  }, [messages]);
 
   // 현재 로그인한 유저 (임시 설정)
-  const currentUser = { id: 1, name: '눈사람' }; // TODO: 인증 데이터와 연동 필요
+  const currentUser = { id: 1, name: users[0].name };
 
   // 현재 유저가 방장인지 확인
   const isHost = users.some(

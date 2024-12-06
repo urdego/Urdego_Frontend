@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
+import useWebSocketStore from '@/stores/useWebSocketStore';
 
 interface UserInfo {
   id: number;
@@ -33,6 +34,7 @@ const MakeRoomPage = () => {
   const router = useRouter();
   const nickname = useUserStore((state) => state.nickname);
   const setGameInfo = useGameStore((state) => state.setGameInfo);
+  const addMessage = useWebSocketStore((state) => state.addMessage);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRoomTitleEntered(!!e.target.value.trim());
@@ -91,6 +93,11 @@ const MakeRoomPage = () => {
         `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${groupId}`,
         (message) => {
           console.log('Received message:', message.body);
+          const parsedMessage = JSON.parse(message.body);
+          addMessage({
+            ...parsedMessage,
+            timestamp: Date.now(),
+          });
         }
       );
 
