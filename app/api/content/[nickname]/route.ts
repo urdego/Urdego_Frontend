@@ -2,9 +2,12 @@ import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ nickname: string }> }
+) {
   const searchParams = request.nextUrl.searchParams;
-  const nickname = 'min';
+  const nickname = (await params).nickname;
 
   try {
     const res = await axiosInstance.get(

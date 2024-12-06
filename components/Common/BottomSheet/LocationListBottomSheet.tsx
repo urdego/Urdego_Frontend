@@ -37,6 +37,7 @@ const LocationListBottomSheet = ({
         console.log('데이터를 가져오는 것에 실패했습니다!');
         return;
       }
+      console.log(data);
       setLocationList(data);
     };
     if (isVisible) {
