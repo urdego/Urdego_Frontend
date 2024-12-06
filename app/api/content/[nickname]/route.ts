@@ -8,6 +8,7 @@ export async function GET(
 ) {
   const searchParams = request.nextUrl.searchParams;
   const nickname = (await params).nickname;
+  console.log('params!!!!!!!' + searchParams);
 
   try {
     const res = await axiosInstance.get(

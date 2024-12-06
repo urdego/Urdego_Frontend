@@ -1,18 +1,38 @@
+import Image from 'next/image';
 import {
   LocationListWrapper,
-  LocationImage,
+  LocationImageContainer,
   LocationContainer,
   LocationTitle,
   LocationDetail,
 } from './LocationList.styles';
 
-const LocationList = () => {
+interface LocationListProps {
+  location: {
+    contentName: string;
+    hint: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    url: string;
+  };
+}
+
+const LocationList = ({ location }: LocationListProps) => {
   return (
     <LocationListWrapper>
-      <LocationImage />
+      <LocationImageContainer>
+        <Image
+          src={location?.url}
+          width={48}
+          height={48}
+          alt="Location Image"
+        />
+      </LocationImageContainer>
+
       <LocationContainer>
-        <LocationTitle>경복궁</LocationTitle>
-        <LocationDetail>서울 종로구 어쩌구 저쩌구</LocationDetail>
+        <LocationTitle>{location?.contentName}</LocationTitle>
+        <LocationDetail>{location?.address}</LocationDetail>
       </LocationContainer>
     </LocationListWrapper>
   );

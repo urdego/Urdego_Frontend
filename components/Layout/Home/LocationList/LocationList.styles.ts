@@ -1,4 +1,5 @@
 import colors from '@/styles/color/palette';
+import Image from 'next/image';
 import styled from 'styled-components';
 
 export const LocationListWrapper = styled.div`
@@ -7,10 +8,10 @@ export const LocationListWrapper = styled.div`
   gap: 16px;
 `;
 
-export const LocationImage = styled.div`
+export const LocationImageContainer = styled.div`
   width: 48px;
   height: 48px;
-  background: black;
+  /* background: black; */
 `;
 
 export const LocationContainer = styled.div`

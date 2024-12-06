@@ -20,13 +20,13 @@ const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [locationList, setLocationList] = useState({});
+  const [locationList, setLocationList] = useState([]);
 
   useEffect(() => {
     const getLocationList = async () => {
       const params = new URLSearchParams();
-      params.append('limit', (5).toString());
-      console.log(params.toString());
+      params.append('limit', (10).toString());
+      params.append('cursorIdx', (100).toString());
 
       const nickname = 'min';
       const response = await fetch(`/api/content/${nickname}?${params}`);
@@ -38,7 +38,11 @@ const LocationListBottomSheet = ({
       console.log(data.userContents);
       setLocationList(data.userContents);
     };
+
+    console.log('change');
+
     if (isVisible) {
+      console.log('open');
       getLocationList();
     }
   }, [isVisible]);
@@ -77,17 +81,10 @@ const LocationListBottomSheet = ({
             <ContentWrapper>
               <ContentHeader>저장한 장소 (999)</ContentHeader>
               <ContentContainer $isExpand={isExpand}>
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
-                <LocationList />
+                {locationList &&
+                  locationList.map((location, index) => (
+                    <LocationList key={`key+${index}`} location={location} />
+                  ))}
               </ContentContainer>
             </ContentWrapper>
           </BottomSheet>
