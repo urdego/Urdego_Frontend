@@ -1,5 +1,4 @@
 import colors from '@/styles/color/palette';
-import Image from 'next/image';
 import styled from 'styled-components';
 
 export const LocationListWrapper = styled.div`
@@ -9,9 +8,12 @@ export const LocationListWrapper = styled.div`
 `;
 
 export const LocationImageContainer = styled.div`
+  position: relative;
   width: 48px;
   height: 48px;
-  /* background: black; */
+  img {
+    border-radius: 4px;
+  }
 `;
 
 export const LocationContainer = styled.div`
