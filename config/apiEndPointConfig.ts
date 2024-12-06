@@ -22,6 +22,10 @@ export const API_URL_CONFIG = Object.freeze({
   GROUP: {
     CREATE: '/api/group-service/groups',
     CONNECT: '/group-service/connect',
+    WS_URL: {
+      PROD: 'wss://urdego.com/api/group-service/connect',
+      DEV: `ws://3.39.135.47:8083/group-service/connect`,
+    },
   },
   GAME: {
     SUBMIT_ANSWER: '/api/game-service/submissions',

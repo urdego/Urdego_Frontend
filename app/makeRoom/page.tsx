@@ -15,6 +15,7 @@ import useGameStore from '@/stores/useGameStores';
 import toast from 'react-hot-toast';
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
 interface UserInfo {
   id: number;
@@ -53,15 +54,33 @@ const MakeRoomPage = () => {
     isRoomTitleEntered && invitedFriends.length === selectedNumber - 1;
 
   const connectWebSocket = async (groupId: number) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const wsUrl = isProduction
+      ? API_URL_CONFIG.GROUP.WS_URL.PROD
+      : API_URL_CONFIG.GROUP.WS_URL.DEV;
+
     const stompClient = new Client({
-      brokerURL: 'ws://' + window.location.host + '/group-service/connect',
+      brokerURL: wsUrl,
       debug: (str) => {
-        // 프로토콜 버전 정보가 포함된 로그를 확인
         console.log('Debug:', str);
-        // CONNECT 프레임의 accept-version 헤더를 통해 버전 확인 가능
         if (str.includes('accept-version')) {
           console.log('Protocol versions:', str);
         }
+      },
+      connectHeaders: {
+        // 필요한 경우 연결 헤더 추가
+      },
+      onConnect: () => {
+        console.log('Connected to WebSocket');
+        // 연결 성공 후 처리 로직
+      },
+      onDisconnect: () => {
+        console.log('Disconnected from WebSocket');
+        // 연결 해제 후 처리 로직
+      },
+      onStompError: (frame) => {
+        console.error('STOMP error:', frame);
+        // 에러 처리 로직
       },
     });
 

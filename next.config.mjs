@@ -10,7 +10,11 @@ const nextConfig = {
     return [
       {
         source: '/group-service/:path*',
-        destination: 'http://3.39.135.47:8083/group-service/:path*', // ws:// 대신 http:// 사용
+        destination: `${
+          process.env.NODE_ENV === 'development'
+            ? 'http://3.39.135.47:8083/group-service/:path*' // 개발 환경
+            : 'https://urdego.com/api/group-service/:path*' // 프로덕션 환경
+        }`,
       },
     ];
   },
