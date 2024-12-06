@@ -1,24 +1,54 @@
 import { create } from 'zustand';
 
+interface User {
+  id: number;
+  name: string;
+  isHost: boolean;
+  isReady: boolean;
+}
+
 interface WebSocketMessage {
-  eventType: string;
-  data: any;
-  timestamp: number;
+  data: {
+    waitingRoomParticipants: {
+      nickname: string;
+      status: string;
+      id: number;
+    }[];
+    eventType?: 'PARTICIPANT' | 'READY' | 'START';
+    users?: User[];
+  };
 }
 
 interface WebSocketStore {
   messages: WebSocketMessage[];
+  users: User[];
   addMessage: (message: WebSocketMessage) => void;
   clearMessages: () => void;
+  setUsers: (users: User[]) => void;
 }
 
 const useWebSocketStore = create<WebSocketStore>((set) => ({
   messages: [],
-  addMessage: (message) =>
-    set((state) => ({
-      messages: [...state.messages, message],
-    })),
+  users: [],
+  addMessage: (message) => {
+    set((state) => {
+      const updatedUsers = message.data.waitingRoomParticipants.map(
+        (participant) => ({
+          id: participant.id,
+          name: participant.nickname,
+          isHost: participant.id === 1,
+          isReady: participant.status === 'ready',
+        })
+      );
+
+      return {
+        messages: [...state.messages, message],
+        users: updatedUsers,
+      };
+    });
+  },
   clearMessages: () => set({ messages: [] }),
+  setUsers: (users) => set({ users }),
 }));
 
 export default useWebSocketStore;
