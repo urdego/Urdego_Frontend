@@ -55,7 +55,7 @@ const WaitingRoom = () => {
   }, [messages]);
 
   // 현재 로그인한 유저 (임시 설정)
-  const currentUser = { id: 1, name: users[0].name };
+  const currentUser = { id: 1, name: users?.[0]?.name ?? 'hi' };
 
   // 현재 유저가 방장인지 확인
   const isHost = users.some(
