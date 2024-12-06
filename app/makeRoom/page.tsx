@@ -54,13 +54,15 @@ const MakeRoomPage = () => {
 
   const connectWebSocket = async (groupId: number) => {
     const stompClient = new Client({
-      brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
+      brokerURL: 'ws://' + window.location.host + '/group-service/connect',
       debug: (str) => {
-        console.log(str);
+        // 프로토콜 버전 정보가 포함된 로그를 확인
+        console.log('Debug:', str);
+        // CONNECT 프레임의 accept-version 헤더를 통해 버전 확인 가능
+        if (str.includes('accept-version')) {
+          console.log('Protocol versions:', str);
+        }
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
     stompClient.onConnect = () => {
