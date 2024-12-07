@@ -7,7 +7,7 @@ import {
   ContentWrapper,
   HeaderWrapper,
   HeaderHandler,
-} from './LocationListBottonSheetStyles';
+} from './LocationListBottonSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 
 interface LocationListBottomSheetProps {
