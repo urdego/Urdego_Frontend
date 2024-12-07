@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Client } from '@stomp/stompjs';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { Footer } from '@/app/makeRoom/makeRoom.styles';
@@ -15,7 +14,7 @@ import useGameStore from '@/stores/useGameStores';
 import toast from 'react-hot-toast';
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
-import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
+import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 
 interface UserInfo {
@@ -34,7 +33,6 @@ const MakeRoomPage = () => {
   const router = useRouter();
   const nickname = useUserStore((state) => state.nickname);
   const setGameInfo = useGameStore((state) => state.setGameInfo);
-  const addMessage = useWebSocketStore((state) => state.addMessage);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsRoomTitleEntered(!!e.target.value.trim());
@@ -55,94 +53,12 @@ const MakeRoomPage = () => {
   const isButtonEnabled =
     isRoomTitleEntered && invitedFriends.length === selectedNumber - 1;
 
-  const connectWebSocket = async (groupId: number) => {
-    const isProduction = process.env.NODE_ENV === 'production';
-    const wsUrl = isProduction
-      ? API_URL_CONFIG.GROUP.WS_URL.PROD
-      : API_URL_CONFIG.GROUP.WS_URL.DEV;
-
-    const stompClient = new Client({
-      brokerURL: wsUrl,
-      debug: (str) => {
-        console.log('Debug:', str);
-        if (str.includes('accept-version')) {
-          console.log('Protocol versions:', str);
-        }
-      },
-      connectHeaders: {
-        // 필요한 경우 연결 헤더 추가
-      },
-      onConnect: () => {
-        console.log('Connected to WebSocket');
-        // 연결 성공 후 처리 로직
-      },
-      onDisconnect: () => {
-        console.log('Disconnected from WebSocket');
-        // 연결 해제 후 처리 로직
-      },
-      onStompError: (frame) => {
-        console.error('STOMP error:', frame);
-        // 에러 처리 로직
-      },
-    });
-
-    stompClient.onConnect = () => {
-      console.log('Connected to the broker.');
-
-      stompClient.subscribe(
-        `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${groupId}`,
-        (message) => {
-          console.log('Received message:', message.body);
-          const parsedMessage = JSON.parse(message.body);
-          addMessage({
-            ...parsedMessage,
-            timestamp: Date.now(),
-          });
-        }
-      );
-
-      if (nickname) {
-        const participantEvent = {
-          eventType: 'PARTICIPANT',
-          data: {
-            nickname: nickname,
-            role: 'MANAGER',
-          },
-        };
-
-        stompClient.publish({
-          destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${groupId}`,
-          body: JSON.stringify(participantEvent),
-        });
-
-        router.push(`/game/${groupId}/waitingRoom`);
-      } else {
-        toast.error('닉네임 정보를 찾을 수 없습니다.');
-        stompClient.deactivate();
-        return;
-      }
-    };
-
-    stompClient.onStompError = (frame) => {
-      console.error('Broker reported error:', frame.headers['message']);
-      console.error('Additional details:', frame.body);
-      toast.error('웹소켓 연결에 실패했습니다.');
-      stompClient.deactivate();
-    };
-
-    if (!stompClient.active) {
-      stompClient.activate();
-    } else {
-      console.warn('WebSocket is already active.');
-    }
-  };
-
   const handleCreateRoom = async () => {
     if (!titleInputRef.current?.value || !nickname) return;
 
     setIsLoading(true);
     try {
-      const requestData = {
+      const roomData = {
         title: titleInputRef.current.value,
         maxPlayers: selectedNumber,
         rounds,
@@ -151,11 +67,16 @@ const MakeRoomPage = () => {
         invitedFriends: invitedFriends.map((friend) => friend.nickname),
       };
 
-      console.log('Sending request with data:', requestData);
-      const { data } = await axiosInstance.post('/api/makeRoom', requestData);
+      const { data } = await axiosInstance.post('/api/makeRoom', roomData);
+
+      // 방장 정보 저장
+      useWebSocketStore.getState().setHostNickname(nickname);
 
       setGameInfo(data.groupId, data.gameId);
-      await connectWebSocket(data.groupId);
+      const wsClient = WaitingRoomWebSocket.getInstance();
+      await wsClient.connect(data.groupId, true);
+
+      router.push(`/game/${data.groupId}/waitingRoom`);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error('Error details:', error.response?.data);
