@@ -99,6 +99,6 @@ export const NoContentText = styled.div<{ $isExpand: boolean }>`
 
 export const IntersectionObserverArea = styled.div`
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   background: black;
 `;

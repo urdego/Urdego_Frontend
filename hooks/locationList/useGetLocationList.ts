@@ -12,12 +12,21 @@ interface LocationListType {
   userContents: LocationType[];
 }
 
-const useGetLocationlist = (isVisible: boolean) => {
+interface useGetLocationListProps {
+  isVisible: boolean;
+  intersectionObserverTarget: React.RefObject<HTMLElement>;
+}
+
+const useGetLocationlist = ({
+  isVisible,
+  intersectionObserverTarget,
+}: useGetLocationListProps) => {
   const [locationList, setLocationList] = useState<LocationListType>({
     totalContentsCount: 0,
     userContents: [],
   });
-  const { nickname } = useUserStore();
+  //   const { nickname } = useUserStore(); //TODO: 사용하도록 변경
+  const nickname = 'min'; //! test를 위한 용도
 
   useEffect(() => {
     const getLocationList = async () => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -9,7 +9,7 @@ import {
   HeaderHandler,
   NoContentText,
   IntersectionObserverArea,
-} from './LocationListBottonSheet.styles';
+} from './LocationListBottomSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 import useGetLocationlist from '@/hooks/locationList/useGetLocationList';
 
@@ -23,8 +23,12 @@ const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
+  const intersectionObserverTarget = useRef(null);
 
-  const { locationList } = useGetLocationlist(isVisible);
+  const { locationList } = useGetLocationlist({
+    isVisible,
+    intersectionObserverTarget,
+  });
 
   return (
     <>
@@ -70,7 +74,7 @@ const LocationListBottomSheet = ({
                   {locationList.userContents.map((location, index) => (
                     <LocationList key={`key+${index}`} location={location} />
                   ))}
-                  <IntersectionObserverArea />
+                  <IntersectionObserverArea ref={intersectionObserverTarget} />
                 </ContentContainer>
               ) : (
                 <NoContentText $isExpand={isExpand}>
