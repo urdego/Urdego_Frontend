@@ -8,6 +8,7 @@ import {
   HeaderWrapper,
   HeaderHandler,
   NoContentText,
+  IntersectionObserverArea,
 } from './LocationListBottonSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 import useGetLocationlist from '@/hooks/locationList/useGetLocationList';
@@ -69,6 +70,7 @@ const LocationListBottomSheet = ({
                   {locationList.userContents.map((location, index) => (
                     <LocationList key={`key+${index}`} location={location} />
                   ))}
+                  <IntersectionObserverArea />
                 </ContentContainer>
               ) : (
                 <NoContentText $isExpand={isExpand}>

@@ -96,3 +96,9 @@ export const NoContentText = styled.div<{ $isExpand: boolean }>`
   height: ${({ $isExpand }) => ($isExpand ? `88vh` : '40vh')};
   font-size: 14px;
 `;
+
+export const IntersectionObserverArea = styled.div`
+  width: 100%;
+  height: 40px;
+  background: black;
+`;

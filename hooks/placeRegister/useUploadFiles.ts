@@ -1,9 +1,11 @@
 import axiosInstance from '@/lib/axios';
 import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
+import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
+  const { nickname } = useUserStore();
 
   const handleUploadFiles = async () => {
     try {
@@ -40,7 +42,7 @@ const useUploadFiles = () => {
 
     // 장소명, 장소 위경도, 힌트 등록
     const params = new URLSearchParams();
-    params.append('userId', '1'); // TODO: nickname으로 변경
+    params.append('nickname', nickname || '');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
     params.append('address', place.address || '');
