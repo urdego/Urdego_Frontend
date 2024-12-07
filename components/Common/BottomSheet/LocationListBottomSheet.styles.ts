@@ -99,6 +99,15 @@ export const NoContentText = styled.div<{ $isExpand: boolean }>`
 
 export const IntersectionObserverArea = styled.div`
   width: 100%;
+  min-height: 100px;
+  visibility: hidden;
+`;
+
+export const LoadingText = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
   min-height: 40px;
-  background: black;
+  font-size: 16px;
 `;

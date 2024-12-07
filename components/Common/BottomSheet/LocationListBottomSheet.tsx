@@ -9,9 +9,10 @@ import {
   HeaderHandler,
   NoContentText,
   IntersectionObserverArea,
+  LoadingText,
 } from './LocationListBottomSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
-import useGetLocationlist from '@/hooks/locationList/useGetLocationList';
+import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
 
 interface LocationListBottomSheetProps {
@@ -23,7 +24,8 @@ const LocationListBottomSheet = ({
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
 
-  const { locationList, totalCount, loadMore } = useGetLocationlist();
+  const { locationList, totalCount, isInitialLoad, isLoading, loadMore } =
+    useGetInfiniteLocationList();
   const targetElementRef = useIntersectionObserver({
     onIntersect: () => {
       loadMore();
@@ -64,13 +66,16 @@ const LocationListBottomSheet = ({
               {locationList.map((location, index) => (
                 <LocationList key={`key+${index}`} location={location} />
               ))}
-              <IntersectionObserverArea ref={targetElementRef} />
+              {isLoading && <LoadingText>장소를 불러오는중...🔍</LoadingText>}
+              {!isLoading && !isInitialLoad && (
+                <IntersectionObserverArea ref={targetElementRef} />
+              )}
+              {!isInitialLoad && locationList.length === 0 && (
+                <NoContentText $isExpand={isExpand}>
+                  올린 장소가 없습니다. 장소를 등록해주세요! 😊
+                </NoContentText>
+              )}
             </ContentContainer>
-            {locationList.length === 0 && (
-              <NoContentText $isExpand={isExpand}>
-                올린 장소가 없습니다. 장소를 등록해주세요! 😊
-              </NoContentText>
-            )}
           </ContentWrapper>
         </BottomSheet>
       </>

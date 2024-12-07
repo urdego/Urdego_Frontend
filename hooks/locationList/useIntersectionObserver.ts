@@ -17,7 +17,7 @@ const useIntersectionObserver = ({
         entries.forEach((entry) => entry.isIntersecting && onIntersect());
       },
       {
-        threshold: 0.5,
+        threshold: 0.3,
       }
     );
 
