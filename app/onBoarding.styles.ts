@@ -68,7 +68,7 @@ export const SlideContent = styled.div`
 
 export const ImageWrapper = styled.div<{ $isSecondSlide?: boolean }>`
   width: 100%;
-  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '60px' : '0')};
+  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '0px' : '0')};
 `;
 
 export const TextWrapper = styled.div<{ $isFirstSlide?: boolean }>`
@@ -100,10 +100,12 @@ export const SlideDescription = styled.p`
 
 export const SlideImage = styled(Image)`
   width: 100%;
-
+  max-width: 300px;
   max-height: 350px;
   height: 100%;
+  min-height: 450px;
   object-fit: contain;
+  margin: 0 auto;
 `;
 
 export const ButtonContainer = styled.div`

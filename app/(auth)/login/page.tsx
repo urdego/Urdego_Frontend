@@ -6,11 +6,12 @@ import toast from 'react-hot-toast';
 import axiosInstance from '@/lib/axios';
 import {
   LoginWrapper,
-  LoginTitle,
   ButtonSignupWrapper,
   LogoContainer,
 } from '@/app/(auth)/login/Login.styles';
-import LoginLogo from '@layout/Login/LoginLogo';
+import Logo from '@/styles/Icon/Logo.svg';
+// import MainLayout from '@/styles/Icon/mainLayout.svg'; // 용량이 너무 크다. . .
+import Image from 'next/image';
 import Input from '@common/Input/Input';
 import AutoLoginCheckbox from '@layout/Login/AutoLogin';
 import Button from '@common/Button/Button';
@@ -123,8 +124,8 @@ const Login = () => {
   return (
     <LoginWrapper>
       <LogoContainer>
-        <LoginLogo src="" />
-        <LoginTitle>Where am I?</LoginTitle>
+        <Image src={Logo} alt="logo" />
+        {/* <Image src={MainLayout} alt="mainLayout" /> */}
       </LogoContainer>
       <form onSubmit={handleLogin} autoComplete="off">
         <Input

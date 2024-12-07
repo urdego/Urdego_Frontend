@@ -25,48 +25,48 @@ interface CharacterProps {
 }
 
 const positions = [
+  { top: '30%', left: '20%' },
   { top: '10%', left: '50%' },
   { top: '30%', left: '80%' },
-  { top: '70%', left: '70%' },
-  { top: '90%', left: '30%' },
-  { top: '60%', left: '10%' },
-  { top: '20%', left: '20%' },
+  { top: '50%', left: '40%' },
+  { top: '80%', left: '30%' },
+  { top: '100%', left: '60%' },
 ];
 
 const Character = ({ users }: CharacterProps) => {
   const characters = users.map((user, index) => {
-    // 타원형 배치를 위한 계산
-    const angle = (index * 360) / users.length;
-    const horizontalRadius = 35; // 가로 반지름 (더 작게)
-    const verticalRadius = 45; // 세로 반지름 (더 크게)
-
-    // 타원형 좌표 계산
-    const x = 50 + horizontalRadius * Math.cos((angle * Math.PI) / 180);
-    const y = 50 + verticalRadius * Math.sin((angle * Math.PI) / 180);
-
     return {
       id: user.id,
-      level: `레벨 ${index + 1}`,
+      level: '레벨 1',
       nickname: user.name,
       src: [
-        Character0,
-        Character1,
-        Character2,
-        Character3,
-        Character4,
         Character5,
+        Character4,
+        Character3,
+        Character2,
+        Character1,
+        Character0,
       ][index],
       alt: `${index + 1}번 눈사람`,
       isHost: user.isHost,
       isReady: user.isReady,
-      position: { left: `${x}%`, top: `${y}%` },
+      position: positions[index],
     };
   });
 
   return (
     <CharactersContainer>
       {characters.map((char) => (
-        <CharacterWrapper key={char.id} style={char.position} animation="slide">
+        <CharacterWrapper
+          key={char.id}
+          style={{
+            ...char.position,
+            width: '350px',
+            height: '280px',
+            position: 'absolute',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
           <InfoWrapper>
             {char.isHost ? (
               <Host>방장</Host>

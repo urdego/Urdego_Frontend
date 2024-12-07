@@ -17,6 +17,8 @@ export const LogoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* gap: 20px; // svg 넣을 경우 추가하기 */
+  margin: 40px 0;
 `;
 
 export const LoginTitle = styled.div`
