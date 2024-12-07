@@ -87,3 +87,12 @@ export const ContentContainer = styled.div<{ $isExpand: boolean }>`
     display: none;
   }
 `;
+
+export const NoContentText = styled.div<{ $isExpand: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: ${({ $isExpand }) => ($isExpand ? `88vh` : '40vh')};
+  font-size: 14px;
+`;

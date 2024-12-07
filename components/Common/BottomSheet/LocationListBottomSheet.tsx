@@ -7,6 +7,7 @@ import {
   ContentWrapper,
   HeaderWrapper,
   HeaderHandler,
+  NoContentText,
 } from './LocationListBottonSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 import useGetLocationlist from '@/hooks/locationList/useGetLocationList';
@@ -57,14 +58,23 @@ const LocationListBottomSheet = ({
             </HeaderWrapper>
             <ContentWrapper>
               <ContentHeader>
-                저장한 장소 ({locationList?.totalContents})
+                올린 장소 (
+                {locationList.totalContentsCount
+                  ? locationList.totalContentsCount
+                  : '0'}
+                )
               </ContentHeader>
-              <ContentContainer $isExpand={isExpand}>
-                {locationList &&
-                  locationList.userContents.map((location, index) => (
+              {locationList.userContents.length !== 0 ? (
+                <ContentContainer $isExpand={isExpand}>
+                  {locationList.userContents.map((location, index) => (
                     <LocationList key={`key+${index}`} location={location} />
                   ))}
-              </ContentContainer>
+                </ContentContainer>
+              ) : (
+                <NoContentText $isExpand={isExpand}>
+                  올린 장소가 없습니다. 장소를 등록해주세요! 😊
+                </NoContentText>
+              )}
             </ContentWrapper>
           </BottomSheet>
         </>

@@ -8,14 +8,13 @@ interface LocationType {
 }
 
 interface LocationListType {
-  totalContents: number;
-
+  totalContentsCount: number;
   userContents: LocationType[];
 }
 
 const useGetLocationlist = (isVisible: boolean) => {
   const [locationList, setLocationList] = useState<LocationListType>({
-    totalContents: 0,
+    totalContentsCount: 0,
     userContents: [],
   });
   const { nickname } = useUserStore();
@@ -34,7 +33,7 @@ const useGetLocationlist = (isVisible: boolean) => {
       }
       console.log(data);
       setLocationList({
-        totalContents: data.totalContent,
+        totalContentsCount: data.totalContent,
         userContents: data.userContents,
       });
     };
