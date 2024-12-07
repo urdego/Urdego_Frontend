@@ -1,59 +1,77 @@
-import useUserStore from '@/stores/useUserStore';
-import { useEffect, useState } from 'react';
+// import useUserStore from '@/stores/useUserStore';
+import { useState } from 'react';
 
-interface LocationType {
+interface Location {
   contentName: string;
   address: string;
   url: string;
 }
 
-interface LocationListType {
-  totalContentsCount: number;
-  userContents: LocationType[];
+interface GetLocationListResponse {
+  userId: number;
+  userContents: [
+    {
+      userId: number;
+      contentId: number;
+      url: string;
+      contentName: string;
+      address: string;
+      latitude: number;
+      longitude: number;
+      hint: string;
+      contentInfo: {
+        contentType: string;
+        metaLatitude: number;
+        metaLongitude: number;
+        size: number;
+      };
+    },
+  ];
+  cursorIdx: number;
+  totalContent: number;
 }
 
-interface useGetLocationListProps {
-  isVisible: boolean;
-  intersectionObserverTarget: React.RefObject<HTMLElement>;
-}
+const useGetLocationlist = () => {
+  const [locationList, setLocationList] = useState<Location[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [cursorIdx, setCursorIdx] = useState<number | null>(null);
+  const [isLoadMore, setIsLoadMore] = useState(true);
 
-const useGetLocationlist = ({
-  isVisible,
-  intersectionObserverTarget,
-}: useGetLocationListProps) => {
-  const [locationList, setLocationList] = useState<LocationListType>({
-    totalContentsCount: 0,
-    userContents: [],
-  });
-  //   const { nickname } = useUserStore(); //TODO: 사용하도록 변경
-  const nickname = 'min'; //! test를 위한 용도
+  const loadMore = async () => {
+    if (!isLoadMore) return;
 
-  useEffect(() => {
-    const getLocationList = async () => {
-      const params = new URLSearchParams();
-      params.append('limit', (10).toString());
-      // params.append('cursorIdx', (100).toString());
-
-      const response = await fetch(`/api/content/${nickname}?${params}`);
-      const data = await response.json();
-      if (!data) {
-        console.log('데이터를 가져오는 것에 실패했습니다!');
-        return;
-      }
-      console.log(data);
-      setLocationList({
-        totalContentsCount: data.totalContent,
-        userContents: data.userContents,
-      });
-    };
-
-    if (isVisible) {
-      getLocationList();
+    const params = new URLSearchParams();
+    params.append('limit', (10).toString());
+    console.log('cursor: ' + cursorIdx);
+    if (cursorIdx) {
+      params.append('cursorIdx', cursorIdx.toString());
     }
-  }, [isVisible]);
+
+    //   const { nickname } = useUserStore(); //TODO: 사용하도록 변경
+    const nickname = 'min'; //! test를 위한 용도
+
+    const response = await fetch(`/api/content/${nickname}?${params}`);
+    const data: GetLocationListResponse = await response.json();
+    if (!data) {
+      console.log('데이터를 가져오는 것에 실패했습니다!');
+      return;
+    }
+    // console.log(data);
+    setLocationList((prev) => [...prev, ...data.userContents]);
+    if (data.totalContent) {
+      setTotalCount(data.totalContent);
+    }
+    console.log(data.cursorIdx);
+    setCursorIdx(data.cursorIdx);
+    if (!data.cursorIdx) {
+      setIsLoadMore(false);
+    }
+  };
 
   return {
     locationList,
+    totalCount,
+    loadMore,
   };
 };
 

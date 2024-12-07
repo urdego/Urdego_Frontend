@@ -292,10 +292,11 @@ const Home = () => {
           </Link>
           <ChannelButton title="랭킹 게임" />
         </ChannelWrapper>
-        <LocationListBottomSheet
-          isVisible={isLocationListVisible}
-          setLocationListVisible={setLocationListVisible}
-        />
+        {isLocationListVisible && (
+          <LocationListBottomSheet
+            setLocationListVisible={setLocationListVisible}
+          />
+        )}
       </HomePageWrapper>
     </>
   );
