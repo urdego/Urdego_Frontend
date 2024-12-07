@@ -8,14 +8,7 @@ import {
 } from './LocationList.styles';
 
 interface LocationListProps {
-  location: {
-    contentName: string;
-    hint: string;
-    address: string;
-    latitude: number;
-    longitude: number;
-    url: string;
-  };
+  location: { contentName: string; address: string; url: string };
 }
 
 const LocationList = ({ location }: LocationListProps) => {

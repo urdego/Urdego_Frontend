@@ -15,12 +15,26 @@ interface LocationListBottomSheetProps {
   setLocationListVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface LocationListType {
+  totalContents: number;
+  userContents: LocationType[];
+}
+
+interface LocationType {
+  contentName: string;
+  address: string;
+  url: string;
+}
+
 const LocationListBottomSheet = ({
   isVisible,
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [locationList, setLocationList] = useState([]);
+  const [locationList, setLocationList] = useState<LocationListType>({
+    totalContents: 0,
+    userContents: [],
+  });
 
   useEffect(() => {
     const getLocationList = async () => {
@@ -35,8 +49,11 @@ const LocationListBottomSheet = ({
         console.log('데이터를 가져오는 것에 실패했습니다!');
         return;
       }
-      console.log(data.userContents);
-      setLocationList(data.userContents);
+      console.log(data);
+      setLocationList({
+        totalContents: data.totalContent,
+        userContents: data.userContents,
+      });
     };
 
     console.log('change');
@@ -79,10 +96,12 @@ const LocationListBottomSheet = ({
               <HeaderHandler />
             </HeaderWrapper>
             <ContentWrapper>
-              <ContentHeader>저장한 장소 (999)</ContentHeader>
+              <ContentHeader>
+                저장한 장소 ({locationList?.totalContents})
+              </ContentHeader>
               <ContentContainer $isExpand={isExpand}>
                 {locationList &&
-                  locationList.map((location, index) => (
+                  locationList.userContents.map((location, index) => (
                     <LocationList key={`key+${index}`} location={location} />
                   ))}
               </ContentContainer>
