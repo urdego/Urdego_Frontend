@@ -10,6 +10,7 @@ import useLoadingStore from '@/stores/loadingStore';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStores';
 
 const WaitingRoom = () => {
   const router = useRouter();
@@ -20,13 +21,22 @@ const WaitingRoom = () => {
   const latestMessage = messages[messages.length - 1];
 
   useEffect(() => {
-    if (latestMessage?.data.waitingRoomParticipants) {
+    if ('waitingRoomParticipants' in latestMessage?.data) {
       console.log(
         '현재 참가 인원 리스트:',
         latestMessage.data.waitingRoomParticipants
       );
     }
-  }, [latestMessage]);
+
+    // Handle game start message from backend
+    if (
+      'action' in latestMessage?.data &&
+      latestMessage.data.action === 'startGame'
+    ) {
+      console.log('Game start message received:', latestMessage.data);
+      router.push(`/game/${roomId}/1`);
+    }
+  }, [latestMessage, roomId, router]);
 
   // 현재 로그인한 유저 찾기
   const currentUser = users.find((user) => user.name === nickname);
@@ -59,10 +69,15 @@ const WaitingRoom = () => {
 
   // 게임 시작 핸들러 (MANAGER만 가능)
   const startGame = () => {
-    if (isManager && users.length >= 2 && allPlayersReady) {
-      setLoading(true);
-      router.push(`/game/${roomId}/1`);
-    }
+    const wsClient = WaitingRoomWebSocket.getInstance();
+    const groupId = useGameStore.getState().groupId;
+
+    wsClient.sendEvent({
+      eventType: 'START',
+      data: {
+        gameId: groupId?.toString(),
+      },
+    });
   };
 
   return (
