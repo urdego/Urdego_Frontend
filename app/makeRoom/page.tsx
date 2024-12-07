@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import axiosInstance from '@/lib/axios';
 import axios from 'axios';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
+import useWebSocketStore from '@/stores/useWebSocketStore';
 
 interface UserInfo {
   id: number;
@@ -66,11 +67,12 @@ const MakeRoomPage = () => {
         invitedFriends: invitedFriends.map((friend) => friend.nickname),
       };
 
-      console.log('Sending request with data:', roomData);
       const { data } = await axiosInstance.post('/api/makeRoom', roomData);
 
-      setGameInfo(data.groupId, data.gameId);
+      // 방장 정보 저장
+      useWebSocketStore.getState().setHostNickname(nickname);
 
+      setGameInfo(data.groupId, data.gameId);
       const wsClient = WaitingRoomWebSocket.getInstance();
       await wsClient.connect(data.groupId, true);
 

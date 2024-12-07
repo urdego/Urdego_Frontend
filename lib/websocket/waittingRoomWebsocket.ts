@@ -16,6 +16,7 @@ class WaitingRoomWebSocket {
   private static instance: WaitingRoomWebSocket;
   private stompClient: Client | null = null;
   private groupId: number | null = null;
+  private isManager: boolean = false; // 역할 상태 저장용 멤버 변수 추가
 
   private constructor() {}
 
@@ -31,6 +32,9 @@ class WaitingRoomWebSocket {
     isManager: boolean = false
   ): Promise<boolean> {
     this.groupId = groupId;
+    this.isManager = isManager; // 연결 시 역할 저장
+    console.log('Connecting as:', this.isManager ? 'MANAGER' : 'MEMBER');
+
     const isProduction = process.env.NODE_ENV === 'production';
     const wsUrl = isProduction
       ? API_URL_CONFIG.GROUP.WS_URL.PROD
@@ -55,7 +59,7 @@ class WaitingRoomWebSocket {
       this.stompClient.onConnect = () => {
         console.log('Connected to WebSocket');
         this.setupSubscription();
-        this.sendParticipantEvent(isManager);
+        this.sendParticipantEvent();
         resolve(true);
       };
 
@@ -93,6 +97,7 @@ class WaitingRoomWebSocket {
 
   public sendEvent(event: WebSocketEvent): void {
     if (this.stompClient?.active && this.groupId) {
+      console.log('Sending event:', event);
       this.stompClient.publish({
         destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${this.groupId}`,
         body: JSON.stringify(event),
@@ -100,7 +105,7 @@ class WaitingRoomWebSocket {
     }
   }
 
-  private sendParticipantEvent(isManager: boolean): void {
+  private sendParticipantEvent(): void {
     if (!this.stompClient?.active || !this.groupId) return;
 
     const nickname = useUserStore.getState().nickname;
@@ -110,15 +115,17 @@ class WaitingRoomWebSocket {
       return;
     }
 
+    console.log('Current role status:', this.isManager ? 'MANAGER' : 'MEMBER');
+
     const participantEvent = {
       eventType: 'PARTICIPANT',
       data: {
         nickname: nickname,
-        role: isManager ? 'MANAGER' : 'MEMBER',
+        role: this.isManager ? 'MANAGER' : 'MEMBER',
       },
     };
 
-    console.log('Sending participant event:', participantEvent); // 로그 추가
+    console.log('Sending participant event:', participantEvent);
 
     this.stompClient.publish({
       destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${this.groupId}`,
@@ -130,12 +137,17 @@ class WaitingRoomWebSocket {
     if (this.stompClient?.active) {
       this.stompClient.deactivate();
       this.groupId = null;
+      this.isManager = false;
       console.log('Disconnected from WebSocket');
     }
   }
 
   public isConnected(): boolean {
     return !!this.stompClient?.active;
+  }
+
+  public getRole(): 'MANAGER' | 'MEMBER' {
+    return this.isManager ? 'MANAGER' : 'MEMBER';
   }
 }
 

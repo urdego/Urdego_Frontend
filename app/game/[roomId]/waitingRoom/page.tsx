@@ -15,50 +15,34 @@ const WaitingRoom = () => {
   const router = useRouter();
   const setLoading = useLoadingStore((state) => state.setLoading);
   const { roomId } = useParams();
-  const { messages, users, setUsers } = useWebSocketStore();
+  const { messages, users } = useWebSocketStore();
+  const nickname = useUserStore((state) => state.nickname);
   const latestMessage = messages[messages.length - 1];
 
   useEffect(() => {
     if (latestMessage?.data.waitingRoomParticipants) {
-      const participants = latestMessage.data.waitingRoomParticipants;
-      console.log('받은 메시지:', latestMessage);
-
-      const updatedUsers = participants.map((participant) => {
-        const isManager = participant.role === 'MANAGER';
-        return {
-          id: participant.id,
-          name: participant.nickname,
-          role: participant.role || 'MEMBER',
-          isHost: isManager,
-          isReady: participant.status === 'Ready' || isManager, // MANAGER는 항상 준비된 상태
-        };
-      });
-
-      console.log('변환된 유저 정보:', updatedUsers);
-      setUsers(updatedUsers);
+      console.log(
+        '현재 참가 인원 리스트:',
+        latestMessage.data.waitingRoomParticipants
+      );
     }
-  }, [latestMessage, setUsers]);
+  }, [latestMessage]);
 
-  // 현재 로그인한 유저 찾기 (nickname으로 찾도록 수정)
-  const nickname = useUserStore((state) => state.nickname);
+  // 현재 로그인한 유저 찾기
   const currentUser = users.find((user) => user.name === nickname);
-
-  console.log('현재 유저 정보:', currentUser);
+  console.log('Current user:', currentUser);
 
   // 현재 유저의 역할 확인
   const isManager = currentUser?.role === 'MANAGER';
-  console.log('isManager:', isManager);
+  console.log('Is manager:', isManager);
 
   // 준비 상태 토글 핸들러
   const toggleReady = () => {
     if (!currentUser) return;
 
-    console.log('준비 상태 토글 전 상태:', {
-      nickname: currentUser.name,
-      currentStatus: currentUser.isReady ? 'Ready' : 'notReady',
-    });
-
     const wsClient = WaitingRoomWebSocket.getInstance();
+    console.log('Toggling ready status. Current status:', currentUser.isReady);
+
     wsClient.sendEvent({
       eventType: 'READY',
       data: {
