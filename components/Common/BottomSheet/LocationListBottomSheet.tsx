@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -9,21 +9,11 @@ import {
   HeaderHandler,
 } from './LocationListBottonSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
+import useGetLocationlist from '@/hooks/locationList/useGetLocationList';
 
 interface LocationListBottomSheetProps {
   isVisible: boolean;
   setLocationListVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-interface LocationListType {
-  totalContents: number;
-  userContents: LocationType[];
-}
-
-interface LocationType {
-  contentName: string;
-  address: string;
-  url: string;
 }
 
 const LocationListBottomSheet = ({
@@ -31,38 +21,8 @@ const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [locationList, setLocationList] = useState<LocationListType>({
-    totalContents: 0,
-    userContents: [],
-  });
 
-  useEffect(() => {
-    const getLocationList = async () => {
-      const params = new URLSearchParams();
-      params.append('limit', (100).toString());
-      // params.append('cursorIdx', (100).toString());
-
-      const nickname = 'min';
-      const response = await fetch(`/api/content/${nickname}?${params}`);
-      const data = await response.json();
-      if (!data) {
-        console.log('데이터를 가져오는 것에 실패했습니다!');
-        return;
-      }
-      console.log(data);
-      setLocationList({
-        totalContents: data.totalContent,
-        userContents: data.userContents,
-      });
-    };
-
-    console.log('change');
-
-    if (isVisible) {
-      console.log('open');
-      getLocationList();
-    }
-  }, [isVisible]);
+  const { locationList } = useGetLocationlist(isVisible);
 
   return (
     <>
