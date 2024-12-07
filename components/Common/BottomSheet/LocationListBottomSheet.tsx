@@ -25,8 +25,8 @@ const LocationListBottomSheet = ({
   useEffect(() => {
     const getLocationList = async () => {
       const params = new URLSearchParams();
-      params.append('limit', (10).toString());
-      params.append('cursorIdx', (100).toString());
+      params.append('limit', (100).toString());
+      // params.append('cursorIdx', (100).toString());
 
       const nickname = 'min';
       const response = await fetch(`/api/content/${nickname}?${params}`);

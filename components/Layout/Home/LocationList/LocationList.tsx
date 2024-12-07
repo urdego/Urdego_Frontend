@@ -24,9 +24,10 @@ const LocationList = ({ location }: LocationListProps) => {
       <LocationImageContainer>
         <Image
           src={location?.url}
+          alt="Location Image"
           fill
           style={{ objectFit: 'cover' }}
-          alt="Location Image"
+          sizes="(max-width: 430px) 100vw"
         />
       </LocationImageContainer>
 

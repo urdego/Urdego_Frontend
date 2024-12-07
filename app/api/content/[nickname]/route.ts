@@ -8,13 +8,12 @@ export async function GET(
 ) {
   const searchParams = request.nextUrl.searchParams;
   const nickname = (await params).nickname;
-  console.log('params!!!!!!!' + searchParams);
 
   try {
     const res = await axiosInstance.get(
-      `${axiosInstance.defaults.baseURL}${API_URL_CONFIG.CONTENT.DEFAULT}${nickname}/contents`,
+      `${API_URL_CONFIG.CONTENT.DEFAULT}${nickname}/contents`,
       {
-        params: Object.entries(searchParams),
+        params: Object.fromEntries(searchParams),
       }
     );
     return NextResponse.json(res.data);
