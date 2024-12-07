@@ -4,6 +4,14 @@ import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
+interface WebSocketEvent {
+  eventType: 'READY' | 'PARTICIPANT' | 'START';
+  data: {
+    nickname: string;
+    role?: string;
+  };
+}
+
 class WaitingRoomWebSocket {
   private static instance: WaitingRoomWebSocket;
   private stompClient: Client | null = null;
@@ -84,6 +92,15 @@ class WaitingRoomWebSocket {
         });
       }
     );
+  }
+
+  public sendEvent(event: WebSocketEvent): void {
+    if (this.stompClient?.active && this.groupId) {
+      this.stompClient.publish({
+        destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${this.groupId}`,
+        body: JSON.stringify(event),
+      });
+    }
   }
 
   private sendParticipantEvent(isManager: boolean): void {

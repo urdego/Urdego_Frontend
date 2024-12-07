@@ -8,6 +8,7 @@ import Button from '@/components/Common/Button/Button';
 import Character from '@/components/Layout/Game/Character';
 import useLoadingStore from '@/stores/loadingStore';
 import useWebSocketStore, { User } from '@/stores/useWebSocketStore';
+import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 
 const WaitingRoom = () => {
   const router = useRouter();
@@ -15,6 +16,8 @@ const WaitingRoom = () => {
   const { roomId } = useParams();
   const messages = useWebSocketStore((state) => state.messages);
   const latestMessage = messages[messages.length - 1];
+
+  const [users, setUsers] = useState<User[]>([]);
 
   const convertParticipants = (
     participants: {
@@ -34,7 +37,6 @@ const WaitingRoom = () => {
   };
 
   useEffect(() => {
-    console.log('WebSocket Messages:', messages);
     if (messages.length > 0) {
       console.log(
         '현재 참가 인원 리스트:',
@@ -42,8 +44,6 @@ const WaitingRoom = () => {
       );
     }
   }, [messages]);
-
-  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     if (latestMessage?.data.waitingRoomParticipants) {
@@ -64,12 +64,21 @@ const WaitingRoom = () => {
 
   // 준비 상태 토글 핸들러 추가
   const toggleReady = () => {
-    setUsers(
-      users.map((user) =>
-        user.id === currentUser.id ? { ...user, isReady: !user.isReady } : user
-      )
-    );
+    const wsClient = WaitingRoomWebSocket.getInstance();
+    wsClient.sendEvent({
+      eventType: 'READY',
+      data: { nickname: currentUser.name },
+    });
   };
+
+  useEffect(() => {
+    if (latestMessage?.data.waitingRoomParticipants) {
+      const convertedUsers = convertParticipants(
+        latestMessage.data.waitingRoomParticipants
+      );
+      setUsers(convertedUsers);
+    }
+  }, [messages]);
 
   // 모든 비방장 플레이어가 준비 완료했는지 확인
   const allPlayersReady = users.every((user) => user.isHost || user.isReady);
