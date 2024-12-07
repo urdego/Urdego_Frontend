@@ -5,6 +5,7 @@ export interface User {
   name: string;
   isHost: boolean;
   isReady: boolean;
+  role: 'MANAGER' | 'MEMBER';
 }
 
 interface WebSocketMessage {
@@ -13,6 +14,7 @@ interface WebSocketMessage {
       nickname: string;
       status: string;
       id: number;
+      role?: 'MANAGER' | 'MEMBER';
     }[];
     eventType?: 'PARTICIPANT' | 'READY' | 'START';
     users?: User[];
@@ -36,8 +38,9 @@ const useWebSocketStore = create<WebSocketStore>((set) => ({
         (participant) => ({
           id: participant.id,
           name: participant.nickname,
-          isHost: participant.id === 1,
-          isReady: participant.status === 'ready',
+          isHost: participant.role === 'MANAGER',
+          isReady: participant.status === 'Ready',
+          role: participant.role || 'MEMBER', // 기본값으로 MEMBER 설정
         })
       );
 

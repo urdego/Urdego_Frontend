@@ -46,9 +46,6 @@ class WaitingRoomWebSocket {
         brokerURL: wsUrl,
         debug: (str) => {
           console.log('Debug:', str);
-          if (str.includes('accept-version')) {
-            console.log('Protocol versions:', str);
-          }
         },
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
@@ -120,6 +117,8 @@ class WaitingRoomWebSocket {
         role: isManager ? 'MANAGER' : 'MEMBER',
       },
     };
+
+    console.log('Sending participant event:', participantEvent); // 로그 추가
 
     this.stompClient.publish({
       destination: `${process.env.NEXT_PUBLIC_GROUP_PUBLISH}/${this.groupId}`,
