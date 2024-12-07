@@ -1,3 +1,4 @@
+import useUserStore from '@/stores/useUserStore';
 import { useEffect, useState } from 'react';
 
 interface LocationType {
@@ -17,6 +18,7 @@ const useGetLocationlist = (isVisible: boolean) => {
     totalContents: 0,
     userContents: [],
   });
+  const { nickname } = useUserStore();
 
   useEffect(() => {
     const getLocationList = async () => {
@@ -24,7 +26,6 @@ const useGetLocationlist = (isVisible: boolean) => {
       params.append('limit', (10).toString());
       // params.append('cursorIdx', (100).toString());
 
-      const nickname = 'min';
       const response = await fetch(`/api/content/${nickname}?${params}`);
       const data = await response.json();
       if (!data) {

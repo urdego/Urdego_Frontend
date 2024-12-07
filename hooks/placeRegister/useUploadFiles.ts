@@ -40,7 +40,7 @@ const useUploadFiles = () => {
 
     // 장소명, 장소 위경도, 힌트 등록
     const params = new URLSearchParams();
-    params.append('userId', '1');
+    params.append('userId', '1'); // TODO: nickname으로 변경
     params.append('contentName', place.title);
     params.append('hint', place.hint);
     params.append('address', place.address || '');
