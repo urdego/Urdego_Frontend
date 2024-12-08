@@ -62,7 +62,6 @@ const handleRegularNotification = (notification: NotificationMessage) => {
     }
   );
 };
-//   notification: NotificationMessage,
 //   router: AppRouterInstance,
 //   addMessageFn: (message: any) => void
 // ) => {
@@ -159,55 +158,33 @@ const handleInvitation = (
 
 const connectSSE = (userId: string) => {
   const { setEventSource } = useSSEStore.getState();
-  let retryCount = 0;
-  const MAX_RETRIES = 3;
-  let retryTimeout: NodeJS.Timeout;
 
-  const connect = () => {
-    try {
-      const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;
-      console.log('SSE 연결 시도:', url);
+  try {
+    const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;
+    console.log('SSE 연결 시도:', url);
 
-      const eventSource = new EventSource(url, {
-        withCredentials: true,
-      });
+    const eventSource = new EventSource(url, {
+      withCredentials: true,
+    });
 
-      eventSource.onopen = () => {
-        console.log('SSE 연결 성공');
-        retryCount = 0;
-      };
+    eventSource.onopen = () => {
+      console.log('SSE 연결 성공');
+    };
 
-      eventSource.onerror = (error) => {
-        console.error('SSE 연결 에러:', error);
+    eventSource.onerror = (error) => {
+      console.error('SSE 연결 에러:', error);
+      if (eventSource.readyState === EventSource.CLOSED) {
+        eventSource.close();
+        setEventSource(null);
+        toast.error('실시간 알림 연결이 끊어졌습니다');
+      }
+    };
 
-        if (eventSource.readyState === EventSource.CLOSED) {
-          eventSource.close();
-          setEventSource(null);
-
-          if (retryCount < MAX_RETRIES) {
-            retryCount++;
-            const delay = Math.min(1000 * Math.pow(2, retryCount), 10000);
-            console.log(
-              `재연결 시도 ${retryCount}/${MAX_RETRIES} (${delay / 1000}초 후)`
-            );
-
-            clearTimeout(retryTimeout);
-            retryTimeout = setTimeout(connect, delay);
-          } else {
-            console.error('최대 재시도 횟수 도달');
-            toast.error('실시간 알림 연결에 실패했습니다');
-          }
-        }
-      };
-
-      return eventSource;
-    } catch (error) {
-      console.error('SSE 초기화 실패:', error);
-      return null;
-    }
-  };
-
-  return connect();
+    return eventSource;
+  } catch (error) {
+    console.error('SSE 초기화 실패:', error);
+    return null;
+  }
 };
 
 const Home = () => {
