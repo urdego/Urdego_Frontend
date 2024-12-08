@@ -8,10 +8,10 @@ const useUploadFiles = () => {
   const { nickname } = useUserStore();
 
   const handleUploadFiles = async () => {
-    try {
-      // 장소 등록 진행
-      const loadingToast = toast.loading('장소를 등록하는 중입니다...');
+    // 장소 등록 진행
+    const loadingToast = toast.loading('장소를 등록하는 중입니다...');
 
+    try {
       for (const place of placeList) {
         await handleUploadPartFile(place);
       }
@@ -24,7 +24,9 @@ const useUploadFiles = () => {
 
       initEntirePlaceList();
     } catch (error) {
+      // 장소 등록 실패
       console.error(`장소 등록하기에서 발생한 에러: ${error}`);
+      toast.remove(loadingToast);
       toast('일부 장소가 등록되지 않았어요', {
         icon: '😱',
       });
