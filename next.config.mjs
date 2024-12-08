@@ -19,14 +19,7 @@ const nextConfig = {
     ];
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'urdego.s3.ap-southeast-2.amazonaws.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    domains: ['urdego.s3.ap-southeast-2.amazonaws.com'],
   },
 };
 
