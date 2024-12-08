@@ -77,7 +77,9 @@ const useGetInfiniteLocationList = () => {
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error(`올린 장소 불러오기에서 실패한 에러: ${error}`);
+      setIsLoading(false);
+      setIsLoadMore(false);
     } finally {
       setIsLoading(false);
     }

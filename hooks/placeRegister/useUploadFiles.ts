@@ -27,14 +27,13 @@ const useUploadFiles = () => {
       // 장소 등록 실패
       console.error(`장소 등록하기에서 발생한 에러: ${error}`);
       toast.remove(loadingToast);
-      toast('일부 장소가 등록되지 않았어요', {
+      toast('장소를 등록하지 못했어요', {
         icon: '😱',
       });
     }
   };
 
   const handleUploadPartFile = async (place: Place) => {
-    console.log(place);
     const formData = new FormData();
 
     // 이미지 등록
