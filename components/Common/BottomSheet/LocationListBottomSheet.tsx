@@ -22,12 +22,14 @@ interface LocationListBottomSheetProps {
 const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
+  // bottomSheet 최대 영역 확인하는 로직
   const [isExpand, setIsExpand] = useState(false);
 
+  // 무한 스크롤 로직
   const { locationList, totalCount, isInitialLoad, isLoading, loadMore } =
     useGetInfiniteLocationList();
   const targetElementRef = useIntersectionObserver({
-    onIntersect: () => {
+    handleIntersect: () => {
       loadMore();
     },
   });
