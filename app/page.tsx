@@ -14,7 +14,8 @@ import {
   SlideContent,
   SlideTitle,
   SlideDescription,
-  SlideImage,
+  SlideStaticImage,
+  SlideDynamicImage,
 } from './onBoarding.styles';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -80,14 +81,22 @@ const OnBoarding = () => {
             {slides.map((slide, index) => (
               <SlideContent key={index}>
                 <ImageWrapper $isSecondSlide={index === 1}>
-                  <SlideImage>
-                    <Image
+                  {index === 0 || index === 1 ? (
+                    <SlideStaticImage
                       src={slide.image}
                       alt={`온보딩 이미지 ${index + 1}`}
-                      fill
-                      style={{ objectFit: 'cover' }}
                     />
-                  </SlideImage>
+                  ) : (
+                    <SlideDynamicImage>
+                      <Image
+                        src={slide.image}
+                        alt={`온보딩 이미지 ${index + 1}`}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(max-width:430px) 100vw"
+                      />
+                    </SlideDynamicImage>
+                  )}
                 </ImageWrapper>
                 <TextWrapper $isFirstSlide={index === 0}>
                   <SlideTitle>{slide.title}</SlideTitle>

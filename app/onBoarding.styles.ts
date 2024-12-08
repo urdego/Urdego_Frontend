@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
+import Image from 'next/image';
 
 export const PageWrapper = styled.div`
   width: 100%;
@@ -97,7 +98,17 @@ export const SlideDescription = styled.p`
   white-space: pre-line;
 `;
 
-export const SlideImage = styled.div`
+export const SlideStaticImage = styled(Image)`
+  width: 100%;
+  max-width: 300px;
+  max-height: 350px;
+  height: 100%;
+  min-height: 450px;
+  object-fit: contain;
+  margin: 0 auto;
+`;
+
+export const SlideDynamicImage = styled.div`
   position: relative;
   width: 224px;
   height: 448px;
