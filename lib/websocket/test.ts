@@ -30,14 +30,15 @@ export interface RoundEndRequest {
 }
 
 export interface ScoreData {
+  roundId: number;
   answerCoordinate: {
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
   };
   submitCoordinates: {
     nickname: string;
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
     score: number;
     totalScore: number;
   }[];
@@ -52,9 +53,7 @@ class InGameWebSocket {
   private stompClient: Client | null = null;
   private gameId: number | null = null;
   private roundNumber: number | null = null;
-  // roundId를 저장할 변수 추가
   private currentRoundId: number | null = null;
-
   private constructor() {}
 
   public static getInstance(): InGameWebSocket {
@@ -125,15 +124,13 @@ class InGameWebSocket {
           console.log('=== 라운드 데이터 수신 ===');
           console.log('Raw message:', message.body);
           const roundData = JSON.parse(message.body);
-          // roundId 저장
-          this.currentRoundId = roundData.roundId;
-
           console.log('Parsed round data:', {
             roundId: roundData.roundId,
             roundNum: roundData.roundNum,
             contentUrls: roundData.contentUrls,
             hint: roundData.hint,
           });
+          this.currentRoundId = roundData.roundId;
 
           const addMessage = useWebSocketStore.getState().addMessage;
           addMessage({
@@ -149,32 +146,14 @@ class InGameWebSocket {
         `/game-service/subscribe/game/${this.gameId}/rounds/${this.roundNumber}/score`,
         (message: Message) => {
           console.log('=== 점수 데이터 수신 ===');
-          const rawData = JSON.parse(message.body);
+          console.log('Raw message:', message.body);
 
-          // 서버 데이터를 클라이언트 형식으로 변환
-          const scoreData = {
-            answerCoordinate: {
-              lat: rawData.answerCoordinate.latitude,
-              lng: rawData.answerCoordinate.longitude,
-            },
-            submitCoordinates: rawData.submitCoordinates.map(
-              (coord: {
-                nickname: string;
-                latitude: number;
-                longitude: number;
-                score: number;
-                totalScore: number;
-              }) => ({
-                nickname: coord.nickname,
-                lat: coord.latitude,
-                lng: coord.longitude,
-                score: coord.score,
-                totalScore: coord.totalScore,
-              })
-            ),
-          };
-
-          console.log('Transformed score data:', scoreData);
+          const scoreData = JSON.parse(message.body);
+          console.log('Parsed score data:', {
+            roundId: scoreData.roundId,
+            answerCoordinate: scoreData.answerCoordinate,
+            submitCoordinates: scoreData.submitCoordinates,
+          });
 
           const addMessage = useWebSocketStore.getState().addMessage;
           addMessage({
@@ -270,7 +249,6 @@ class InGameWebSocket {
       this.stompClient.deactivate();
       this.gameId = null;
       this.roundNumber = null;
-      this.currentRoundId = null;
       console.log('Disconnected from Game WebSocket');
     }
   }

@@ -111,13 +111,10 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent images={gameState.roundState?.contentUrls || []} />
-            {/* TODO: 백엔드 연동 시 사용 */}
-            {/* <SwiperComponent images={gameState.roundState?.contentUrls || []} /> */}
             {gameState.roundState?.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
                 <HintText> {gameState.roundState.hint}</HintText>
-                {/* <HintText>{gameState.roundState.hint}</HintText> */}
               </HintWrapper>
             )}
           </>
