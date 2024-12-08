@@ -22,6 +22,7 @@ import OnBoarding1 from '@/styles/Icon/OnBoarding/OnBoarding1.svg';
 import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
 import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoarding3.gif';
 import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoarding4.gif';
+import Image from 'next/image';
 
 const OnBoarding = () => {
   const router = useRouter();
@@ -79,10 +80,14 @@ const OnBoarding = () => {
             {slides.map((slide, index) => (
               <SlideContent key={index}>
                 <ImageWrapper $isSecondSlide={index === 1}>
-                  <SlideImage
-                    src={slide.image}
-                    alt={`온보딩 이미지 ${index + 1}`}
-                  />
+                  <SlideImage>
+                    <Image
+                      src={slide.image}
+                      alt={`온보딩 이미지 ${index + 1}`}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </SlideImage>
                 </ImageWrapper>
                 <TextWrapper $isFirstSlide={index === 0}>
                   <SlideTitle>{slide.title}</SlideTitle>
