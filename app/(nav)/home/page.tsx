@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
@@ -8,13 +8,16 @@ import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
 import { HomeTitle, ChannelWrapper } from './Home.styles';
 import { HomePageWrapper } from '@/app/commonPage.styles';
+
 import useSSEStore from '@/stores/useSSEStore';
 import useUserStore from '@/stores/useUserStore';
-import { toast } from 'react-hot-toast';
 import type { NotificationMessage } from '@/lib/types/notification';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
+
+import { toast } from 'react-hot-toast';
+import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationListBottomSheet';
 
 interface InviteToastProps {
   message: string;
@@ -275,11 +278,13 @@ const Home = () => {
     };
   }, [email, eventSource, router, setEventSource, addMessage]);
 
+  const [isLocationListVisible, setLocationListVisible] = useState(false);
+
   return (
     <>
       <TopBar NavType="main" />
       <HomePageWrapper>
-        <MainBanner />
+        <MainBanner setLocationListVisible={setLocationListVisible} />
         <ChannelWrapper>
           <HomeTitle>게임채널</HomeTitle>
           <Link href="/groupList">
@@ -287,6 +292,11 @@ const Home = () => {
           </Link>
           <ChannelButton title="랭킹 게임" />
         </ChannelWrapper>
+        {isLocationListVisible && (
+          <LocationListBottomSheet
+            setLocationListVisible={setLocationListVisible}
+          />
+        )}
       </HomePageWrapper>
     </>
   );

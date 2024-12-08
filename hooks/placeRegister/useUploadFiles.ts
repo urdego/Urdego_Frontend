@@ -1,15 +1,17 @@
 import axiosInstance from '@/lib/axios';
 import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
+import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
+  const { nickname } = useUserStore();
 
   const handleUploadFiles = async () => {
-    try {
-      // 장소 등록 진행
-      const loadingToast = toast.loading('장소를 등록하는 중입니다...');
+    // 장소 등록 진행
+    const loadingToast = toast.loading('장소를 등록하는 중입니다...');
 
+    try {
       for (const place of placeList) {
         await handleUploadPartFile(place);
       }
@@ -22,15 +24,16 @@ const useUploadFiles = () => {
 
       initEntirePlaceList();
     } catch (error) {
+      // 장소 등록 실패
       console.error(`장소 등록하기에서 발생한 에러: ${error}`);
-      toast('일부 장소가 등록되지 않았어요', {
+      toast.remove(loadingToast);
+      toast('장소를 등록하지 못했어요', {
         icon: '😱',
       });
     }
   };
 
   const handleUploadPartFile = async (place: Place) => {
-    console.log(place);
     const formData = new FormData();
 
     // 이미지 등록
@@ -40,7 +43,7 @@ const useUploadFiles = () => {
 
     // 장소명, 장소 위경도, 힌트 등록
     const params = new URLSearchParams();
-    params.append('userId', '1');
+    params.append('nickname', nickname || '');
     params.append('contentName', place.title);
     params.append('hint', place.hint);
     params.append('address', place.address || '');

@@ -2,19 +2,18 @@ import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const params = request.nextUrl.searchParams;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ nickname: string }> }
+) {
+  const searchParams = request.nextUrl.searchParams;
+  const nickname = (await params).nickname;
 
   try {
-    const res = await axiosInstance.post(
-      `${API_URL_CONFIG.CONTENT.POST_MULTIPLE}`,
-      formData,
+    const res = await axiosInstance.get(
+      `${API_URL_CONFIG.CONTENT.DEFAULT}${nickname}/contents`,
       {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        params: Object.fromEntries(params),
+        params: Object.fromEntries(searchParams),
       }
     );
     return NextResponse.json(res.data);
