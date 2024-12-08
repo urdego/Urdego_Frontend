@@ -1,5 +1,5 @@
 import colors from '@/styles/color/palette';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 export const BackgroundOverlay = styled(motion.div)`
