@@ -1,18 +1,26 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-interface IngameState {
+interface InGameState {
   joinedUsers: string[];
   totalRounds: number;
-  setGameInfo: (users: string[], rounds: number) => void;
+  setGameInfo: (joinedUsers: string[], totalRounds: number) => void;
   clearGameInfo: () => void;
 }
 
-const useIngameStore = create<IngameState>()((set) => ({
-  joinedUsers: [],
-  totalRounds: 0,
-  setGameInfo: (users: string[], rounds: number) =>
-    set({ joinedUsers: users, totalRounds: rounds }),
-  clearGameInfo: () => set({ joinedUsers: [], totalRounds: 0 }),
-}));
+const useInGameStore = create<InGameState>()(
+  persist(
+    (set) => ({
+      joinedUsers: [],
+      totalRounds: 0,
+      setGameInfo: (joinedUsers: string[], totalRounds: number) =>
+        set({ joinedUsers, totalRounds }),
+      clearGameInfo: () => set({ joinedUsers: [], totalRounds: 0 }),
+    }),
+    {
+      name: 'ingame-storage',
+    }
+  )
+);
 
-export default useIngameStore;
+export default useInGameStore;

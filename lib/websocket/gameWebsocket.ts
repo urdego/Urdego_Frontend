@@ -1,38 +1,37 @@
 import { Client } from '@stomp/stompjs';
-import useGameStore from '@/stores/useGameStores';
+import useWebSocketStore from '@/stores/useWebSocketStore';
 import useUserStore from '@/stores/useUserStore';
-import useIngameStore from '@/stores/useIngameStore';
 import toast from 'react-hot-toast';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
-interface GameWebSocketEvent {
-  eventType: string;
+interface InGameWebSocketEvent {
+  eventType: 'JOIN' | 'ANSWER' | 'RESULT';
   data: {
-    nickname: string;
-    content?: string;
-    role?: string;
-    [key: string]: any;
+    nickname?: string;
+    answer?: string;
+    roundNumber?: number;
   };
 }
 
-class GameWebSocket {
-  private static instance: GameWebSocket;
+class InGameWebSocket {
+  private static instance: InGameWebSocket;
   private stompClient: Client | null = null;
   private gameId: number | null = null;
-  private groupId: number | null = null;
+  private roundNumber: number | null = null;
 
   private constructor() {}
 
-  public static getInstance(): GameWebSocket {
-    if (!GameWebSocket.instance) {
-      GameWebSocket.instance = new GameWebSocket();
+  public static getInstance(): InGameWebSocket {
+    if (!InGameWebSocket.instance) {
+      InGameWebSocket.instance = new InGameWebSocket();
     }
-    return GameWebSocket.instance;
+    return InGameWebSocket.instance;
   }
 
-  public async connect(gameId: number, groupId: number): Promise<boolean> {
+  public async connect(gameId: number, roundNumber: number): Promise<boolean> {
     this.gameId = gameId;
-    this.groupId = groupId;
+    this.roundNumber = roundNumber;
+    console.log('Connecting to game:', this.gameId, 'round:', this.roundNumber);
 
     const isProduction = process.env.NODE_ENV === 'production';
     const wsUrl = isProduction
@@ -40,7 +39,7 @@ class GameWebSocket {
       : API_URL_CONFIG.GAME.WS_URL.DEV;
 
     if (this.stompClient?.active) {
-      console.warn('Game WebSocket is already active.');
+      console.warn('WebSocket is already active.');
       return true;
     }
 
@@ -48,39 +47,25 @@ class GameWebSocket {
       this.stompClient = new Client({
         brokerURL: wsUrl,
         debug: (str) => {
-          console.log('Game WebSocket Debug:', str);
+          console.log('Debug:', str);
         },
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-        onConnect: () => {
-          console.log('Connected to Game WebSocket');
-
-          // WebSocket 연결 직후 메시지 구독
-          this.stompClient?.subscribe(
-            `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${this.groupId}`,
-            (message) => {
-              const parsedMessage = JSON.parse(message.body);
-              const { data } = parsedMessage;
-
-              if (data.action === 'startGame') {
-                // ingame store 업데이트
-                const ingameStore = useIngameStore.getState();
-                ingameStore.setGameInfo(data.joinedUser, data.totalRounds);
-
-                // 실제 구독 설정
-                this.setupSubscription();
-                resolve(true);
-              }
-            }
-          );
-        },
-        onStompError: (frame) => {
-          console.error('Game STOMP error:', frame);
-          toast.error('게임 서버 연결에 실패했습니다.');
-          reject(new Error(frame.headers['message']));
-        },
       });
+
+      this.stompClient.onConnect = () => {
+        console.log('Connected to Game WebSocket');
+        this.setupSubscription();
+        this.sendJoinEvent();
+        resolve(true);
+      };
+
+      this.stompClient.onStompError = (frame) => {
+        console.error('STOMP error:', frame);
+        toast.error('게임 웹소켓 연결에 실패했습니다.');
+        reject(new Error(frame.headers['message']));
+      };
 
       try {
         this.stompClient.activate();
@@ -92,36 +77,59 @@ class GameWebSocket {
   }
 
   private setupSubscription(): void {
+    if (!this.stompClient?.active || !this.gameId || !this.roundNumber) return;
+
+    // 게임 라운드별 구독
+    this.stompClient.subscribe(
+      `${API_URL_CONFIG.GAME.SUBSCRIBE}/game/${this.gameId}/round/${this.roundNumber}`,
+      (message) => {
+        console.log('Received game message:', message.body);
+        const parsedMessage = JSON.parse(message.body);
+        const addMessage = useWebSocketStore.getState().addMessage;
+        addMessage({
+          ...parsedMessage,
+          timestamp: Date.now(),
+        });
+      }
+    );
+  }
+
+  public sendEvent(event: InGameWebSocketEvent): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
-    const subscriptionPath = `${process.env.NEXT_PUBLIC_GAME_SUBSCRIBE}/${this.gameId}`;
-    console.log('Subscribing to:', subscriptionPath);
-
-    this.stompClient.subscribe(subscriptionPath, (message) => {
-      console.log('Received game message:', message.body);
-      const parsedMessage = JSON.parse(message.body);
-      // Here you can add game-specific message handling
-      // For example, updating game state through a store
+    console.log('Sending game event:', event);
+    this.stompClient.publish({
+      destination: `${API_URL_CONFIG.GAME.PUBLISH}/game/${this.gameId}`,
+      body: JSON.stringify(event),
     });
   }
 
-  public sendEvent(event: GameWebSocketEvent): void {
+  private sendJoinEvent(): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
-    const publishPath = `${process.env.NEXT_PUBLIC_GAME_PUBLISH}/${this.gameId}`;
-    console.log('Sending game event:', event);
+    const nickname = useUserStore.getState().nickname;
+    if (!nickname) {
+      toast.error('닉네임 정보를 찾을 수 없습니다.');
+      this.disconnect();
+      return;
+    }
 
-    this.stompClient.publish({
-      destination: publishPath,
-      body: JSON.stringify(event),
-    });
+    const joinEvent: InGameWebSocketEvent = {
+      eventType: 'JOIN',
+      data: {
+        nickname: nickname,
+      },
+    };
+
+    console.log('Sending join event:', joinEvent);
+    // this.sendEvent(joinEvent);
   }
 
   public disconnect(): void {
     if (this.stompClient?.active) {
       this.stompClient.deactivate();
       this.gameId = null;
-      this.groupId = null;
+      this.roundNumber = null;
       console.log('Disconnected from Game WebSocket');
     }
   }
@@ -130,13 +138,12 @@ class GameWebSocket {
     return !!this.stompClient?.active;
   }
 
-  public getGameId(): number | null {
-    return this.gameId;
-  }
-
-  public getGroupId(): number | null {
-    return this.groupId;
+  public updateRound(roundNumber: number): void {
+    this.roundNumber = roundNumber;
+    if (this.stompClient?.active) {
+      this.setupSubscription();
+    }
   }
 }
 
-export default GameWebSocket;
+export default InGameWebSocket;
