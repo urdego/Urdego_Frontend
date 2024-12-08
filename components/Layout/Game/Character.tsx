@@ -5,6 +5,8 @@ import Character2 from '@/styles/Icon/Character/character-2.svg';
 import Character3 from '@/styles/Icon/Character/character-3.svg';
 import Character4 from '@/styles/Icon/Character/character-4.svg';
 import Character5 from '@/styles/Icon/Character/character-5.svg';
+import HostIcon from '@/styles/Icon/Host.svg';
+
 import {
   CharacterWrapper,
   CharactersContainer,
@@ -69,7 +71,16 @@ const Character = ({ users }: CharacterProps) => {
         >
           <InfoWrapper>
             {char.isHost ? (
-              <Host>방장</Host>
+              <Host style={{ display: 'flex', alignItems: 'center' }}>
+                <Image
+                  src={HostIcon.src}
+                  alt="방장"
+                  width={16}
+                  height={16}
+                  style={{ paddingRight: '3px' }}
+                />
+                방장
+              </Host>
             ) : char.isReady ? (
               <Host isReady>준비완료</Host>
             ) : (
