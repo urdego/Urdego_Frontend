@@ -42,13 +42,13 @@ const RankList = ({
     <Container>
       <ButtonContainer>
         <Button
-          active={activeButton === 'thisRound'}
+          $active={activeButton === 'thisRound'}
           onClick={() => handleButtonClick('thisRound')}
         >
           이번 라운드
         </Button>
         <Button
-          active={activeButton === 'totalRound'}
+          $active={activeButton === 'totalRound'}
           onClick={() => handleButtonClick('totalRound')}
         >
           총 라운드

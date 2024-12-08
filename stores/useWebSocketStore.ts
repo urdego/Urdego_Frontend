@@ -47,8 +47,23 @@ export interface ResultData {
   }[];
 }
 
+interface ScoreData {
+  roundId: number;
+  answerCoordinate: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates: {
+    nickname: string;
+    lat: number;
+    lng: number;
+    score: number;
+    totalScore: number;
+  }[];
+}
+
 interface WebSocketMessage {
-  data: WaitingRoomData | GameStartData | RoundData | ResultData;
+  data: WaitingRoomData | GameStartData | RoundData | ResultData | ScoreData;
   eventType?:
     | 'PARTICIPANT'
     | 'READY'

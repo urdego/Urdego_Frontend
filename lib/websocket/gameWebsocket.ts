@@ -117,9 +117,9 @@ class InGameWebSocket {
     }
 
     try {
-      // 라운드 생성만 구독
+      // 라운드 생성 구독
       this.stompClient.subscribe(
-        '/game-service/subscribe/rounds/create',
+        `/game-service/subscribe/game/${this.gameId}/rounds/create`,
         (message: Message) => {
           console.log('=== 라운드 데이터 수신 ===');
           console.log('Raw message:', message.body);
@@ -140,7 +140,43 @@ class InGameWebSocket {
         }
       );
 
-      console.log(`라운드 ${this.roundNumber}번 구독 완료`);
+      // 점수 구독
+      this.stompClient.subscribe(
+        `/game-service/subscribe/game/${this.gameId}/rounds/${this.roundNumber}/score`,
+        (message: Message) => {
+          console.log('=== 점수 데이터 수신 ===');
+          console.log('Raw message:', message.body);
+          const scoreData = JSON.parse(message.body);
+          console.log('Parsed score data:', {
+            roundId: scoreData.roundId,
+            answerCoordinate: scoreData.answerCoordinate,
+            submitCoordinates: scoreData.submitCoordinates,
+          });
+
+          const addMessage = useWebSocketStore.getState().addMessage;
+          addMessage({
+            eventType: 'RESULT',
+            data: scoreData,
+          });
+        }
+      );
+
+      // 라운드 종료 구독 추가
+      this.stompClient.subscribe(
+        `/game-service/subscribe/game/${this.gameId}/rounds/${this.roundNumber}/end`,
+        (message: Message) => {
+          console.log('=== 라운드 종료 데이터 수신 ===');
+          console.log('Raw message:', message.body);
+          const endData = JSON.parse(message.body);
+          console.log('Round end data:', endData);
+
+          const addMessage = useWebSocketStore.getState().addMessage;
+          addMessage({
+            eventType: 'ROUND_END',
+            data: endData,
+          });
+        }
+      );
 
       // 라운드 데이터 요청
       this.createRound(this.roundNumber);
@@ -180,8 +216,8 @@ class InGameWebSocket {
 
     const payload = {
       nickname,
-      answer: JSON.stringify(coordinate),
-      roundNumber: roundId,
+      coordinate: coordinate.map(String),
+      roundId,
     };
 
     console.log('답안 제출:', payload);
@@ -201,7 +237,7 @@ class InGameWebSocket {
 
     console.log('라운드 종료 요청:', payload);
     this.stompClient.publish({
-      destination: '/game-service/publish/rounds/end',
+      destination: `/game-service/publish/rounds/${roundNum}/end`,
       body: JSON.stringify(payload),
     });
   }

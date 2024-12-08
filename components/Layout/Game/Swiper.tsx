@@ -2,19 +2,22 @@
 
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { SwiperContainer, StyledSwiperSlide, Image } from './Swiper.styles';
+import {
+  SwiperContainer,
+  StyledSwiperSlide,
+  ImageContainer,
+} from './Swiper.styles';
 import { Swiper as SwiperType } from 'swiper/types';
+import Image from 'next/image';
 import 'swiper/css';
 
-const images = [
-  'https://swiperjs.com/demos/images/nature-1.jpg',
-  'https://swiperjs.com/demos/images/nature-2.jpg',
-  'https://swiperjs.com/demos/images/nature-3.jpg',
-];
+interface SwiperProps {
+  images: string[];
+}
 
-const SwiperComponent = () => {
+const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
   // 슬라이드 복제: 슬라이드가 3개 미만이면 복제해서 최소 3개로 보이도록 처리
-  const slides = images.length < 3 ? [...images, ...images] : images;
+  // const slides = images.length < 3 ? [...images, ...images] : images;
   const applySlideStyles = (swiper: SwiperType) => {
     const slides = swiper.slides;
     slides.forEach((slide: HTMLElement, index: number) => {
@@ -40,7 +43,14 @@ const SwiperComponent = () => {
         {images.map((src, index) => (
           <SwiperSlide key={index}>
             <StyledSwiperSlide>
-              <Image src={src} alt={`Slide ${index}`} />
+              <ImageContainer>
+                <Image
+                  src={src}
+                  alt={`Slide ${index}`}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </ImageContainer>
             </StyledSwiperSlide>
           </SwiperSlide>
         ))}
