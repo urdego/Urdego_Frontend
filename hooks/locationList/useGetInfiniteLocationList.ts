@@ -45,7 +45,6 @@ const useGetInfiniteLocationList = () => {
       setIsInitialLoad(false);
     };
 
-    console.log('initial');
     initialFetchLocationList();
   }, []);
 
@@ -87,7 +86,6 @@ const useGetInfiniteLocationList = () => {
   const loadMore = async () => {
     if (!isLoadMore) return;
 
-    console.log('second');
     await fetchLocationList();
   };
 
@@ -96,6 +94,7 @@ const useGetInfiniteLocationList = () => {
     totalCount,
     isInitialLoad,
     isLoading,
+    isLoadMore,
     loadMore,
   };
 };

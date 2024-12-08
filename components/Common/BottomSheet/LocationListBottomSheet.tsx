@@ -26,8 +26,14 @@ const LocationListBottomSheet = ({
   const [isExpand, setIsExpand] = useState(false);
 
   // 무한 스크롤 로직
-  const { locationList, totalCount, isInitialLoad, isLoading, loadMore } =
-    useGetInfiniteLocationList();
+  const {
+    locationList,
+    totalCount,
+    isInitialLoad,
+    isLoading,
+    isLoadMore,
+    loadMore,
+  } = useGetInfiniteLocationList();
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
       loadMore();
@@ -69,7 +75,7 @@ const LocationListBottomSheet = ({
                 <LocationList key={`key+${index}`} location={location} />
               ))}
               {isLoading && <LoadingText>장소를 불러오는중...🔍</LoadingText>}
-              {!isLoading && !isInitialLoad && (
+              {!isLoading && !isInitialLoad && isLoadMore && (
                 <IntersectionObserverArea ref={targetElementRef} />
               )}
               {!isInitialLoad && locationList.length === 0 && (
