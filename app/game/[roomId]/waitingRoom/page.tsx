@@ -39,7 +39,7 @@ const WaitingRoom = () => {
     ) {
       console.log('Game start message received:', latestMessage.data);
       const { joinedUser, totalRounds } = latestMessage.data;
-      const currentGameId = latestMessage.data.gameId;
+      // const currentGameId = latestMessage.data.gameId;
 
       const connectAndNavigate = async () => {
         try {
@@ -52,10 +52,9 @@ const WaitingRoom = () => {
 
           // 2. 게임 소켓 연결 - latestMessage에서 받은 gameId 사용
           const inGameWsClient = InGameWebSocket.getInstance();
-          await inGameWsClient.connect(Number(currentGameId), 1);
-
+          await inGameWsClient.connect(Number(gameId), 1);
           // 4. 소켓 연결이 완료된 후 페이지 이동 - gameId를 사용
-          router.push(`/game/${currentGameId}/1`);
+          router.push(`/game/${gameId}/1`);
         } catch (error) {
           console.error('Failed to connect to game socket:', error);
           toast.error('게임 연결에 실패했습니다.');

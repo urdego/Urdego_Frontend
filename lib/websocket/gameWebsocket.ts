@@ -1,16 +1,51 @@
-import { Client } from '@stomp/stompjs';
+import { Client, Message } from '@stomp/stompjs';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
-interface InGameWebSocketEvent {
-  eventType: 'JOIN' | 'ANSWER' | 'RESULT';
-  data: {
-    nickname?: string;
-    answer?: string;
-    roundNumber?: number;
+// 라운드 생성 요청/응답
+export interface RoundCreateRequest {
+  gameId: number;
+  roundNum: number;
+}
+
+// 라운드 별 데이터 형식
+export interface RoundData {
+  roundId: number;
+  roundNum: number;
+  roundTimer: number;
+  contentUrls: string[];
+  hint?: string;
+}
+// 답안 제출 요청/응답
+export interface RoundSubmitRequest {
+  nickname: string;
+  roundId: number;
+  coordinate: [number, number];
+}
+
+export interface RoundEndRequest {
+  roundNum: number;
+}
+
+export interface ScoreData {
+  roundId: number;
+  answerCoordinate: {
+    lat: number;
+    lng: number;
   };
+  submitCoordinates: {
+    nickname: string;
+    lat: number;
+    lng: number;
+    score: number;
+    totalScore: number;
+  }[];
+}
+
+export interface RoundEndResponse {
+  message: string;
 }
 
 class InGameWebSocket {
@@ -57,7 +92,6 @@ class InGameWebSocket {
       this.stompClient.onConnect = () => {
         console.log('Connected to Game WebSocket');
         this.setupSubscription();
-        this.sendJoinEvent();
         resolve(true);
       };
 
@@ -77,52 +111,99 @@ class InGameWebSocket {
   }
 
   private setupSubscription(): void {
-    if (!this.stompClient?.active || !this.gameId || !this.roundNumber) return;
+    if (!this.stompClient?.active || !this.gameId || !this.roundNumber) {
+      console.warn('WebSocket 연결 실패 혹은 gameId/roundNumber 정보 없음');
+      return;
+    }
 
-    // 게임 라운드별 구독
-    this.stompClient.subscribe(
-      `${API_URL_CONFIG.GAME.SUBSCRIBE}/game/${this.gameId}/round/${this.roundNumber}`,
-      (message) => {
-        console.log('Received game message:', message.body);
-        const parsedMessage = JSON.parse(message.body);
-        const addMessage = useWebSocketStore.getState().addMessage;
-        addMessage({
-          ...parsedMessage,
-          timestamp: Date.now(),
-        });
-      }
-    );
+    try {
+      // 라운드 생성만 구독
+      this.stompClient.subscribe(
+        '/game-service/subscribe/rounds/create',
+        (message: Message) => {
+          console.log('=== 라운드 데이터 수신 ===');
+          console.log('Raw message:', message.body);
+          const roundData = JSON.parse(message.body);
+          console.log('Parsed round data:', {
+            roundId: roundData.roundId,
+            roundNum: roundData.roundNum,
+            contentUrls: roundData.contentUrls,
+            hint: roundData.hint,
+          });
+
+          const addMessage = useWebSocketStore.getState().addMessage;
+          addMessage({
+            eventType: 'ROUND_START',
+            data: roundData,
+            // timestamp: Date.now(),
+          });
+        }
+      );
+
+      console.log(`라운드 ${this.roundNumber}번 구독 완료`);
+
+      // 라운드 데이터 요청
+      this.createRound(this.roundNumber);
+      console.log(`라운드 ${this.roundNumber}번 데이터 요청`);
+    } catch (error) {
+      console.error('구독 설정 실패:', error);
+      setTimeout(() => this.setupSubscription(), 1000);
+    }
   }
 
-  public sendEvent(event: InGameWebSocketEvent): void {
+  // 라운드 생성 요청
+  public createRound(roundNum: number): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
-    console.log('Sending game event:', event);
+    const payload: RoundCreateRequest = {
+      gameId: this.gameId,
+      roundNum: roundNum,
+    };
+
+    console.log('라운드 생성 요청 payload:', payload);
+
     this.stompClient.publish({
-      destination: `${API_URL_CONFIG.GAME.PUBLISH}/game/${this.gameId}`,
-      body: JSON.stringify(event),
+      destination: '/game-service/publish/rounds/create',
+      body: JSON.stringify(payload),
     });
   }
 
-  private sendJoinEvent(): void {
+  // 답안 제출
+  public submitAnswer(roundId: number, coordinate: [number, number]): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
     const nickname = useUserStore.getState().nickname;
     if (!nickname) {
       toast.error('닉네임 정보를 찾을 수 없습니다.');
-      this.disconnect();
       return;
     }
 
-    const joinEvent: InGameWebSocketEvent = {
-      eventType: 'JOIN',
-      data: {
-        nickname: nickname,
-      },
+    const payload = {
+      nickname,
+      answer: JSON.stringify(coordinate),
+      roundNumber: roundId,
     };
 
-    console.log('Sending join event:', joinEvent);
-    // this.sendEvent(joinEvent);
+    console.log('답안 제출:', payload);
+    this.stompClient.publish({
+      destination: `/game-service/publish/game/${this.gameId}/rounds/${roundId}/submit`,
+      body: JSON.stringify(payload),
+    });
+  }
+
+  // 라운드 종료 요청
+  public endRound(roundNum: number): void {
+    if (!this.stompClient?.active) return;
+
+    const payload: RoundEndRequest = {
+      roundNum,
+    };
+
+    console.log('라운드 종료 요청:', payload);
+    this.stompClient.publish({
+      destination: '/game-service/publish/rounds/end',
+      body: JSON.stringify(payload),
+    });
   }
 
   public disconnect(): void {

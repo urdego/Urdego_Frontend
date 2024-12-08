@@ -27,7 +27,7 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const nickname = useUserStore((state) => state.nickname);
+  // const nickname = useUserStore((state) => state.nickname);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const {
@@ -64,18 +64,10 @@ const GamePage = ({ params }: GamePageProps) => {
     setHasSubmitted(true);
 
     try {
-      webSocket.sendEvent({
-        eventType: 'ANSWER',
-        data: {
-          nickname: nickname || '',
-          answer: JSON.stringify([
-            currentSelectedCoordinate.lat,
-            currentSelectedCoordinate.lng,
-          ]),
-          roundNumber: Number(params.round),
-        },
-      });
-
+      webSocket.submitAnswer(Number(params.round), [
+        currentSelectedCoordinate.lat,
+        currentSelectedCoordinate.lng,
+      ]);
       setCurrentSelectedCoordinate(null);
       console.log('제출 완료');
     } catch (error) {
@@ -119,10 +111,13 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent images={gameState.roundState?.contentUrls || []} />
+            {/* TODO: 백엔드 연동 시 사용 */}
+            {/* <SwiperComponent images={gameState.roundState?.contentUrls || []} /> */}
             {gameState.roundState?.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
-                <HintText>{gameState.roundState.hint}</HintText>
+                <HintText> {gameState.roundState.hint}</HintText>
+                {/* <HintText>{gameState.roundState.hint}</HintText> */}
               </HintWrapper>
             )}
           </>

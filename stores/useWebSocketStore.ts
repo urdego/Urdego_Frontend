@@ -49,7 +49,14 @@ export interface ResultData {
 
 interface WebSocketMessage {
   data: WaitingRoomData | GameStartData | RoundData | ResultData;
-  eventType: 'PARTICIPANT' | 'READY' | 'START' | 'ROUND_START' | 'RESULT';
+  eventType?:
+    | 'PARTICIPANT'
+    | 'READY'
+    | 'START'
+    | 'ROUND_START'
+    | 'RESULT'
+    | 'SCORE'
+    | 'ROUND_END';
 }
 
 interface WebSocketStore {
