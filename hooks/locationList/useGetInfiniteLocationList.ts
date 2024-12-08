@@ -1,4 +1,4 @@
-// import useUserStore from '@/stores/useUserStore';
+import useUserStore from '@/stores/useUserStore';
 import { useEffect, useState } from 'react';
 
 interface Location {
@@ -38,6 +38,7 @@ const useGetInfiniteLocationList = () => {
   const [isLoadMore, setIsLoadMore] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { nickname } = useUserStore(); //TODO: 사용하도록 변경
 
   useEffect(() => {
     const initialFetchLocationList = async () => {
@@ -49,8 +50,7 @@ const useGetInfiniteLocationList = () => {
   }, []);
 
   const fetchLocationList = async () => {
-    //   const { nickname } = useUserStore(); //TODO: 사용하도록 변경
-    const nickname = 'min'; //! test를 위한 용도
+    // const nickname = '어데고~'; //! test를 위한 용도
 
     setIsLoading(true);
 
