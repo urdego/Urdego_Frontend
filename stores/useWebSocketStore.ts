@@ -25,8 +25,31 @@ interface GameStartData {
   totalRounds: number;
 }
 
+export interface RoundData {
+  roundId: number;
+  roundNum: number;
+  roundTimer: number;
+  contentUrls: string[];
+  hint?: string;
+}
+
+export interface ResultData {
+  answerCoordinate: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates: {
+    nickname: string;
+    lat: number;
+    lng: number;
+    score: number;
+    totalScore: number;
+  }[];
+}
+
 interface WebSocketMessage {
-  data: WaitingRoomData | GameStartData;
+  data: WaitingRoomData | GameStartData | RoundData | ResultData;
+  eventType: 'PARTICIPANT' | 'READY' | 'START' | 'ROUND_START' | 'RESULT';
 }
 
 interface WebSocketStore {
@@ -37,6 +60,29 @@ interface WebSocketStore {
   clearMessages: () => void;
   setUsers: (users: User[]) => void;
   setHostNickname: (nickname: string) => void;
+}
+
+export interface GameState {
+  roundState?: {
+    roundId: number;
+    roundNum: number;
+    roundTimer: number;
+    contentUrls: string[];
+    hint?: string;
+  };
+  scoreState?: {
+    answerCoordinate: {
+      lat: number;
+      lng: number;
+    };
+    submitCoordinates: {
+      nickname: string;
+      lat: number;
+      lng: number;
+      score: number;
+      totalScore: number;
+    }[];
+  };
 }
 
 const useWebSocketStore = create<WebSocketStore>((set) => ({

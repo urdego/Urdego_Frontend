@@ -6,7 +6,7 @@ import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Character from '@/components/Layout/Game/Character';
-import useLoadingStore from '@/stores/loadingStore';
+// import useLoadingStore from '@/stores/loadingStore';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 import useUserStore from '@/stores/useUserStore';
@@ -17,7 +17,7 @@ import { toast } from 'react-hot-toast';
 
 const WaitingRoom = () => {
   const router = useRouter();
-  const setLoading = useLoadingStore((state) => state.setLoading);
+  // const setLoading = useLoadingStore((state) => state.setLoading);
   const { messages, users } = useWebSocketStore();
   const nickname = useUserStore((state) => state.nickname);
   const gameId = useGameStore((state) => state.gameId); // 여기로 이동

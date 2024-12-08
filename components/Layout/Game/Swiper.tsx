@@ -3,21 +3,21 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { SwiperContainer, StyledSwiperSlide, Image } from './Swiper.styles';
-
+import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 
 const images = [
   'https://swiperjs.com/demos/images/nature-1.jpg',
-  'https://swiperjs.com/demos/images/nature-1.jpg',
+  'https://swiperjs.com/demos/images/nature-2.jpg',
   'https://swiperjs.com/demos/images/nature-3.jpg',
 ];
 
 const SwiperComponent = () => {
   // 슬라이드 복제: 슬라이드가 3개 미만이면 복제해서 최소 3개로 보이도록 처리
   const slides = images.length < 3 ? [...images, ...images] : images;
-  const applySlideStyles = (swiper: any) => {
+  const applySlideStyles = (swiper: SwiperType) => {
     const slides = swiper.slides;
-    slides.forEach((slide: any, index: number) => {
+    slides.forEach((slide: HTMLElement, index: number) => {
       slide.style.zIndex = index === swiper.activeIndex ? '10' : '1';
       slide.style.opacity = index === swiper.activeIndex ? '1' : '0.5';
       slide.style.transform =

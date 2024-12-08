@@ -1,19 +1,15 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
-
 import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
-
 import MapBottomSheet from '@/components/Layout/Game/MapBottomSheet';
-
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
-import { useCallback, useState, useEffect } from 'react';
-import { useWebSocket } from '@/hooks/inGame/useWebSocket';
-
+import { useCallback, useState } from 'react';
+import InGameWebSocket from '@/lib/websocket/gameWebsocket';
 import {
   PageWrapper,
   Footer,
@@ -31,27 +27,20 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const nickname = useUserStore(
-    (state: { nickname: string | null }) => state.nickname
-  );
-
-  // const { submitAnswer, isSubmitting } = useGameSubmit();
+  const nickname = useUserStore((state) => state.nickname);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  // WebSocket
-  const { gameState, submitAnswer, createRound } = useWebSocket(
-    Number(params.roomId)
-  );
-
   const {
+    gameState,
     currentRound,
     isMapView,
     showBackIcon,
     currentSelectedCoordinate,
-    roundState,
     setCurrentSelectedCoordinate,
     handleBackClick,
   } = useGameState(Number(params.round));
+
+  const webSocket = InGameWebSocket.getInstance();
 
   const handleNextRound = useCallback(() => {
     router.push(`/game/${params.roomId}/${currentRound}/roundRank`);
@@ -65,77 +54,27 @@ const GamePage = ({ params }: GamePageProps) => {
     setCurrentSelectedCoordinate(coordinate);
   };
 
-  // TODO: 백엔드 연동 시 사용
-  // const handleSubmitAnswer = async () => {
-  //   if (hasSubmitted || !currentSelectedCoordinate) {
-  //     console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
-  //     return;
-  //   }
-
-  //   const submitData = {
-  //     nickname: nickname || '',
-  //     roundId: Number(params.round),
-  //     coordinate: [
-  //       currentSelectedCoordinate.lat,
-  //       currentSelectedCoordinate.lng,
-  //     ],
-  //   };
-
-  //   // 제출 시작과 동시에 버튼 비활성화
-  //   setHasSubmitted(true);
-  //   console.log('제출 시작:', submitData);
-
-  //   try {
-  //     const success = await submitAnswer(submitData);
-  //     console.log('제출 결과:', success);
-
-  //     if (!success) {
-  //       console.warn('제출 실패');
-  //       setHasSubmitted(false); // 실패시에만 다시 활성화
-  //       return;
-  //     }
-
-  //     setCurrentSelectedCoordinate(null);
-  //     console.log('제출 완료');
-  //   } catch (error) {
-  //     console.error('제출 중 에러 발생:', error);
-  //     setHasSubmitted(false); // 에러 발생시에도 다시 활성화
-  //   }
-  // };
-
-  // 클라이언트 테스트 용
-
+  // 답안 제출 함수 수정
   const handleSubmitAnswer = async () => {
     if (hasSubmitted || !currentSelectedCoordinate) {
       console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
       return;
     }
 
-    const submitData = {
-      nickname: nickname || '',
-      roundId: Number(params.round),
-      coordinate: [
-        currentSelectedCoordinate.lat,
-        currentSelectedCoordinate.lng,
-      ] as [number, number],
-    };
-
     setHasSubmitted(true);
 
-    // API 호출 대신 setTimeout으로 테스트
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1초 딜레이
-      const mockSuccess = true; // 테스트용 성공 응답
-
-      console.log('제출 결과:', mockSuccess);
-
-      if (!mockSuccess) {
-        console.warn('제출 실패');
-        setHasSubmitted(false);
-        return;
-      }
-
-      submitAnswer(submitData);
+      webSocket.sendEvent({
+        eventType: 'ANSWER',
+        data: {
+          nickname: nickname || '',
+          answer: JSON.stringify([
+            currentSelectedCoordinate.lat,
+            currentSelectedCoordinate.lng,
+          ]),
+          roundNumber: Number(params.round),
+        },
+      });
 
       setCurrentSelectedCoordinate(null);
       console.log('제출 완료');
@@ -156,19 +95,6 @@ const GamePage = ({ params }: GamePageProps) => {
     }
   };
 
-  useEffect(() => {
-    // 라운드 시작시 라운드 생성 요청
-    createRound(Number(params.round));
-  }, [createRound, params.round]);
-
-  // gameState에서 라운드 정보 활용
-  useEffect(() => {
-    if (gameState.roundState) {
-      // 라운드 상태 업데이트시 처리
-      console.log('새로운 라운드 정보:', gameState.roundState);
-    }
-  }, [gameState.roundState]);
-
   return (
     <>
       <PageWrapper>
@@ -184,13 +110,6 @@ const GamePage = ({ params }: GamePageProps) => {
         <Timer initialTime={60} onTimeEnd={handleNextRound} />
 
         {/* 기본 뷰 (스와이퍼와 힌트) */}
-        <SwiperComponent />
-        {roundState.hint && (
-          <HintWrapper>
-            <HintIcon>힌트</HintIcon>
-            <HintText> {roundState.hint}</HintText>
-          </HintWrapper>
-        )}
         {isMapView ? (
           <MapComponent
             mode="game"
@@ -199,14 +118,11 @@ const GamePage = ({ params }: GamePageProps) => {
           />
         ) : (
           <>
-            <SwiperComponent />
-            {/* TODO: 백엔드 연동 시 사용 */}
-            {/* <SwiperComponent images={gameState.roundState?.contentUrls || []} /> */}
-            {roundState.hint && (
+            <SwiperComponent images={gameState.roundState?.contentUrls || []} />
+            {gameState.roundState?.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
-                <HintText> {roundState.hint}</HintText>
-                {/* <HintText>{gameState.roundState.hint}</HintText> */}
+                <HintText>{gameState.roundState.hint}</HintText>
               </HintWrapper>
             )}
           </>
