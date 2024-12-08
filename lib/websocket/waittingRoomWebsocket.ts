@@ -7,8 +7,9 @@ import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 interface WebSocketEvent {
   eventType: 'READY' | 'PARTICIPANT' | 'START';
   data: {
-    nickname: string;
+    nickname?: string;
     role?: string;
+    gameId?: string;
   };
 }
 

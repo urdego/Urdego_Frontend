@@ -18,6 +18,7 @@ export const API_URL_CONFIG = Object.freeze({
   },
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',
+    SEND: '/api/notification-service/notifications/send',
   },
   GROUP: {
     CREATE: '/api/group-service/groups',
@@ -26,9 +27,17 @@ export const API_URL_CONFIG = Object.freeze({
       PROD: 'wss://urdego.com/api/group-service/connect',
       DEV: `ws://3.39.135.47:8083/group-service/connect`,
     },
+    SUBSCRIBE: '/group-service/subscribe/group',
+    PUBLISH: '/group-service/publish/group',
   },
   GAME: {
     SUBMIT_ANSWER: '/api/game-service/submissions',
+    WS_URL: {
+      PROD: 'wss://urdego.com/api/game-service/connect',
+      DEV: `ws://3.39.135.47:8084/game-service/connect`,
+    },
+    SUBSCRIBE: '/game-service/subscribe',
+    PUBLISH: '/game-service/publish',
   },
 });
 

@@ -10,14 +10,23 @@ export interface User {
   role: UserRole;
 }
 
+interface WaitingRoomData {
+  waitingRoomParticipants: {
+    nickname: string;
+    status: string;
+    id: number;
+  }[];
+}
+
+interface GameStartData {
+  action: 'startGame';
+  gameId: string;
+  joinedUser: string[];
+  totalRounds: number;
+}
+
 interface WebSocketMessage {
-  data: {
-    waitingRoomParticipants: {
-      nickname: string;
-      status: string;
-      id: number;
-    }[];
-  };
+  data: WaitingRoomData | GameStartData;
 }
 
 interface WebSocketStore {
@@ -36,23 +45,33 @@ const useWebSocketStore = create<WebSocketStore>((set) => ({
   hostNickname: null,
   addMessage: (message) => {
     set((state) => {
-      const updatedUsers = message.data.waitingRoomParticipants.map(
-        (participant): User => ({
-          id: participant.id,
-          name: participant.nickname,
-          isHost: participant.nickname === state.hostNickname,
-          isReady:
-            participant.status === 'Ready' ||
-            participant.nickname === state.hostNickname,
-          role:
-            participant.nickname === state.hostNickname ? 'MANAGER' : 'MEMBER',
-        })
-      );
+      // WaitingRoomData 타입인 경우에만 users 업데이트
+      if ('waitingRoomParticipants' in message.data) {
+        const updatedUsers = message.data.waitingRoomParticipants.map(
+          (participant): User => ({
+            id: participant.id,
+            name: participant.nickname,
+            isHost: participant.nickname === state.hostNickname,
+            isReady:
+              participant.status === 'Ready' ||
+              participant.nickname === state.hostNickname,
+            role:
+              participant.nickname === state.hostNickname
+                ? 'MANAGER'
+                : 'MEMBER',
+          })
+        );
+
+        return {
+          ...state,
+          messages: [...state.messages, message],
+          users: updatedUsers,
+        };
+      }
 
       return {
         ...state,
         messages: [...state.messages, message],
-        users: updatedUsers,
       };
     });
   },
