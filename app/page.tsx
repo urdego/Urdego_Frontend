@@ -20,8 +20,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import OnBoarding1 from '@/styles/Icon/OnBoarding/OnBoarding1.svg';
 import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
-import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoarding3.gif';
-import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoarding4.gif';
+import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoardingPlace.gif';
+import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoardingGame.gif';
 import Image from 'next/image';
 
 const OnBoarding = () => {
