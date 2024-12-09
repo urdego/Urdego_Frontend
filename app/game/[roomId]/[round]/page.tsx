@@ -123,7 +123,7 @@ const GamePage = ({ params }: GamePageProps) => {
           isMapView={isMapView}
           onBackClick={handleBackClick}
         />
-        <Timer initialTime={30} onTimeEnd={handleNextRound} />
+        <Timer initialTime={20} onTimeEnd={handleNextRound} />
 
         {/* 기본 뷰 (스와이퍼와 힌트) */}
         {isMapView ? (
