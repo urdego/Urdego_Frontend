@@ -1,11 +1,13 @@
 import axiosInstance from '@/lib/axios';
 import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
 import useUserStore from '@/stores/useUserStore';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
   const { nickname } = useUserStore();
+  const router = useRouter();
 
   const handleUploadFiles = async () => {
     // 장소 등록 진행
@@ -23,6 +25,7 @@ const useUploadFiles = () => {
       });
 
       initEntirePlaceList();
+      router.push('/home');
     } catch (error) {
       // 장소 등록 실패
       console.error(`장소 등록하기에서 발생한 에러: ${error}`);
