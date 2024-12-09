@@ -14,14 +14,16 @@ import {
   SlideContent,
   SlideTitle,
   SlideDescription,
-  SlideImage,
+  SlideStaticImage,
+  SlideDynamicImage,
 } from './onBoarding.styles';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import OnBoarding1 from '@/styles/Icon/OnBoarding/OnBoarding1.svg';
 import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
-import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoarding3.gif';
-import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoarding4.gif';
+import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoardingPlace.gif';
+import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoardingGame.gif';
+import Image from 'next/image';
 
 const OnBoarding = () => {
   const router = useRouter();
@@ -79,10 +81,22 @@ const OnBoarding = () => {
             {slides.map((slide, index) => (
               <SlideContent key={index}>
                 <ImageWrapper $isSecondSlide={index === 1}>
-                  <SlideImage
-                    src={slide.image}
-                    alt={`온보딩 이미지 ${index + 1}`}
-                  />
+                  {index === 0 || index === 1 ? (
+                    <SlideStaticImage
+                      src={slide.image}
+                      alt={`온보딩 이미지 ${index + 1}`}
+                    />
+                  ) : (
+                    <SlideDynamicImage>
+                      <Image
+                        src={slide.image}
+                        alt={`온보딩 이미지 ${index + 1}`}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="(max-width:430px) 100vw"
+                      />
+                    </SlideDynamicImage>
+                  )}
                 </ImageWrapper>
                 <TextWrapper $isFirstSlide={index === 0}>
                   <SlideTitle>{slide.title}</SlideTitle>

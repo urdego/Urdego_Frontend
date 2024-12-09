@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
@@ -8,42 +8,17 @@ import { MainBanner } from '@/components/Layout/Home/MainBanner/MainBanner';
 import ChannelButton from '@/components/Layout/Home/ChannelButton/ChannelButton';
 import { HomeTitle, ChannelWrapper } from './Home.styles';
 import { HomePageWrapper } from '@/app/commonPage.styles';
+
 import useSSEStore from '@/stores/useSSEStore';
 import useUserStore from '@/stores/useUserStore';
-import { toast } from 'react-hot-toast';
 import type { NotificationMessage } from '@/lib/types/notification';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 
-interface InviteToastProps {
-  message: string;
-  onAccept: () => void;
-  onReject: () => void;
-  toastId: string;
-}
-
-const InviteToast = ({ message, onAccept, onReject }: InviteToastProps) => {
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full mx-auto">
-      <p className="text-gray-800 mb-4">{message}</p>
-      <div className="flex justify-end space-x-2">
-        <button
-          onClick={onReject}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-        >
-          거절
-        </button>
-        <button
-          onClick={onAccept}
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-        >
-          수락
-        </button>
-      </div>
-    </div>
-  );
-};
+import { toast } from 'react-hot-toast';
+import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationListBottomSheet';
+import { InviteToast } from '@/components/Layout/Home/InviteToast/InviteToast';
 
 const handleRegularNotification = (notification: NotificationMessage) => {
   toast(
@@ -62,6 +37,7 @@ const handleRegularNotification = (notification: NotificationMessage) => {
     }
   );
 };
+//   notification: NotificationMessage,
 //   router: AppRouterInstance,
 //   addMessageFn: (message: any) => void
 // ) => {
@@ -158,6 +134,9 @@ const handleInvitation = (
 
 const connectSSE = (userId: string) => {
   const { setEventSource } = useSSEStore.getState();
+  // let retryCount = 0;
+  // const MAX_RETRIES = 3;
+  // let retryTimeout: NodeJS.Timeout;
 
   try {
     const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;
@@ -252,11 +231,13 @@ const Home = () => {
     };
   }, [email, eventSource, router, setEventSource, addMessage]);
 
+  const [isLocationListVisible, setLocationListVisible] = useState(false);
+
   return (
     <>
       <TopBar NavType="main" />
       <HomePageWrapper>
-        <MainBanner />
+        <MainBanner setLocationListVisible={setLocationListVisible} />
         <ChannelWrapper>
           <HomeTitle>게임채널</HomeTitle>
           <Link href="/groupList">
@@ -264,6 +245,11 @@ const Home = () => {
           </Link>
           <ChannelButton title="랭킹 게임" />
         </ChannelWrapper>
+        {isLocationListVisible && (
+          <LocationListBottomSheet
+            setLocationListVisible={setLocationListVisible}
+          />
+        )}
       </HomePageWrapper>
     </>
   );

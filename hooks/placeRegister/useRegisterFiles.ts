@@ -39,6 +39,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
+      toast.error('업로드 가능한 용량을 초과했어요');
       return;
     }
 

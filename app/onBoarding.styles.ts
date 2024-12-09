@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
+import Image from 'next/image';
 
 export const PageWrapper = styled.div`
   width: 100%;
@@ -98,7 +98,7 @@ export const SlideDescription = styled.p`
   white-space: pre-line;
 `;
 
-export const SlideImage = styled(Image)`
+export const SlideStaticImage = styled(Image)`
   width: 100%;
   max-width: 300px;
   max-height: 350px;
@@ -106,6 +106,16 @@ export const SlideImage = styled(Image)`
   min-height: 450px;
   object-fit: contain;
   margin: 0 auto;
+`;
+
+export const SlideDynamicImage = styled.div`
+  position: relative;
+  width: 224px;
+  height: 448px;
+  margin: 0 auto;
+  img {
+    border-radius: 12.8px;
+  }
 `;
 
 export const ButtonContainer = styled.div`

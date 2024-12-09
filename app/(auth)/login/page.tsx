@@ -124,7 +124,7 @@ const Login = () => {
   return (
     <LoginWrapper>
       <LogoContainer>
-        <Image src={Logo} alt="logo" />
+        <Image src={Logo} alt="logo" priority />
         {/* <Image src={MainLayout} alt="mainLayout" /> */}
       </LogoContainer>
       <form onSubmit={handleLogin} autoComplete="off">

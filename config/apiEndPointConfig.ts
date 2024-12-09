@@ -10,6 +10,7 @@ export const API_URL_CONFIG = Object.freeze({
   CONTENT: {
     POST_MULTIPLE: '/api/content-service/contents/multiple',
     POST_SINGLE: '/api/content-service/contents/',
+    DEFAULT: '/api/content-service/',
   },
   AUTH: {
     SIGNUP: '/api/user-service/users',
