@@ -34,7 +34,7 @@ const RoundRank = ({
 }) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1;
-  const maxRounds = 3;
+  const maxRounds = 2;
   const messages = useWebSocketStore((state) => state.messages);
   const [currentRoundData, setCurrentRoundData] = useState<
     'thisRound' | 'totalRound'
@@ -54,8 +54,8 @@ const RoundRank = ({
             ? b.score - a.score
             : b.totalScore - a.totalScore
         )
-        .map((coord) => ({
-          rank: 0,
+        .map((coord, index) => ({
+          rank: index + 1,
           name: coord.nickname,
           score:
             currentRoundData === 'thisRound' ? coord.score : coord.totalScore,
@@ -80,7 +80,7 @@ const RoundRank = ({
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
       {currentRound < maxRounds && (
-        <Timer initialTime={15} onTimeEnd={handleNextRound} />
+        <Timer initialTime={10} onTimeEnd={handleNextRound} />
       )}
       <MapComponent
         mode="rank"
@@ -96,7 +96,7 @@ const RoundRank = ({
       />
       {currentRound >= maxRounds && (
         <Footer>
-          <CountdownButton initialTime={15} onTimeEnd={handleNextRound} />
+          <CountdownButton initialTime={10} onTimeEnd={handleNextRound} />
         </Footer>
       )}
     </PageWrapper>

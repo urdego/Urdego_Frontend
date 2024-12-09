@@ -4,7 +4,6 @@ import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
-// 인터페이스 정의 부분은 변경 없음
 export interface RoundCreateRequest {
   gameId: number;
   roundNum: number;

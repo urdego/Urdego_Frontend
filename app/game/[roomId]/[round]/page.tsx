@@ -111,9 +111,6 @@ const GamePage = ({ params }: GamePageProps) => {
     }
   };
 
-  // 디버깅용 콘솔 로그 추가
-  console.log('현재 gameState:', gameState);
-  console.log('contentUrls:', gameState.roundState?.contentUrls);
   return (
     <>
       <PageWrapper>
@@ -126,7 +123,7 @@ const GamePage = ({ params }: GamePageProps) => {
           isMapView={isMapView}
           onBackClick={handleBackClick}
         />
-        <Timer initialTime={60} onTimeEnd={handleNextRound} />
+        <Timer initialTime={30} onTimeEnd={handleNextRound} />
 
         {/* 기본 뷰 (스와이퍼와 힌트) */}
         {isMapView ? (

@@ -114,6 +114,24 @@ const MapComponent: React.FC<MapComponentProps> = ({
     }
   };
 
+  // 부드러운 줌을 위한 함수 추가
+  const smoothZoom = (
+    map: google.maps.Map,
+    targetZoom: number,
+    currentZoom: number
+  ) => {
+    if (currentZoom !== targetZoom) {
+      const nextZoom =
+        currentZoom < targetZoom ? currentZoom + 1 : currentZoom - 1;
+      google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
+        setTimeout(() => {
+          smoothZoom(map, targetZoom, nextZoom);
+        }, 180); // 줌 속도 조절
+      });
+      map.setZoom(nextZoom);
+    }
+  };
+
   // 정답 좌표 및 유저 좌표 마커 배치 함수
   const placeMarkers = () => {
     if (!mapRef.current) return;
@@ -136,13 +154,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
       });
       markerRefs.current.push(answerMarker);
 
-      // 더 자연스러운 줌 애니메이션을 위한 순차적 실행
-      mapRef.current.setZoom(12); // 먼저 넓은 시야로 줌 아웃
+      // 더 자연스러운 줌 애니메이션
+      mapRef.current.setZoom(7); // 먼저 넓은 시야로 줌 아웃
       setTimeout(() => {
         mapRef.current?.panTo(answerCoordinate); // 위치로 이동
         setTimeout(() => {
-          mapRef.current?.setZoom(15); // 부드럽게 줌인
-        }, 1000);
+          if (mapRef.current) {
+            smoothZoom(mapRef.current, 15, 7); // 부드럽게 줌인 (7에서 15까지)
+          }
+        }, 500);
       }, 100);
     }
 
