@@ -16,8 +16,12 @@ interface SwiperProps {
 }
 
 const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
-  // 슬라이드 복제: 슬라이드가 3개 미만이면 복제해서 최소 3개로 보이도록 처리
-  // const slides = images.length < 3 ? [...images, ...images] : images;
+  // 이미지가 없을 경우 처리
+  if (!images || images.length === 0) {
+    console.log('이미지가 없습니다.');
+    return null;
+  }
+
   const applySlideStyles = (swiper: SwiperType) => {
     const slides = swiper.slides;
     slides.forEach((slide: HTMLElement, index: number) => {
@@ -49,6 +53,7 @@ const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
                   alt={`Slide ${index}`}
                   fill
                   style={{ objectFit: 'cover' }}
+                  priority={true}
                 />
               </ImageContainer>
             </StyledSwiperSlide>

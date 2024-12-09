@@ -8,8 +8,10 @@ import Timer from '@/components/Layout/Game/Timer';
 import MapBottomSheet from '@/components/Layout/Game/MapBottomSheet';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import InGameWebSocket from '@/lib/websocket/gameWebsocket';
+import useWebSocketStore, { RoundData } from '@/stores/useWebSocketStore';
+
 import {
   PageWrapper,
   Footer,
@@ -39,6 +41,28 @@ const GamePage = ({ params }: GamePageProps) => {
     setCurrentSelectedCoordinate,
     handleBackClick,
   } = useGameState(Number(params.round));
+
+  const messages = useWebSocketStore((state) => state.messages);
+
+  // roundState를 별도의 state로 관리
+  const [roundState, setRoundState] = useState<RoundData | null>(null);
+
+  // messages와 currentRound 변경 시 roundState 업데이트
+  useEffect(() => {
+    const roundStartMessage = messages
+      .filter((msg) => msg.eventType === 'ROUND_START')
+      .find((msg) => (msg.data as RoundData).roundNum === currentRound);
+
+    if (roundStartMessage) {
+      setRoundState(roundStartMessage.data as RoundData);
+      console.log(
+        'Round state updated for round',
+        currentRound,
+        ':',
+        roundStartMessage.data
+      );
+    }
+  }, [messages, currentRound]);
 
   const webSocket = InGameWebSocket.getInstance();
 
@@ -87,6 +111,9 @@ const GamePage = ({ params }: GamePageProps) => {
     }
   };
 
+  // 디버깅용 콘솔 로그 추가
+  console.log('현재 gameState:', gameState);
+  console.log('contentUrls:', gameState.roundState?.contentUrls);
   return (
     <>
       <PageWrapper>
@@ -110,11 +137,14 @@ const GamePage = ({ params }: GamePageProps) => {
           />
         ) : (
           <>
-            <SwiperComponent images={gameState.roundState?.contentUrls || []} />
-            {gameState.roundState?.hint && (
+            <SwiperComponent
+              images={roundState?.contentUrls || []}
+              key={roundState?.roundId}
+            />
+            {roundState?.hint && (
               <HintWrapper>
                 <HintIcon>힌트</HintIcon>
-                <HintText> {gameState.roundState.hint}</HintText>
+                <HintText> {roundState.hint}</HintText>
               </HintWrapper>
             )}
           </>
