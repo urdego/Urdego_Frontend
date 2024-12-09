@@ -32,7 +32,7 @@ const RoomButton = ({
     artboards[Math.floor(Math.random() * artboards.length)];
 
   return (
-    <RoomButtonWrapper $backgroundimage={randomArtboard.src}>
+    <RoomButtonWrapper $backgroundImage={randomArtboard.src}>
       <RoomButtonLayout>
         <RoomTitle>{title}</RoomTitle>
         <RoomPerson>
