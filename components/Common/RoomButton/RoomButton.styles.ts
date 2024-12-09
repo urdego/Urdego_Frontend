@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 // import CardBackground from '@/styles/Icon/CardBackGround.png';
 
-export const RoomButtonWrapper = styled.div<{ backgroundImage: string }>`
+export const RoomButtonWrapper = styled.div<{ $backgroundImage: string }>`
   width: 163px;
   height: 139px;
   border-radius: 12px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
 `;
 
 export const RoomButtonLayout = styled.div`
