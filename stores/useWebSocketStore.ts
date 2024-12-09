@@ -25,24 +25,95 @@ interface GameStartData {
   totalRounds: number;
 }
 
+export interface RoundData {
+  roundId: number;
+  roundNum: number;
+  roundTimer: number;
+  contentUrls: string[];
+  hint?: string;
+}
+
+export interface ResultData {
+  answerCoordinate: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates: {
+    nickname: string;
+    lat: number;
+    lng: number;
+    score: number;
+    totalScore: number;
+  }[];
+}
+
+export interface ScoreData {
+  roundId: number;
+  answerCoordinate: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates: {
+    nickname: string;
+    lat: number;
+    lng: number;
+    score: number;
+    totalScore: number;
+  }[];
+}
+
 interface WebSocketMessage {
-  data: WaitingRoomData | GameStartData;
+  data: WaitingRoomData | GameStartData | RoundData | ResultData | ScoreData;
+  eventType?:
+    | 'PARTICIPANT'
+    | 'READY'
+    | 'START'
+    | 'ROUND_START'
+    | 'RESULT'
+    | 'SCORE'
+    | 'ROUND_END';
 }
 
 interface WebSocketStore {
   messages: WebSocketMessage[];
   users: User[];
   hostNickname: string | null;
+  scoreData: ScoreData | null;
   addMessage: (message: WebSocketMessage) => void;
   clearMessages: () => void;
   setUsers: (users: User[]) => void;
   setHostNickname: (nickname: string) => void;
+  setScoreData: (scoreData: ScoreData | null) => void;
+}
+
+export interface GameState {
+  roundState?: {
+    roundId: number;
+    roundNum: number;
+    roundTimer: number;
+    contentUrls: string[];
+    hint?: string;
+  };
+  scoreState?: {
+    answerCoordinate: {
+      lat: number;
+      lng: number;
+    };
+    submitCoordinates: {
+      nickname: string;
+      lat: number;
+      lng: number;
+      score: number;
+      totalScore: number;
+    }[];
+  };
 }
 
 const useWebSocketStore = create<WebSocketStore>((set) => ({
   messages: [],
   users: [],
   hostNickname: null,
+  scoreData: null,
   addMessage: (message) => {
     set((state) => {
       // WaitingRoomData 타입인 경우에만 users 업데이트
@@ -78,6 +149,7 @@ const useWebSocketStore = create<WebSocketStore>((set) => ({
   clearMessages: () => set({ messages: [], hostNickname: null }),
   setUsers: (users) => set({ users }),
   setHostNickname: (nickname) => set({ hostNickname: nickname }),
+  setScoreData: (scoreData) => set({ scoreData }),
 }));
 
 export default useWebSocketStore;

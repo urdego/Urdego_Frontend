@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import colors from '@/styles/color/palette';
+import SoundOn from '@/styles/Icon/SoundOn.svg';
+import SoundOff from '@/styles/Icon/SoundOff.svg';
 
 const InGameLayout = ({ children }: { children: React.ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -91,12 +91,7 @@ const MusicSwitch = ({
         onClick();
       }}
     >
-      <SwitchTrack isOn={isOn}>
-        <SwitchThumb
-          layout
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        />
-      </SwitchTrack>
+      {isOn ? <SoundOnIcon /> : <SoundOffIcon />}
     </SwitchContainer>
   );
 };
@@ -108,7 +103,7 @@ const Container = styled.div`
 const SwitchContainer = styled.div`
   position: absolute;
   top: 0.5rem;
-  right: 0.5rem;
+  left: 1rem;
   z-index: 50;
   cursor: pointer;
   margin: 0 auto;
@@ -119,23 +114,20 @@ const SwitchContainer = styled.div`
   }
 `;
 
-const SwitchTrack = styled(motion.div)<{ isOn: boolean }>`
-  width: 50px;
+const SoundOnIcon = styled.img.attrs({
+  src: SoundOn.src,
+  alt: 'Sound On',
+})`
+  width: 24px;
   height: 24px;
-  background-color: ${({ isOn }) =>
-    isOn ? colors.purple[60] : colors.gray[80]};
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: ${({ isOn }) => (isOn ? 'flex-end' : 'flex-start')};
-  padding: 2px;
 `;
 
-const SwitchThumb = styled(motion.div)`
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
+const SoundOffIcon = styled.img.attrs({
+  src: SoundOff.src,
+  alt: 'Sound Off',
+})`
+  width: 24px;
+  height: 24px;
 `;
 
 export default InGameLayout;

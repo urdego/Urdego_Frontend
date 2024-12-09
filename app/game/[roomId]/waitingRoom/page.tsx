@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Character from '@/components/Layout/Game/Character';
-import useLoadingStore from '@/stores/loadingStore';
+// import useLoadingStore from '@/stores/loadingStore';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
 import useUserStore from '@/stores/useUserStore';
@@ -17,7 +17,7 @@ import { toast } from 'react-hot-toast';
 
 const WaitingRoom = () => {
   const router = useRouter();
-  const setLoading = useLoadingStore((state) => state.setLoading);
+  // const setLoading = useLoadingStore((state) => state.setLoading);
   const { messages, users } = useWebSocketStore();
   const nickname = useUserStore((state) => state.nickname);
   const gameId = useGameStore((state) => state.gameId); // 여기로 이동
@@ -98,12 +98,12 @@ const WaitingRoom = () => {
   // 게임 시작 핸들러 (MANAGER만 가능)
   const startGame = () => {
     const wsClient = WaitingRoomWebSocket.getInstance();
-    const groupId = useGameStore.getState().groupId;
+    const gameId = useGameStore.getState().gameId;
 
     wsClient.sendEvent({
       eventType: 'START',
       data: {
-        gameId: groupId?.toString(),
+        gameId: gameId?.toString(),
       },
     });
   };

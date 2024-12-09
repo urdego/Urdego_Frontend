@@ -12,12 +12,12 @@ export const ButtonContainer = styled.div`
   padding: 8px 24px 16px 24px;
 `;
 
-export const Button = styled.button<{ active: boolean }>`
+export const Button = styled.button<{ $active: boolean }>`
   flex: 1;
   padding: 8px 20px;
-  background-color: ${({ active }) =>
-    active ? colors.purple[50] : 'transparent'};
-  color: ${({ active }) => (active ? colors.etc.white : colors.gray[70])};
+  background-color: ${({ $active }) =>
+    $active ? colors.purple[50] : 'transparent'};
+  color: ${({ $active }) => ($active ? colors.etc.white : colors.gray[70])};
   border: none;
   border-radius: 999px;
   cursor: pointer;

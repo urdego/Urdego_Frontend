@@ -37,6 +37,68 @@ const handleRegularNotification = (notification: NotificationMessage) => {
     }
   );
 };
+//   notification: NotificationMessage,
+//   router: AppRouterInstance,
+//   addMessageFn: (message: any) => void
+// ) => {
+//   toast.custom(
+//     (t) => (
+//       <InviteToast
+//         message={`${notification.groupName}에서 ${notification.senderNickName}님이 ${notification.action}`}
+//         onAccept={async () => {
+//           const stompClient = new Client({
+//             brokerURL: `${process.env.NEXT_PUBLIC_GROUP_WS_URL}/group-service/connect`,
+//           });
+
+//           // 연결 시도 전에 이벤트 핸들러 설정
+//           stompClient.onConnect = () => {
+//             console.log('WebSocket 연결 성공');
+
+//             // 구독 설정
+//             const subscription = stompClient.subscribe(
+//               `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${notification.groupId}`,
+//               (message: { body: string }) => {
+//                 console.log('Received message:', message.body);
+//                 const parsedMessage = JSON.parse(message.body);
+//                 addMessageFn({
+//                   ...parsedMessage,
+//                   timestamp: Date.now(),
+//                 });
+//               }
+//             );
+//             console.log('구독 설정 완료');
+//           };
+
+//           stompClient.onConnect = () => {
+//             stompClient.subscribe(
+//               `${process.env.NEXT_PUBLIC_GROUP_SUBSCRIBE}/${notification.groupId}`,
+//               (message: { body: string }) => {
+//                 console.log('Received message:', message.body);
+//                 const parsedMessage = JSON.parse(message.body);
+//                 addMessageFn({
+//                   ...parsedMessage,
+//                   timestamp: Date.now(),
+//                 });
+//               }
+//             );
+//           };
+//           stompClient.activate();
+//           router.push(`/game/${notification.groupId}/waitingRoom`);
+//           toast.dismiss(t.id);
+//         }}
+//         onReject={() => {
+//           toast.dismiss(t.id);
+//         }}
+//         toastId={t.id}
+//       />
+//     ),
+//     {
+//       position: 'top-center',
+//       duration: 30000,
+//     }
+//   );
+// };
+// ... existing code ...
 
 const handleInvitation = (
   notification: NotificationMessage,
@@ -72,6 +134,9 @@ const handleInvitation = (
 
 const connectSSE = (userId: string) => {
   const { setEventSource } = useSSEStore.getState();
+  // let retryCount = 0;
+  // const MAX_RETRIES = 3;
+  // let retryTimeout: NodeJS.Timeout;
 
   try {
     const url = `/api/notification-service/connect/${encodeURIComponent(userId)}`;

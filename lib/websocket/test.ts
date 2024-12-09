@@ -1,15 +1,16 @@
-import { Client, Message, StompSubscription } from '@stomp/stompjs';
+import { Client, Message } from '@stomp/stompjs';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 import useUserStore from '@/stores/useUserStore';
 import toast from 'react-hot-toast';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
-// 인터페이스 정의 부분은 변경 없음
+// 라운드 생성 요청/응답
 export interface RoundCreateRequest {
   gameId: number;
   roundNum: number;
 }
 
+// 라운드 별 데이터 형식
 export interface RoundData {
   roundId: number;
   roundNum: number;
@@ -17,7 +18,7 @@ export interface RoundData {
   contentUrls: string[];
   hint?: string;
 }
-
+// 답안 제출 요청/응답
 export interface RoundSubmitRequest {
   nickname: string;
   roundId: number;
@@ -29,14 +30,15 @@ export interface RoundEndRequest {
 }
 
 export interface ScoreData {
+  roundId: number;
   answerCoordinate: {
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
   };
   submitCoordinates: {
     nickname: string;
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
     score: number;
     totalScore: number;
   }[];
@@ -52,8 +54,6 @@ class InGameWebSocket {
   private gameId: number | null = null;
   private roundNumber: number | null = null;
   private currentRoundId: number | null = null;
-  private subscriptions: Record<string, StompSubscription> = {};
-
   private constructor() {}
 
   public static getInstance(): InGameWebSocket {
@@ -61,15 +61,6 @@ class InGameWebSocket {
       InGameWebSocket.instance = new InGameWebSocket();
     }
     return InGameWebSocket.instance;
-  }
-
-  private unsubscribeAll(): void {
-    Object.values(this.subscriptions).forEach((subscription) => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
-    });
-    this.subscriptions = {};
   }
 
   public async connect(gameId: number, roundNumber: number): Promise<boolean> {
@@ -120,12 +111,6 @@ class InGameWebSocket {
   }
 
   private setupSubscription(): void {
-    // 이미 구독이 설정되어 있다면 리턴
-    if (Object.keys(this.subscriptions).length > 0) {
-      console.log('구독이 이미 설정되어 있습니다.');
-      return;
-    }
-
     if (!this.stompClient?.active || !this.gameId || !this.roundNumber) {
       console.warn('WebSocket 연결 실패 혹은 gameId/roundNumber 정보 없음');
       return;
@@ -133,60 +118,42 @@ class InGameWebSocket {
 
     try {
       // 라운드 생성 구독
-      this.subscriptions['roundCreate'] = this.stompClient.subscribe(
+      this.stompClient.subscribe(
         `/game-service/subscribe/game/${this.gameId}/rounds/create`,
         (message: Message) => {
           console.log('=== 라운드 데이터 수신 ===');
           console.log('Raw message:', message.body);
           const roundData = JSON.parse(message.body);
-          console.log('roundData:', roundData);
-          this.currentRoundId = roundData.roundId;
-
           console.log('Parsed round data:', {
             roundId: roundData.roundId,
             roundNum: roundData.roundNum,
             contentUrls: roundData.contentUrls,
             hint: roundData.hint,
           });
+          this.currentRoundId = roundData.roundId;
 
           const addMessage = useWebSocketStore.getState().addMessage;
           addMessage({
             eventType: 'ROUND_START',
             data: roundData,
+            // timestamp: Date.now(),
           });
         }
       );
 
       // 점수 구독
-      this.subscriptions['score'] = this.stompClient.subscribe(
+      this.stompClient.subscribe(
         `/game-service/subscribe/game/${this.gameId}/rounds/${this.roundNumber}/score`,
         (message: Message) => {
           console.log('=== 점수 데이터 수신 ===');
-          const rawData = JSON.parse(message.body);
+          console.log('Raw message:', message.body);
 
-          const scoreData = {
-            answerCoordinate: {
-              lat: rawData.answerCoordinate.latitude,
-              lng: rawData.answerCoordinate.longitude,
-            },
-            submitCoordinates: rawData.submitCoordinates.map(
-              (coord: {
-                nickname: string;
-                latitude: number;
-                longitude: number;
-                score: number;
-                totalScore: number;
-              }) => ({
-                nickname: coord.nickname,
-                lat: coord.latitude,
-                lng: coord.longitude,
-                score: coord.score,
-                totalScore: coord.totalScore,
-              })
-            ),
-          };
-
-          console.log('Transformed score data:', scoreData);
+          const scoreData = JSON.parse(message.body);
+          console.log('Parsed score data:', {
+            roundId: scoreData.roundId,
+            answerCoordinate: scoreData.answerCoordinate,
+            submitCoordinates: scoreData.submitCoordinates,
+          });
 
           const addMessage = useWebSocketStore.getState().addMessage;
           addMessage({
@@ -196,8 +163,8 @@ class InGameWebSocket {
         }
       );
 
-      // 라운드 종료 구독
-      this.subscriptions['roundEnd'] = this.stompClient.subscribe(
+      // 라운드 종료 구독 추가
+      this.stompClient.subscribe(
         `/game-service/subscribe/game/${this.gameId}/rounds/${this.roundNumber}/end`,
         (message: Message) => {
           console.log('=== 라운드 종료 데이터 수신 ===');
@@ -218,11 +185,11 @@ class InGameWebSocket {
       console.log(`라운드 ${this.roundNumber}번 데이터 요청`);
     } catch (error) {
       console.error('구독 설정 실패:', error);
-      this.unsubscribeAll(); // 에러 발생 시 구독 해제
       setTimeout(() => this.setupSubscription(), 1000);
     }
   }
 
+  // 라운드 생성 요청
   public createRound(roundNum: number): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
@@ -239,6 +206,7 @@ class InGameWebSocket {
     });
   }
 
+  // 답안 제출
   public submitAnswer(roundId: number, coordinate: [number, number]): void {
     if (!this.stompClient?.active || !this.gameId) return;
 
@@ -261,6 +229,7 @@ class InGameWebSocket {
     });
   }
 
+  // 라운드 종료 요청
   public endRound(roundNum: number): void {
     if (!this.stompClient?.active) return;
 
@@ -277,11 +246,9 @@ class InGameWebSocket {
 
   public disconnect(): void {
     if (this.stompClient?.active) {
-      this.unsubscribeAll();
       this.stompClient.deactivate();
       this.gameId = null;
       this.roundNumber = null;
-      this.currentRoundId = null;
       console.log('Disconnected from Game WebSocket');
     }
   }
@@ -291,15 +258,9 @@ class InGameWebSocket {
   }
 
   public updateRound(roundNumber: number): void {
-    if (this.roundNumber === roundNumber) {
-      console.log('같은 라운드 번호로 업데이트 요청됨, 무시합니다.');
-      return;
-    }
-
     this.roundNumber = roundNumber;
     if (this.stompClient?.active) {
-      this.unsubscribeAll(); // 기존 구독 해제
-      this.setupSubscription(); // 새로운 구독 설정
+      this.setupSubscription();
     }
   }
 }
