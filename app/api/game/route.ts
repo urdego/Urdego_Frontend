@@ -1,4 +1,4 @@
-import { API_PORT_CONFIG, API_URL_CONFIG } from '@/config/apiEndPointConfig';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { NextRequest, NextResponse } from 'next/server';
 

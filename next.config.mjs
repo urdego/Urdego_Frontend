@@ -1,6 +1,15 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: true,
+  openAnalyzer:true,
   compiler: {
     styledComponents: {
       displayName: true,
@@ -13,8 +22,8 @@ const nextConfig = {
         source: '/group-service/:path*',
         destination: `${
           process.env.NODE_ENV === 'development'
-            ? 'http://3.39.135.47:8083/group-service/:path*' // 개발 환경
-            : 'https://urdego.com/api/group-service/:path*' // 프로덕션 환경
+            ? 'http://3.39.135.47:8083/group-service/:path*'
+            : 'https://urdego.com/api/group-service/:path*'
         }`,
       },
     ];
@@ -24,4 +33,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

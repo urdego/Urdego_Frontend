@@ -33,7 +33,7 @@ const GamePage = ({ params }: GamePageProps) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const {
-    gameState,
+    // gameState,
     currentRound,
     isMapView,
     showBackIcon,
