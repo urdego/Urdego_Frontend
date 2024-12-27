@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 
-interface CharacterWrapperProps {
-  animation?: string;
-}
-
 export const CharactersContainer = styled.div`
   position: relative;
   width: 100%;
