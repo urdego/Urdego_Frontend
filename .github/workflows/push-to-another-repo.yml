@@ -1,45 +1,53 @@
 name: Push to Another Repository
 on:
- push:
-   branches:
-     - develop
- pull_request:
-   types: [closed]
-   branches:
-     - develop
+  push:
+    branches:
+      - develop
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
 
 jobs:
- push-to-another-repo:
-   if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v4
-       with:
-         token: ${{ secrets.API_TOKEN_GITHUB }}
-     
-     - name: Setup Node
-       uses: actions/setup-node@v4
-       with:
-         node-version: '20'
-         cache: 'yarn'
-         
-     - name: Install Dependencies
-       run: yarn install
-       
-     - name: Build
-       run: yarn build
-       env:
-         VITE_APP_BASE_URL: ${{ secrets.VITE_APP_BASE_URL }}
+  push-to-another-repo:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+      # 먼저 소스코드를 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+      
+      # Node.js 설정
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          
+      # 의존성 설치
+      - name: Install Dependencies
+        run: yarn install
+        
+      # 빌드
+      - name: Build
+        run: yarn build
+        env:
+          VITE_APP_BASE_URL: ${{ secrets.VITE_APP_BASE_URL }}
 
-     - name: Push Directory to Another Repository
-       uses: cpina/github-action-push-to-another-repository@main
-       env:
-         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-       with:
-         source-directory: output
-         destination-github-username: aaahyesu
-         destination-repository-name: urdego_fe
-         commit-message: 'fix: add API_TOKEN_GITHUB'
-         target-branch: main
-         github-server: github.com
-         create-target-branch-if-needed: false
+      # 다른 레포지토리로 푸시
+      - name: Push Directory to Another Repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}  # 여기서 환경변수를 올바르게 설정
+          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+        with:
+          source-directory: output
+          destination-github-username: aaahyesu
+          destination-repository-name: urdego_fe
+          commit-message: 'fix: add push-to-another-repo'
+          target-branch: main
+          github-server: github.com
+          user-email: ${{ secrets.JIRA_USER_EMAIL }}  # Git 설정을 위한 이메일 추가
+          user-name: "GitHub Actions"  # Git 설정을 위한 사용자 이름 추가
