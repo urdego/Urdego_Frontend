@@ -6,18 +6,18 @@ import { LoginWrapper } from './Login.styles';
 const LoginPage = () => {
   const { data: session } = useSession();
 
-  if (session) {
-    return (
-      <LoginWrapper>
-        <p>{session.user?.email}님 환영합니다</p>
-        <button onClick={() => signOut()}>logout</button>
-      </LoginWrapper>
-    );
-  }
-
   return (
     <LoginWrapper>
-      <button onClick={() => signIn('kakao')}>login</button>
+      {session ? (
+        <>
+          <p>{session.user?.email}님 환영합니다</p>
+          <button onClick={() => signOut()}>logout</button>
+        </>
+      ) : (
+        <button onClick={() => signIn('kakao', { callbackUrl: '/home' })}>
+          login
+        </button>
+      )}
     </LoginWrapper>
   );
 };
