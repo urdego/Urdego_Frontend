@@ -1,4 +1,5 @@
 'use client';
+
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { LoginWrapper } from './Login.styles';
 
@@ -16,7 +17,7 @@ const LoginPage = () => {
 
   return (
     <LoginWrapper>
-      <button onClick={() => signIn()}>login</button>
+      <button onClick={() => signIn('kakao')}>login</button>
     </LoginWrapper>
   );
 };
