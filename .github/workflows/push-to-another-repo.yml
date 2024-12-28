@@ -1,0 +1,45 @@
+name: Push to Another Repository
+on:
+ push:
+   branches:
+     - develop
+ pull_request:
+   types: [closed]
+   branches:
+     - develop
+
+jobs:
+ push-to-another-repo:
+   if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v4
+       with:
+         token: ${{ secrets.API_TOKEN_GITHUB }}
+     
+     - name: Setup Node
+       uses: actions/setup-node@v4
+       with:
+         node-version: '20'
+         cache: 'yarn'
+         
+     - name: Install Dependencies
+       run: yarn install
+       
+     - name: Build
+       run: yarn build
+       env:
+         VITE_APP_BASE_URL: ${{ secrets.VITE_APP_BASE_URL }}
+
+     - name: Push Directory to Another Repository
+       uses: cpina/github-action-push-to-another-repository@main
+       env:
+         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+       with:
+         source-directory: output
+         destination-github-username: aaahyesu
+         destination-repository-name: urdego_fe
+         commit-message: 'fix: add API_TOKEN_GITHUB'
+         target-branch: main
+         github-server: github.com
+         create-target-branch-if-needed: false
