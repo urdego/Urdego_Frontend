@@ -5,6 +5,7 @@ import { LoginWrapper } from './Login.styles';
 
 const LoginPage = () => {
   const { data: session } = useSession();
+  console.log(session?.accessToken);
 
   return (
     <LoginWrapper>
@@ -14,9 +15,7 @@ const LoginPage = () => {
           <button onClick={() => signOut()}>logout</button>
         </>
       ) : (
-        <button onClick={() => signIn('kakao', { callbackUrl: '/home' })}>
-          login
-        </button>
+        <button onClick={() => signIn('kakao')}>login</button>
       )}
     </LoginWrapper>
   );
