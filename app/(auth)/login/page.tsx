@@ -5,7 +5,7 @@ import { LoginWrapper } from './Login.styles';
 
 const LoginPage = () => {
   const { data: session } = useSession();
-  console.log(session?.accessToken);
+  console.log(session?.accessToken); // accessToken
 
   return (
     <LoginWrapper>
