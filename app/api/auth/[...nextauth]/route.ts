@@ -27,8 +27,11 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.KAKAO_CLIENT_SECRET as string,
     }),
     AppleProvider({
-      clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: await getAppleToken(),
+      clientId: process.env.APPLE_ID!,
+      clientSecret: {
+        async: true,
+        token: getAppleToken,
+      } as unknown as string,
       profile(profile: AppleProfile) {
         return {
           id: profile.sub,
