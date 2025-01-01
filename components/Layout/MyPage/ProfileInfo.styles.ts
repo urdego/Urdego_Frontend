@@ -6,6 +6,7 @@ export const ProfileInfoWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 12px; /* 프로필과 버튼 간 간격 */
 `;
 
 export const ImageWrapper = styled.div`
@@ -21,6 +22,7 @@ export const ImageWrapper = styled.div`
 
 export const ProfileName = styled.div`
   font-size: 14px;
+  margin-bottom: 4px; /* 이름과 이메일 간 간격 */
   font-weight: bold;
   text-align: center;
 `;
