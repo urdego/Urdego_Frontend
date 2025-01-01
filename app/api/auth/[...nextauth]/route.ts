@@ -1,5 +1,24 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import KakaoProvider from 'next-auth/providers/kakao';
+import AppleProvider, { AppleProfile } from 'next-auth/providers/apple';
+import { createPrivateKey } from 'crypto';
+import { SignJWT } from 'jose';
+
+// 애플 토큰 생성 함수
+const getAppleToken = async () => {
+  const key = `-----BEGIN PRIVATE KEY-----\n${process.env.APPLE_PRIVATE_KEY}\n-----END PRIVATE KEY-----`;
+  return await new SignJWT({})
+    .setAudience('https://appleid.apple.com')
+    .setIssuer(process.env.APPLE_TEAM_ID!)
+    .setIssuedAt(new Date().getTime() / 1000)
+    .setExpirationTime(new Date().getTime() / 1000 + 3600 * 2)
+    .setSubject(process.env.APPLE_ID!)
+    .setProtectedHeader({
+      alg: 'ES256',
+      kid: process.env.APPLE_KEY_ID,
+    })
+    .sign(createPrivateKey(key));
+};
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -7,7 +26,35 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.KAKAO_CLIENT_ID as string,
       clientSecret: process.env.KAKAO_CLIENT_SECRET as string,
     }),
+    AppleProvider({
+      clientId: process.env.APPLE_ID!,
+      clientSecret: {
+        async: true,
+        token: getAppleToken,
+      } as unknown as string,
+      profile(profile: AppleProfile) {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          from: 'apple',
+        };
+      },
+    }),
   ],
+
+  // Apple 로그인을 위한 쿠키 설정
+  cookies: {
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+      },
+    },
+  },
+
   session: {
     strategy: 'jwt', //JWT 기반 인증
     maxAge: 24 * 60 * 60, // 24시간

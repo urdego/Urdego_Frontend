@@ -15,9 +15,14 @@ const LoginPage = () => {
           <button onClick={() => signOut()}>logout</button>
         </>
       ) : (
-        <button onClick={() => signIn('kakao', { callbackUrl: '/home' })}>
-          login
-        </button>
+        <>
+          <button onClick={() => signIn('kakao', { callbackUrl: '/home' })}>
+            카카오 로그인
+          </button>
+          <button onClick={() => signIn('apple', { callbackUrl: '/home' })}>
+            애플 로그인
+          </button>
+        </>
       )}
     </LoginWrapper>
   );
