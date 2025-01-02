@@ -32,7 +32,10 @@ const MyPage = () => {
           label="비밀번호 변경"
           onClick={() => router.push('/myPage/passwordChange')}
         />
-        <SettingButton label="간편 로그인 설정" onClick={() => {}} />
+        <SettingButton
+          label="간편 로그인 설정"
+          onClick={() => router.push('/myPage/simpleLoginSetting')}
+        />
         <SettingButton label="사운드 설정" onClick={() => {}} />
         <SettingButton label="로그아웃" onClick={() => {}} />
         <SettingButton label="회원탈퇴" onClick={() => {}} />
