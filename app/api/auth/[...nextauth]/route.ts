@@ -32,6 +32,14 @@ const authOptions: NextAuthOptions = {
         async: true,
         token: getAppleToken,
       } as unknown as string,
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+          response_type: 'code',
+          redirect_uri: 'https://urdego.vercel.app/api/auth/callback/apple',
+        },
+      },
       profile(profile: AppleProfile) {
         return {
           id: profile.sub,
