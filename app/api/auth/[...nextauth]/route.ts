@@ -46,6 +46,14 @@ const authOptions: NextAuthOptions = {
           return token;
         },
       } as unknown as string,
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+          response_type: 'code',
+          redirect_uri: '/api/auth/callback/apple',
+        },
+      },
       profile(profile) {
         return {
           id: profile.sub,
