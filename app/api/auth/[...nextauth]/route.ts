@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import KakaoProvider from 'next-auth/providers/kakao';
-import AppleProvider, { AppleProfile } from 'next-auth/providers/apple';
+import AppleProvider from 'next-auth/providers/apple';
 import { createPrivateKey } from 'crypto';
 import { SignJWT } from 'jose';
 
@@ -46,18 +46,7 @@ const authOptions: NextAuthOptions = {
           return token;
         },
       } as unknown as string,
-      authorization: {
-        params: {
-          scope: 'name email',
-          response_mode: 'form_post',
-          response_type: 'code',
-          redirect_uri: 'https://urdego.vercel.app/api/auth/callback/apple',
-        },
-      },
-      profile(profile: AppleProfile) {
-        console.log('애플 프로필 데이터:', profile);
-        console.log('애플 프로필 sub:', profile.sub);
-        console.log('애플 프로필 email:', profile.email);
+      profile(profile) {
         return {
           id: profile.sub,
           email: profile.email,
