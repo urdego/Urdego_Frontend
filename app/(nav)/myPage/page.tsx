@@ -1,5 +1,6 @@
 'use client';
 import TopBar from '@/components/Common/TopBar/TopBar';
+import { useRouter } from 'next/navigation';
 import {
   MyPageWrapper,
   ProfileWrapper,
@@ -11,6 +12,8 @@ import SettingButton from '@/components/Layout/MyPage/SettingButton';
 import SmallButton from '@/components/Layout/MyPage/SmallButton';
 
 const MyPage = () => {
+  const router = useRouter();
+
   return (
     <>
       <TopBar NavType="default" label="마이페이지" />
@@ -19,7 +22,9 @@ const MyPage = () => {
           <ProfileInfo />
           <SmallButtonWrapper>
             <SmallButton onClick={() => {}}>캐릭터 수정</SmallButton>
-            <SmallButton onClick={() => {}}>닉네임 변경</SmallButton>
+            <SmallButton onClick={() => router.push('/myPage/nicknameChange')}>
+              닉네임 변경
+            </SmallButton>
           </SmallButtonWrapper>
         </ProfileWrapper>
         <Separator />
