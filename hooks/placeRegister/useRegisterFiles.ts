@@ -8,13 +8,7 @@ interface useUploadFilesProps {
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const {
-    placeList,
-    initPlaceList,
-    setPlaceInput,
-    removePartPlaceFile,
-    removePlaceList,
-  } = usePlaceRegisterStore();
+  const { setPlaceInput } = usePlaceRegisterStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
@@ -109,32 +103,8 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceInput(index, 'title', e.target.value);
-  };
-
-  const handleHintChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceInput(index, 'hint', e.target.value);
-  };
-
-  const handlePartFileRemove = (previewIndex: number) => {
-    if (placeList[index].file.length === 1) {
-      initPlaceList(index);
-      return;
-    }
-    removePartPlaceFile(index, previewIndex);
-  };
-
-  const handlePlaceRemove = () => {
-    removePlaceList(index);
-  };
-
   return {
     handleFilesUpload,
-    handleTitleChange,
-    handleHintChange,
-    handlePartFileRemove,
-    handlePlaceRemove,
   };
 };
 
