@@ -40,17 +40,17 @@ const PasswordChangePage = () => {
         <PasswordInputWrapper>
           <RoomTitleInput
             label="현재 비밀번호"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="현재 비밀번호 입력"
             onChange={handlePasswordChange}
           />
           <RoomTitleInput
             label="새 비밀번호"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="8자 이상의 문자 입력 (숫자, 영어, 특수문자 포함)"
             onChange={handleNewPasswordChange}
           />
           <RoomTitleInput
-            label="비밀번호 확인"
-            placeholder="비밀번호를 입력해주세요"
+            label="새 비밀번호 재 입력"
+            placeholder="영문, 숫자, 특수문자 포함 0자 이상"
             onChange={handleConfirmPasswordChange}
           />
         </PasswordInputWrapper>
