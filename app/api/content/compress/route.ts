@@ -9,9 +9,23 @@ export async function POST(req: Request) {
     // file 객체를 Buffer로 변환
     const buffer = Buffer.from(await file.arrayBuffer());
 
+    // 가로/세로에 따른 옵션 설정
+    const metadata = await sharp(buffer).rotate().metadata();
+    let resizeOptions = {};
+    if (metadata.width && metadata.height) {
+      if (metadata.width > metadata.height) {
+        // 가로가 세로보다 길 경우
+        resizeOptions = { width: 800, withoutEnlargement: true };
+      } else {
+        // 세로가 가로보다 길 경우
+        resizeOptions = { height: 800, withoutEnlargement: true };
+      }
+    }
+
     // Sharp로 이미지 압축
     const compressedBuffer = await sharp(buffer)
-      .resize({ width: 800, withoutEnlargement: true })
+      .rotate()
+      .resize(resizeOptions)
       .withMetadata()
       .webp({ quality: 80 })
       .toBuffer();
