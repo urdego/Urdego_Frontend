@@ -41,6 +41,7 @@ const authOptions: NextAuthOptions = {
         },
       },
       profile(profile: AppleProfile) {
+        console.log('Apple profile:', profile); // 디버깅용 로그
         return {
           id: profile.sub,
           email: profile.email,
@@ -52,6 +53,15 @@ const authOptions: NextAuthOptions = {
 
   // Apple 로그인을 위한 쿠키 설정
   cookies: {
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: false,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+      },
+    },
     pkceCodeVerifier: {
       name: 'next-auth.pkce.code_verifier',
       options: {
