@@ -30,18 +30,17 @@ const authOptions: NextAuthOptions = {
       clientId: process.env.APPLE_ID!,
       clientSecret: {
         async: true,
-        token: getAppleToken,
-      } as unknown as string,
-      authorization: {
-        params: {
-          scope: 'name email',
-          response_mode: 'form_post',
-          response_type: 'code',
-          redirect_uri: 'https://urdego.vercel.app/api/auth/callback/apple',
+        token: async () => {
+          console.log('애플 토큰 생성 시작');
+          const token = await getAppleToken();
+          console.log('생성된 애플 토큰:', token);
+          return token;
         },
-      },
+      } as unknown as string,
       profile(profile: AppleProfile) {
-        console.log('Apple profile:', profile); // 디버깅용 로그
+        console.log('애플 프로필 데이터:', profile);
+        console.log('애플 프로필 sub:', profile.sub);
+        console.log('애플 프로필 email:', profile.email);
         return {
           id: profile.sub,
           email: profile.email,
@@ -79,9 +78,41 @@ const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET, //JWT 암호화 키 설정
   callbacks: {
-    async signIn({ user }) {
-      return !!user.email;
+    async signIn({ user, account, profile }) {
+      console.log('로그인 시도:', account?.provider);
+
+      if (account?.provider === 'kakao') {
+        console.log('카카오 로그인 정보:');
+        console.log('유저:', {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        });
+        console.log('카카오 프로필:', profile);
+      }
+
+      if (account?.provider === 'apple') {
+        console.log('애플 로그인 정보:');
+        console.log('유저:', {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        });
+        // 애플 최초 로그인시 이름 정보 확인
+        if (profile) {
+          console.log('애플 프로필:', profile);
+        }
+      }
+
+      // 필수 정보 검증
+      if (!user.id || !user.email) {
+        console.log('필수 정보 누락');
+        return false;
+      }
+
+      return true;
     },
+
     async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token;
