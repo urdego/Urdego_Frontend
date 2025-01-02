@@ -21,6 +21,15 @@ const getAppleToken = async () => {
 };
 
 const authOptions: NextAuthOptions = {
+  debug: true, // 디버그 모드 활성화
+  logger: {
+    error: (code, metadata) => {
+      console.error('Auth 에러:', code, metadata);
+    },
+    warn: (code) => {
+      console.warn('Auth 경고:', code);
+    },
+  },
   providers: [
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -37,6 +46,14 @@ const authOptions: NextAuthOptions = {
           return token;
         },
       } as unknown as string,
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+          response_type: 'code',
+          redirect_uri: 'https://urdego.vercel.app/api/auth/callback/apple',
+        },
+      },
       profile(profile: AppleProfile) {
         console.log('애플 프로필 데이터:', profile);
         console.log('애플 프로필 sub:', profile.sub);
@@ -78,38 +95,14 @@ const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET, //JWT 암호화 키 설정
   callbacks: {
-    async signIn({ user, account, profile }) {
-      console.log('로그인 시도:', account?.provider);
-
-      if (account?.provider === 'kakao') {
-        console.log('카카오 로그인 정보:');
-        console.log('유저:', {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        });
-        console.log('카카오 프로필:', profile);
-      }
-
-      if (account?.provider === 'apple') {
-        console.log('애플 로그인 정보:');
-        console.log('유저:', {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        });
-        // 애플 최초 로그인시 이름 정보 확인
-        if (profile) {
-          console.log('애플 프로필:', profile);
-        }
-      }
-
-      // 필수 정보 검증
-      if (!user.id || !user.email) {
-        console.log('필수 정보 누락');
-        return false;
-      }
-
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log('로그인 시도 데이터:', {
+        user,
+        account,
+        profile,
+        email,
+        credentials,
+      });
       return true;
     },
 
