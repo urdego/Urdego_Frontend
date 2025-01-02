@@ -14,7 +14,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
-  const handleFilesUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 불러오는 로직
     const fileList = e.target.files;
 
@@ -37,14 +37,25 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       return;
     }
 
-    exportMetadata(selectedFileList);
+    await exportMetadata(selectedFileList);
 
-    storeFile(selectedFileList);
-    storePreviewFile(selectedFileList);
+    try {
+      const compressedFileList = await compressFile(selectedFileList);
+      console.log(selectedFileList);
+      console.log(compressedFileList);
+      previewFile(selectedFileList);
+      previewFile(compressedFileList);
 
-    toast('사진 등록이 완료되었어요!', {
-      icon: '👍',
-    });
+      storeFile(compressedFileList);
+      storePreviewFile(compressedFileList);
+
+      toast('사진 등록이 완료되었어요!', {
+        icon: '👍',
+      });
+    } catch (error) {
+      console.error('파일 압축 중 에러:', error);
+      toast.error('사진 등록에 실패했어요');
+    }
   };
 
   // 용량 제한 로직
@@ -78,6 +89,50 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         latLng: { lat: gps.latitude, lng: gps.longitude },
       });
     }
+  };
+
+  // 이미지 압축 로직
+  const compressFile = async (fileList: File[]) => {
+    const compressedFileList: File[] = [];
+
+    for (const file of fileList) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/content/compress', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('파일 압축 실패');
+      }
+
+      const compressedBlob = await response.blob();
+      const fileNameToWebp = file.name.split('.')[0] + '.webp';
+      const compressedFile = new File([compressedBlob], fileNameToWebp, {
+        type: 'image/webp',
+      });
+      compressedFileList.push(compressedFile);
+    }
+
+    return compressedFileList;
+  };
+
+  // 파일 전체 정보 조회 로직
+  const previewFile = (fileList: File[]) => {
+    fileList.forEach((file) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        const img = new Image();
+        img.src = fileReader.result as string;
+        img.onload = () => {
+          console.log(`파일명: ${file.name}`);
+          console.log(`가로 크기: ${img.width}px, 세로 크기: ${img.height}px`);
+        };
+      };
+      fileReader.readAsDataURL(file);
+    });
   };
 
   // 서버에 전송할 파일 저장 로직
