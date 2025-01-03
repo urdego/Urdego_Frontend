@@ -7,7 +7,7 @@ import { SignJWT } from 'jose';
 // 애플 토큰 생성 함수
 const getAppleToken = async () => {
   const key = `-----BEGIN PRIVATE KEY-----\n${process.env.APPLE_PRIVATE_KEY}\n-----END PRIVATE KEY-----`;
-  const token = await new SignJWT({})
+  return await new SignJWT({})
     .setAudience('https://appleid.apple.com')
     .setIssuer(process.env.APPLE_TEAM_ID!)
     .setIssuedAt(new Date().getTime() / 1000)
@@ -18,11 +18,7 @@ const getAppleToken = async () => {
       kid: process.env.APPLE_KEY_ID,
     })
     .sign(createPrivateKey(key));
-
-  console.log('Generated Apple Client Secret:', token); // 토큰 로그 출력
-  return token;
 };
-
 // Apple 토큰을 미리 생성
 const appleClientSecret = await getAppleToken();
 
@@ -49,7 +45,7 @@ const authOptions: NextAuthOptions = {
           scope: 'name email',
           response_mode: 'form_post',
           response_type: 'code',
-          redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/callback/apple',
+          redirect_uri: '/api/auth/callback/apple',
         },
       },
       profile(profile) {
