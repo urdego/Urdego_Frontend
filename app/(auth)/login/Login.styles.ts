@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import colors from '@/styles/color/palette';
 
 export const LoginWrapper = styled.div`
   width: 100%;
@@ -23,7 +24,10 @@ export const LogoContainer = styled.div`
 
 export const LoginTitle = styled.div`
   margin: 8px 0;
-  font-size: 30px;
+  font-size: 32px;
+  font-weight: 700;
+  color: ${colors.purple[50]};
+  padding: 20px 0 40px 0;
 `;
 
 export const ButtonSignupWrapper = styled.div`
@@ -35,24 +39,15 @@ export const ButtonSignupWrapper = styled.div`
   gap: 16px;
 `;
 
-export const SocialLoginWrapper = styled.div`
-  display: flex;
-  gap: 43px;
-  justify-content: center;
-  align-items: center;
-`;
-
 export const SocialButton = styled.button`
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
   border: none;
   cursor: pointer;
   background: transparent;
   transition: transform 0.2s;
+  padding-bottom: 12px;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   img {
