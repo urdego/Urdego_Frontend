@@ -14,7 +14,7 @@ import {
 import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
-import useControlButton from '@/hooks/placeRegister/useContorlButtons';
+import useControlButtons from '@/hooks/placeRegister/useControlButtons';
 
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
@@ -32,7 +32,7 @@ const PlaceRegisterPage = () => {
 
   // client state 불러오는 custom hook
   const { handleUploadFiles } = useUploadFiles();
-  const { handleAddPlaceList } = useControlButton();
+  const { handleAddPlaceList } = useControlButtons();
 
   // store state 불러오는 로직
   const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
