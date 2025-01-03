@@ -2,7 +2,7 @@ import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useEffect } from 'react';
 
-const useControlButton = () => {
+const useControlButtons = () => {
   const { placeList, addPlaceList } = usePlaceRegisterStore();
   const { setIsInputComplete, setIsSubmitReady } = usePlaceRegisterModeStore();
 
@@ -34,4 +34,4 @@ const useControlButton = () => {
   };
 };
 
-export default useControlButton;
+export default useControlButtons;

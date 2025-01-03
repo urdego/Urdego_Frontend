@@ -15,6 +15,7 @@ import {
 
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import useControlInput from '@/hooks/placeRegister/useControlInput';
 
 interface PlaceRegisterProps {
   index: number;
@@ -23,15 +24,15 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
+  const { handleFilesUpload } = useRegisterFiles({
+    index,
+  });
   const {
-    handleFilesUpload,
     handleTitleChange,
     handleHintChange,
     handlePartFileRemove,
     handlePlaceRemove,
-  } = useRegisterFiles({
-    index,
-  });
+  } = useControlInput({ index });
 
   // store state 불러오는 로직
   const { placeList } = usePlaceRegisterStore();
