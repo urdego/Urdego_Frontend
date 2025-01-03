@@ -9,7 +9,7 @@ import {
   BottomSheetFooter,
 } from './MapBottomSheet.styles';
 
-interface MapBottomSheetProps {
+export interface MapBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onCoordinateSelect: (coordinate: google.maps.LatLngLiteral | null) => void;
