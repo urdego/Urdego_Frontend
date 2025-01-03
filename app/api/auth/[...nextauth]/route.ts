@@ -19,6 +19,8 @@ const getAppleToken = async () => {
     })
     .sign(createPrivateKey(key));
 };
+// Apple 토큰을 미리 생성
+const appleClientSecret = await getAppleToken();
 
 const authOptions: NextAuthOptions = {
   debug: true, // 디버그 모드 활성화
@@ -37,15 +39,15 @@ const authOptions: NextAuthOptions = {
     }),
     AppleProvider({
       clientId: process.env.APPLE_ID!,
-      clientSecret: {
-        async: true,
-        token: async () => {
-          console.log('애플 토큰 생성 시작');
-          const token = await getAppleToken();
-          console.log('생성된 애플 토큰:', token);
-          return token;
+      clientSecret: appleClientSecret,
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+          response_type: 'code',
+          redirect_uri: '/api/auth/callback/apple',
         },
-      } as unknown as string,
+      },
       profile(profile) {
         return {
           id: profile.sub,
