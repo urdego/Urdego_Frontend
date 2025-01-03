@@ -22,7 +22,13 @@ const LoginPage = () => {
       ) : (
         <>
           <LogoContainer>
-            <Image src={LoginThumbnail} alt="login-thumbnail" priority />
+            <Image
+              src={LoginThumbnail}
+              alt="login-thumbnail"
+              width={272}
+              height={268}
+              priority
+            />
             <LoginTitle>어데고?!</LoginTitle>
             <SocialButton
               onClick={() => signIn('kakao', { callbackUrl: '/home' })}

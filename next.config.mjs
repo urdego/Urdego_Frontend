@@ -9,7 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  openAnalyzer:true,
+  openAnalyzer: true,
   compiler: {
     styledComponents: {
       displayName: true,
