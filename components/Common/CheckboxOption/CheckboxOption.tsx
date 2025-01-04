@@ -9,23 +9,26 @@ import CheckedBoxIcon from '@styles/Icon/check_circle.svg';
 
 interface CheckboxOptionProps {
   label: string;
+  size?: 'default' | 'big';
 }
 
-const CheckboxOption = ({ label }: CheckboxOptionProps) => {
+const CheckboxOption = ({ label, size = 'default' }: CheckboxOptionProps) => {
   const [checked, setChecked] = useState(false);
 
   const toggleCheckbox = () => {
     setChecked((prev) => !prev);
   };
 
+  const iconSize = size === 'big' ? 24 : 20;
+
   return (
-    <CheckboxOptionWrapper onClick={toggleCheckbox}>
-      <Checkbox>
+    <CheckboxOptionWrapper onClick={toggleCheckbox} size={size}>
+      <Checkbox size={size}>
         <Image
           src={checked ? CheckedBoxIcon : EmptyCheckBoxIcon}
           alt={checked ? 'Checked' : 'Unchecked'}
-          width={20}
-          height={20}
+          width={iconSize}
+          height={iconSize}
         />
       </Checkbox>
       {label}
