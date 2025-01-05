@@ -52,7 +52,10 @@ const MyPage = () => {
           label="로그아웃"
           onClick={() => setIsLogoutModalOpen(true)}
         />
-        <SettingButton label="회원탈퇴" onClick={() => {}} />
+        <SettingButton
+          label="회원탈퇴"
+          onClick={() => router.push('/myPage/accountCencellation')}
+        />
       </MyPageWrapper>
 
       <AlertModal

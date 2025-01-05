@@ -5,11 +5,12 @@ interface SizeProps {
 }
 
 export const CheckboxOptionWrapper = styled.div<SizeProps>`
+  height: 32px;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: ${({ size }) => (size === 'big' ? '16px' : '14px')};
+  font-size: ${({ size }) => (size === 'big' ? '15px' : '14px')};
 `;
 
 export const Checkbox = styled.div<SizeProps>`

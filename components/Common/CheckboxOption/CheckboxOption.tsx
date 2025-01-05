@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
 import {
   CheckboxOptionWrapper,
@@ -10,14 +10,25 @@ import CheckedBoxIcon from '@styles/Icon/check_circle.svg';
 interface CheckboxOptionProps {
   label: string;
   size?: 'default' | 'big';
+  onChange?: (checked: boolean) => void;
+  isChecked?: boolean;
 }
 
-const CheckboxOption = ({ label, size = 'default' }: CheckboxOptionProps) => {
-  const [checked, setChecked] = useState(false);
+const CheckboxOption: React.FC<CheckboxOptionProps> = ({
+  label,
+  size = 'default',
+  onChange,
+  isChecked = false,
+}) => {
+  const [checked, setChecked] = useState(isChecked);
 
-  const toggleCheckbox = () => {
-    setChecked((prev) => !prev);
-  };
+  const toggleCheckbox = useCallback(() => {
+    const newChecked = !checked;
+    setChecked(newChecked);
+    if (onChange) {
+      onChange(newChecked);
+    }
+  }, [checked, onChange]);
 
   const iconSize = size === 'big' ? 24 : 20;
 
@@ -36,4 +47,4 @@ const CheckboxOption = ({ label, size = 'default' }: CheckboxOptionProps) => {
   );
 };
 
-export default CheckboxOption;
+export default React.memo(CheckboxOption);
