@@ -40,3 +40,32 @@ export const BigCheckboxWrapper = styled.div`
   bottom: 90px;
   padding: 0 0 0 16px;
 `;
+
+export const TextareaWrapper = styled.div`
+  height: 120px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background-color: ${colors.gray[90]};
+  border-radius: 4px;
+  width: 100%;
+`;
+
+export const StyledTextarea = styled.textarea`
+  width: 100%;
+  height: 80px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: ${colors.etc.black};
+  resize: none;
+  outline: none;
+  &::placeholder {
+    color: ${colors.gray[60]};
+  }
+`;
+
+export const Separator = styled.div`
+  height: 9px;
+  width: 100%;
+  background-color: ${colors.gray[95]};
+`;
