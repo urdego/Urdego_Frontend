@@ -7,6 +7,7 @@ import {
   BottomSheetHeader,
   DragHandle,
   BottomSheetFooter,
+  Title,
 } from './MapBottomSheet.styles';
 
 export interface MapBottomSheetProps {
@@ -59,23 +60,15 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
       <BottomSheetWrapper>
         <BottomSheetHeader>
           <DragHandle />
-          <div
-            style={{
-              fontSize: '16px',
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            위치를 선택해주세요
-          </div>
+          <Title>위치를 선택해주세요</Title>
         </BottomSheetHeader>
-        <div style={{ width: '100%', height: '100%' }}>
-          <MapComponent
-            mode="game"
-            onCoordinateSelect={onCoordinateSelect}
-            answerCoordinate={null}
-          />
-        </div>
+
+        <MapComponent
+          mode="game"
+          onCoordinateSelect={onCoordinateSelect}
+          answerCoordinate={null}
+        />
+
         <BottomSheetFooter>
           <Button
             label="정답 제출"

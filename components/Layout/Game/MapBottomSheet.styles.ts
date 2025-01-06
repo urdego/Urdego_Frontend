@@ -27,3 +27,9 @@ export const BottomSheetFooter = styled.div`
   background-color: white;
   border-top: 1px solid #eee;
 `;
+
+export const Title = styled.div`
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+`;
