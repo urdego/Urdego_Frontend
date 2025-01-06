@@ -9,13 +9,18 @@ export const StyledMotion = styled(motion.div)`
   left: 0;
   right: 0;
   height: 42vh;
-  z-index: 1000;
+  z-index: 5;
   touch-action: none;
   margin: 0 auto;
   max-width: 430px;
+
+  & > div {
+    height: 100%;
+  }
 `;
 
 export const BottomSheetWrapper = styled.div`
+  height: 100%;
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 16px;

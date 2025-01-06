@@ -41,11 +41,7 @@ const RoundRank = ({
   >(currentRound >= maxRounds ? 'totalRound' : 'thisRound');
 
   const resultMessage = messages[messages.length - 1];
-  // console.log('All messages:', messages);
-  // console.log('Result message:', resultMessage);
   const scoreData = resultMessage?.data as ScoreDataType;
-  // console.log('Score data:', scoreData);
-
   const rankData = !scoreData?.submitCoordinates
     ? []
     : scoreData.submitCoordinates

@@ -91,3 +91,13 @@ export const ExitButtonWrapper = styled.div`
     opacity: 0.7;
   }
 `;
+
+export const IconWrapper = styled.div`
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;

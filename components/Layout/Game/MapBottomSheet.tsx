@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, PanInfo } from 'framer-motion';
+import { PanInfo } from 'framer-motion';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import Button from '@/components/Common/Button/Button';
 import {
@@ -8,6 +8,7 @@ import {
   DragHandle,
   BottomSheetFooter,
   Title,
+  StyledMotion,
 } from './MapBottomSheet.styles';
 
 export interface MapBottomSheetProps {
@@ -36,7 +37,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
   };
 
   return (
-    <motion.div
+    <StyledMotion
       initial={{ y: '100%' }}
       animate={{ y: isOpen ? '0%' : '100%' }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -45,17 +46,6 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
       dragElastic={0.2}
       onDragEnd={handleDragEnd}
       dragMomentum={false}
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '80vh',
-        zIndex: 1000,
-        touchAction: 'none',
-        margin: '0 auto',
-        maxWidth: '430px',
-      }}
     >
       <BottomSheetWrapper>
         <BottomSheetHeader>
@@ -80,7 +70,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
           />
         </BottomSheetFooter>
       </BottomSheetWrapper>
-    </motion.div>
+    </StyledMotion>
   );
 };
 
