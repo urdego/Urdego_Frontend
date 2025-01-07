@@ -38,7 +38,6 @@ const GamePage = ({ params }: GamePageProps) => {
   }, []);
 
   const {
-    // gameState,
     currentRound,
     isMapView,
     showBackIcon,
