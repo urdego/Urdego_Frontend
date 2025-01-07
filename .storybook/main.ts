@@ -17,5 +17,10 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
+  env: (config) => ({
+    ...config,
+    STORYBOOK_GOOGLE_MAPS_API_KEY:
+      process.env.STORYBOOK_GOOGLE_MAPS_API_KEY || '',
+  }),
 };
 export default config;
