@@ -23,8 +23,8 @@ const AccountCancellation = () => {
   });
   const [otherReason, setOtherReason] = useState(''); // '기타' 이유 입력값
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  const hasText = otherReason.trim().length > 0; // 입력값이 있는지 확인
+  const [$isActive, set$isActive] = useState(false);
+  const $hasText = otherReason.trim().length > 0; // 입력값이 있는지 확인
 
   const handleReasonChange = useCallback(
     (reason: keyof typeof reasons) => (checked: boolean) => {
@@ -88,13 +88,13 @@ const AccountCancellation = () => {
           onChange={(checked) => handleReasonChange('other')(checked)}
         />
         {reasons.other && (
-          <TextareaWrapper hasText={hasText} isActive={isActive}>
+          <TextareaWrapper $hasText={$hasText} $isActive={$isActive}>
             <StyledTextarea
               placeholder="탈퇴사유를 알려주시면 고객님의 소중한 피드백을 반영해 더 나은 게임 환경을 제공하도록 하겠습니다."
               value={otherReason}
               onChange={(e) => setOtherReason(e.target.value)}
-              onFocus={() => setIsActive(true)}
-              onBlur={() => setIsActive(false)}
+              onFocus={() => set$isActive(true)}
+              onBlur={() => set$isActive(false)}
             />
           </TextareaWrapper>
         )}
