@@ -22,7 +22,7 @@ const AlertModal = ({ isOpen, onClose, onConfirm, title }: AlertModalProps) => {
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <AlertTitle>{title}</AlertTitle>
         <ButtonContainer>
-          <Button confirm onClick={onConfirm}>
+          <Button $confirm onClick={onConfirm}>
             확인
           </Button>
           <Button onClick={onClose}>취소</Button>

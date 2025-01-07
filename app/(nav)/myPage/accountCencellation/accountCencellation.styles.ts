@@ -41,22 +41,30 @@ export const BigCheckboxWrapper = styled.div`
   padding: 0 0 0 16px;
 `;
 
-export const TextareaWrapper = styled.div`
+export const TextareaWrapper = styled.div<{
+  isActive: boolean;
+  hasText: boolean;
+}>`
   height: 120px;
   margin-top: 8px;
   padding: 8px 12px;
-  background-color: ${colors.gray[90]};
+  background-color: ${({ isActive }) =>
+    isActive ? colors.etc.white : colors.gray[90]};
   border-radius: 4px;
+  border: ${({ isActive, hasText }) =>
+    isActive || hasText
+      ? `1px solid ${hasText ? colors.etc.black : colors.gray[80]}`
+      : 'none'};
   width: 100%;
 `;
 
 export const StyledTextarea = styled.textarea`
   width: 100%;
-  height: 80px;
+  height: 100px;
   border: none;
   background: transparent;
   font-size: 14px;
-  color: ${colors.etc.black};
+  color: ${({ value }) => (value ? colors.etc.black : colors.gray[60])};
   resize: none;
   outline: none;
   &::placeholder {

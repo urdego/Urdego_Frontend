@@ -23,6 +23,8 @@ const AccountCancellation = () => {
   });
   const [otherReason, setOtherReason] = useState(''); // '기타' 이유 입력값
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const hasText = otherReason.trim().length > 0; // 입력값이 있는지 확인
 
   const handleReasonChange = useCallback(
     (reason: keyof typeof reasons) => (checked: boolean) => {
@@ -69,7 +71,15 @@ const AccountCancellation = () => {
           onChange={(checked) => handleReasonChange('gameDislike')(checked)}
         />
         <CheckboxOption
+          label="게임이 너무 어렵거나/너무 쉬워요."
+          onChange={(checked) => handleReasonChange('inconvenience')(checked)}
+        />
+        <CheckboxOption
           label="이용이 불편하고 장애가 많아요."
+          onChange={(checked) => handleReasonChange('inconvenience')(checked)}
+        />
+        <CheckboxOption
+          label="소셜 기능이 부족해요"
           onChange={(checked) => handleReasonChange('inconvenience')(checked)}
         />
         <CheckboxOption
@@ -77,14 +87,14 @@ const AccountCancellation = () => {
           isChecked={reasons.other}
           onChange={(checked) => handleReasonChange('other')(checked)}
         />
-
-        {/* '기타' 체크 시 입력 필드 표시 */}
         {reasons.other && (
-          <TextareaWrapper>
+          <TextareaWrapper hasText={hasText} isActive={isActive}>
             <StyledTextarea
-              placeholder="탈퇴사유를 적어주시면 감사하겠습니다. 더 노력하는 '어데고'가 되겠습니다! (최대 100자 이내로 적어주시면 감사하겠습니다)"
+              placeholder="탈퇴사유를 알려주시면 고객님의 소중한 피드백을 반영해 더 나은 게임 환경을 제공하도록 하겠습니다."
               value={otherReason}
               onChange={(e) => setOtherReason(e.target.value)}
+              onFocus={() => setIsActive(true)}
+              onBlur={() => setIsActive(false)}
             />
           </TextareaWrapper>
         )}

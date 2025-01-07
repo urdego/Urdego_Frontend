@@ -27,22 +27,22 @@ export const OptionToggleLabel = styled.span`
   font-size: 14px;
 `;
 
-export const Toggle = styled.button<{ isOn: boolean }>`
+export const Toggle = styled.button<{ $isOn: boolean }>`
   border: none;
   outline: none;
   position: relative;
   width: 48px;
   height: 28px;
   border-radius: 14px;
-  background-color: ${(props) =>
-    props.isOn ? colors.purple[50] : colors.gray[80]};
+  background-color: ${({ $isOn }) =>
+    $isOn ? colors.purple[50] : colors.gray[80]};
   transition: background-color 0.2s;
 
   &::after {
     content: '';
     position: absolute;
     top: 2px;
-    left: ${(props) => (props.isOn ? '24px' : '2px')};
+    left: ${({ $isOn }) => ($isOn ? '24px' : '2px')};
     width: 24px;
     height: 24px;
     border-radius: 50%;

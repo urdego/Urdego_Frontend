@@ -15,34 +15,37 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContainer = styled.div`
-  background-color: ${colors.etc.white};
-  border-radius: 14px;
-  padding: 20px 16px 16px;
-  width: 270px;
+  background-color: ${colors.gray[95]};
+  border-radius: 16px;
+  /* padding: 16px 12px; */
+  width: fit-content;
+  min-width: 270px;
+  max-width: 300px;
+  text-align: center;
 `;
 
 export const AlertTitle = styled.h2`
-  text-align: center;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
-  margin-bottom: 16px;
-  color: ${colors.gray[20]};
+  color: ${colors.etc.black};
+  margin: 19px 16px;
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  border-top: 1px solid ${colors.gray[80]};
 `;
 
-export const Button = styled.button<{ confirm?: boolean }>`
+export const Button = styled.button<{ $confirm?: boolean }>`
   flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 13px;
+  padding: 11px 0;
+  font-size: 16px;
   font-weight: 400;
-  color: ${(props) => (props.confirm ? colors.etc.white : colors.gray[20])};
-  background-color: ${(props) =>
-    props.confirm ? colors.purple[50] : colors.gray[95]};
+  color: ${colors.etc.blue};
+  background: transparent;
+  border: none;
+
+  &:first-child {
+    border-right: 1px solid ${colors.gray[80]};
+  }
 `;

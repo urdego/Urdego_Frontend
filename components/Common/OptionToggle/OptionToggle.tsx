@@ -21,7 +21,7 @@ const OptionToggle = ({ label, icon }: OptionToggleProps) => {
         {icon && <Icon>{icon}</Icon>}
         <OptionToggleLabel>{label}</OptionToggleLabel>
       </LeftSection>
-      <Toggle isOn={isToggled} onClick={() => setIsToggled(!isToggled)} />
+      <Toggle $isOn={isToggled} onClick={() => setIsToggled(!isToggled)} />
     </OptionToggleWrapper>
   );
 };
