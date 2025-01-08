@@ -19,6 +19,7 @@ export const LocationImageContainer = styled.div`
 export const LocationContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const LocationTitle = styled.div`
