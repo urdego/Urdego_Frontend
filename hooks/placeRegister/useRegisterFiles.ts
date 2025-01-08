@@ -14,7 +14,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
-  const MAX_MEMORY = 1024; // 30MB
+  const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 불러오는 로직
