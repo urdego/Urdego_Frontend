@@ -7,13 +7,15 @@ import {
   RightIconsWrapper,
   Label,
   ExitButtonWrapper,
+  IconWrapper,
 } from './TopBar.styles';
 import { BackIcon, AlarmIcon, FriendIcon, ExitIcon } from './TopBarIcon';
+import ReportIcon from '@/styles/Icon/Game/Report';
 
 // default : 뒤로가기 아이콘 + 라벨
 // other : 뒤로가기 아이콘 + 라벨 + 알람 아이콘 + 친구 아이콘
 // main : 알람 아이콘 + 친구 아이콘
-// game : 뒤로가기 아이콘 + 라벨
+// game : 음향조절(layout에서 처리) + 라벨 + 신고 아이콘
 // room : 라벨 + 나가기 아이콘(오른쪽)
 interface TopBarProps {
   NavType?: 'default' | 'other' | 'main' | 'game' | 'room';
@@ -25,6 +27,7 @@ interface TopBarProps {
   onBackClick?: () => void;
   exitIcon?: boolean;
   onExitClick?: () => void;
+  onReportClick?: () => void;
 }
 
 const TopBar = ({
@@ -37,6 +40,7 @@ const TopBar = ({
   onBackClick,
   exitIcon = false,
   onExitClick,
+  onReportClick,
 }: TopBarProps) => {
   const router = useRouter();
 
@@ -70,6 +74,9 @@ const TopBar = ({
               </BackIconWrapper>
             )}
           <Label>{label}</Label>
+          <IconWrapper onClick={onReportClick}>
+            <ReportIcon />
+          </IconWrapper>
         </>
       )}
       {NavType === 'default' && (

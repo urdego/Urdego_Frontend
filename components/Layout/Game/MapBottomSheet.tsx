@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, PanInfo } from 'framer-motion';
+import { PanInfo } from 'framer-motion';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import Button from '@/components/Common/Button/Button';
 import {
@@ -7,9 +7,11 @@ import {
   BottomSheetHeader,
   DragHandle,
   BottomSheetFooter,
+  Title,
+  StyledMotion,
 } from './MapBottomSheet.styles';
 
-interface MapBottomSheetProps {
+export interface MapBottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onCoordinateSelect: (coordinate: google.maps.LatLngLiteral | null) => void;
@@ -35,7 +37,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
   };
 
   return (
-    <motion.div
+    <StyledMotion
       initial={{ y: '100%' }}
       animate={{ y: isOpen ? '0%' : '100%' }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -44,38 +46,19 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
       dragElastic={0.2}
       onDragEnd={handleDragEnd}
       dragMomentum={false}
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '80vh',
-        zIndex: 1000,
-        touchAction: 'none',
-        margin: '0 auto',
-        maxWidth: '430px',
-      }}
     >
       <BottomSheetWrapper>
         <BottomSheetHeader>
           <DragHandle />
-          <div
-            style={{
-              fontSize: '16px',
-              fontWeight: 'bold',
-              textAlign: 'center',
-            }}
-          >
-            위치를 선택해주세요
-          </div>
+          <Title>위치를 선택해주세요</Title>
         </BottomSheetHeader>
-        <div style={{ width: '100%', height: '100%' }}>
-          <MapComponent
-            mode="game"
-            onCoordinateSelect={onCoordinateSelect}
-            answerCoordinate={null}
-          />
-        </div>
+
+        <MapComponent
+          mode="game"
+          onCoordinateSelect={onCoordinateSelect}
+          answerCoordinate={null}
+        />
+
         <BottomSheetFooter>
           <Button
             label="정답 제출"
@@ -87,7 +70,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
           />
         </BottomSheetFooter>
       </BottomSheetWrapper>
-    </motion.div>
+    </StyledMotion>
   );
 };
 

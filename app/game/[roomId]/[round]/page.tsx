@@ -1,11 +1,11 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useGameState } from '@/hooks/inGame/useGameState';
-// import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import Timer from '@/components/Layout/Game/Timer';
 import MapBottomSheet from '@/components/Layout/Game/MapBottomSheet';
+import ReportBottomSheet from '@/components/Common/BottomSheet/ReportBottomSheet';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState, useEffect } from 'react';
@@ -29,11 +29,15 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  // const nickname = useUserStore((state) => state.nickname);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+
+  const handleReportClick = useCallback(() => {
+    console.log('Report clicked');
+    setIsReportOpen(true);
+  }, []);
 
   const {
-    // gameState,
     currentRound,
     isMapView,
     showBackIcon,
@@ -55,12 +59,6 @@ const GamePage = ({ params }: GamePageProps) => {
 
     if (roundStartMessage) {
       setRoundState(roundStartMessage.data as RoundData);
-      console.log(
-        'Round state updated for round',
-        currentRound,
-        ':',
-        roundStartMessage.data
-      );
     }
   }, [messages, currentRound]);
 
@@ -118,10 +116,9 @@ const GamePage = ({ params }: GamePageProps) => {
           NavType="game"
           label={`${currentRound} 라운드`}
           backIcon={showBackIcon}
-          alarmIcon={false}
-          friendIcon={false}
           isMapView={isMapView}
           onBackClick={handleBackClick}
+          onReportClick={handleReportClick}
         />
         <Timer initialTime={20} onTimeEnd={handleNextRound} />
 
@@ -158,6 +155,16 @@ const GamePage = ({ params }: GamePageProps) => {
           />
         </Footer>
       </PageWrapper>
+
+      {/* 신고 기능 BottomSheet 호출 */}
+      <ReportBottomSheet
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        onSubmit={(reportType) => {
+          console.log('신고 유형:', reportType);
+          setIsReportOpen(false);
+        }}
+      />
 
       {/* MapBottomSheet 컴포넌트 호출 */}
       <MapBottomSheet
