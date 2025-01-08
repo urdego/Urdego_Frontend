@@ -49,7 +49,7 @@ export const TextareaWrapper = styled.div<{
   margin-top: 8px;
   padding: 8px 12px;
   background-color: ${({ $isActive }) =>
-    $isActive ? colors.etc.white : colors.gray[90]};
+    $isActive ? colors.etc.white : colors.gray[95]};
   border-radius: 4px;
   border: ${({ $isActive, $hasText }) =>
     $isActive || $hasText
