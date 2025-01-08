@@ -77,3 +77,11 @@ export const Separator = styled.div`
   width: 100%;
   background-color: ${colors.gray[95]};
 `;
+
+export const CharCount = styled.div<{ $isValid: boolean }>`
+  font-size: 12px;
+  text-align: right;
+  color: ${({ $isValid }) =>
+    $isValid ? colors.gray[60] : colors.alert[50]}; /* 10자 미만이면 빨간색 */
+  margin-top: 4px;
+`;

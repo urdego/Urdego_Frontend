@@ -13,6 +13,7 @@ import {
   TextareaWrapper,
   StyledTextarea,
   Separator,
+  CharCount,
 } from '@/app/(nav)/myPage/accountCencellation/accountCencellation.styles';
 
 const AccountCancellation = () => {
@@ -21,17 +22,15 @@ const AccountCancellation = () => {
     inconvenience: false,
     other: false,
   });
-  const [otherReason, setOtherReason] = useState(''); // '기타' 이유 입력값
+  const [otherReason, setOtherReason] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [$isActive, set$isActive] = useState(false);
-  const $hasText = otherReason.trim().length > 0; // 입력값이 있는지 확인
+  const [isActive, setIsActive] = useState(false);
 
   const handleReasonChange = useCallback(
     (reason: keyof typeof reasons) => (checked: boolean) => {
       setReasons((prev) => {
         const updatedReasons = { ...prev, [reason]: checked };
 
-        // '기타' 체크 해제 시 입력 필드 초기화
         if (reason === 'other' && !checked) {
           setOtherReason('');
         }
@@ -42,11 +41,15 @@ const AccountCancellation = () => {
     []
   );
 
+  const hasText = otherReason.trim().length > 0;
+  const charCount = otherReason.length;
+  const isValid = charCount >= 10; // 10자 이상 입력해야 유효
+
   const canSubmit =
     isConfirmed &&
     (reasons.gameDislike ||
       reasons.inconvenience ||
-      (reasons.other && otherReason.trim().length > 0));
+      (reasons.other && isValid)); // 🔥 10자 이상 입력해야 버튼 활성화
 
   return (
     <>
@@ -88,15 +91,19 @@ const AccountCancellation = () => {
           onChange={(checked) => handleReasonChange('other')(checked)}
         />
         {reasons.other && (
-          <TextareaWrapper $hasText={$hasText} $isActive={$isActive}>
-            <StyledTextarea
-              placeholder="탈퇴사유를 알려주시면 고객님의 소중한 피드백을 반영해 더 나은 게임 환경을 제공하도록 하겠습니다."
-              value={otherReason}
-              onChange={(e) => setOtherReason(e.target.value)}
-              onFocus={() => set$isActive(true)}
-              onBlur={() => set$isActive(false)}
-            />
-          </TextareaWrapper>
+          <>
+            <TextareaWrapper $hasText={hasText} $isActive={isActive}>
+              <StyledTextarea
+                placeholder="탈퇴사유를 알려주시면 고객님의 소중한 피드백을 반영해 더 나은 게임 환경을 제공하도록 하겠습니다."
+                value={otherReason}
+                onChange={(e) => setOtherReason(e.target.value)}
+                onFocus={() => setIsActive(true)}
+                onBlur={() => setIsActive(false)}
+              />
+            </TextareaWrapper>
+            {/* 🔥 "0/10자 이상" 글자 수 카운트 UI */}
+            <CharCount $isValid={isValid}>{charCount}/10자 이상</CharCount>
+          </>
         )}
       </SessionWrapper>
 
