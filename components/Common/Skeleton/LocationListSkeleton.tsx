@@ -1,5 +1,5 @@
 import {
-  LocationContainer,
+  SkeletonLocationContainer,
   LocationImageContainer,
   LocationListWrapper,
 } from '@/components/Layout/Home/LocationList/LocationList.styles';
@@ -11,10 +11,10 @@ const LocationListSkeleton = () => {
       <LocationImageContainer>
         <Skeleton width={48} height={48} />
       </LocationImageContainer>
-      <LocationContainer>
+      <SkeletonLocationContainer>
         <Skeleton width={202} height={20} />
         <Skeleton width={202} height={20} />
-      </LocationContainer>
+      </SkeletonLocationContainer>
     </LocationListWrapper>
   );
 };
