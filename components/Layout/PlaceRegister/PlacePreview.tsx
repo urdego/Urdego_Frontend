@@ -10,6 +10,8 @@ import {
 import { BlackClearIcon } from './PlaceRegisterIcon';
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import useControlInput from '@/hooks/placeRegister/useControlInput';
+import useLoadingStore from '@/stores/loadingStore';
+import Skeleton from '@/components/Common/Skeleton/Skeleton';
 
 interface PlacePreviewProps {
   index: number;
@@ -24,6 +26,7 @@ const PlacePreview = ({ index }: PlacePreviewProps) => {
 
   // store state 불러오는 로직
   const { placeList } = usePlaceRegisterStore();
+  const { isPreviewLoading } = useLoadingStore();
 
   return (
     <PlacePreviewWrapper>
@@ -32,21 +35,29 @@ const PlacePreview = ({ index }: PlacePreviewProps) => {
         currCount={placeList[index].previewFile.length}
         totalCount={3}
       />
-      {placeList[index].previewFile.map((file, previewIndex) => (
-        <PreviewImage key={previewIndex}>
-          <PreviewImageRemoveButton
-            onClick={() => handlePartFileRemove(previewIndex)}
-          >
-            <BlackClearIcon />
-          </PreviewImageRemoveButton>
-          <Image
-            src={file}
-            alt="Preview Image"
-            fill
-            style={{ objectFit: 'cover' }}
-          />
-        </PreviewImage>
-      ))}
+      {isPreviewLoading[index]?.every(
+        (partPreviewLoading) => partPreviewLoading === true
+      )
+        ? isPreviewLoading[index].map((_, index) => (
+            <PreviewImage key={index}>
+              <Skeleton width={60} height={60} />
+            </PreviewImage>
+          ))
+        : placeList[index].previewFile.map((file, previewIndex) => (
+            <PreviewImage key={previewIndex}>
+              <PreviewImageRemoveButton
+                onClick={() => handlePartFileRemove(previewIndex)}
+              >
+                <BlackClearIcon />
+              </PreviewImageRemoveButton>
+              <Image
+                src={file}
+                alt="Preview Image"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+            </PreviewImage>
+          ))}
     </PlacePreviewWrapper>
   );
 };
