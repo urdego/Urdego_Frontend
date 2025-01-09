@@ -43,7 +43,7 @@ const PositionCard = ({
             {isHost ? (
               <HostLabel $isHost={true}>방장</HostLabel>
             ) : (
-              isReady && <HostLabel $isHost={false}>READY</HostLabel>
+              isReady && <HostLabel $isHost={false}>준비완료</HostLabel>
             )}
           </>
         ) : (

@@ -75,7 +75,7 @@ export const HostLabel = styled.div<{ $isHost?: boolean }>`
   left: 0;
   right: 0;
   padding: 2px 0;
-  color: ${colors.black};
+  color: ${colors.etc.black};
   text-align: center;
   font-size: 20px;
   font-style: normal;

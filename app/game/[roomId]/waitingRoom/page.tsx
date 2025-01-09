@@ -13,7 +13,7 @@ const WaitingRoom = () => {
   const mockData = {
     currentUser: { name: '테스트유저', isReady: false },
     isManager: true,
-    allPlayersReady: true,
+    allPlayersReady: false,
     users: [
       { id: 1, name: '유저1', isHost: true, isReady: true },
       { id: 2, name: '유저2', isHost: false, isReady: true },
