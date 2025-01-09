@@ -7,7 +7,6 @@ import SnowMan0 from '@/styles/Icon/Character/character-0.svg';
 // import SnowMan4 from '@/styles/Icon/Character/character-4.svg';
 
 import {
-  CardWrapper,
   Card,
   Level,
   Username,
