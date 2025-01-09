@@ -3,22 +3,54 @@
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
-import Character from '@/components/Layout/Game/Character';
-import { useUserStatus } from '@/hooks/inGame/useUserStatus';
-import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
-import { useGameStart } from '@/hooks/inGame/useGameStart';
+import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
+// import { useUserStatus } from '@/hooks/inGame/useUserStatus';
+// import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
+// import { useGameStart } from '@/hooks/inGame/useGameStart';
 
 const WaitingRoom = () => {
-  const { currentUser, isManager, allPlayersReady, users } = useUserStatus();
-  const { toggleReady, startGame } = useReadyStatus(currentUser || null);
-  useGameStart();
+  // Mock 데이터 사용
+  const mockData = {
+    currentUser: { name: '테스트유저', isReady: false },
+    isManager: true,
+    allPlayersReady: true,
+    users: [
+      { id: 1, name: '유저1', isHost: true, isReady: true },
+      { id: 2, name: '유저2', isHost: false, isReady: true },
+      { id: 3, name: '유저3', isHost: false, isReady: false },
+      { id: 4, name: '유저4', isHost: false, isReady: false },
+      { id: 5, name: '유저5', isHost: false, isReady: false },
+      // { id: 6, name: '유저6', isHost: false, isReady: false },
+    ],
+  };
+
+  // const { currentUser, isManager, allPlayersReady, users } = useUserStatus();
+  // const { toggleReady, startGame } = useReadyStatus(currentUser || null);
+  // useGameStart();
+
+  const { currentUser, isManager, allPlayersReady, users } = mockData;
+  const toggleReady = () => console.log('준비하기 클릭');
+  const startGame = () => console.log('게임 시작 클릭');
 
   return (
     <>
       <TopBar label="게임 대기방" NavType="room" exitIcon />
       <WaitingWrapper>
         <UserList>
-          <Character users={users} />
+          {users.map((user) => (
+            <PositionCard
+              key={user.id}
+              username={user.name}
+              isHost={user.isHost}
+              isReady={user.isReady}
+            />
+          ))}
+          {/* 남은 자리를 빈 카드로 채우기 (최대 6명) */}
+          {Array.from({ length: Math.max(0, 6 - users.length) }).map(
+            (_, index) => (
+              <PositionCard key={`empty-${index}`} isEmpty={true} />
+            )
+          )}
         </UserList>
         <Footer>
           {isManager ? (

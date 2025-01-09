@@ -20,6 +20,7 @@ const colors = {
     black: 'rgba(26, 28, 28, 1)',
     white: 'rgba(255, 255, 255, 1)',
     green: 'rgba(67, 195, 59, 1)',
+    card: 'rgba(255, 255, 255, 0.6)',
   },
   alert: {
     50: 'rgba(222, 55, 48, 1)',
