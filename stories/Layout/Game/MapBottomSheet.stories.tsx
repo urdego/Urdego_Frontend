@@ -1,6 +1,8 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import MapBottomSheet, { MapBottomSheetProps } from './MapBottomSheet';
+import MapBottomSheet, {
+  MapBottomSheetProps,
+} from '@/components/Layout/Game/MapBottomSheet';
 
 export default {
   title: 'Components/MapBottomSheet',

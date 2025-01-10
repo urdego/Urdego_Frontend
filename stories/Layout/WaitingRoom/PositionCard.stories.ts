@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import PositionCard from '../../../components/Layout/WaitingRoom/PositionCard';
+import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
 
 const meta = {
   title: 'Components/WaitingRoom/PositionCard',
