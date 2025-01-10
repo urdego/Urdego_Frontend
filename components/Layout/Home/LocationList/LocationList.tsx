@@ -23,7 +23,6 @@ const LocationList = ({ location }: LocationListProps) => {
           sizes="(max-width: 430px) 100vw"
         />
       </LocationImageContainer>
-
       <LocationContainer>
         <LocationTitle>{location?.contentName}</LocationTitle>
         <LocationDetail>{location?.address}</LocationDetail>

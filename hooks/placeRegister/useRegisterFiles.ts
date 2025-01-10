@@ -2,6 +2,7 @@ import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import exifr from 'exifr';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import toast from 'react-hot-toast';
+import useLoadingStore from '@/stores/loadingStore';
 
 interface useUploadFilesProps {
   index: number;
@@ -9,6 +10,7 @@ interface useUploadFilesProps {
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const { setPlaceInput } = usePlaceRegisterStore();
+  const { setPreviewLoading } = useLoadingStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
@@ -19,17 +21,14 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const fileList = e.target.files;
 
     if (!fileList || fileList?.length === 0) {
-      toast('선택된 사진이 없어요', {
-        icon: '😮',
-      });
       return;
     }
-
     if (fileList.length > MAX_CONTENT_COUNT) {
       toast('최대 3개의 사진만 업로드가 가능해요', {
         icon: '😱',
       });
     }
+
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
@@ -37,9 +36,14 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       return;
     }
 
-    await exportMetadata(selectedFileList);
+    setPreviewLoading({
+      locationIndex: index,
+      newPreviewLoading: new Array(selectedFileList.length).fill(true),
+    });
 
     try {
+      await exportMetadata(selectedFileList);
+
       const compressedFileList = await compressFile(selectedFileList);
       console.log(selectedFileList);
       console.log(compressedFileList);
@@ -48,13 +52,21 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       storeFile(compressedFileList);
       storePreviewFile(compressedFileList);
+      setPreviewLoading({
+        locationIndex: index,
+        newPreviewLoading: new Array(selectedFileList.length).fill(false),
+      });
 
       toast('사진 등록이 완료되었어요!', {
         icon: '👍',
       });
     } catch (error) {
-      console.error('파일 압축 중 에러:', error);
-      toast.error('사진 등록에 실패했어요');
+      console.log(error);
+      setPreviewLoading({
+        locationIndex: index,
+        newPreviewLoading: [],
+      });
+      toast.error('사진 등록에 실패했습니다');
     }
   };
 
@@ -68,7 +80,6 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     if (totalMemory >= MAX_MEMORY) {
       setPlaceInput(index, 'file', []);
       setPlaceInput(index, 'previewFile', []);
-      alert('30MB를 초과하실 수 없습니다!');
       return true;
     }
     return false;
