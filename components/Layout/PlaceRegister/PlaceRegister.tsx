@@ -1,19 +1,13 @@
-import Image from 'next/image';
-
-import ImageUpload from './ImageUpload';
+import PlacePreview from './PlacePreview';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
-import { BlackClearIcon, TrashIcon } from './PlaceRegisterIcon';
+import { TrashIcon } from './PlaceRegisterIcon';
 import {
   PlaceContentResetButton,
-  PlacePreview,
   PlaceRegistertext,
   PlaceRegisterWrapper,
-  PreviewImage,
-  PreviewImageRemoveButton,
 } from './PlaceRegister.styles';
 
-import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import useControlInput from '@/hooks/placeRegister/useControlInput';
 
@@ -24,15 +18,8 @@ interface PlaceRegisterProps {
 
 const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
-  const { handleFilesUpload } = useRegisterFiles({
-    index,
-  });
-  const {
-    handleTitleChange,
-    handleHintChange,
-    handlePartFileRemove,
-    handlePlaceRemove,
-  } = useControlInput({ index });
+  const { handleTitleChange, handleHintChange, handlePlaceRemove } =
+    useControlInput({ index });
 
   // store state 불러오는 로직
   const { placeList } = usePlaceRegisterStore();
@@ -47,28 +34,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
           </PlaceContentResetButton>
         )}
       </PlaceRegistertext>
-      <PlacePreview>
-        <ImageUpload
-          handleFilesUpload={handleFilesUpload}
-          currCount={placeList[index].previewFile.length}
-          totalCount={3}
-        />
-        {placeList[index].previewFile.map((file, previewIndex) => (
-          <PreviewImage key={previewIndex}>
-            <PreviewImageRemoveButton
-              onClick={() => handlePartFileRemove(previewIndex)}
-            >
-              <BlackClearIcon />
-            </PreviewImageRemoveButton>
-            <Image
-              src={file}
-              alt="Preview Image"
-              fill
-              style={{ objectFit: 'cover' }}
-            />
-          </PreviewImage>
-        ))}
-      </PlacePreview>
+      <PlacePreview index={index} />
       <PlaceInput
         placeholder="장소명"
         value={placeList[index].title}
