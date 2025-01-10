@@ -105,7 +105,7 @@ export const UserStatus = styled.span<{ $status: string }>`
 `;
 
 export const InviteButton = styled.button<{ $invited: boolean }>`
-  width: 64px;
+  width: 74px;
   height: 30px;
   padding: 8px 16px;
   font-size: 12px;

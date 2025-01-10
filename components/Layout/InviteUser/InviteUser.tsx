@@ -72,7 +72,7 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
       >
         <HeaderWrapper>
           <HeaderHandler />
-          <HeaderTitle>친구초대</HeaderTitle>
+          <HeaderTitle>플레이어 초대</HeaderTitle>
         </HeaderWrapper>
         <ContentWrapper>
           <SearchBarWrapper>
