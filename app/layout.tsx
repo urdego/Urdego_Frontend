@@ -24,6 +24,9 @@ export default function RootLayout({
             <Container>{children}</Container>
             <Toaster
               position="bottom-center"
+              containerStyle={{
+                bottom: 80,
+              }}
               toastOptions={{
                 error: {
                   duration: 2000,

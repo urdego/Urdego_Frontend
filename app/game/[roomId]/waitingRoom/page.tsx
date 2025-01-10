@@ -4,6 +4,7 @@ import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
+import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
 // import { useUserStatus } from '@/hooks/inGame/useUserStatus';
 // import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
 // import { useGameStart } from '@/hooks/inGame/useGameStart';
@@ -30,7 +31,14 @@ const WaitingRoom = () => {
 
   const { currentUser, isManager, allPlayersReady, users } = mockData;
   const toggleReady = () => console.log('준비하기 클릭');
-  const startGame = () => console.log('게임 시작 클릭');
+  const startGame = () => {
+    if (!allPlayersReady) {
+      showReadyToast('아직 모든 팀원이 준비되지 않았습니다.');
+      return;
+    }
+    // 게임 시작 로직
+    console.log('게임 시작');
+  };
 
   return (
     <>
@@ -63,7 +71,6 @@ const WaitingRoom = () => {
               label={users.length >= 2 ? '게임시작' : '게임시작 대기중...'}
               onClick={startGame}
               styleType="coloredBackground"
-              disabled={!allPlayersReady || users.length < 2}
             />
           ) : (
             <Button
