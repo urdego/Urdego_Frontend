@@ -9,7 +9,6 @@ interface ReadyToastProps extends Partial<ToasterProps> {
 }
 
 const ReadyToast = ({
-  icon = <ErrorIcon />,
   duration = 3000,
   position = 'bottom-center',
   reverseOrder = false,
@@ -24,7 +23,7 @@ const ReadyToast = ({
         toastOptions={{
           className: 'toast',
           duration,
-          icon,
+          icon: <ErrorIcon />,
         }}
         {...props}
       />
