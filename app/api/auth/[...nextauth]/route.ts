@@ -113,18 +113,16 @@ const authOptions: NextAuthOptions = {
 
       // 토큰이 만료되지 않았으면 현재 토큰 반환
       const tokenExpires = token.accessTokenExpires as number;
-      if (tokenExpires && Date.now() < tokenExpires) {
-        return token;
+      // 만료 10분 전부터 갱신 시도
+      if (tokenExpires && Date.now() + 10 * 60 * 1000 > tokenExpires) {
+        console.log('토큰 만료 10분 전, 갱신:', {
+          현재시간: new Date(Date.now()).toISOString(),
+          만료시간: new Date(tokenExpires).toISOString(),
+        });
+        return refreshAccessToken(token);
       }
 
-      // 토큰이 만료되었으면 갱신
-      return refreshAccessToken(token);
-    },
-
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string | undefined;
-      session.error = token.error as string | undefined;
-      return session;
+      return token;
     },
   },
 };
