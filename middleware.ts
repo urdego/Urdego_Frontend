@@ -40,6 +40,6 @@ export const config = {
     // API 경로에 대해서만 적용
     '/api/:path*',
     // auth 관련 경로는 제외
-    '/((?!api/auth|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api/auth|_next/static|_next/image|favicon.ico|login|$).*)',
   ],
 };
