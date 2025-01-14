@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import ReportBottomSheet from './ReportBottomSheet';
+import ReportBottomSheet from '@/components/Common/BottomSheet/ReportBottomSheet';
 
 export default {
   title: 'Common/BottomSheet/ReportBottomSheet',

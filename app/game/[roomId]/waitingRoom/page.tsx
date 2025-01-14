@@ -1,111 +1,43 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
-import Character from '@/components/Layout/Game/Character';
-// import useLoadingStore from '@/stores/loadingStore';
-import useWebSocketStore from '@/stores/useWebSocketStore';
-import WaitingRoomWebSocket from '@/lib/websocket/waittingRoomWebsocket';
-import useUserStore from '@/stores/useUserStore';
-import useGameStore from '@/stores/useGameStores';
-import useInGameStore from '@/stores/useIngameStore';
-import InGameWebSocket from '@/lib/websocket/gameWebsocket';
-import { toast } from 'react-hot-toast';
+import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
+import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
+// import { useUserStatus } from '@/hooks/inGame/useUserStatus';
+// import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
+// import { useGameStart } from '@/hooks/inGame/useGameStart';
 
 const WaitingRoom = () => {
-  const router = useRouter();
-  // const setLoading = useLoadingStore((state) => state.setLoading);
-  const { messages, users } = useWebSocketStore();
-  const nickname = useUserStore((state) => state.nickname);
-  const gameId = useGameStore((state) => state.gameId); // 여기로 이동
-  const setGameInfo = useInGameStore((state) => state.setGameInfo); // 여기로 이동
-  const latestMessage = messages[messages.length - 1];
-
-  useEffect(() => {
-    if ('waitingRoomParticipants' in latestMessage?.data) {
-      console.log(
-        '현재 참가 인원 리스트:',
-        latestMessage.data.waitingRoomParticipants
-      );
-    }
-
-    // "gamestart" 이벤트 수신 받은 경우
-    if (
-      'action' in latestMessage?.data &&
-      latestMessage.data.action === 'startGame'
-    ) {
-      console.log('Game start message received:', latestMessage.data);
-      const { joinedUser, totalRounds } = latestMessage.data;
-      const currentGameId = latestMessage.data.gameId;
-
-      const connectAndNavigate = async () => {
-        try {
-          // 1. 게임 정보 저장
-          setGameInfo(joinedUser, totalRounds);
-
-          // 2. 대기방 소켓 연결 해제
-          const waitingRoomWsClient = WaitingRoomWebSocket.getInstance();
-          waitingRoomWsClient.disconnect();
-
-          // 2. 게임 소켓 연결 - latestMessage에서 받은 gameId 사용
-          const inGameWsClient = InGameWebSocket.getInstance();
-          await inGameWsClient.connect(Number(currentGameId), 1);
-
-          // 4. 소켓 연결이 완료된 후 페이지 이동 - gameId를 사용
-          router.push(`/game/${currentGameId}/1`);
-        } catch (error) {
-          console.error('Failed to connect to game socket:', error);
-          toast.error('게임 연결에 실패했습니다.');
-        }
-      };
-
-      connectAndNavigate();
-    }
-  }, [latestMessage, router, gameId, setGameInfo]);
-
-  // 현재 로그인한 유저 찾기
-  const currentUser = users.find((user) => user.name === nickname);
-  console.log('Current user:', currentUser);
-
-  // 현재 유저의 역할 확인
-  const isManager = currentUser?.role === 'MANAGER';
-  console.log('Is manager:', isManager);
-
-  // 준비 상태 토글 핸들러
-  const toggleReady = () => {
-    if (!currentUser) return;
-
-    const wsClient = WaitingRoomWebSocket.getInstance();
-    console.log('Toggling ready status. Current status:', currentUser.isReady);
-
-    wsClient.sendEvent({
-      eventType: 'READY',
-      data: {
-        nickname: currentUser.name,
-        role: currentUser.isReady ? 'notReady' : 'Ready',
-      },
-    });
+  // Mock 데이터 사용
+  const mockData = {
+    currentUser: { name: '테스트유저', isReady: false },
+    isManager: true,
+    allPlayersReady: false,
+    users: [
+      { id: 1, name: '유저1', isHost: true, isReady: true },
+      { id: 2, name: '유저2', isHost: false, isReady: true },
+      { id: 3, name: '유저3', isHost: false, isReady: false },
+      { id: 4, name: '유저4', isHost: false, isReady: false },
+      { id: 5, name: '유저5', isHost: false, isReady: false },
+      // { id: 6, name: '유저6', isHost: false, isReady: false },
+    ],
   };
 
-  // 모든 MEMBER 플레이어가 준비 완료했는지 확인
-  const allPlayersReady = users.every(
-    (user) => user.role === 'MANAGER' || user.isReady
-  );
+  // const { currentUser, isManager, allPlayersReady, users } = useUserStatus();
+  // const { toggleReady, startGame } = useReadyStatus(currentUser || null);
+  // useGameStart();
 
-  // 게임 시작 핸들러 (MANAGER만 가능)
+  const { currentUser, isManager, allPlayersReady, users } = mockData;
+  const toggleReady = () => console.log('준비하기 클릭');
   const startGame = () => {
-    const wsClient = WaitingRoomWebSocket.getInstance();
-    const gameId = useGameStore.getState().gameId;
-
-    wsClient.sendEvent({
-      eventType: 'START',
-      data: {
-        gameId: gameId?.toString(),
-      },
-    });
+    if (!allPlayersReady) {
+      showReadyToast('아직 모든 팀원이 준비되지 않았습니다.');
+      return;
+    }
+    // 게임 시작 로직
+    console.log('게임 시작');
   };
 
   return (
@@ -113,7 +45,20 @@ const WaitingRoom = () => {
       <TopBar label="게임 대기방" NavType="room" exitIcon />
       <WaitingWrapper>
         <UserList>
-          <Character users={users} />
+          {users.map((user) => (
+            <PositionCard
+              key={user.id}
+              username={user.name}
+              isHost={user.isHost}
+              isReady={user.isReady}
+            />
+          ))}
+          {/* 남은 자리를 빈 카드로 채우기 (최대 6명) */}
+          {Array.from({ length: Math.max(0, 6 - users.length) }).map(
+            (_, index) => (
+              <PositionCard key={`empty-${index}`} isEmpty={true} />
+            )
+          )}
         </UserList>
         <Footer>
           {isManager ? (
@@ -126,7 +71,6 @@ const WaitingRoom = () => {
               label={users.length >= 2 ? '게임시작' : '게임시작 대기중...'}
               onClick={startGame}
               styleType="coloredBackground"
-              disabled={!allPlayersReady || users.length < 2}
             />
           ) : (
             <Button
