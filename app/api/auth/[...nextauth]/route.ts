@@ -87,7 +87,8 @@ const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt', //JWT 기반 인증
-    maxAge: 24 * 60 * 60, // 24시간
+    maxAge: 24 * 60 * 60, // 24시간 - 세션 총 유효기간
+    updateAge: 10 * 60 * 60, // 1시간  - 세션 업데이트 주기
   },
   secret: process.env.NEXTAUTH_SECRET, //JWT 암호화 키 설정
   callbacks: {
