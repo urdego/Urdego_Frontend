@@ -3,6 +3,7 @@ import KakaoProvider from 'next-auth/providers/kakao';
 import AppleProvider from 'next-auth/providers/apple';
 import { createPrivateKey } from 'crypto';
 import { SignJWT } from 'jose';
+import { refreshAccessToken } from '@/lib/auth/refreshToken';
 
 // 애플 토큰 생성 함수
 const getAppleToken = async () => {
@@ -102,14 +103,27 @@ const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, account }) {
+      // 초기 로그인 시 토큰 설정
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
+        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
+        token.provider = account.provider;
       }
-      return token;
+
+      // 토큰이 만료되지 않았으면 현재 토큰 반환
+      const tokenExpires = token.accessTokenExpires as number;
+      if (tokenExpires && Date.now() < tokenExpires) {
+        return token;
+      }
+
+      // 토큰이 만료되었으면 갱신
+      return refreshAccessToken(token);
     },
+
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
+      session.accessToken = token.accessToken as string | undefined;
+      session.error = token.error as string | undefined;
       return session;
     },
   },
