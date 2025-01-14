@@ -3,6 +3,7 @@ import KakaoProvider from 'next-auth/providers/kakao';
 import AppleProvider from 'next-auth/providers/apple';
 import { createPrivateKey } from 'crypto';
 import { SignJWT } from 'jose';
+import { refreshAccessToken } from '@/lib/auth/refreshToken';
 
 // 애플 토큰 생성 함수
 const getAppleToken = async () => {
@@ -86,7 +87,8 @@ const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt', //JWT 기반 인증
-    maxAge: 24 * 60 * 60, // 24시간
+    maxAge: 24 * 60 * 60, // 24시간 - 세션 총 유효기간
+    updateAge: 10 * 60 * 60, // 1시간  - 세션 업데이트 주기
   },
   secret: process.env.NEXTAUTH_SECRET, //JWT 암호화 키 설정
   callbacks: {
@@ -102,15 +104,26 @@ const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, account }) {
+      // 초기 로그인 시 토큰 설정
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
+        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
+        token.provider = account.provider;
       }
+
+      // 토큰이 만료되지 않았으면 현재 토큰 반환
+      const tokenExpires = token.accessTokenExpires as number;
+      // 만료 10분 전부터 갱신 시도
+      if (tokenExpires && Date.now() + 10 * 60 * 1000 > tokenExpires) {
+        console.log('토큰 만료 10분 전, 갱신:', {
+          현재시간: new Date(Date.now()).toISOString(),
+          만료시간: new Date(tokenExpires).toISOString(),
+        });
+        return refreshAccessToken(token);
+      }
+
       return token;
-    },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
-      return session;
     },
   },
 };
