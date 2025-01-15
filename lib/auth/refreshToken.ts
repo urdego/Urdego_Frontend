@@ -1,14 +1,5 @@
 import axios from 'axios';
-import { JWT } from 'next-auth/jwt';
-
-interface Token extends JWT {
-  [key: string]: unknown;
-  provider?: string;
-  refreshToken?: string;
-  accessToken?: string;
-  accessTokenExpires?: number;
-  error?: string;
-}
+import type { Token } from 'next-auth';
 
 export async function refreshAccessToken(token: Token): Promise<Token> {
   try {
