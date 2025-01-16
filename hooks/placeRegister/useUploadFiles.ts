@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
-  const { nickname } = useUserStore();
+  const { nickname } = useUserStore(); //TODO: userId로 변경 필요
   const router = useRouter();
 
   const handleUploadFiles = async () => {
@@ -37,31 +37,31 @@ const useUploadFiles = () => {
   };
 
   const handleUploadPartFile = async (place: Place) => {
+    const params = new URLSearchParams();
+    params.append('userId', '4');
+
     const formData = new FormData();
 
     // 이미지 등록
     place.file.map((item) => {
-      formData.append('files', item);
+      formData.append('contents', item);
     });
 
     // 장소명, 장소 위경도, 힌트 등록
-    const params = new URLSearchParams();
-    params.append('nickname', nickname || '');
-    params.append('contentName', place.title);
-    params.append('hint', place.hint);
-    params.append('address', place.address || '');
-    params.append('latitude', String(place.lat));
-    params.append('longitude', String(place.lng));
+    formData.append('contentName', place.title);
+    formData.append('hint', place.hint);
+    formData.append('address', place.address || '');
+    formData.append('latitude', String(place.lat));
+    formData.append('longitude', String(place.lng));
 
     // 서버에게 정보 전송
     await axiosInstance
-      .post('/api/content/', formData, {
-        params: params,
-      })
+      .post('/api/content', formData, { params })
       .then((response) => {
         console.log(`장소 등록하기의 서버 통신 상태:${response.status}`);
       })
       .catch((error) => {
+        console.error('Upload error:', error.response?.data || error.message);
         throw new Error(error);
       });
   };
