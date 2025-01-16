@@ -35,6 +35,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       toast.error('업로드 가능한 용량을 초과했어요');
       return;
     }
+    if (!selectedFileList.every(isImageFile)) {
+      toast.error('이미지만 업로드가 가능해요');
+      return;
+    }
 
     setPreviewLoading({
       locationIndex: index,
@@ -83,6 +87,14 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       return true;
     }
     return false;
+  };
+
+  // 확장자 제한 로직
+  const isImageFile = (file: File) => {
+    const filePath = file.name.split('.');
+    const fileExtension = filePath[filePath.length - 1].toLocaleLowerCase();
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+    return validExtensions.includes(fileExtension);
   };
 
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
