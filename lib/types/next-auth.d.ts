@@ -21,4 +21,13 @@ declare module 'next-auth' {
     refresh_token: string;
     provider: string;
   }
+
+  interface Token extends JWT {
+    [key: string]: unknown;
+    provider?: string;
+    refreshToken?: string;
+    accessToken?: string;
+    accessTokenExpires?: number;
+    error?: string;
+  }
 }

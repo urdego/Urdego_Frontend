@@ -125,6 +125,17 @@ const authOptions: NextAuthOptions = {
 
       return token;
     },
+    async session({ session, token }) {
+      // JWT 토큰의 정보를 세션에 포함
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          accessToken: token.accessToken,
+          // refreshToken은 보안을 위해 클라이언트에 전달 X
+        },
+      };
+    },
   },
 };
 
