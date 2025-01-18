@@ -9,9 +9,8 @@ interface Location {
 
 interface GetLocationListResponse {
   userId: number;
-  userContents: [
+  contents: [
     {
-      userId: number;
       contentId: number;
       url: string;
       contentName: string;
@@ -19,12 +18,6 @@ interface GetLocationListResponse {
       latitude: number;
       longitude: number;
       hint: string;
-      contentInfo: {
-        contentType: string;
-        metaLatitude: number;
-        metaLongitude: number;
-        size: number;
-      };
     },
   ];
   cursorIdx: number;
@@ -38,7 +31,7 @@ const useGetInfiniteLocationList = () => {
   const [isLoadMore, setIsLoadMore] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { nickname } = useUserStore(); //TODO: 사용하도록 변경
+  const { userId } = useUserStore(); //TODO: 사용하도록 변경
 
   useEffect(() => {
     const initialFetchLocationList = async () => {
@@ -50,7 +43,7 @@ const useGetInfiniteLocationList = () => {
   }, []);
 
   const fetchLocationList = async () => {
-    // const nickname = '어데고~'; //! test를 위한 용도
+    const userId = 2; //! test를 위한 용도
 
     setIsLoading(true);
 
@@ -61,13 +54,14 @@ const useGetInfiniteLocationList = () => {
     }
 
     try {
-      const response = await fetch(`/api/content/${nickname}?${params}`);
+      const response = await fetch(`/api/content/${userId}?${params}`);
       if (!response.ok) {
         throw new Error('데이터를 가져오는 것에 실패했습니다!');
       }
       const data: GetLocationListResponse = await response.json();
+      console.log(data);
       if (data) {
-        setLocationList((prev) => [...prev, ...data.userContents]);
+        setLocationList((prev) => [...prev, ...data.contents]);
         if (data.totalContent) {
           setTotalCount(data.totalContent);
         }
