@@ -27,10 +27,13 @@ const meta = {
 } satisfies Meta<typeof ReadyToast>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof ReadyToast>;
 
 export const Default: Story = {
-  render: () => {
+  args: {
+    message: '아직 모든 팀원이 준비되지 않았습니다.',
+  },
+  render: function Story(args) {
     return (
       <Button
         onClick={() => showReadyToast('아직 모든 팀원이 준비되지 않았습니다.')}
@@ -39,13 +42,17 @@ export const Default: Story = {
         buttonSize="medium"
         buttonHeight="default"
         styleType="coloredBackground"
+        {...args}
       />
     );
   },
 };
 
 export const WithCustomMessage: Story = {
-  render: () => {
+  args: {
+    message: '게임을 시작하기 위해서는 최소 2명의 플레이어가 필요합니다.',
+  },
+  render: function Story(args) {
     return (
       <Button
         onClick={() =>
@@ -58,6 +65,7 @@ export const WithCustomMessage: Story = {
         buttonSize="medium"
         buttonHeight="default"
         styleType="coloredBackground"
+        {...args}
       />
     );
   },
