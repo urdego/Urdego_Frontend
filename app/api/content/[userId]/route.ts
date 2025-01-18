@@ -4,14 +4,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ nickname: string }> }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   const searchParams = request.nextUrl.searchParams;
-  const nickname = (await params).nickname;
+  const userId = (await params).userId;
 
   try {
     const res = await axiosInstance.get(
-      `${API_URL_CONFIG.CONTENT.DEFAULT}${nickname}/contents`,
+      `${API_URL_CONFIG.CONTENT.GET}/${userId}/contents`,
       {
         params: Object.fromEntries(searchParams),
       }

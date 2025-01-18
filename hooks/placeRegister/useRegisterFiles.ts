@@ -35,6 +35,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       toast.error('업로드 가능한 용량을 초과했어요');
       return;
     }
+    if (!selectedFileList.every(isImageFile)) {
+      toast.error('이미지만 업로드가 가능해요');
+      return;
+    }
 
     setPreviewLoading({
       locationIndex: index,
@@ -42,7 +46,12 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
 
     try {
-      await exportMetadata(selectedFileList);
+      const isMeta = await exportMetadata(selectedFileList);
+      if (!isMeta) {
+        toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
+          icon: '👍',
+        });
+      }
 
       const compressedFileList = await compressFile(selectedFileList);
       console.log(selectedFileList);
@@ -56,17 +65,13 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         locationIndex: index,
         newPreviewLoading: new Array(selectedFileList.length).fill(false),
       });
-
-      toast('사진 등록이 완료되었어요!', {
-        icon: '👍',
-      });
     } catch (error) {
       console.log(error);
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: [],
       });
-      toast.error('사진 등록에 실패했습니다');
+      toast.error('사진 등록에 실패했어요');
     }
   };
 
@@ -85,6 +90,14 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     return false;
   };
 
+  // 확장자 제한 로직
+  const isImageFile = (file: File) => {
+    const filePath = file.name.split('.');
+    const fileExtension = filePath[filePath.length - 1].toLocaleLowerCase();
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+    return validExtensions.includes(fileExtension);
+  };
+
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
     const gps = await exifr.gps(fileList[0]);
@@ -99,7 +112,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         index,
         latLng: { lat: gps.latitude, lng: gps.longitude },
       });
+
+      return true;
     }
+    return false;
   };
 
   // 이미지 압축 로직
