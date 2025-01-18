@@ -31,7 +31,7 @@ const useGetInfiniteLocationList = () => {
   const [isLoadMore, setIsLoadMore] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { userId } = useUserStore(); //TODO: 사용하도록 변경
+  // const { userId } = useUserStore(); //TODO: 사용하도록 변경
 
   useEffect(() => {
     const initialFetchLocationList = async () => {
