@@ -1,7 +1,7 @@
 export const API_URL_CONFIG = Object.freeze({
   CONTENT: {
-    POST_MULTIPLE: '/api/content-service/',
-    DEFAULT: '/api/content-service/',
+    POST_MULTIPLE: '/api/content-service',
+    GET: '/api/content-service',
   },
   AUTH: {
     SIGNUP: '/api/user-service/users',

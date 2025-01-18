@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const res = await axiosInstance.post(
-      `${API_URL_CONFIG.CONTENT.POST_MULTIPLE}${userId}/multiple`,
+      `${API_URL_CONFIG.CONTENT.POST_MULTIPLE}/${userId}/multiple`,
       formData,
       {
         headers: {
