@@ -62,9 +62,16 @@ export const TitleContainer = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  height: calc(100% - 80px);
+  height: calc(100% - 100px); // HeaderWrapper 높이를 고려한 조정
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 export const AllCancelButton = styled.button`
@@ -85,7 +92,7 @@ export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  padding: 0 4px;
+  width: 100%;
 `;
 
 export const GridItem = styled.div`
@@ -93,6 +100,7 @@ export const GridItem = styled.div`
   aspect-ratio: 1;
   background: ${colors.gray[90]};
   cursor: pointer;
+  width: 100%;
 
   &:hover {
     background: ${colors.gray[95]};
@@ -123,4 +131,14 @@ export const SelectNumber = styled.div`
   justify-content: center;
   font-size: 12px;
   font-weight: 600;
+`;
+
+export const LocationName = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: ${colors.etc.white};
+  text-align: center;
 `;

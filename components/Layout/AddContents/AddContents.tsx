@@ -1,4 +1,5 @@
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, useEffect, useRef } from 'react';
+import axios from 'axios';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -12,7 +13,18 @@ import {
   SelectNumber,
   CancelButtonText,
   TitleContainer,
+  LocationName,
 } from './AddContents.styles';
+
+interface Content {
+  contentId: number;
+  url: string;
+  contentName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  hint: string;
+}
 
 interface AddContentsProps {
   isVisible: boolean;
@@ -21,9 +33,71 @@ interface AddContentsProps {
   children: ReactNode;
 }
 
+const ITEMS_PER_PAGE = 16;
+
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
+  const [contents, setContents] = useState<Content[]>([]);
+  const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
+  const [cursorIdx, setCursorIdx] = useState(1); // 시작 idx
+  const [isLoading, setIsLoading] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const userId = 1; // 1, 2, 3, 4 중 하나로 하드코딩
+
+  const fetchContents = async () => {
+    if (isLoading) return; // 중복 요청 방지
+    setIsLoading(true);
+
+    try {
+      const response = await axios.get(
+        `/api/content-service/${userId}/contents`,
+        {
+          params: {
+            cursorIdx,
+            limit: ITEMS_PER_PAGE,
+          },
+        }
+      );
+      const fetchedContents = response.data.contents;
+      setContents((prev) => [...prev, ...fetchedContents]);
+      setCursorIdx((prev) => prev + ITEMS_PER_PAGE); // 다음 cursorIdx 설정
+    } catch (error) {
+      console.error('Error fetching contents:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleScroll = () => {
+    if (contentRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+      if (scrollHeight - scrollTop <= clientHeight + 1 && !isLoading) {
+        fetchContents(); // 추가 데이터 가져오기
+      }
+    }
+  };
+
+  useEffect(() => {
+    const currentRef = contentRef.current;
+    if (currentRef) {
+      currentRef.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [contents, isLoading]);
+
+  useEffect(() => {
+    if (isVisible) {
+      setContents([]); // 초기화
+      setCursorIdx(1); // 초기 cursorIdx 설정
+      fetchContents(); // 처음 데이터 가져오기
+    }
+  }, [isVisible]);
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -51,15 +125,17 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   };
 
   const renderGridItems = () => {
-    return Array(12)
-      .fill(null)
-      .map((_, index) => (
-        <GridItem key={index} onClick={() => handleLocationSelect(index)}>
-          {selectedLocations.includes(index) && (
-            <SelectNumber>{getLocationNumber(index)}</SelectNumber>
-          )}
-        </GridItem>
-      ));
+    return contents.slice(0, visibleItems).map((content) => (
+      <GridItem
+        key={content.contentId}
+        onClick={() => handleLocationSelect(content.contentId)}
+      >
+        <LocationName>{content.contentName}</LocationName>
+        {selectedLocations.includes(content.contentId) && (
+          <SelectNumber>{getLocationNumber(content.contentId)}</SelectNumber>
+        )}
+      </GridItem>
+    ));
   };
 
   if (!isVisible) return null;
@@ -94,7 +170,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
             </AllCancelButton>
           </TitleContainer>
         </HeaderWrapper>
-        <ContentWrapper>
+        <ContentWrapper ref={contentRef}>
           <GridContainer>{renderGridItems()}</GridContainer>
         </ContentWrapper>
       </BottomSheet>
