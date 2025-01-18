@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 
 export async function GET(request: NextRequest) {
@@ -15,17 +14,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await axiosInstance.get(
-      `${API_BASE_URL.DNS}/api/user-service/nickname`,
-      {
-        params: {
-          string: queryString,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/api/user-service/nickname`, {
+      params: {
+        string: queryString,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     console.log('Search response:', response.data);
     return NextResponse.json(response.data);

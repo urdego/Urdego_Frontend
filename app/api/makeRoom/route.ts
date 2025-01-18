@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { API_BASE_URL, API_URL_CONFIG } from '@/config/apiEndPointConfig';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { AxiosError } from 'axios';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const fullUrl = `${API_BASE_URL.DNS}${API_URL_CONFIG.GROUP.CREATE}`;
+    const fullUrl = `${API_URL_CONFIG.GROUP.CREATE}`;
 
     console.log('Requesting to URL:', fullUrl);
 

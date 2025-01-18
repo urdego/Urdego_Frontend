@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { API_URL_CONFIG, API_BASE_URL } from '@/config/apiEndPointConfig';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 
 export async function POST(request: NextRequest) {
@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     const response = await axiosInstance.post(
-      `${API_BASE_URL.DNS}${API_URL_CONFIG.AUTH.NICKNAME}`,
+      `${API_URL_CONFIG.AUTH.NICKNAME}`,
       data,
       {
         headers: {

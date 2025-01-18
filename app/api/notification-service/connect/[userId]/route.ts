@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { API_URL_CONFIG, API_BASE_URL } from '@/config/apiEndPointConfig';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 
 export async function GET(
   request: NextRequest,
@@ -7,7 +7,7 @@ export async function GET(
 ) {
   console.log('SSE Route Handler - Started');
   const userId = params.userId.replace('%40', '@');
-  const sseUrl = `${API_BASE_URL.DNS}${API_URL_CONFIG.NOTIFICATION.SSE}${userId}`;
+  const sseUrl = `${API_URL_CONFIG.NOTIFICATION.SSE}${userId}`;
 
   try {
     const response = await fetch(sseUrl, {
