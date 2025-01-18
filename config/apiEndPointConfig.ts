@@ -1,4 +1,4 @@
-export const API_URL_CONFIG = Object.freeze({
+export const API_URL_CONFIG = {
   CONTENT: {
     POST_MULTIPLE: '/api/content-service',
     GET: '/api/content-service',
@@ -31,4 +31,4 @@ export const API_URL_CONFIG = Object.freeze({
     SUBSCRIBE: '/game-service/subscribe',
     PUBLISH: '/game-service/publish',
   },
-});
+} as const;
