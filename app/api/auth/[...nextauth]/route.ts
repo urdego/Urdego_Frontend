@@ -20,7 +20,7 @@ const getAppleToken = async () => {
     })
     .sign(createPrivateKey(key));
 
-  console.log('Generated Apple Client Secret:', token); // 토큰 로그 출력
+  // console.log('Generated Apple Client Secret:', token); // 토큰 로그 출력
   return token;
 };
 
