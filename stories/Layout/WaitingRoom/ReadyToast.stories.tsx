@@ -1,7 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import ReadyToast from '@/components/Common/Toast/ReadyToast';
-import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
+import ReadyToast, {
+  showReadyToast,
+} from '@/components/Common/Toast/ReadyToast';
 import { Toaster } from 'react-hot-toast';
 import Button from '@/components/Common/Button/Button';
 
@@ -39,7 +40,7 @@ export const Default: Story = {
         onClick={() => showReadyToast('아직 모든 팀원이 준비되지 않았습니다.')}
         label="토스트 보기"
         buttonType="purple"
-        buttonSize="medium"
+        buttonSize="small"
         buttonHeight="default"
         styleType="coloredBackground"
         {...args}
@@ -62,7 +63,7 @@ export const WithCustomMessage: Story = {
         }
         label="다른 메시지로 토스트 보기"
         buttonType="purple"
-        buttonSize="medium"
+        buttonSize="large"
         buttonHeight="default"
         styleType="coloredBackground"
         {...args}
