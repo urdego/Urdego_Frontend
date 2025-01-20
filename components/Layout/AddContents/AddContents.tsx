@@ -1,5 +1,4 @@
 import { useState, ReactNode, useEffect, useRef } from 'react';
-import axios from 'axios';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -14,73 +13,42 @@ import {
   CancelButtonText,
   TitleContainer,
   LocationName,
-} from './AddContents.styles';
-
-interface Content {
-  contentId: number;
-  url: string;
-  contentName: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  hint: string;
-}
+} from '@/components/Layout/AddContents/AddContents.styles';
+import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
+import Image from 'next/image';
 
 interface AddContentsProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
-
-const ITEMS_PER_PAGE = 16;
 
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
-  const [contents, setContents] = useState<Content[]>([]);
-  const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
-  const [cursorIdx, setCursorIdx] = useState(1); // 시작 idx
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const userId = 1; // 1, 2, 3, 4 중 하나로 하드코딩
+  // useGetInfiniteLocationList 훅 호출
+  const {
+    locationList: contents,
+    loadMore,
+    isLoading,
+    isInitialLoad,
+  } = useGetInfiniteLocationList();
 
-  const fetchContents = async () => {
-    if (isLoading) return; // 중복 요청 방지
-    setIsLoading(true);
-
-    try {
-      const response = await axios.get(
-        `/api/content-service/${userId}/contents`,
-        {
-          params: {
-            cursorIdx,
-            limit: ITEMS_PER_PAGE,
-          },
-        }
-      );
-      const fetchedContents = response.data.contents;
-      setContents((prev) => [...prev, ...fetchedContents]);
-      setCursorIdx((prev) => prev + ITEMS_PER_PAGE); // 다음 cursorIdx 설정
-    } catch (error) {
-      console.error('Error fetching contents:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleScroll = () => {
-    if (contentRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
-      if (scrollHeight - scrollTop <= clientHeight + 1 && !isLoading) {
-        fetchContents(); // 추가 데이터 가져오기
-      }
-    }
-  };
-
+  // 초기 로드 및 무한 스크롤 설정
   useEffect(() => {
     const currentRef = contentRef.current;
+    const handleScroll = () => {
+      if (currentRef) {
+        const { scrollTop, scrollHeight, clientHeight } = currentRef;
+        if (scrollHeight - scrollTop <= clientHeight + 1 && !isLoading) {
+          loadMore(); // 추가 데이터 로드
+        }
+      }
+    };
+
     if (currentRef) {
       currentRef.addEventListener('scroll', handleScroll);
     }
@@ -89,13 +57,11 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         currentRef.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [contents, isLoading]);
+  }, [isLoading, loadMore]);
 
   useEffect(() => {
-    if (isVisible) {
-      setContents([]); // 초기화
-      setCursorIdx(1); // 초기 cursorIdx 설정
-      fetchContents(); // 처음 데이터 가져오기
+    if (!isVisible) {
+      setSelectedLocations([]); // 선택 항목 초기화
     }
   }, [isVisible]);
 
@@ -105,13 +71,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     }
   };
 
-  const handleLocationSelect = (index: number) => {
-    if (selectedLocations.includes(index)) {
-      const newLocations = selectedLocations.filter((i) => i !== index);
+  const handleLocationSelect = (name: string) => {
+    if (selectedLocations.includes(name)) {
+      const newLocations = selectedLocations.filter((i) => i !== name);
       setSelectedLocations(newLocations);
     } else {
-      if (selectedLocations.length < 9) {
-        setSelectedLocations([...selectedLocations, index]);
+      if (selectedLocations.length < 5) {
+        setSelectedLocations([...selectedLocations, name]);
       }
     }
   };
@@ -120,19 +86,25 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     setSelectedLocations([]);
   };
 
-  const getLocationNumber = (index: number) => {
-    return selectedLocations.indexOf(index) + 1;
+  const getLocationNumber = (name: string) => {
+    return selectedLocations.indexOf(name) + 1;
   };
 
   const renderGridItems = () => {
-    return contents.slice(0, visibleItems).map((content) => (
+    return contents.map((content) => (
       <GridItem
-        key={content.contentId}
-        onClick={() => handleLocationSelect(content.contentId)}
+        key={content.contentName}
+        onClick={() => handleLocationSelect(content.contentName)}
       >
+        <Image
+          src={content.url}
+          alt={content.contentName}
+          layout="fill" // GridItem 크기에 맞게 채우기
+          objectFit="cover" // 이미지 비율 유지하며 채우기
+        />
         <LocationName>{content.contentName}</LocationName>
-        {selectedLocations.includes(content.contentId) && (
-          <SelectNumber>{getLocationNumber(content.contentId)}</SelectNumber>
+        {selectedLocations.includes(content.contentName) && (
+          <SelectNumber>{getLocationNumber(content.contentName)}</SelectNumber>
         )}
       </GridItem>
     ));
@@ -171,7 +143,10 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
           </TitleContainer>
         </HeaderWrapper>
         <ContentWrapper ref={contentRef}>
-          <GridContainer>{renderGridItems()}</GridContainer>
+          <GridContainer>
+            {isInitialLoad && <div>Loading...</div>}
+            {renderGridItems()}
+          </GridContainer>
         </ContentWrapper>
       </BottomSheet>
     </BackgroundOverlay>

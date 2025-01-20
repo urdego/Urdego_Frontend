@@ -65,7 +65,6 @@ export const ContentWrapper = styled.div`
   height: calc(100% - 100px); // HeaderWrapper 높이를 고려한 조정
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0 16px;
 
   &::-webkit-scrollbar {
     display: none;
