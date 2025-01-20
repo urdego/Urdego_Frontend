@@ -13,6 +13,7 @@ import {
   CancelButtonText,
   TitleContainer,
   LocationName,
+  SelectIndicator,
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
@@ -99,13 +100,19 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <Image
           src={content.url}
           alt={content.contentName}
-          layout="fill" // GridItem 크기에 맞게 채우기
-          objectFit="cover" // 이미지 비율 유지하며 채우기
+          layout="fill"
+          objectFit="cover"
         />
+        <SelectIndicator
+          selected={selectedLocations.includes(content.contentName)}
+        >
+          {selectedLocations.includes(content.contentName) && (
+            <SelectNumber>
+              {getLocationNumber(content.contentName)}
+            </SelectNumber>
+          )}
+        </SelectIndicator>
         <LocationName>{content.contentName}</LocationName>
-        {selectedLocations.includes(content.contentName) && (
-          <SelectNumber>{getLocationNumber(content.contentName)}</SelectNumber>
-        )}
       </GridItem>
     ));
   };

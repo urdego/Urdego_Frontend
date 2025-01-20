@@ -106,28 +106,22 @@ export const GridItem = styled.div`
   }
 `;
 
-export const SelectIndicator = styled.div`
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: ${colors.purple[50]};
-`;
-
-export const SelectNumber = styled.div`
+export const SelectIndicator = styled.div<{ selected: boolean }>`
   position: absolute;
   top: 4px;
   right: 4px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: ${colors.purple[50]};
-  color: white;
+  background: ${({ selected }) =>
+    selected ? colors.purple[50] : colors.gray[70]};
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const SelectNumber = styled.span`
+  color: white;
   font-size: 12px;
   font-weight: 600;
 `;
