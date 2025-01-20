@@ -56,7 +56,7 @@ export const TitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 `;
 
 export const ContentWrapper = styled.div`
