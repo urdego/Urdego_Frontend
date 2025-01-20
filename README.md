@@ -45,12 +45,13 @@
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 
 ### Architecture
+![Architecture](https://github.com/user-attachments/assets/72a93272-8abe-44d0-b9e4-14d609321154)
 
 ## 🎯 기능 소개
 
 | 컨텐츠 업로드 | 컨텐츠 조회 |
 | :-----------: | :---------: |
-|               |             |
+|     ![ppt](https://github.com/user-attachments/assets/1c21460c-fef2-4355-9166-f23026880a69)|      ![ppt](https://github.com/user-attachments/assets/1c21460c-fef2-4355-9166-f23026880a69)       |
 
 | 친구 초대 | 대기방 |
 | :-------: | :----: |
