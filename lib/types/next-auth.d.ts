@@ -37,13 +37,6 @@ declare module 'next-auth' {
     name?: string | null;
     image?: string | null;
   }
-
-  interface Profile extends KakaoProfile {
-    sub?: string;
-    email?: string;
-    name?: string;
-    image?: string;
-  }
 }
 
 export interface AppleRequest {
@@ -60,8 +53,21 @@ export interface AppleUserInfo {
     lastName?: string;
   };
 }
-
-export interface KakaoProfile {
-  nickname?: string;
-  [key: string]: unknown;
+interface KakaoProfile {
+  id: number;
+  connected_at: string;
+  properties: {
+    nickname: string;
+  };
+  kakao_account: {
+    profile_nickname_needs_agreement: boolean;
+    profile: {
+      nickname: string;
+    };
+    has_email: boolean;
+    email_needs_agreement: boolean;
+    is_email_valid: boolean;
+    is_email_verified: boolean;
+    email: string;
+  };
 }

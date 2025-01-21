@@ -115,7 +115,7 @@ const authOptions: NextAuthOptions = {
         let nickname;
         if (platformType === 'KAKAO') {
           // 카카오는 항상 nickname을 제공
-          nickname = (profile as KakaoProfile)?.nickname;
+          nickname = (profile as KakaoProfile)?.properties?.nickname;
         } else if (platformType === 'APPLE') {
           if (appleFirstInfo?.name) {
             // 애플 최초 로그인시에만 이름 정보 사용
