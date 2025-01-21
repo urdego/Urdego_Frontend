@@ -136,7 +136,6 @@ const authOptions: NextAuthOptions = {
               email: user.email,
               platformType,
               platformId: user.id,
-              profileImageUrl: user.image || '',
               accessToken: account?.access_token,
               refreshToken: account?.refresh_token,
             }),
