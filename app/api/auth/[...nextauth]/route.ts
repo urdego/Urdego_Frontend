@@ -112,23 +112,23 @@ const authOptions: NextAuthOptions = {
 
         if (platformType === 'KAKAO') {
           requestData = {
-            nickname: user.name || null,
-            email: user.email || null,
+            nickname: user.name || '',
+            email: user.email || '',
             platformType: platformType,
-            platformId: user.id || null,
-            accessToken: account?.access_token || null,
-            refreshToken: account?.refresh_token || null,
+            platformId: user.id || '',
+            accessToken: account?.access_token || '',
+            refreshToken: account?.refresh_token || '',
           };
         } else if (platformType === 'APPLE') {
           requestData = {
             nickname: appleFirstInfo?.name
               ? `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`
-              : null,
-            email: profile?.email || null,
+              : '',
+            email: profile?.email || '',
             platformType: platformType,
-            platformId: profile?.id || null,
-            accessToken: account?.access_token || null,
-            refreshToken: account?.refresh_token || null,
+            platformId: profile?.sub || '',
+            accessToken: account?.access_token || '',
+            refreshToken: account?.refresh_token || '',
           };
         }
 
