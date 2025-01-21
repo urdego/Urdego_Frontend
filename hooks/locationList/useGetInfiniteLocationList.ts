@@ -2,6 +2,7 @@ import useUserStore from '@/stores/useUserStore';
 import { useEffect, useState } from 'react';
 
 interface Location {
+  contentId: number;
   contentName: string;
   address: string;
   url: string;
