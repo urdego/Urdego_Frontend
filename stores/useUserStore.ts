@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 
 interface UserState {
-  email: string;
+  userId: number;
   nickname: string;
-  setEmail: (email: string) => void;
+  setUserId: (userId: number) => void;
   setNickname: (nickname: string) => void;
 }
 
 const useUserStore = create<UserState>((set) => ({
-  email: '',
+  userId: 0,
   nickname: '',
-  setEmail: (email: string) => set({ email }),
+  setUserId: (userId: number) => set({ userId }),
   setNickname: (nickname: string) => set({ nickname }),
 }));
 
