@@ -132,7 +132,7 @@ const handleInvitation = (
   );
 };
 
-const connectSSE = (userId: string) => {
+const connectSSE = (userId: number) => {
   const { setEventSource } = useSSEStore.getState();
   // let retryCount = 0;
   // const MAX_RETRIES = 3;
@@ -168,7 +168,7 @@ const connectSSE = (userId: string) => {
 
 const Home = () => {
   const router = useRouter();
-  const { email } = useUserStore();
+  const { userId } = useUserStore();
   const { eventSource, setEventSource } = useSSEStore();
   const addMessage = useWebSocketStore((state) => state.addMessage);
 
@@ -176,10 +176,10 @@ const Home = () => {
     let mounted = true;
 
     const initializeSSE = async () => {
-      if (!email || eventSource) return;
+      if (!userId || eventSource) return;
 
       try {
-        const newEventSource = connectSSE(email);
+        const newEventSource = connectSSE(userId);
 
         if (!mounted) {
           newEventSource?.close();
@@ -229,7 +229,7 @@ const Home = () => {
         setEventSource(null);
       }
     };
-  }, [email, eventSource, router, setEventSource, addMessage]);
+  }, [userId, eventSource, router, setEventSource, addMessage]);
 
   const [isLocationListVisible, setLocationListVisible] = useState(false);
 
