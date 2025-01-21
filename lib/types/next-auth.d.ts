@@ -37,6 +37,14 @@ declare module 'next-auth' {
     name?: string | null;
     image?: string | null;
   }
+
+  interface Profile extends KakaoProfile {
+    sub?: string; // Apple ID
+    id?: string; // 추가
+    email?: string;
+    name?: string;
+    image?: string;
+  }
 }
 
 export interface AppleRequest {

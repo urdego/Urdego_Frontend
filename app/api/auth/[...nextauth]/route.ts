@@ -4,11 +4,7 @@ import AppleProvider from 'next-auth/providers/apple';
 import { createPrivateKey } from 'crypto';
 import { SignJWT } from 'jose';
 import { refreshAccessToken } from '@/lib/auth/refreshToken';
-import type {
-  AppleRequest,
-  AppleUserInfo,
-  KakaoProfile,
-} from '@/lib/types/next-auth';
+import type { AppleRequest, AppleUserInfo } from '@/lib/types/next-auth';
 
 // 전역 변수로 이동
 let appleFirstInfo: AppleUserInfo | null = null;
@@ -111,18 +107,32 @@ const authOptions: NextAuthOptions = {
       try {
         const platformType = account?.provider.toUpperCase();
 
-        // 제공자별 닉네임 처리
-        let nickname;
+        // 제공자별 데이터 구성
+        let requestData;
+
         if (platformType === 'KAKAO') {
-          // 카카오는 항상 nickname을 제공
-          nickname = (profile as KakaoProfile)?.properties?.nickname;
+          requestData = {
+            nickname: user.name || null,
+            email: user.email || null,
+            platformType: platformType,
+            platformId: user.id || null,
+            accessToken: account?.access_token || null,
+            refreshToken: account?.refresh_token || null,
+          };
         } else if (platformType === 'APPLE') {
-          if (appleFirstInfo?.name) {
-            // 애플 최초 로그인시에만 이름 정보 사용
-            nickname = `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`;
-          }
-          // 이름 정보가 없는 경우 nickname은 undefined로 전송
+          requestData = {
+            nickname: appleFirstInfo?.name
+              ? `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`
+              : null,
+            email: profile?.email || null,
+            platformType: platformType,
+            platformId: profile?.id || null,
+            accessToken: account?.access_token || null,
+            refreshToken: account?.refresh_token || null,
+          };
         }
+
+        console.log('전송할 데이터:', requestData); // 디버깅용
 
         const response = await fetch(
           `${process.env.API_URL}/api/user-service/users/save`,
@@ -131,14 +141,7 @@ const authOptions: NextAuthOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              nickname, // 카카오: nickname 전달, 애플: 최초에만 이름 전달, 이후엔 undefined
-              email: user.email,
-              platformType,
-              platformId: user.id,
-              accessToken: account?.access_token,
-              refreshToken: account?.refresh_token,
-            }),
+            body: JSON.stringify(requestData),
           }
         );
 
