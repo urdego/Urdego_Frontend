@@ -126,7 +126,7 @@ const authOptions: NextAuthOptions = {
               : null,
             email: profile?.email || null,
             platformType: platformType,
-            platformId: profile?.sub || null,
+            platformId: profile?.id || null,
             accessToken: account?.access_token || null,
             refreshToken: account?.refresh_token || null,
           };
