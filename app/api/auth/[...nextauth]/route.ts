@@ -124,21 +124,24 @@ const authOptions: NextAuthOptions = {
           // 이름 정보가 없는 경우 nickname은 undefined로 전송
         }
 
-        const response = await fetch(`${process.env.API_URL}/api/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nickname, // 카카오: nickname 전달, 애플: 최초에만 이름 전달, 이후엔 undefined
-            email: user.email,
-            platformType,
-            platformId: user.id,
-            profileImageUrl: user.image || '',
-            accessToken: account?.access_token,
-            refreshToken: account?.refresh_token,
-          }),
-        });
+        const response = await fetch(
+          `${process.env.API_URL}/api/user-service/users/save`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nickname, // 카카오: nickname 전달, 애플: 최초에만 이름 전달, 이후엔 undefined
+              email: user.email,
+              platformType,
+              platformId: user.id,
+              profileImageUrl: user.image || '',
+              accessToken: account?.access_token,
+              refreshToken: account?.refresh_token,
+            }),
+          }
+        );
 
         if (!response.ok) {
           console.error('DB 저장 실패:', await response.text());
