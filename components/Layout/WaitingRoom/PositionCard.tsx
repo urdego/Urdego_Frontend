@@ -1,11 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import SnowMan0 from '@/styles/Icon/Character/character-0.svg';
-// import SnowMan1 from '@/styles/Icon/Character/character-1.svg';
-// import SnowMan2 from '@/styles/Icon/Character/character-2.svg';
-// import SnowMan3 from '@/styles/Icon/Character/character-3.svg';
-// import SnowMan4 from '@/styles/Icon/Character/character-4.svg';
-
 import {
   Card,
   Level,
@@ -21,6 +16,7 @@ interface PositionCardProps {
   isHost?: boolean;
   isReady?: boolean;
   isEmpty?: boolean;
+  onClick?: () => void; // onClick 속성 추가
 }
 
 const PositionCard = ({
@@ -29,28 +25,27 @@ const PositionCard = ({
   isHost = false,
   isReady = false,
   isEmpty = false,
+  onClick,
 }: PositionCardProps) => {
   return (
-    <>
-      <Card $isEmpty={isEmpty}>
-        {!isEmpty ? (
-          <>
-            <Level>Lv.{level}</Level>
-            <Username>{username}</Username>
-            <Character>
-              <Image src={SnowMan0} alt="snowman" />
-            </Character>
-            {isHost ? (
-              <HostLabel $isHost={true}>방장</HostLabel>
-            ) : (
-              isReady && <HostLabel $isHost={false}>준비완료</HostLabel>
-            )}
-          </>
-        ) : (
-          <EmptyCardIcon />
-        )}
-      </Card>
-    </>
+    <Card $isEmpty={isEmpty} onClick={isEmpty ? onClick : undefined}>
+      {!isEmpty ? (
+        <>
+          <Level>Lv.{level}</Level>
+          <Username>{username}</Username>
+          <Character>
+            <Image src={SnowMan0} alt="snowman" />
+          </Character>
+          {isHost ? (
+            <HostLabel $isHost={true}>방장</HostLabel>
+          ) : (
+            isReady && <HostLabel $isHost={false}>준비완료</HostLabel>
+          )}
+        </>
+      ) : (
+        <EmptyCardIcon />
+      )}
+    </Card>
   );
 };
 
