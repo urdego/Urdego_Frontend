@@ -48,7 +48,7 @@ const useGetInfiniteLocationList = () => {
     setIsLoading(true);
 
     const params = new URLSearchParams();
-    params.append('limit', (10).toString());
+    params.append('limit', (16).toString());
     if (cursorIdx) {
       params.append('cursorIdx', cursorIdx.toString());
     }
