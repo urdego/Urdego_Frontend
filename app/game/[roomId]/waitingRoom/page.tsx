@@ -49,9 +49,8 @@ const WaitingRoom = () => {
   const handleAddContentsOpen = () => {
     setAddContentsVisible(true);
     if (!toastShown) {
-      // 토스트가 이미 표시된 적이 없다면 표시
       showReadyToast('"어데고"에서 제공하는 컨텐츠로 대체될 수 있습니다.');
-      setToastShown(true); // 토스트 표시 여부 업데이트
+      setToastShown(true);
     }
   };
 
