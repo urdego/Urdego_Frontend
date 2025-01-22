@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
-import BackgroundImage from '@/styles/Image/WaitingRoom/BackgroundImageL.png';
+import BackgroundImage from '@/styles/Image/WaitingRoom/BackgroundImage.png';
 
 export const WaitingWrapper = styled.div`
   background-image: url(${BackgroundImage.src});
