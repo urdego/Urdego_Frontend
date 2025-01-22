@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
@@ -45,6 +45,11 @@ const WaitingRoom = () => {
     setSelectedLocations(locations);
   };
 
+  const handleAddContentsOpen = () => {
+    setAddContentsVisible(true);
+    showReadyToast('"어데고"에서 제공하는 컨텐츠로 대체될 수 있습니다.');
+  };
+
   const buttonLabel = isAddContentsVisible
     ? selectedLocations.length > 0
       ? '선택 완료'
@@ -82,7 +87,7 @@ const WaitingRoom = () => {
             buttonSize="large"
             buttonHeight="default"
             label={buttonLabel}
-            onClick={() => setAddContentsVisible(true)}
+            onClick={handleAddContentsOpen}
             styleType="coloredBackground"
           />
         </Footer>
