@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@common/Button/Button';
 import CheckboxOption from '@common/CheckboxOption/CheckboxOption';
@@ -19,6 +19,14 @@ import {
 import { signOut } from 'next-auth/react';
 
 const AccountCancellation = () => {
+  // store에서 값 가져오기
+  const userId = useUserStore((state) => state.userId);
+  const nickname = useUserStore((state) => state.nickname);
+
+  useEffect(() => {
+    console.log('탈퇴 페이지 - 유저 스토어 정보:', { userId, nickname });
+  }, [userId, nickname]);
+
   const [reasons, setReasons] = useState({
     gameDislike: false,
     inconvenience: false,
@@ -53,7 +61,6 @@ const AccountCancellation = () => {
       reasons.inconvenience ||
       (reasons.other && isValid)); // 🔥 10자 이상 입력해야 버튼 활성화
 
-  const { userId } = useUserStore();
   const handleWithdraw = async () => {
     try {
       const response = await fetch('/api/auth/withdraw', {
@@ -62,7 +69,7 @@ const AccountCancellation = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId,
+          userId, // store에서 가져온 userId 사용
           withDrawReason: otherReason,
         }),
       });

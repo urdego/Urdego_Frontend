@@ -4,6 +4,11 @@ declare module 'next-auth' {
   interface Session {
     accessToken?: string;
     error?: string;
+    user: {
+      userId?: number;
+      nickname?: string;
+      email?: string | null;
+    };
   }
 
   interface JWT {
@@ -36,6 +41,8 @@ declare module 'next-auth' {
     email?: string | null;
     name?: string | null;
     image?: string | null;
+    userId?: number;
+    nickname?: string;
   }
 
   interface Profile extends KakaoProfile {
