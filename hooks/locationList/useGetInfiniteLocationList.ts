@@ -59,6 +59,7 @@ const useGetInfiniteLocationList = () => {
       if (!response.ok) {
         throw new Error('데이터를 가져오는 것에 실패했습니다!');
       }
+
       const data: GetLocationListResponse = await response.json();
       console.log(data);
       if (data) {
@@ -73,7 +74,6 @@ const useGetInfiniteLocationList = () => {
       }
     } catch (error) {
       console.error(`올린 장소 불러오기에서 실패한 에러: ${error}`);
-      setIsLoading(false);
       setIsLoadMore(false);
     } finally {
       setIsLoading(false);
