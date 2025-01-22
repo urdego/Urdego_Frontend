@@ -23,7 +23,7 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   max-width: 430px;
   height: ${({ $isExpand }) => ($isExpand ? '100vh' : '60vh')};
   background: ${colors.etc.white};
-  border-radius: ${({ $isExpand }) => ($isExpand ? '0' : '20px 20px 0 0')};
+  border-radius: 4px 4px 0 0;
   padding: 16px;
   z-index: 1000;
   overflow: hidden;
