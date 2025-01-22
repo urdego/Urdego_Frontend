@@ -7,6 +7,7 @@ import Button from '@/components/Common/Button/Button';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
 import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
+import AddContents from '@/components/Layout/AddContents/AddContents';
 
 const WaitingRoom = () => {
   const mockData = {
@@ -18,14 +19,14 @@ const WaitingRoom = () => {
       { id: 2, name: '유저2', isHost: false, isReady: true },
       { id: 3, name: '유저3', isHost: false, isReady: false },
       { id: 4, name: '유저4', isHost: false, isReady: false },
-      // { id: 5, name: '유저5', isHost: false, isReady: false },
-      // { id: 6, name: '유저6', isHost: false, isReady: false },
     ],
   };
 
   const { currentUser, isManager, allPlayersReady, users } = mockData;
 
   const [isInviteVisible, setInviteVisible] = useState(false);
+  const [isAddContentsVisible, setAddContentsVisible] = useState(false);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const toggleReady = () => console.log('준비하기 클릭');
   const startGame = () => {
@@ -35,6 +36,20 @@ const WaitingRoom = () => {
     }
     console.log('게임 시작');
   };
+
+  const handleAddContentsClose = () => {
+    setAddContentsVisible(false);
+  };
+
+  const handleLocationSelection = (locations: string[]) => {
+    setSelectedLocations(locations);
+  };
+
+  const buttonLabel = isAddContentsVisible
+    ? selectedLocations.length > 0
+      ? '선택 완료'
+      : '선택없이 준비완료'
+    : '장소 선택하기';
 
   return (
     <>
@@ -62,30 +77,26 @@ const WaitingRoom = () => {
           )}
         </UserList>
         <Footer>
-          {isManager ? (
-            <Button
-              buttonType={
-                allPlayersReady && users.length >= 2 ? 'purple' : 'gray'
-              }
-              buttonSize="large"
-              buttonHeight="default"
-              label={users.length >= 2 ? '게임시작' : '게임시작 대기중...'}
-              onClick={startGame}
-              styleType="coloredBackground"
-            />
-          ) : (
-            <Button
-              buttonType={currentUser?.isReady ? 'gray' : 'purple'}
-              buttonSize="large"
-              buttonHeight="default"
-              label={currentUser?.isReady ? '준비완료' : '준비하기'}
-              onClick={toggleReady}
-              styleType="coloredBackground"
-            />
-          )}
+          <Button
+            buttonType="purple"
+            buttonSize="large"
+            buttonHeight="default"
+            label={buttonLabel}
+            onClick={() => setAddContentsVisible(true)}
+            styleType="coloredBackground"
+          />
         </Footer>
       </WaitingWrapper>
       {isInviteVisible && <InviteUser setInviteVisible={setInviteVisible} />}
+      {isAddContentsVisible && (
+        <AddContents
+          isVisible={isAddContentsVisible}
+          setIsVisible={handleAddContentsClose}
+          title="장소 선택하기 (최대 5개)"
+          onSelectionChange={handleLocationSelection} // 선택 변경 핸들러 전달
+          initialSelections={selectedLocations} // 기존 선택 전달
+        />
+      )}
     </>
   );
 };

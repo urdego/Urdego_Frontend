@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, ReactNode, useEffect, useRef } from 'react';
 import {
   BackgroundOverlay,
@@ -23,11 +25,20 @@ interface AddContentsProps {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
   children?: ReactNode;
+  onSelectionChange: (locations: string[]) => void; // 부모로 선택 데이터 전달
+  initialSelections?: string[]; // 기존 선택된 데이터 전달
 }
 
-const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
+const AddContents = ({
+  isVisible,
+  setIsVisible,
+  title,
+  onSelectionChange,
+  initialSelections = [], // 초기값 설정
+}: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] =
+    useState<string[]>(initialSelections); // 초기값 반영
   const contentRef = useRef<HTMLDivElement>(null);
 
   // useGetInfiniteLocationList 훅 호출
@@ -59,6 +70,11 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
       }
     };
   }, [isLoading, loadMore]);
+
+  // 선택된 위치가 변경될 때 부모로 데이터 전달
+  useEffect(() => {
+    onSelectionChange(selectedLocations);
+  }, [selectedLocations, onSelectionChange]);
 
   useEffect(() => {
     if (!isVisible) {
