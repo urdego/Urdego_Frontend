@@ -56,15 +56,12 @@ export const Username = styled.div`
 export const Character = styled.div`
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
   position: relative;
 
   img {
     position: absolute;
     right: 0;
-    left: -52px;
-    width: 260%;
     object-fit: contain;
   }
 `;

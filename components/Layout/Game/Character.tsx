@@ -1,10 +1,13 @@
 import Image from 'next/image';
-import Character0 from '@/styles/Icon/Character/character-0.svg';
-import Character1 from '@/styles/Icon/Character/character-1.svg';
-import Character2 from '@/styles/Icon/Character/character-2.svg';
-import Character3 from '@/styles/Icon/Character/character-3.svg';
-import Character4 from '@/styles/Icon/Character/character-4.svg';
-import Character5 from '@/styles/Icon/Character/character-5.svg';
+import Angular from '@/styles/Icon/angular.png';
+import Basic from '@/styles/Icon/basic.png';
+import Bumpy from '@/styles/Icon/bumpy.png';
+import Dot from '@/styles/Icon/dot.png';
+import Planet from '@/styles/Icon/planet.png';
+import Sharp from '@/styles/Icon/sharp.png';
+import Square from '@/styles/Icon/square.png';
+import Star from '@/styles/Icon/star.png';
+import Wool from '@/styles/Icon/wool.png';
 import HostIcon from '@/styles/Icon/Host.svg';
 
 import {
@@ -41,18 +44,13 @@ const Character = ({ users }: CharacterProps) => {
       id: user.id,
       level: '레벨 1',
       nickname: user.name,
-      src: [
-        Character5,
-        Character4,
-        Character3,
-        Character2,
-        Character1,
-        Character0,
-      ][index],
-      alt: `${index + 1}번 눈사람`,
+      src: [Angular, Basic, Bumpy, Dot, Planet, Sharp, Square, Star, Wool][
+        index % 15
+      ], // 파일 순환 로직
+      alt: `${index + 1}번 캐릭터`,
       isHost: user.isHost,
       isReady: user.isReady,
-      position: positions[index],
+      position: positions[index % positions.length], // 위치 순환 로직
     };
   });
 
@@ -77,7 +75,7 @@ const Character = ({ users }: CharacterProps) => {
                   alt="방장"
                   width={16}
                   height={16}
-                  style={{ paddingRight: '3px' }}
+                  // style={{ paddingRight: '3px' }}
                 />
                 방장
               </Host>
@@ -91,7 +89,7 @@ const Character = ({ users }: CharacterProps) => {
               <NickName>{char.nickname}</NickName>
             </NicknameContainer>
           </InfoWrapper>
-          <Image src={char.src} alt={char.alt} />
+          <Image src={char.src} alt={char.alt} width={100} height={100} />
         </CharacterWrapper>
       ))}
     </CharactersContainer>

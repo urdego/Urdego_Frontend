@@ -1,5 +1,5 @@
 import { StyledImage } from './UserCharacter.styles';
-import UserCharacterSrc from '@/styles/Icon/Character/character-5.svg';
+import UserCharacterSrc from '@/styles/Icon/Character/basic.png';
 import Image from 'next/image';
 
 export const UserCharacter = () => {
