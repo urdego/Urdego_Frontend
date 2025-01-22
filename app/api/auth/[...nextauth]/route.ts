@@ -116,19 +116,16 @@ const authOptions: NextAuthOptions = {
             email: user.email || '',
             platformType: platformType,
             platformId: user.id || '',
-            accessToken: account?.access_token || '',
-            refreshToken: account?.refresh_token || '',
           };
         } else if (platformType === 'APPLE') {
+          const emailId = profile?.email?.split('@')[0];
           requestData = {
             nickname: appleFirstInfo?.name
               ? `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`
-              : '',
+              : emailId,
             email: profile?.email || '',
             platformType: platformType,
             platformId: profile?.sub || '',
-            accessToken: account?.access_token || '',
-            refreshToken: account?.refresh_token || '',
           };
         }
 
