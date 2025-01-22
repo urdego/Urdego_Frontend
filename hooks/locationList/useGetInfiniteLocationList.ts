@@ -1,5 +1,5 @@
 import useUserStore from '@/stores/useUserStore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Location {
   contentId: number;

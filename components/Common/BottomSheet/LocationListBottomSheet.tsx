@@ -38,7 +38,7 @@ const LocationListBottomSheet = ({
           {!isLoading && isLoadMore && (
             <IntersectionObserverArea ref={targetElementRef} />
           )}
-          {locationList.length === 0 && (
+          {!isLoadMore && locationList.length === 0 && (
             <NoContentText>
               올린 장소가 없습니다. 장소를 등록해주세요! 😊
             </NoContentText>
