@@ -38,7 +38,7 @@ const LocationListBottomSheet = ({
         <ContentHeader>올린 장소 ({totalCount})</ContentHeader>
         <ContentContainer>
           {locationList.map((location, index) => (
-            <LocationList key={`key+${index}`} location={location} />
+            <LocationList key={`list+${index}`} location={location} />
           ))}
           {isLoading && <LoadingText>장소를 불러오는중...🔍</LoadingText>}
           {!isLoading && !isInitialLoad && isLoadMore && (
