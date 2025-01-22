@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@common/Button/Button';
 import CheckboxOption from '@common/CheckboxOption/CheckboxOption';
+import useUserStore from '@/stores/useUserStore';
 import {
   SessionWrapper,
   SubTitle,
@@ -15,6 +16,7 @@ import {
   Separator,
   CharCount,
 } from '@/app/(nav)/myPage/accountCencellation/accountCencellation.styles';
+import { signOut } from 'next-auth/react';
 
 const AccountCancellation = () => {
   const [reasons, setReasons] = useState({
@@ -50,6 +52,32 @@ const AccountCancellation = () => {
     (reasons.gameDislike ||
       reasons.inconvenience ||
       (reasons.other && isValid)); // 🔥 10자 이상 입력해야 버튼 활성화
+
+  const { userId } = useUserStore();
+  const handleWithdraw = async () => {
+    try {
+      const response = await fetch('/api/auth/withdraw', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          withDrawReason: otherReason,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('회원 탈퇴 실패');
+      }
+
+      // 2. 탈퇴 성공 시 로그아웃 처리
+      signOut({ callbackUrl: '/' });
+    } catch (error) {
+      console.error('회원 탈퇴 중 에러:', error);
+      // 에러 처리 (TODO: 토스트 메시지)
+    }
+  };
 
   return (
     <>
@@ -120,9 +148,7 @@ const AccountCancellation = () => {
           label="회원탈퇴"
           buttonType={canSubmit ? 'purple' : 'gray'}
           disabled={!canSubmit}
-          onClick={() => {
-            console.log('탈퇴 이유:', reasons, '기타 사유:', otherReason);
-          }}
+          onClick={handleWithdraw}
         />
       </Footer>
     </>
