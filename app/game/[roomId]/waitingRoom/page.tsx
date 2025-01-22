@@ -27,6 +27,7 @@ const WaitingRoom = () => {
   const [isInviteVisible, setInviteVisible] = useState(false);
   const [isAddContentsVisible, setAddContentsVisible] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [toastShown, setToastShown] = useState(false); // 토스트가 이미 표시되었는지 여부
 
   const toggleReady = () => console.log('준비하기 클릭');
   const startGame = () => {
@@ -47,7 +48,11 @@ const WaitingRoom = () => {
 
   const handleAddContentsOpen = () => {
     setAddContentsVisible(true);
-    showReadyToast('"어데고"에서 제공하는 컨텐츠로 대체될 수 있습니다.');
+    if (!toastShown) {
+      // 토스트가 이미 표시된 적이 없다면 표시
+      showReadyToast('"어데고"에서 제공하는 컨텐츠로 대체될 수 있습니다.');
+      setToastShown(true); // 토스트 표시 여부 업데이트
+    }
   };
 
   const buttonLabel = isAddContentsVisible
@@ -76,7 +81,7 @@ const WaitingRoom = () => {
               <PositionCard
                 key={`empty-${index}`}
                 isEmpty={true}
-                onClick={() => setInviteVisible(true)} // 빈 카드 클릭 이벤트
+                onClick={() => setInviteVisible(true)}
               />
             )
           )}
@@ -87,7 +92,7 @@ const WaitingRoom = () => {
             buttonSize="large"
             buttonHeight="default"
             label={buttonLabel}
-            onClick={handleAddContentsOpen}
+            onClick={handleAddContentsOpen} // '장소 선택하기' 버튼 클릭 시 실행
             styleType="coloredBackground"
           />
         </Footer>
@@ -98,8 +103,8 @@ const WaitingRoom = () => {
           isVisible={isAddContentsVisible}
           setIsVisible={handleAddContentsClose}
           title="장소 선택하기 (최대 5개)"
-          onSelectionChange={handleLocationSelection} // 선택 변경 핸들러 전달
-          initialSelections={selectedLocations} // 기존 선택 전달
+          onSelectionChange={handleLocationSelection}
+          initialSelections={selectedLocations}
         />
       )}
     </>
