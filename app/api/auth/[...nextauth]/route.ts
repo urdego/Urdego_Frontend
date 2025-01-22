@@ -4,7 +4,11 @@ import AppleProvider from 'next-auth/providers/apple';
 import { createPrivateKey } from 'crypto';
 import { SignJWT } from 'jose';
 import { refreshAccessToken } from '@/lib/auth/refreshToken';
-import type { AppleRequest, AppleUserInfo } from '@/lib/types/next-auth';
+import type {
+  KakaoProfile,
+  AppleRequest,
+  AppleUserInfo,
+} from '@/lib/types/next-auth';
 
 // 전역 변수로 이동
 let appleFirstInfo: AppleUserInfo | null = null;
@@ -107,32 +111,15 @@ const authOptions: NextAuthOptions = {
       try {
         const platformType = account?.provider.toUpperCase();
 
-        // 제공자별 데이터 구성
-        let requestData;
-
+        // 제공자별 닉네임 처리
+        let nickname;
         if (platformType === 'KAKAO') {
-          requestData = {
-            nickname: user.name || '',
-            email: user.email || '',
-            platformType: platformType,
-            platformId: user.id || '',
-            accessToken: account?.access_token || '',
-            refreshToken: account?.refresh_token || '',
-          };
+          nickname = (profile as KakaoProfile).properties?.nickname;
         } else if (platformType === 'APPLE') {
-          requestData = {
-            nickname: appleFirstInfo?.name
-              ? `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`
-              : '',
-            email: profile?.email || '',
-            platformType: platformType,
-            platformId: profile?.sub || '',
-            accessToken: account?.access_token || '',
-            refreshToken: account?.refresh_token || '',
-          };
+          if (appleFirstInfo?.name) {
+            nickname = `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`;
+          }
         }
-
-        console.log('전송할 데이터:', requestData); // 디버깅용
 
         const response = await fetch(
           `${process.env.API_URL}/api/user-service/users/save`,
@@ -141,17 +128,25 @@ const authOptions: NextAuthOptions = {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestData),
+            body: JSON.stringify({
+              nickname,
+              email: user.email,
+              platformType,
+              platformId: user.id,
+              profileImageUrl: user.image || '',
+              accessToken: account?.access_token,
+              refreshToken: account?.refresh_token,
+            }),
           }
         );
 
         if (!response.ok) {
-          console.error('DB 저장 실패:', await response.text());
+          console.error('로그인 실패:', await response.text());
           return false;
         }
 
         const data = await response.json();
-        console.log('DB 저장 성공:', data);
+        console.log('로그인 성공:', data);
         return true;
       } catch (error) {
         console.error('로그인 처리 중 에러:', error);
