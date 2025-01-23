@@ -12,17 +12,8 @@ import useUserStore from '@/stores/useUserStore';
 
 const LoginPage = () => {
   const { data: session } = useSession();
-  const { setUserId, setNickname } = useUserStore();
   const userId = useUserStore((state) => state.userId);
   const nickname = useUserStore((state) => state.nickname);
-
-  // 세션 데이터로 store 업데이트
-  useEffect(() => {
-    if (session?.user?.userId) {
-      setUserId(session.user.userId);
-      setNickname(session.user.nickname ?? '');
-    }
-  }, [session, setUserId, setNickname]);
 
   // store 값 변화 감지
   useEffect(() => {
