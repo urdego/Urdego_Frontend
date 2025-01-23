@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 요청 바디에서 탈퇴 사유 가져오기
-    const { userId, withDrawReason } = await req.json();
+    const { userId, withDrawalReason } = await req.json();
 
     // 1. 소셜 로그인 연결 해제
     if (token.provider === 'kakao') {
@@ -38,12 +38,12 @@ export async function POST(req: NextRequest) {
     const withdrawResponse = await fetch(
       `${process.env.API_URL}/api/user-service/users/${userId}`,
       {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token.accessToken}`,
         },
-        body: JSON.stringify({ withDrawReason }),
+        body: JSON.stringify({ withDrawalReason }),
       }
     );
 

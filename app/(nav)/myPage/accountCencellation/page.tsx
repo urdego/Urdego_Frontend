@@ -18,6 +18,13 @@ import {
 } from '@/app/(nav)/myPage/accountCencellation/accountCencellation.styles';
 import { signOut } from 'next-auth/react';
 
+type ReasonType =
+  | 'gameDislike'
+  | 'difficulty'
+  | 'inconvenience'
+  | 'social'
+  | 'other';
+
 const AccountCancellation = () => {
   // store에서 값 가져오기
   const userId = useUserStore((state) => state.userId);
@@ -27,9 +34,25 @@ const AccountCancellation = () => {
     console.log('탈퇴 페이지 - 유저 스토어 정보:', { userId, nickname });
   }, [userId, nickname]);
 
+  const withdrawReasons = [
+    { id: 'gameDislike' as ReasonType, label: '게임이 마음에 들지 않아요.' },
+    {
+      id: 'difficulty' as ReasonType,
+      label: '게임이 너무 어렵거나/너무 쉬워요.',
+    },
+    {
+      id: 'inconvenience' as ReasonType,
+      label: '이용이 불편하고 장애가 많아요.',
+    },
+    { id: 'social' as ReasonType, label: '소셜 기능이 부족해요' },
+    { id: 'other' as ReasonType, label: '기타' },
+  ];
+
   const [reasons, setReasons] = useState({
     gameDislike: false,
+    difficulty: false,
     inconvenience: false,
+    social: false,
     other: false,
   });
   const [otherReason, setOtherReason] = useState('');
@@ -58,19 +81,38 @@ const AccountCancellation = () => {
   const canSubmit =
     isConfirmed &&
     (reasons.gameDislike ||
+      reasons.difficulty ||
       reasons.inconvenience ||
+      reasons.social ||
       (reasons.other && isValid)); // 🔥 10자 이상 입력해야 버튼 활성화
+
+  const getSelectedReasons = () => {
+    const selectedLabels = withdrawReasons
+      .filter(({ id }) => reasons[id])
+      .map(({ label }) => label);
+
+    if (reasons.other && otherReason) {
+      selectedLabels.push(otherReason);
+    }
+
+    return selectedLabels.join(', ');
+  };
 
   const handleWithdraw = async () => {
     try {
+      const requestData = {
+        withDrawalReason: getSelectedReasons(),
+      };
+
+      // API 라우트를 통해 탈퇴 처리
       const response = await fetch('/api/auth/withdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId, // store에서 가져온 userId 사용
-          withDrawReason: otherReason,
+          userId,
+          ...requestData,
         }),
       });
 
@@ -78,11 +120,10 @@ const AccountCancellation = () => {
         throw new Error('회원 탈퇴 실패');
       }
 
-      // 2. 탈퇴 성공 시 로그아웃 처리
+      // 모든 처리가 완료된 후 로그아웃
       signOut({ callbackUrl: '/' });
     } catch (error) {
       console.error('회원 탈퇴 중 에러:', error);
-      // 에러 처리 (TODO: 토스트 메시지)
     }
   };
 
@@ -104,27 +145,14 @@ const AccountCancellation = () => {
       <Separator />
       <SessionWrapper>
         <SubTitle>탈퇴하시는 이유가 궁금해요.</SubTitle>
-        <CheckboxOption
-          label="게임이 마음에 들지 않아요."
-          onChange={(checked) => handleReasonChange('gameDislike')(checked)}
-        />
-        <CheckboxOption
-          label="게임이 너무 어렵거나/너무 쉬워요."
-          onChange={(checked) => handleReasonChange('inconvenience')(checked)}
-        />
-        <CheckboxOption
-          label="이용이 불편하고 장애가 많아요."
-          onChange={(checked) => handleReasonChange('inconvenience')(checked)}
-        />
-        <CheckboxOption
-          label="소셜 기능이 부족해요"
-          onChange={(checked) => handleReasonChange('inconvenience')(checked)}
-        />
-        <CheckboxOption
-          label="기타"
-          isChecked={reasons.other}
-          onChange={(checked) => handleReasonChange('other')(checked)}
-        />
+        {withdrawReasons.map(({ id, label }) => (
+          <CheckboxOption
+            key={id}
+            label={label}
+            isChecked={reasons[id]}
+            onChange={(checked) => handleReasonChange(id)(checked)}
+          />
+        ))}
         {reasons.other && (
           <>
             <TextareaWrapper $hasText={hasText} $isActive={isActive}>
