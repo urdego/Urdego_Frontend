@@ -7,14 +7,18 @@ export async function POST(request: NextRequest) {
   try {
     const userStore = useUserStore.getState();
     const userId = userStore.userId; // userStore의 userId 참조
-
     const requestData = await request.json();
     const newNickname = requestData.newNickname; // RoomTitleInput에서 받은 새 닉네임
+
+    console.log('New nickname:', newNickname);
+    console.log('User ID:', userId);
 
     const response = await axiosInstance.post(
       `${API_URL_CONFIG.AUTH.NICKNAME}/${userId}`,
       {
-        params: { newNickname },
+        newNickname, // JSON 본문에 포함
+      },
+      {
         headers: {
           'Content-Type': 'application/json',
         },
