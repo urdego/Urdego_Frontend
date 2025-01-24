@@ -28,7 +28,6 @@ export const BottomWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-
   height: 240px;
   padding: 0 15px;
 `;

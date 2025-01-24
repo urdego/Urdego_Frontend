@@ -8,7 +8,7 @@ import {
   CharacterSelect,
   BottomWrapper,
 } from './HomeBox.styles';
-import Level from '@/components/Layout/Home/MainBanner/Level';
+import Level from '@/components/Layout/Home/HomeBox/Level';
 import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationListBottomSheet';
 import PlaceRegisterIcon from '@/styles/Icon/Home/PlaceRegister.svg';
 import CharacterSelectIcon from '@/styles/Icon/Home/CharacterSelect.svg';
