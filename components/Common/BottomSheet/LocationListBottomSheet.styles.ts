@@ -6,6 +6,7 @@ export const ContentHeader = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
+  padding: 8px 0;
 `;
 
 export const ContentContainer = styled.div`
