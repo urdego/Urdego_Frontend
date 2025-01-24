@@ -20,31 +20,35 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     // 파일 불러오는 로직
     const fileList = e.target.files;
 
+    if (!fileList || fileList?.length === 0) {
+      return;
+    }
+    if (fileList.length > MAX_CONTENT_COUNT) {
+      toast('최대 3개의 사진만 업로드가 가능해요', {
+        icon: '😱',
+      });
+    }
+
+    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
     try {
-      if (!fileList || fileList?.length === 0) {
-        return;
-      }
-      if (fileList.length > MAX_CONTENT_COUNT) {
-        toast('최대 3개의 사진만 업로드가 가능해요', {
-          icon: '😱',
-        });
-      }
-
-      const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
-
-      if (isOverMemory(selectedFileList)) {
-        toast.error('업로드 가능한 용량을 초과했어요');
-        return;
-      }
-      if (!selectedFileList.every(isImageFile)) {
-        toast.error('이미지만 업로드가 가능해요');
-        return;
-      }
-
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: new Array(selectedFileList.length).fill(true),
       });
+      setPlaceInput(
+        index,
+        'previewFile',
+        new Array(selectedFileList.length).fill([])
+      );
+
+      if (isOverMemory(selectedFileList)) {
+        toast.error('업로드 가능한 용량을 초과했어요');
+        throw new Error('업로드 가능한 용량을 초과했어요');
+      }
+      if (!selectedFileList.every(isImageFile)) {
+        toast.error('이미지만 업로드가 가능해요');
+        throw new Error('이미지만 업로드가 가능해요');
+      }
 
       const isMeta = await exportMetadata(selectedFileList);
       if (!isMeta) {
@@ -57,17 +61,13 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       storeFile(compressedFileList);
       storePreviewFile(compressedFileList);
-      setPreviewLoading({
-        locationIndex: index,
-        newPreviewLoading: new Array(compressedFileList.length).fill(false),
-      });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.log(error);
+      setPlaceInput(index, 'previewFile', []);
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: [],
       });
-      toast.error('사진 등록에 실패했어요');
     }
   };
 
@@ -178,6 +178,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
     Promise.all(previewPromises).then((previewURLs) => {
       setPlaceInput(index, 'previewFile', previewURLs);
+      setPreviewLoading({
+        locationIndex: index,
+        newPreviewLoading: new Array(selectedFileList.length).fill(false),
+      });
     });
   };
 
