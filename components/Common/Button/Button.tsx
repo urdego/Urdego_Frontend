@@ -8,12 +8,13 @@ import Image from 'next/image';
 interface ButtonProps {
   buttonType?: 'purple' | 'gray' | 'lightGray';
   buttonSize?: 'small' | 'large';
-  buttonHeight?: 'default' | 'short';
+  buttonHeight?: 'default' | 'short' | 'long';
   styleType?: 'whiteBackground' | 'coloredBackground';
   disabled?: boolean;
   label: string;
   icon?: string | StaticImageData;
   onClick?: () => void;
+  $iconPosition?: 'left' | 'right';
 }
 
 const Button = ({
@@ -25,6 +26,7 @@ const Button = ({
   icon,
   onClick,
   disabled,
+  $iconPosition = 'left',
 }: ButtonProps) => {
   return (
     <StyledButton
@@ -34,6 +36,7 @@ const Button = ({
       $styleType={styleType}
       onClick={onClick}
       disabled={disabled}
+      $iconPosition={$iconPosition}
     >
       {icon && (
         <IconWrapper>

@@ -1,32 +1,33 @@
 import {
-  Container,
   InfoRow,
   LevelText,
   UserName,
+  ProgressRow,
   ProgressBarContainer,
   ProgressBar,
+  ProgressNum,
 } from './Level.styles';
+import useUserStore from '@/stores/useUserStore';
 
-interface LevelProps {
-  level: number; // 레벨
-  userName: string; // 유저명
-  progress?: number; // 진행도 (0~100%)
-}
+export const Level = () => {
+  const level = 1;
+  const progress = 30;
+  const nickname = useUserStore((state) => state.nickname);
 
-export const Level: React.FC<LevelProps> = ({
-  level,
-  userName,
-  progress = 30,
-}) => {
   return (
-    <Container>
+    <>
       <InfoRow>
-        <LevelText>레벨 {level}</LevelText>
-        <UserName>{userName}</UserName>
+        <LevelText>LV.{level}</LevelText>
+        <UserName>{nickname}</UserName>
       </InfoRow>
-      <ProgressBarContainer>
-        <ProgressBar $progress={progress} />
-      </ProgressBarContainer>
-    </Container>
+      <ProgressRow>
+        <ProgressBarContainer>
+          <ProgressBar $progress={progress} />
+        </ProgressBarContainer>
+        <ProgressNum>{progress}%</ProgressNum>
+      </ProgressRow>
+    </>
   );
 };
+
+export default Level;
