@@ -23,8 +23,8 @@ export const DotContainer = styled.div`
 `;
 
 export const Dot = styled.div`
-  width: 13px;
-  height: 13px;
+  width: 11px;
+  height: 11px;
   background-color: ${colors.gray[90]};
   border-radius: 50%;
   animation: ${fadeInOut} 1.5s infinite ease-in-out;

@@ -3,7 +3,6 @@ import {
   ContentContainer,
   NoContentText,
   IntersectionObserverArea,
-  LoadingText,
 } from './LocationListBottomSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';

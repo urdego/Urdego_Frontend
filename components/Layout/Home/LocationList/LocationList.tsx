@@ -26,7 +26,7 @@ const LocationList = ({ location }: LocationListProps) => {
           fill
           style={{ objectFit: 'cover' }}
           sizes="(max-width: 430px) 100vw"
-          onLoadingComplete={() => setIsLoading(false)}
+          onLoad={() => setIsLoading(false)}
         />
       </LocationImageContainer>
       {isLoading ? (
