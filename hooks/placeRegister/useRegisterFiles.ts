@@ -54,6 +54,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     }
   };
 
+  // 업로드된 파일 예외 확인 및 정제
   const validateUserUploadFile = (userUploadFileList: FileList | null) => {
     const fileList = userUploadFileList;
 
@@ -106,7 +107,11 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
-    const gps = await exifr.gps(fileList[0]);
+    const gpsList = (
+      await Promise.all(fileList.map((item) => exifr.gps(item)))
+    ).filter((item) => item !== undefined);
+    const gps = gpsList[0];
+
     if (gps) {
       // 위경도 저장
       setPlaceInput(index, 'lat', gps.latitude);
@@ -153,6 +158,18 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     return compressedFileList;
   };
 
+  // 기본 파일을 미리보기 파일로 변환하는 로직
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise<string>((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        const result = fileReader.result;
+        resolve(typeof result === 'string' ? result : '');
+      };
+      fileReader.readAsDataURL(file);
+    });
+  };
+
   // 파일 전체 정보 조회 로직
   const previewFile = (fileList: File[]) => {
     fileList.forEach((file) => {
@@ -164,18 +181,6 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
           console.log(`파일명: ${file.name}`);
           console.log(`가로 크기: ${img.width}px, 세로 크기: ${img.height}px`);
         };
-      };
-      fileReader.readAsDataURL(file);
-    });
-  };
-
-  // 기본 파일을 미리보기 파일로 변환하는 로직
-  const readFileAsDataURL = (file: File): Promise<string> => {
-    return new Promise<string>((resolve) => {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        const result = fileReader.result;
-        resolve(typeof result === 'string' ? result : '');
       };
       fileReader.readAsDataURL(file);
     });
