@@ -20,32 +20,32 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     // 파일 불러오는 로직
     const fileList = e.target.files;
 
-    if (!fileList || fileList?.length === 0) {
-      return;
-    }
-    if (fileList.length > MAX_CONTENT_COUNT) {
-      toast('최대 3개의 사진만 업로드가 가능해요', {
-        icon: '😱',
-      });
-    }
-
-    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
-
-    if (isOverMemory(selectedFileList)) {
-      toast.error('업로드 가능한 용량을 초과했어요');
-      return;
-    }
-    if (!selectedFileList.every(isImageFile)) {
-      toast.error('이미지만 업로드가 가능해요');
-      return;
-    }
-
-    setPreviewLoading({
-      locationIndex: index,
-      newPreviewLoading: new Array(selectedFileList.length).fill(true),
-    });
-
     try {
+      if (!fileList || fileList?.length === 0) {
+        return;
+      }
+      if (fileList.length > MAX_CONTENT_COUNT) {
+        toast('최대 3개의 사진만 업로드가 가능해요', {
+          icon: '😱',
+        });
+      }
+
+      const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
+
+      if (isOverMemory(selectedFileList)) {
+        toast.error('업로드 가능한 용량을 초과했어요');
+        return;
+      }
+      if (!selectedFileList.every(isImageFile)) {
+        toast.error('이미지만 업로드가 가능해요');
+        return;
+      }
+
+      setPreviewLoading({
+        locationIndex: index,
+        newPreviewLoading: new Array(selectedFileList.length).fill(true),
+      });
+
       const isMeta = await exportMetadata(selectedFileList);
       if (!isMeta) {
         toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
@@ -54,16 +54,12 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       }
 
       const compressedFileList = await compressFile(selectedFileList);
-      console.log(selectedFileList);
-      console.log(compressedFileList);
-      previewFile(selectedFileList);
-      previewFile(compressedFileList);
 
       storeFile(compressedFileList);
       storePreviewFile(compressedFileList);
       setPreviewLoading({
         locationIndex: index,
-        newPreviewLoading: new Array(selectedFileList.length).fill(false),
+        newPreviewLoading: new Array(compressedFileList.length).fill(false),
       });
     } catch (error) {
       console.log(error);
