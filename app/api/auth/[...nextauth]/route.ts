@@ -129,8 +129,6 @@ const authOptions: NextAuthOptions = {
           };
         }
 
-        console.log('전송할 데이터:', requestData); // 디버깅용
-
         const response = await fetch(
           `${process.env.API_URL}/api/user-service/users/save`,
           {
@@ -148,7 +146,8 @@ const authOptions: NextAuthOptions = {
         }
 
         const data = await response.json();
-        console.log('DB 저장 성공:', data);
+        user.userId = data.userId;
+        user.nickname = data.nickname;
         return true;
       } catch (error) {
         console.error('로그인 처리 중 에러:', error);
@@ -156,13 +155,19 @@ const authOptions: NextAuthOptions = {
       }
     },
 
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       // 초기 로그인 시 토큰 설정
       if (account) {
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
         token.accessTokenExpires = Date.now() + account.expires_in * 1000;
         token.provider = account.provider;
+      }
+
+      // user 데이터가 있으면 token에 추가
+      if (user) {
+        token.userId = user.userId;
+        token.nickname = user.nickname;
       }
 
       // 토큰이 만료되지 않았으면 현재 토큰 반환
@@ -185,7 +190,8 @@ const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           accessToken: token.accessToken,
-          // refreshToken은 보안을 위해 클라이언트에 전달 X
+          userId: token.userId,
+          nickname: token.nickname,
         },
       };
     },

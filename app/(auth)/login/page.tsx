@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { LoginWrapper } from './Login.styles';
 import LoginThumbnail from '@/styles/Icon/Login/LoginThumbnail.svg';
@@ -7,10 +8,17 @@ import Image from 'next/image';
 import { LogoContainer, LoginTitle, SocialButton } from './Login.styles';
 import KakaoLogin from '@/styles/Icon/Login/KakaoLogin.svg';
 import AppleLogin from '@/styles/Icon/Login/AppleLogin.svg';
+import useUserStore from '@/stores/useUserStore';
 
 const LoginPage = () => {
   const { data: session } = useSession();
-  console.log(session?.accessToken); // accessToken
+  const userId = useUserStore((state) => state.userId);
+  const nickname = useUserStore((state) => state.nickname);
+
+  // store 값 변화 감지
+  useEffect(() => {
+    console.log('로그인 페이지 - 유저 스토어 정보:', { userId, nickname });
+  }, [userId, nickname]);
 
   return (
     <LoginWrapper>
