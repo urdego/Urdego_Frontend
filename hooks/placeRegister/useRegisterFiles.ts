@@ -17,19 +17,9 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 파일 불러오는 로직
-    const fileList = e.target.files;
+    const selectedFileList = validateUserUploadFile(e.target.files);
+    if (!selectedFileList) return;
 
-    if (!fileList || fileList?.length === 0) {
-      return;
-    }
-    if (fileList.length > MAX_CONTENT_COUNT) {
-      toast('최대 3개의 사진만 업로드가 가능해요', {
-        icon: '😱',
-      });
-    }
-
-    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
     try {
       setPreviewLoading({
         locationIndex: index,
@@ -50,6 +40,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         throw new Error('이미지만 업로드가 가능해요');
       }
 
+      // 파일 메타 데이터 추출
       const isMeta = await exportMetadata(selectedFileList);
       if (!isMeta) {
         toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
@@ -57,14 +48,16 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         });
       }
 
+      // 파일 등록: 파일 크기 최적화
       const compressedFileList = await compressFile(selectedFileList);
+
+      // 파일 등록: 미리보기 용도
       const previewURLs = await Promise.all(
         compressedFileList.map(readFileAsDataURL)
       );
 
       setPlaceInput(index, 'file', compressedFileList);
       setPlaceInput(index, 'previewFile', previewURLs);
-
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: new Array(selectedFileList.length).fill(false),
@@ -78,6 +71,22 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         newPreviewLoading: [],
       });
     }
+  };
+
+  const validateUserUploadFile = (userUploadFileList: FileList | null) => {
+    const fileList = userUploadFileList;
+
+    if (!fileList || fileList?.length === 0) {
+      return;
+    }
+    if (fileList.length > MAX_CONTENT_COUNT) {
+      toast('최대 3개의 사진만 업로드가 가능해요', {
+        icon: '😱',
+      });
+    }
+
+    // 파일 등록: 최대 개수 제한 설정
+    return Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
   };
 
   // 용량 제한 로직
