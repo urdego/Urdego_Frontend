@@ -58,9 +58,18 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       }
 
       const compressedFileList = await compressFile(selectedFileList);
+      const previewURLs = await Promise.all(
+        compressedFileList.map(readFileAsDataURL)
+      );
 
-      storeFile(compressedFileList);
-      storePreviewFile(compressedFileList);
+      setPlaceInput(index, 'file', compressedFileList);
+      setPlaceInput(index, 'previewFile', previewURLs);
+
+      setPreviewLoading({
+        locationIndex: index,
+        newPreviewLoading: new Array(selectedFileList.length).fill(false),
+      });
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setPlaceInput(index, 'previewFile', []);
@@ -158,30 +167,15 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     });
   };
 
-  // 서버에 전송할 파일 저장 로직
-  const storeFile = (selectedFileList: File[]) => {
-    setPlaceInput(index, 'file', selectedFileList);
-  };
-
-  // 미리보기 파일 저장 로직
-  const storePreviewFile = (selectedFileList: File[]) => {
-    const previewPromises = selectedFileList.map((file) => {
-      return new Promise<string>((resolve) => {
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-          const result = fileReader.result;
-          resolve(typeof result === 'string' ? result : '');
-        };
-        fileReader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(previewPromises).then((previewURLs) => {
-      setPlaceInput(index, 'previewFile', previewURLs);
-      setPreviewLoading({
-        locationIndex: index,
-        newPreviewLoading: new Array(selectedFileList.length).fill(false),
-      });
+  // 기본 파일을 미리보기 파일로 변환하는 로직
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise<string>((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        const result = fileReader.result;
+        resolve(typeof result === 'string' ? result : '');
+      };
+      fileReader.readAsDataURL(file);
     });
   };
 
