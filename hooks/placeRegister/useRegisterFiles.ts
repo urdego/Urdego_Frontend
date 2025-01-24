@@ -18,21 +18,17 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      const selectedFileList = validateUserUploadFile(e.target.files);
-      if (!selectedFileList) return;
+      const fileList = validateUserUploadFile(e.target.files);
+      if (!fileList) return;
 
       setPreviewLoading({
         locationIndex: index,
-        newPreviewLoading: new Array(selectedFileList.length).fill(true),
+        newPreviewLoading: new Array(fileList.length).fill(true),
       });
-      setPlaceInput(
-        index,
-        'previewFile',
-        new Array(selectedFileList.length).fill([])
-      );
+      setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
 
-      await exportMetadata(selectedFileList);
-      const compressedFileList = await compressFile(selectedFileList);
+      await exportMetadata(fileList);
+      const compressedFileList = await compressFile(fileList);
       const previewURLs = await Promise.all(
         compressedFileList.map(readFileAsDataURL)
       );
@@ -41,7 +37,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       setPlaceInput(index, 'previewFile', previewURLs);
       setPreviewLoading({
         locationIndex: index,
-        newPreviewLoading: new Array(selectedFileList.length).fill(false),
+        newPreviewLoading: new Array(compressedFileList.length).fill(false),
       });
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
