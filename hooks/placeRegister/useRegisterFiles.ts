@@ -17,10 +17,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFileList = validateUserUploadFile(e.target.files);
-    if (!selectedFileList) return;
-
     try {
+      const selectedFileList = validateUserUploadFile(e.target.files);
+      if (!selectedFileList) return;
+
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: new Array(selectedFileList.length).fill(true),
@@ -31,27 +31,8 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         new Array(selectedFileList.length).fill([])
       );
 
-      if (isOverMemory(selectedFileList)) {
-        toast.error('업로드 가능한 용량을 초과했어요');
-        throw new Error('업로드 가능한 용량을 초과했어요');
-      }
-      if (!selectedFileList.every(isImageFile)) {
-        toast.error('이미지만 업로드가 가능해요');
-        throw new Error('이미지만 업로드가 가능해요');
-      }
-
-      // 파일 메타 데이터 추출
-      const isMeta = await exportMetadata(selectedFileList);
-      if (!isMeta) {
-        toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
-          icon: '👍',
-        });
-      }
-
-      // 파일 등록: 파일 크기 최적화
+      await exportMetadata(selectedFileList);
       const compressedFileList = await compressFile(selectedFileList);
-
-      // 파일 등록: 미리보기 용도
       const previewURLs = await Promise.all(
         compressedFileList.map(readFileAsDataURL)
       );
@@ -86,7 +67,18 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     }
 
     // 파일 등록: 최대 개수 제한 설정
-    return Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
+    const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
+
+    if (isOverMemory(selectedFileList)) {
+      toast.error('업로드 가능한 용량을 초과했어요');
+      throw new Error('업로드 가능한 용량을 초과했어요');
+    }
+    if (!selectedFileList.every(isImageFile)) {
+      toast.error('이미지만 업로드가 가능해요');
+      throw new Error('이미지만 업로드가 가능해요');
+    }
+
+    return selectedFileList;
   };
 
   // 용량 제한 로직
@@ -126,10 +118,11 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         index,
         latLng: { lat: gps.latitude, lng: gps.longitude },
       });
-
-      return true;
+      return;
     }
-    return false;
+    toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
+      icon: '👍',
+    });
   };
 
   // 이미지 압축 로직
