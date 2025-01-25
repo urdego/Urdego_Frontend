@@ -8,6 +8,9 @@ export const API_URL_CONFIG = {
     LOGIN: '/api/user-service/login',
     NICKNAME: '/api/user-service/users/nickname',
   },
+  USER_SERVICE: {
+    USERS: '/api/user-service/users',
+  },
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',
     SEND: '/api/notification-service/notifications/send',
