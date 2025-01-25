@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.5",
     "@react-three/drei": "^9.121.3",
     "@react-three/fiber": "^8.17.12",
     "@stomp/stompjs": "^7.0.0",

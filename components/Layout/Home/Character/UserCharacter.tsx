@@ -7,15 +7,15 @@ import { useLoader } from '@react-three/fiber';
 
 const Model = () => {
   const gltf = useLoader(GLTFLoader, '/Character/basic.glb');
-  return <primitive object={gltf.scene} />;
+  return <primitive object={gltf.scene} scale={[2.5, 2.5, 2.5]} />;
 };
 
 const UserCharacter = () => {
   return (
     <Canvas>
-      <Suspense fallback={null}>
+      <Suspense>
         <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
         <Model />
         <OrbitControls enableZoom={false} />
         <Environment preset="sunset" />
