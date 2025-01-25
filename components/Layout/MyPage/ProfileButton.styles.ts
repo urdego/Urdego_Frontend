@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 
-export const SButton = styled.button`
-  width: 185px;
+export const PButton = styled.button`
+  width: 100%;
   padding: 10px 10px;
   font-size: 12px;
   font-weight: 700;

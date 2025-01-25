@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,12 +11,36 @@ import {
 } from '@/app/(nav)/myPage/myPage.styles';
 import ProfileInfo from '@/components/Layout/MyPage/ProfileInfo';
 import SettingButton from '@/components/Layout/MyPage/SettingButton';
-import SmallButton from '@/components/Layout/MyPage/SmallButton';
+import ProfileButton from '@/components/Layout/MyPage/ProfileButton';
 import AlertModal from '@/components/Common/AlertModal/AlertModal';
 
 const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    nickname: '',
+    characterType: '',
+  });
+
+  console.log('userInfo:', userInfo);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch('/api/userInfo'); // API 호출
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        const data = await response.json();
+        setUserInfo(data); // 유저 데이터 설정
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const handleLogout = () => {
     // 로그아웃 로직
@@ -27,12 +52,19 @@ const MyPage = () => {
       <TopBar NavType="default" label="마이페이지" />
       <MyPageWrapper>
         <ProfileWrapper>
-          <ProfileInfo />
+          {/* 유저 정보 컴포넌트에 추가 될 API 데이터: 프로필 사진, 유저 LV  */}
+          <ProfileInfo
+            email={userInfo.email}
+            nickname={userInfo.nickname}
+            characterType={userInfo.characterType}
+          />
+
           <SmallButtonWrapper>
-            <SmallButton onClick={() => {}}>캐릭터 수정</SmallButton>
-            <SmallButton onClick={() => router.push('/myPage/nicknameChange')}>
+            <ProfileButton
+              onClick={() => router.push('/myPage/nicknameChange')}
+            >
               닉네임 변경
-            </SmallButton>
+            </ProfileButton>
           </SmallButtonWrapper>
         </ProfileWrapper>
         <Separator />

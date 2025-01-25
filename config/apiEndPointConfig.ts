@@ -6,7 +6,10 @@ export const API_URL_CONFIG = {
   AUTH: {
     SIGNUP: '/api/user-service/users',
     LOGIN: '/api/user-service/login',
-    NICKNAME: '/api/user-service/nickname',
+    NICKNAME: '/api/user-service/users/nickname',
+  },
+  USER_SERVICE: {
+    USERS: '/api/user-service/users',
   },
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',
