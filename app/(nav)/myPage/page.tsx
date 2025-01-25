@@ -53,7 +53,12 @@ const MyPage = () => {
       <MyPageWrapper>
         <ProfileWrapper>
           {/* 유저 정보 컴포넌트에 추가 될 API 데이터: 프로필 사진, 유저 LV  */}
-          <ProfileInfo email={userInfo.email} nickname={userInfo.nickname} />
+          <ProfileInfo
+            email={userInfo.email}
+            nickname={userInfo.nickname}
+            characterType={userInfo.characterType}
+          />
+
           <SmallButtonWrapper>
             <ProfileButton
               onClick={() => router.push('/myPage/nicknameChange')}
