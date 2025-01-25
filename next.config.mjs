@@ -10,6 +10,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   openAnalyzer: true,
+  transpilePackages: ['three'],
   compiler: {
     styledComponents: {
       displayName: true,

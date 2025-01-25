@@ -20,7 +20,7 @@ export const Button = styled.button`
 `;
 
 export const TopWrapper = styled.div`
-  height: 500px;
+  height: 400px;
   padding: 0 15px;
 `;
 
