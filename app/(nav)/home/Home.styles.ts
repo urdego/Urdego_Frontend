@@ -20,7 +20,7 @@ export const Button = styled.button`
 `;
 
 export const TopWrapper = styled.div`
-  height: 400px;
+  height: 450px;
   padding: 0 15px;
 `;
 
@@ -30,6 +30,9 @@ export const BottomWrapper = styled.div`
   gap: 12px;
   height: 240px;
   padding: 0 15px;
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
 `;
 export const UserInfo = styled.div`
   height: 152px;
