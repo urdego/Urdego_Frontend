@@ -43,6 +43,10 @@ const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
   const characters = useCharacterData({ ownCharacters });
 
   const handleCharacterClick = (key: string) => {
+    if (!ownCharacters.includes(key)) {
+      console.error('보유하지 않은 캐릭터 선택 불가!', key);
+      return;
+    }
     // 동일한 캐릭터를 선택해도 렌더링 되도록 `null` 설정 후 다시 업데이트
     setSelectedCharacterLocal(null);
     setTimeout(() => setSelectedCharacterLocal(key), 0);
