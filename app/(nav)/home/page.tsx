@@ -1,21 +1,26 @@
 'use client';
-
 import { TopWrapper, BottomWrapper } from './Home.styles';
 import HomeBox from '@/components/Layout/Home/HomeBox/HomeBox';
 import { HomePageWrapper } from '@/app/commonPage.styles';
 import Button from '@/components/Common/Button/Button';
 import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
+import { useState } from 'react';
 
 const Home = () => {
+  // 디폴트 값 'BASIC'
+  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(
+    'BASIC'
+  );
+
   return (
     <>
       <HomePageWrapper>
         <TopWrapper>
-          <UserCharacter />
+          <UserCharacter selectedCharacter={selectedCharacter} />
         </TopWrapper>
         <BottomWrapper>
-          <HomeBox />
+          <HomeBox setSelectedCharacter={setSelectedCharacter} />
           <Button
             label="방 입장하기"
             icon={EnterArrowIcon}

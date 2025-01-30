@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
 import {
   HomeBoxWrapper,
   TopWrapper,
@@ -15,10 +14,37 @@ import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationLis
 import PlaceRegisterIcon from '@/styles/Icon/Home/PlaceRegister.svg';
 import CharacterSelectIcon from '@/styles/Icon/Home/CharacterSelect.svg';
 import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBottomSheet';
+import Button from '@/components/Common/Button/Button';
+import useCharacterData from '@/hooks/character/useCharacterData';
 
-const HomeBox = () => {
+interface HomeBoxProps {
+  setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
   const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacterLocal] = useState<
+    string | null
+  >('BASIC');
+
+  const ownCharacters = [
+    'BASIC',
+    'DOT',
+    'ANGULAR',
+    'BUMPY',
+    // 'PLANET',
+    // 'SHARP',
+    // 'STAR',
+    // 'SQUARE',
+    'WOOL',
+  ];
+  const characters = useCharacterData({ ownCharacters });
+
+  const handleCharacterClick = (key: string) => {
+    setSelectedCharacterLocal(key);
+    setSelectedCharacter(key);
+  };
 
   const handleCharacterSelect = () => {
     setIsBottomSheetOpen(true);
@@ -55,18 +81,23 @@ const HomeBox = () => {
         <CharacterBottomSheet
           isOpen={isBottomSheetOpen}
           onClose={() => setIsBottomSheetOpen(false)}
-          title="캐릭터(4/9)"
+          title={`캐릭터 (${ownCharacters.length}/9)`}
+          footerContent={<Button label="저장하기" buttonHeight="default" />}
         >
-          {' '}
           <GridContainer>
-            {Array.from({ length: 9 }).map((_, index) => (
-              <GridItem key={index}>{index + 1}</GridItem>
+            {characters.map((character) => (
+              <GridItem
+                key={character.key}
+                onClick={() => handleCharacterClick(character.key)}
+                isSelected={selectedCharacter === character.key}
+              >
+                <Image src={character.displayImage} alt={character.key} />
+              </GridItem>
             ))}
           </GridContainer>
         </CharacterBottomSheet>
       </BottomWrapper>
 
-      {/* 바텀시트가 visible일 때만 표시! */}
       {isLocationListVisible && (
         <LocationListBottomSheet
           setLocationListVisible={setLocationListVisible}

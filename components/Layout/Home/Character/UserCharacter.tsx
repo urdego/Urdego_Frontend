@@ -1,4 +1,3 @@
-'use client';
 import React, { Suspense, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
@@ -6,8 +5,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const Model = () => {
-  const gltf = useLoader(GLTFLoader, '/Character/basic.glb');
+// selectedCharacter를 prop으로 받아서 모델을 로드하는 방식으로 변경
+const Model = ({ characterKey }: { characterKey: string }) => {
+  const gltf = useLoader(GLTFLoader, `/Character/${characterKey}.glb`);
   const modelRef = useRef<THREE.Object3D>();
   const [isRotating, setIsRotating] = useState(true);
   const rotationSpeed = useRef(0.2);
@@ -50,13 +50,18 @@ const Model = () => {
 /* ambientLight: 장면 전체에 균일한 조명을 제공 */
 /* directionalLight: 특정 방향에서 강한 빛을 비추며 그림자를 생성 */
 /* OrbitControls: 사용자가 마우스를 사용하여 3D 모델을 회전 */
-const UserCharacter = () => {
+const UserCharacter = ({
+  selectedCharacter,
+}: {
+  selectedCharacter: string | null;
+}) => {
   return (
     <Canvas>
       <Suspense fallback={null}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-        <Model />
+        {/* 선택된 캐릭터에 맞는 모델을 표시 */}
+        {selectedCharacter && <Model characterKey={selectedCharacter} />}
         <OrbitControls enableZoom={false} />
         <Environment preset="sunset" />
       </Suspense>

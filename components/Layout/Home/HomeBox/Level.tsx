@@ -12,6 +12,7 @@ import useUserStore from '@/stores/useUserStore';
 export const Level = () => {
   const level = 1;
   const progress = 30;
+
   const nickname = useUserStore((state) => state.nickname);
 
   return (

@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
+interface GridItemProps {
+  isSelected: boolean;
+}
 
 export const HomeBoxWrapper = styled.div`
   height: 152px;
@@ -72,22 +75,25 @@ export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  padding: 20px;
+  padding: 16px;
+  justify-content: center;
 `;
 
-export const GridItem = styled.div`
-  background-color: #f8f9fa;
-  border: 1px solid #dfe2e6;
-  border-radius: 12px;
-  aspect-ratio: 1;
+export const GridItem = styled.div<GridItemProps>`
+  background-color: ${colors.gray[95]};
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  /* width: 108px;
+  height: 108px; */
 
-  &:hover {
-    border-color: #007aff;
-    background-color: #f0f7ff;
-  }
+  ${({ isSelected }) =>
+    isSelected &&
+    `
+    border: 2px solid ${colors.gray[50]};
+    background-color: ${colors.gray[95]};
+  `}
 `;
