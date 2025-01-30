@@ -8,10 +8,11 @@ import {
   ProgressNum,
 } from './Level.styles';
 import useUserStore from '@/stores/useUserStore';
+import useCountUp from '@/hooks/Loading/useCountUp';
 
 export const Level = () => {
   const level = 1;
-  const progress = 30;
+  const progress = useCountUp(30);
 
   const nickname = useUserStore((state) => state.nickname);
 
