@@ -68,3 +68,26 @@ export const CharacterSelect = styled.button`
   letter-spacing: -0.16px;
   color: ${colors.purple[50]};
 `;
+export const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 20px;
+`;
+
+export const GridItem = styled.div`
+  background-color: #f8f9fa;
+  border: 1px solid #dfe2e6;
+  border-radius: 12px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    border-color: #007aff;
+    background-color: #f0f7ff;
+  }
+`;
