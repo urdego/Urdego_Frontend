@@ -56,12 +56,13 @@ const UserCharacter = ({
   selectedCharacter: string | null;
 }) => {
   return (
-    <Canvas>
+    <Canvas key={selectedCharacter || 'default'}>
       <Suspense fallback={null}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-        {/* 선택된 캐릭터에 맞는 모델을 표시 */}
-        {selectedCharacter && <Model characterKey={selectedCharacter} />}
+        {selectedCharacter && (
+          <Model key={selectedCharacter} characterKey={selectedCharacter} />
+        )}
         <OrbitControls enableZoom={false} />
         <Environment preset="sunset" />
       </Suspense>

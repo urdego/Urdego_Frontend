@@ -22,12 +22,7 @@ interface HomeBoxProps {
 }
 
 const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
-  const [isLocationListVisible, setLocationListVisible] = useState(false);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacterLocal] = useState<
-    string | null
-  >('BASIC');
-
+  const initialCharacter = 'WOOL';
   const ownCharacters = [
     'BASIC',
     'DOT',
@@ -39,11 +34,21 @@ const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
     // 'SQUARE',
     'WOOL',
   ];
+  const [isLocationListVisible, setLocationListVisible] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacterLocal] = useState<
+    string | null
+  >(initialCharacter);
+
   const characters = useCharacterData({ ownCharacters });
 
   const handleCharacterClick = (key: string) => {
-    setSelectedCharacterLocal(key);
-    setSelectedCharacter(key);
+    // 동일한 캐릭터를 선택해도 렌더링 되도록 `null` 설정 후 다시 업데이트
+    setSelectedCharacterLocal(null);
+    setTimeout(() => setSelectedCharacterLocal(key), 0);
+
+    setSelectedCharacter(null);
+    setTimeout(() => setSelectedCharacter(key), 0);
   };
 
   const handleCharacterSelect = () => {

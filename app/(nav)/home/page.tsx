@@ -10,7 +10,7 @@ import { useState } from 'react';
 const Home = () => {
   // 디폴트 값 'BASIC'
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>(
-    'BASIC'
+    'WOOL'
   );
 
   return (
