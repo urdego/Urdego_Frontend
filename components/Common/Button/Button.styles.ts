@@ -25,6 +25,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   letter-spacing: -0.16px;
 
   transition: 0.5s ease;
+  white-space: nowrap;
 
   ${({ $buttonSize }) =>
     $buttonSize === 'small'

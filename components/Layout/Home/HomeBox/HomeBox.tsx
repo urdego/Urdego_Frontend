@@ -23,38 +23,28 @@ interface HomeBoxProps {
 
 const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
   const initialCharacter = 'WOOL';
-  const ownCharacters = [
-    'BASIC',
-    'DOT',
-    'ANGULAR',
-    'BUMPY',
-    // 'PLANET',
-    // 'SHARP',
-    // 'STAR',
-    // 'SQUARE',
-    'WOOL',
-  ];
+  const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
   const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacterLocal] = useState<
     string | null
   >(initialCharacter);
+  const [isButtonVisible, setButtonVisible] = useState(false);
 
   const characters = useCharacterData({ ownCharacters });
 
+  // 캐릭터 클릭 처리
   const handleCharacterClick = (key: string) => {
-    if (!ownCharacters.includes(key)) {
-      console.error('보유하지 않은 캐릭터 선택 불가!', key);
-      return;
+    if (ownCharacters.includes(key)) {
+      setSelectedCharacterLocal(key);
+      setSelectedCharacter(key);
+      setButtonVisible(true); // 캐릭터 선택 후 버튼 보이기
+    } else {
+      console.error('보유하지 않은 캐릭터 선택 불가! ', key);
     }
-    // 동일한 캐릭터를 선택해도 렌더링 되도록 `null` 설정 후 다시 업데이트
-    setSelectedCharacterLocal(null);
-    setTimeout(() => setSelectedCharacterLocal(key), 0);
-
-    setSelectedCharacter(null);
-    setTimeout(() => setSelectedCharacter(key), 0);
   };
 
+  // 캐릭터 선택 버튼 클릭 처리
   const handleCharacterSelect = () => {
     setIsBottomSheetOpen(true);
   };
@@ -91,14 +81,20 @@ const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
           isOpen={isBottomSheetOpen}
           onClose={() => setIsBottomSheetOpen(false)}
           title={`캐릭터 (${ownCharacters.length}/9)`}
-          footerContent={<Button label="저장하기" buttonHeight="default" />}
+          footerContent={
+            <Button
+              label="저장하기"
+              buttonHeight="default"
+              hidden={!isButtonVisible}
+            />
+          }
         >
           <GridContainer>
             {characters.map((character) => (
               <GridItem
                 key={character.key}
                 onClick={() => handleCharacterClick(character.key)}
-                isSelected={selectedCharacter === character.key}
+                $isSelected={selectedCharacter === character.key}
               >
                 <Image src={character.displayImage} alt={character.key} />
               </GridItem>

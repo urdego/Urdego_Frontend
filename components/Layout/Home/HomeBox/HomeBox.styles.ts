@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 interface GridItemProps {
-  isSelected: boolean;
+  $isSelected: boolean;
 }
 
 export const HomeBoxWrapper = styled.div`
@@ -90,8 +90,8 @@ export const GridItem = styled.div<GridItemProps>`
   /* width: 108px;
   height: 108px; */
 
-  ${({ isSelected }) =>
-    isSelected &&
+  ${({ $isSelected }) =>
+    $isSelected &&
     `
     border: 2px solid ${colors.gray[50]};
     background-color: ${colors.gray[95]};
