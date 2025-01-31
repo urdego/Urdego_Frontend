@@ -8,14 +8,21 @@ import {
 import ProfileImg from '@/styles/Icon/Profile_Snowman1.svg';
 import Image from 'next/image';
 
-const ProfileInfo = () => {
+interface ProfileInfoProps {
+  email: string;
+  nickname: string;
+  characterType: string;
+}
+
+const ProfileInfo = ({ email, nickname, characterType }: ProfileInfoProps) => {
   return (
     <ProfileInfoWrapper>
       <ImageWrapper>
         <Image src={ProfileImg} width={56} height={56} alt="Profile Image" />
       </ImageWrapper>
-      <ProfileName>김눈사람</ProfileName>
-      <ProfileEmail>urdego@gmail.com</ProfileEmail>
+      <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+      <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
+      <div>{characterType || '캐릭터 타입 없음'}</div>
     </ProfileInfoWrapper>
   );
 };

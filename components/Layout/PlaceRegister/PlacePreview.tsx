@@ -39,12 +39,12 @@ const PlacePreview = ({ index }: PlacePreviewProps) => {
         (partPreviewLoading) => partPreviewLoading === true
       )
         ? isPreviewLoading[index].map((_, index) => (
-            <PreviewImage key={index}>
+            <PreviewImage key={`item${index}`}>
               <Skeleton width={60} height={60} />
             </PreviewImage>
           ))
         : placeList[index].previewFile.map((file, previewIndex) => (
-            <PreviewImage key={previewIndex}>
+            <PreviewImage key={`item${previewIndex}`}>
               <PreviewImageRemoveButton
                 onClick={() => handlePartFileRemove(previewIndex)}
               >

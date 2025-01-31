@@ -1,7 +1,8 @@
 import useUserStore from '@/stores/useUserStore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface Location {
+  contentId: number;
   contentName: string;
   address: string;
   url: string;
@@ -25,22 +26,16 @@ interface GetLocationListResponse {
 }
 
 const useGetInfiniteLocationList = () => {
+  // 서버로부터 받아오는 정보
   const [locationList, setLocationList] = useState<Location[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [cursorIdx, setCursorIdx] = useState<number | null>(null);
+
+  // 무한 스크롤 관련 정보
   const [isLoadMore, setIsLoadMore] = useState(true);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
   // const { userId } = useUserStore(); //TODO: 사용하도록 변경
-
-  useEffect(() => {
-    const initialFetchLocationList = async () => {
-      await fetchLocationList();
-      setIsInitialLoad(false);
-    };
-
-    initialFetchLocationList();
-  }, []);
 
   const fetchLocationList = async () => {
     const userId = 2; //! test를 위한 용도
@@ -48,7 +43,7 @@ const useGetInfiniteLocationList = () => {
     setIsLoading(true);
 
     const params = new URLSearchParams();
-    params.append('limit', (10).toString());
+    params.append('limit', (16).toString());
     if (cursorIdx) {
       params.append('cursorIdx', cursorIdx.toString());
     }
@@ -58,6 +53,7 @@ const useGetInfiniteLocationList = () => {
       if (!response.ok) {
         throw new Error('데이터를 가져오는 것에 실패했습니다!');
       }
+
       const data: GetLocationListResponse = await response.json();
       console.log(data);
       if (data) {
@@ -72,26 +68,18 @@ const useGetInfiniteLocationList = () => {
       }
     } catch (error) {
       console.error(`올린 장소 불러오기에서 실패한 에러: ${error}`);
-      setIsLoading(false);
       setIsLoadMore(false);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const loadMore = async () => {
-    if (!isLoadMore) return;
-
-    await fetchLocationList();
-  };
-
   return {
     locationList,
     totalCount,
-    isInitialLoad,
     isLoading,
     isLoadMore,
-    loadMore,
+    fetchLocationList,
   };
 };
 

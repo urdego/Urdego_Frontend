@@ -3,12 +3,12 @@ import {
   ContentContainer,
   NoContentText,
   IntersectionObserverArea,
-  LoadingText,
 } from './LocationListBottomSheet.styles';
 import LocationList from '@/components/Layout/Home/LocationList/LocationList';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
 import BottomSheet from './BottomSheet';
+import DotLoadingSpinner from '../LoadingSpinner/DotLoadingSpinner';
 
 interface LocationListBottomSheetProps {
   setLocationListVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,17 +18,11 @@ const LocationListBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   // 무한 스크롤 로직
-  const {
-    locationList,
-    totalCount,
-    isInitialLoad,
-    isLoading,
-    isLoadMore,
-    loadMore,
-  } = useGetInfiniteLocationList();
+  const { locationList, totalCount, isLoading, isLoadMore, fetchLocationList } =
+    useGetInfiniteLocationList();
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
-      loadMore();
+      fetchLocationList();
     },
   });
 
@@ -40,11 +34,11 @@ const LocationListBottomSheet = ({
           {locationList.map((location, index) => (
             <LocationList key={`key+${index}`} location={location} />
           ))}
-          {isLoading && <LoadingText>장소를 불러오는중...🔍</LoadingText>}
-          {!isLoading && !isInitialLoad && isLoadMore && (
+          {isLoading && <DotLoadingSpinner />}
+          {!isLoading && isLoadMore && (
             <IntersectionObserverArea ref={targetElementRef} />
           )}
-          {!isInitialLoad && locationList.length === 0 && (
+          {!isLoadMore && locationList.length === 0 && (
             <NoContentText>
               올린 장소가 없습니다. 장소를 등록해주세요! 😊
             </NoContentText>
