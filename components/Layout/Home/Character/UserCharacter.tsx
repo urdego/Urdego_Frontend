@@ -6,7 +6,13 @@ import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 
 // selectedCharacter를 prop으로 받아서 모델을 로드하는 방식으로 변경
-const Model = ({ characterKey }: { characterKey: string }) => {
+const Model = ({
+  characterKey,
+  isOpen,
+}: {
+  characterKey: string;
+  isOpen: boolean;
+}) => {
   const gltf = useLoader(GLTFLoader, `/Character/${characterKey}.glb`);
   const modelRef = useRef<THREE.Object3D>();
   const [isRotating, setIsRotating] = useState(true);
@@ -41,9 +47,17 @@ const Model = ({ characterKey }: { characterKey: string }) => {
       }
     }
   });
+  console.log(
+    `isOpen: ${isOpen}, scale:`,
+    isOpen ? [1.5, 1.5, 1.5] : [2.5, 2.5, 2.5]
+  );
 
   return (
-    <primitive ref={modelRef} object={gltf.scene} scale={[2.5, 2.5, 2.5]} />
+    <primitive
+      ref={modelRef}
+      object={gltf.scene}
+      scale={isOpen ? [1.5, 1.5, 1.5] : [2.5, 2.5, 2.5]}
+    />
   );
 };
 
@@ -52,8 +66,10 @@ const Model = ({ characterKey }: { characterKey: string }) => {
 /* OrbitControls: 사용자가 마우스를 사용하여 3D 모델을 회전 */
 const UserCharacter = ({
   selectedCharacter,
+  isOpen,
 }: {
   selectedCharacter: string | null;
+  isOpen: boolean;
 }) => {
   return (
     <Canvas key={selectedCharacter || 'default'}>
@@ -61,7 +77,11 @@ const UserCharacter = ({
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
         {selectedCharacter && (
-          <Model key={selectedCharacter} characterKey={selectedCharacter} />
+          <Model
+            key={selectedCharacter}
+            characterKey={selectedCharacter}
+            isOpen={isOpen}
+          />
         )}
         <OrbitControls enableZoom={false} />
         <Environment preset="sunset" />

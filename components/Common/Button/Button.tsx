@@ -40,7 +40,7 @@ const Button = ({
       disabled={disabled}
       $iconPosition={$iconPosition}
       style={{
-        display: hidden ? 'none' : 'flex',
+        display: hidden ? 'hidden' : 'visible',
       }}
     >
       {icon && (

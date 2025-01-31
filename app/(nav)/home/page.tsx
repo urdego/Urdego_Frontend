@@ -8,6 +8,7 @@ import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useState } from 'react';
 
 const Home = () => {
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   // 디폴트 값 'BASIC'
   const [selectedCharacter, setSelectedCharacter] = useState<string | null>(
     'WOOL'
@@ -17,10 +18,16 @@ const Home = () => {
     <>
       <HomePageWrapper>
         <TopWrapper>
-          <UserCharacter selectedCharacter={selectedCharacter} />
+          <UserCharacter
+            selectedCharacter={selectedCharacter}
+            isOpen={isBottomSheetOpen}
+          />
         </TopWrapper>
         <BottomWrapper>
-          <HomeBox setSelectedCharacter={setSelectedCharacter} />
+          <HomeBox
+            setSelectedCharacter={setSelectedCharacter}
+            setIsBottomSheetOpen={setIsBottomSheetOpen}
+          />
           <Button
             label="방 입장하기"
             icon={EnterArrowIcon}

@@ -19,6 +19,7 @@ import useCharacterData from '@/hooks/character/useCharacterData';
 
 interface HomeBoxProps {
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
+  setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
@@ -47,6 +48,7 @@ const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
   // 캐릭터 선택 버튼 클릭 처리
   const handleCharacterSelect = () => {
     setIsBottomSheetOpen(true);
+    setButtonVisible(false);
   };
 
   const toggleLocationList = () => {

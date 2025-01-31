@@ -77,6 +77,7 @@ export const GridContainer = styled.div`
   gap: 12px;
   padding: 16px;
   justify-content: center;
+  margin-left: 10px;
 `;
 
 export const GridItem = styled.div<GridItemProps>`
@@ -87,8 +88,8 @@ export const GridItem = styled.div<GridItemProps>`
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  /* width: 108px;
-  height: 108px; */
+  width: 108px;
+  height: 108px;
 
   ${({ $isSelected }) =>
     $isSelected &&
