@@ -112,7 +112,7 @@ const authOptions: NextAuthOptions = {
 
         if (platformType === 'KAKAO') {
           requestData = {
-            nickname: user.name || '',
+            name: user.name || '',
             email: user.email || '',
             platformType: platformType,
             platformId: user.id || '',
@@ -120,7 +120,7 @@ const authOptions: NextAuthOptions = {
         } else if (platformType === 'APPLE') {
           const emailId = profile?.email?.split('@')[0];
           requestData = {
-            nickname: appleFirstInfo?.name
+            name: appleFirstInfo?.name
               ? `${appleFirstInfo.name.firstName}${appleFirstInfo.name.lastName || ''}`
               : emailId,
             email: profile?.email || '',
