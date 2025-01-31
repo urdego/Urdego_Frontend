@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   },
   description: 'Where am I? Urdego!',
   icons: {
-    icon: '/favicon-outline.svg',
+    icon: '/favicon.svg',
   },
 };
 
