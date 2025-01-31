@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
-import useUserStore from '@/stores/useUserStore';
 
-export async function GET(request: NextRequest) {
+export async function GET(req: Request) {
   try {
-    const userStore = useUserStore.getState();
-    const userId = userStore.userId; // userStore의 userId 참조
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
+    }
 
     console.log('User ID:', userId);
     console.log(`${API_URL_CONFIG.USER_SERVICE.USERS}/${userId}`);
