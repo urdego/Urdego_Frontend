@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axiosInstance from '@/lib/axios';
 import Image from 'next/image';
 import {
   HomeBoxWrapper,
@@ -16,6 +17,7 @@ import CharacterSelectIcon from '@/styles/Icon/Home/CharacterSelect.svg';
 import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBottomSheet';
 import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
+import useUserStore from '@/stores/useUserStore';
 
 interface HomeBoxProps {
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
@@ -37,6 +39,7 @@ const HomeBox = ({
   const [isButtonVisible, setButtonVisible] = useState(false);
 
   const characters = useCharacterData({ ownCharacters });
+  const userId = useUserStore((state) => state.userId);
 
   // 캐릭터 클릭 처리
   const handleCharacterClick = (key: string) => {
@@ -57,6 +60,33 @@ const HomeBox = ({
 
   const toggleLocationList = () => {
     setLocationListVisible((prev) => !prev);
+  };
+
+  // 저장하기 버튼 클릭 처리
+  const handleSaveClick = async () => {
+    if (!selectedCharacter) {
+      console.error('선택된 캐릭터가 없습니다.');
+      return;
+    }
+
+    if (!userId) {
+      console.error('유저 ID를 찾을 수 없습니다.');
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post(`/api/character`, {
+        characterName: selectedCharacter,
+      });
+
+      if (response.status === 200) {
+        console.log('캐릭터 저장 성공:', response.data);
+      } else {
+        console.error('캐릭터 저장 실패:', response.data);
+      }
+    } catch (error) {
+      console.error('캐릭터 저장 중 에러:', error);
+    }
   };
 
   return (
@@ -93,6 +123,7 @@ const HomeBox = ({
               label="저장하기"
               buttonHeight="default"
               buttonType={isButtonVisible ? 'purple' : 'lightGray'}
+              onClick={handleSaveClick}
             />
           }
         >

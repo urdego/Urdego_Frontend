@@ -25,7 +25,22 @@ export default withAuth(
       );
     }
 
-    return NextResponse.next();
+    // userId와 nickname을 토큰에서 추출
+    const userId = request.nextauth.token.userId as string;
+    const nickname = request.nextauth.token.nickname as string;
+
+    if (!userId || !nickname) {
+      return NextResponse.json(
+        { error: '유저 정보를 찾을 수 없습니다.' },
+        { status: 401 }
+      );
+    }
+
+    // userId와 인코딩된 nickname을 헤더에 추가
+    const response = NextResponse.next();
+    response.headers.set('User-Id', userId);
+    response.headers.set('Nickname', encodeURIComponent(nickname));
+    return response;
   },
   {
     callbacks: {
