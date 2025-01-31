@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Title,
@@ -37,43 +37,6 @@ const FriendsInviteForm = ({
   const [searchResults, setSearchResults] = useState<UserInfo[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
   const currentUserNickname = useUserStore((state) => state.nickname);
-
-  useEffect(() => {
-    const searchUsers = async () => {
-      if (searchTerm.trim()) {
-        try {
-          const queryString = encodeURIComponent(searchTerm.trim());
-          const response = await fetch(`/api/invite?string=${queryString}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (response.status === 200) {
-            const data = await response.json();
-            // 현재 사용자의 닉네임을 제외한 결과만 필터링
-            const filteredResults = data.filter(
-              (user: UserInfo) => user.nickname !== currentUserNickname
-            );
-            setSearchResults(
-              Array.isArray(filteredResults) ? filteredResults : []
-            );
-          } else {
-            setSearchResults([]);
-          }
-        } catch (error) {
-          console.error('API 호출 에러:', error);
-          setSearchResults([]);
-        }
-      } else {
-        setSearchResults([]);
-      }
-    };
-
-    const debounceTimeout = setTimeout(searchUsers, 300);
-    return () => clearTimeout(debounceTimeout);
-  }, [searchTerm, currentUserNickname]);
 
   const handleUserSelect = (user: UserInfo) => {
     setSelectedUser(user);
