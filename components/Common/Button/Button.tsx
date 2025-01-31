@@ -15,7 +15,6 @@ interface ButtonProps {
   icon?: string | StaticImageData;
   onClick?: () => void;
   $iconPosition?: 'left' | 'right';
-  hidden?: boolean;
 }
 
 const Button = ({
@@ -28,7 +27,6 @@ const Button = ({
   onClick,
   disabled,
   $iconPosition = 'left',
-  hidden = false,
 }: ButtonProps) => {
   return (
     <StyledButton
@@ -39,9 +37,6 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       $iconPosition={$iconPosition}
-      style={{
-        display: hidden ? 'hidden' : 'visible',
-      }}
     >
       {icon && (
         <IconWrapper>

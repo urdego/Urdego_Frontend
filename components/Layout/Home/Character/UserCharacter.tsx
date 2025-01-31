@@ -1,11 +1,10 @@
-import React, { Suspense, useRef, useState } from 'react';
+import React, { Suspense, useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// selectedCharacter를 prop으로 받아서 모델을 로드하는 방식으로 변경
 const Model = ({
   characterKey,
   isOpen,
@@ -14,51 +13,53 @@ const Model = ({
   isOpen: boolean;
 }) => {
   const gltf = useLoader(GLTFLoader, `/Character/${characterKey}.glb`);
-  const modelRef = useRef<THREE.Object3D>();
-  const [isRotating, setIsRotating] = useState(true);
+  const modelRef = useRef<THREE.Object3D | null>(null);
+  const isRotatingRef = useRef(true);
   const rotationSpeed = useRef(0.2);
   const totalRotation = useRef(0);
   const lerpFactor = useRef(0.1); // 보간 계수
 
+  // isOpen 값이 바뀔 때 scale 값 업데이트
+  const scale = useMemo(
+    () => (isOpen ? [1.5, 1.5, 1.5] : [2.5, 2.5, 2.5]),
+    [isOpen]
+  );
+
+  // scale 변경 시 즉시 반영
+  useEffect(() => {
+    if (modelRef.current) {
+      modelRef.current.scale.set(scale[0], scale[1], scale[2]);
+    }
+  }, [scale]);
+
   useFrame(() => {
-    if (modelRef.current && isRotating) {
-      rotationSpeed.current *= 0.99; // 감속률 조정
-      const rotation = rotationSpeed.current;
-      totalRotation.current += rotation;
+    if (!modelRef.current || !isRotatingRef.current) return;
 
-      // 3바퀴 회전 후 자연스럽게 정면으로
-      if (totalRotation.current >= Math.PI * 6) {
-        // 현재 회전 각도에서 정면으로 움직임 (lerp)
-        const currentRotation = modelRef.current.rotation.y;
-        const targetAngle = Math.PI * 6;
-        modelRef.current.rotation.y = THREE.MathUtils.lerp(
-          currentRotation,
-          targetAngle,
-          lerpFactor.current
-        );
+    rotationSpeed.current *= 0.99; // 감속률 조정
+    const rotation = rotationSpeed.current;
+    totalRotation.current += rotation;
 
-        // 거의 정면에 도달했을 때 회전 정지
-        if (Math.abs(modelRef.current.rotation.y - targetAngle) < 0.01) {
-          setIsRotating(false);
-          modelRef.current.rotation.y = 0;
-        }
-      } else {
-        modelRef.current.rotation.y += rotation;
+    // 3바퀴 회전 후 자연스럽게 정면으로
+    if (totalRotation.current >= Math.PI * 6) {
+      const currentRotation = modelRef.current.rotation.y;
+      const targetAngle = Math.PI * 6;
+      modelRef.current.rotation.y = THREE.MathUtils.lerp(
+        currentRotation,
+        targetAngle,
+        lerpFactor.current
+      );
+
+      // 거의 정면에 도달했을 때 회전 정지
+      if (Math.abs(modelRef.current.rotation.y - targetAngle) < 0.01) {
+        isRotatingRef.current = false;
+        modelRef.current.rotation.y = 0;
       }
+    } else {
+      modelRef.current.rotation.y += rotation;
     }
   });
-  console.log(
-    `isOpen: ${isOpen}, scale:`,
-    isOpen ? [1.5, 1.5, 1.5] : [2.5, 2.5, 2.5]
-  );
 
-  return (
-    <primitive
-      ref={modelRef}
-      object={gltf.scene}
-      scale={isOpen ? [1.5, 1.5, 1.5] : [2.5, 2.5, 2.5]}
-    />
-  );
+  return <primitive ref={modelRef} object={gltf.scene} />;
 };
 
 /* ambientLight: 장면 전체에 균일한 조명을 제공 */
@@ -72,7 +73,7 @@ const UserCharacter = ({
   isOpen: boolean;
 }) => {
   return (
-    <Canvas key={selectedCharacter || 'default'}>
+    <Canvas key={`${selectedCharacter}-${isOpen}`}>
       <Suspense fallback={null}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} castShadow />

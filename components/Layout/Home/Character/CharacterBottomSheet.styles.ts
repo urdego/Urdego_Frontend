@@ -6,33 +6,36 @@ export const StyledMotion = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  /* height: auto; */
   max-height: 491px;
   z-index: 200;
   touch-action: none;
   margin: 0 auto;
   max-width: 430px;
   background-color: white;
-  overflow: auto;
-
-  & > div {
-    height: 100%;
-  }
+  display: flex;
+  flex-direction: column;
 `;
 
 export const BottomSheetWrapper = styled.div`
-  height: 100%;
   background-color: white;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const BottomSheetHeader = styled.div`
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
   background-color: white;
+  flex-shrink: 0;
+`;
+
+export const ContentContainer = styled.div`
+  flex: 1; /* 남은 공간을 차지하여 스크롤*/
+  overflow-y: auto;
 `;
 
 export const DragHandle = styled.div`

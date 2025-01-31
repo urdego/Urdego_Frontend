@@ -27,6 +27,7 @@ const Home = () => {
           <HomeBox
             setSelectedCharacter={setSelectedCharacter}
             setIsBottomSheetOpen={setIsBottomSheetOpen}
+            isBottomSheetOpen={isBottomSheetOpen}
           />
           <Button
             label="방 입장하기"

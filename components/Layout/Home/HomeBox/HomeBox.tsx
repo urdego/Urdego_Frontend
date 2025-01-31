@@ -20,13 +20,17 @@ import useCharacterData from '@/hooks/character/useCharacterData';
 interface HomeBoxProps {
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isBottomSheetOpen: boolean;
 }
 
-const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
+const HomeBox = ({
+  setSelectedCharacter,
+  setIsBottomSheetOpen,
+  isBottomSheetOpen,
+}: HomeBoxProps) => {
   const initialCharacter = 'WOOL';
   const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
   const [isLocationListVisible, setLocationListVisible] = useState(false);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [selectedCharacter, setSelectedCharacterLocal] = useState<
     string | null
   >(initialCharacter);
@@ -83,11 +87,12 @@ const HomeBox = ({ setSelectedCharacter }: HomeBoxProps) => {
           isOpen={isBottomSheetOpen}
           onClose={() => setIsBottomSheetOpen(false)}
           title={`캐릭터 (${ownCharacters.length}/9)`}
+          selectedCharacter={selectedCharacter}
           footerContent={
             <Button
               label="저장하기"
               buttonHeight="default"
-              hidden={!isButtonVisible}
+              buttonType={isButtonVisible ? 'purple' : 'lightGray'}
             />
           }
         >

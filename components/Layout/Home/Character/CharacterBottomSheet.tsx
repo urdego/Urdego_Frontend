@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PanInfo } from 'framer-motion';
 import {
   BottomSheetWrapper,
@@ -7,6 +7,7 @@ import {
   BottomSheetFooter,
   Title,
   StyledMotion,
+  ContentContainer,
 } from './CharacterBottomSheet.styles';
 
 export interface CommonBottomSheetProps {
@@ -15,6 +16,7 @@ export interface CommonBottomSheetProps {
   title?: string;
   children?: React.ReactNode;
   footerContent?: React.ReactNode;
+  selectedCharacter?: string | null; // 현재 선택된 캐릭터 추가
 }
 
 const CharacterBottomSheet: React.FC<CommonBottomSheetProps> = ({
@@ -23,7 +25,17 @@ const CharacterBottomSheet: React.FC<CommonBottomSheetProps> = ({
   title,
   children,
   footerContent,
+  selectedCharacter, // 선택된 캐릭터 prop 추가
 }) => {
+  const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+  // 선택된 캐릭터가 변경될 때 버튼 보이기
+  useEffect(() => {
+    if (selectedCharacter) {
+      setIsButtonVisible(true);
+    }
+  }, [selectedCharacter]);
+
   const handleDragEnd = (event: TouchEvent | MouseEvent, info: PanInfo) => {
     const shouldClose =
       info.velocity.y > 20 || (info.velocity.y >= 0 && info.offset.y > 200);
@@ -42,16 +54,21 @@ const CharacterBottomSheet: React.FC<CommonBottomSheetProps> = ({
         dragConstraints={{ top: 0 }}
         dragElastic={0.2}
         onDragEnd={handleDragEnd}
+        style={{ overflowY: 'auto' }} // 스크롤 활성화
       >
         <BottomSheetHeader>
           <DragHandle />
           {title && <Title>{title}</Title>}
         </BottomSheetHeader>
 
-        {children}
+        <ContentContainer>{children}</ContentContainer>
 
         {footerContent && (
-          <BottomSheetFooter>{footerContent}</BottomSheetFooter>
+          <BottomSheetFooter
+            style={{ display: isButtonVisible ? 'block' : 'none' }}
+          >
+            {footerContent}
+          </BottomSheetFooter>
         )}
       </StyledMotion>
     </BottomSheetWrapper>
