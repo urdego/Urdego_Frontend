@@ -30,22 +30,28 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // useGetInfiniteLocationList 훅 호출
   const {
     locationList: contents,
-    loadMore,
+    fetchLocationList,
     isLoading,
-    isInitialLoad,
+    isLoadMore,
   } = useGetInfiniteLocationList();
 
-  // 초기 로드 및 무한 스크롤 설정
+  const isInitialLoad = contents.length === 0;
+
   useEffect(() => {
     const currentRef = contentRef.current;
+
     const handleScroll = () => {
       if (currentRef) {
         const { scrollTop, scrollHeight, clientHeight } = currentRef;
-        if (scrollHeight - scrollTop <= clientHeight + 1 && !isLoading) {
-          loadMore(); // 추가 데이터 로드
+        // 무한 스크롤 조건: 스크롤이 하단에 도달했으며, 로딩 중이 아니고, 추가 데이터가 있음
+        if (
+          scrollHeight - scrollTop <= clientHeight + 1 &&
+          !isLoading &&
+          isLoadMore
+        ) {
+          fetchLocationList();
         }
       }
     };
@@ -58,7 +64,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         currentRef.removeEventListener('scroll', handleScroll);
       }
     };
-  }, [isLoading, loadMore]);
+  }, [isLoading, isLoadMore, fetchLocationList]);
 
   useEffect(() => {
     if (!isVisible) {
