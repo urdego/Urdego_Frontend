@@ -15,6 +15,7 @@ ${reset}
     font-family: "Pretendard", sans-serif;
     background-color: #e0e0e0;
     color: rgba(26, 28, 28, 1);
+    
   }
 
   html, body, #__next {
