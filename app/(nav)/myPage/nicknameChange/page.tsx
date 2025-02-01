@@ -28,8 +28,9 @@ const NicknameChangePage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
         },
-        body: JSON.stringify({ userId, newNickname: nickname }), // userId 추가
+        body: JSON.stringify({ newNickname: nickname }), // ✅ userId는 헤더로 보내므로 body에서 제거
       });
 
       if (!response.ok) {

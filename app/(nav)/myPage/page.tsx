@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import useUserStore from '@/stores/useUserStore'; // ✅ userId를 클라이언트에서 가져옴
+import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import {
   MyPageWrapper,
@@ -33,10 +33,16 @@ const MyPage = () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(`/api/userInfo?userId=${userId}`);
+        const response = await fetch(`/api/userInfo`, {
+          headers: {
+            'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
+          },
+        });
+
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
+
         const data = await response.json();
         setUserInfo(data); // 유저 데이터 설정
       } catch (error) {

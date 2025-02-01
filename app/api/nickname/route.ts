@@ -4,8 +4,8 @@ import axiosInstance from '@/lib/axios';
 
 export async function POST(request: NextRequest) {
   try {
-    const requestData = await request.json();
-    const { userId, newNickname } = requestData;
+    const userId = request.headers.get('User-Id');
+    const { newNickname } = await request.json();
 
     if (!userId || !newNickname) {
       return NextResponse.json(
