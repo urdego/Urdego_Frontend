@@ -1,13 +1,19 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { LoadingOverlay } from './LoadingSpinner.style';
-import LottieComponent from '@/components/Common/Lottie/LottieComponent';
 import animationData from '@styles/lottie/loading.json';
 
 interface LoadingSpinnerComponentProps {
   isLocationRegister?: boolean;
 }
+
+// 동적 import로 LottieComponent 가져오는 방법으로 변경
+const LottieComponent = dynamic(
+  () => import('@components/Common/Lottie/LottieComponent'),
+  { ssr: false }
+);
 
 const LoadingSpinnerComponent: React.FC<LoadingSpinnerComponentProps> = ({
   isLocationRegister = false,
