@@ -15,9 +15,9 @@ const LottieComponent = dynamic(
   { ssr: false }
 );
 
-const LoadingSpinnerComponent: React.FC<LoadingSpinnerComponentProps> = ({
+const LoadingSpinnerComponent = ({
   isLocationRegister = false,
-}) => {
+}: LoadingSpinnerComponentProps) => {
   return (
     <LoadingOverlay $isLocationRegister={isLocationRegister}>
       <LottieComponent animationData={animationData} />
