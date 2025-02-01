@@ -1,10 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import SnowMan0 from '@/styles/Icon/Character/character-0.svg';
-// import SnowMan1 from '@/styles/Icon/Character/character-1.svg';
-// import SnowMan2 from '@/styles/Icon/Character/character-2.svg';
-// import SnowMan3 from '@/styles/Icon/Character/character-3.svg';
-// import SnowMan4 from '@/styles/Icon/Character/character-4.svg';
+import SnowMan0 from '@/styles/Icon/Character/basic.png';
 
 import {
   Card,

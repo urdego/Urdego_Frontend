@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import Character0 from '@/styles/Icon/Character/character-0.svg';
-import Character1 from '@/styles/Icon/Character/character-1.svg';
-import Character2 from '@/styles/Icon/Character/character-2.svg';
-import Character3 from '@/styles/Icon/Character/character-3.svg';
-import Character4 from '@/styles/Icon/Character/character-4.svg';
-import Character5 from '@/styles/Icon/Character/character-5.svg';
+import Character0 from '@/styles/Icon/Character/basic.png';
+import Character1 from '@/styles/Icon/Character/angular.png';
+import Character2 from '@/styles/Icon/Character/bumphy.png';
+import Character3 from '@/styles/Icon/Character/dot.png';
+import Character4 from '@/styles/Icon/Character/planet.png';
+import Character5 from '@/styles/Icon/Character/sharp.png';
 import HostIcon from '@/styles/Icon/Host.svg';
 
 import {
