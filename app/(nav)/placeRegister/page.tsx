@@ -7,7 +7,9 @@ import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import Button from '@/components/Common/Button/Button';
 import PlusIconSrc from '@styles/Icon/Plus.svg';
 import {
+  BottomLayout,
   ButtonLayout,
+  LottieLayout,
   PlaceLayout,
   PlaceRegisterWrapper,
 } from './PlaceRegister.styles';
@@ -18,6 +20,7 @@ import useControlButtons from '@/hooks/placeRegister/useControlButtons';
 
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 
 const PlaceRegisterPage = () => {
   const searchParams = useSearchParams();
@@ -59,13 +62,18 @@ const PlaceRegisterPage = () => {
               onClick={isInputComplete ? handleAddPlaceList : undefined}
             />
           </PlaceLayout>
-          <ButtonLayout>
-            <Button
-              buttonType={isSubmitReady ? 'purple' : 'gray'}
-              label="작성 완료"
-              onClick={isSubmitReady ? handleUploadFiles : undefined}
-            />
-          </ButtonLayout>
+          <BottomLayout>
+            <LottieLayout>
+              <PlayerTip />
+            </LottieLayout>
+            <ButtonLayout>
+              <Button
+                buttonType={isSubmitReady ? 'purple' : 'gray'}
+                label="작성 완료"
+                onClick={isSubmitReady ? handleUploadFiles : undefined}
+              />
+            </ButtonLayout>
+          </BottomLayout>
         </PlaceRegisterWrapper>
       </PageWrapper>
     </>
