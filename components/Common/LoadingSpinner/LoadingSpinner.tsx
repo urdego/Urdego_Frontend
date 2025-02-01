@@ -11,7 +11,7 @@ interface LoadingSpinnerComponentProps {
 
 // 동적 import로 LottieComponent 가져오는 방법으로 변경
 const LottieComponent = dynamic(
-  () => import('@/components/Common/Lottie/LottieComponent'),
+  () => import('@components/Common/Lottie/LottieComponent'),
   { ssr: false }
 );
 
