@@ -12,7 +12,10 @@ const Model = ({
   characterKey: string;
   isOpen: boolean;
 }) => {
-  const gltf = useLoader(GLTFLoader, `/Character/${characterKey}.glb`);
+  const gltf = useLoader(
+    GLTFLoader,
+    `/Character/${characterKey.toLowerCase()}.glb`
+  );
   const modelRef = useRef<THREE.Object3D | null>(null);
   const isRotatingRef = useRef(true);
   const rotationSpeed = useRef(0.2);
