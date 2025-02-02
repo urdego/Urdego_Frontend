@@ -167,6 +167,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   };
 
   // 파일 전체 정보 조회 로직
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const previewFile = (fileList: File[]) => {
     fileList.forEach((file) => {
       const fileReader = new FileReader();

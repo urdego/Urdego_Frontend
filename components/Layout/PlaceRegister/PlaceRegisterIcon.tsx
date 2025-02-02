@@ -6,7 +6,13 @@ import BlackClearIconSrc from '@styles/Icon/BlackClear.svg';
 import GalleryIconSrc from '@styles/Icon/Gallery.svg';
 import SearchIconSrc from '@styles/Icon/Search.svg';
 
-export const TrashIcon = () => <Image src={DeleteIconSrc} alt="Trash Icon" />;
+interface DeleteIconProps {
+  width?: number;
+}
+
+export const DeleteIcon = ({ width = 14 }: DeleteIconProps) => (
+  <Image src={DeleteIconSrc} width={width} height={width} alt="Trash Icon" />
+);
 
 export const ClearIcon = () => <Image src={ClearIconSrc} alt="Clear Icon" />;
 
