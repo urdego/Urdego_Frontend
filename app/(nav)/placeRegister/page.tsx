@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import TopBar from '@/components/Common/TopBar/TopBar';
@@ -10,6 +10,7 @@ import {
   BottomLayout,
   ButtonLayout,
   LottieLayout,
+  ModalLayout,
   PlaceLayout,
   PlaceRegisterWrapper,
 } from './PlaceRegister.styles';
@@ -21,6 +22,7 @@ import useControlButtons from '@/hooks/placeRegister/useControlButtons';
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import PlayerTip from '@/components/Common/Lottie/PlayerTip';
+import TipModal from '@/components/Common/TipModal/TipModal';
 
 const PlaceRegisterPage = () => {
   const searchParams = useSearchParams();
@@ -40,6 +42,7 @@ const PlaceRegisterPage = () => {
   // store state 불러오는 로직
   const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
+  const [isTipOpen, setIsTipOpen] = useState(false);
 
   return (
     <>
@@ -63,9 +66,15 @@ const PlaceRegisterPage = () => {
             />
           </PlaceLayout>
           <BottomLayout>
-            <LottieLayout>
-              <PlayerTip />
-            </LottieLayout>
+            {isTipOpen ? (
+              <ModalLayout>
+                <TipModal setIsTipOpen={setIsTipOpen} />
+              </ModalLayout>
+            ) : (
+              <LottieLayout onClick={() => setIsTipOpen(true)}>
+                <PlayerTip />
+              </LottieLayout>
+            )}
             <ButtonLayout>
               <Button
                 buttonType={isSubmitReady ? 'purple' : 'gray'}

@@ -28,6 +28,12 @@ export const LottieLayout = styled.div`
 
   margin-right: 16px;
   margin-left: auto;
+
+  cursor: pointer;
+`;
+
+export const ModalLayout = styled.div`
+  padding: 12px 16px;
 `;
 
 export const ButtonLayout = styled.div`
