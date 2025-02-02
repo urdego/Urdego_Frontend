@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
-  const { nickname } = useUserStore(); //TODO: userId로 변경 필요
+  const { userId } = useUserStore();
   const router = useRouter();
 
   const handleUploadFiles = async () => {
@@ -38,7 +38,7 @@ const useUploadFiles = () => {
 
   const handleUploadPartFile = async (place: Place) => {
     const params = new URLSearchParams();
-    params.append('userId', '4');
+    params.append('userId', String(userId));
 
     const formData = new FormData();
 
