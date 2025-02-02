@@ -8,7 +8,6 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
-  openAnalyzer: true,
   compiler: {
     styledComponents: {
       displayName: true, // 개발 중 스타일 컴포넌트의 디버깅 편의성을 높이기 위한 설정
