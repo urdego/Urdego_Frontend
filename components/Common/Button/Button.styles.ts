@@ -4,8 +4,9 @@ import colors from '@styles/color/palette';
 interface StyledButtonProps {
   $buttonType: 'purple' | 'gray' | 'lightGray';
   $buttonSize: 'small' | 'large';
-  $buttonHeight: 'default' | 'short';
+  $buttonHeight: 'default' | 'short' | 'long';
   $styleType: 'whiteBackground' | 'coloredBackground';
+  $iconPosition?: 'left' | 'right';
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -15,12 +16,16 @@ export const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
 
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 16px;
   user-select: none;
   font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.16px;
 
   transition: 0.5s ease;
+  white-space: nowrap;
 
   ${({ $buttonSize }) =>
     $buttonSize === 'small'
@@ -36,9 +41,13 @@ export const StyledButton = styled.button<StyledButtonProps>`
       ? css`
           height: 48px;
         `
-      : css`
-          height: 40px;
-        `}
+      : $buttonHeight === 'long'
+        ? css`
+            height: 64px;
+          `
+        : css`
+            height: 40px;
+          `}
 
   ${({ $styleType, $buttonType }) =>
     $styleType === 'whiteBackground'
@@ -69,6 +78,13 @@ export const StyledButton = styled.button<StyledButtonProps>`
     cursor: not-allowed;
     opacity: 0.7;
   }
+
+  /* 아이콘 위치가 'right'인 경우 아이콘을 오른쪽에 배치(홈 버튼 사용) */
+  ${({ $iconPosition }) =>
+    $iconPosition === 'right' &&
+    css`
+      flex-direction: row-reverse;
+    `}
 `;
 
 export const IconWrapper = styled.span`
@@ -78,11 +94,13 @@ export const IconWrapper = styled.span`
   align-items: center;
 
   margin-right: 8px;
+  margin-left: 4px; /* 아이콘이 오른쪽일 때 간격 */
   vertical-align: middle;
 
   img {
     width: 16px;
     height: 16px;
+    flex-shrink: 0;
     display: inline-block;
   }
 `;

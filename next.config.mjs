@@ -6,9 +6,9 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false, // 개발 중 오류를 줄이기 위해 false 설정 (필요 시 true 변경 가능)
-  swcMinify: true, // SWC 기반 코드 최적화 활성화
-
+  reactStrictMode: false,
+  swcMinify: true,
+  openAnalyzer: true,
   compiler: {
     styledComponents: {
       displayName: true, // 개발 중 스타일 컴포넌트의 디버깅 편의성을 높이기 위한 설정

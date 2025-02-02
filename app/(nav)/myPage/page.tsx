@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import TopBar from '@/components/Common/TopBar/TopBar';
 import { useRouter } from 'next/navigation';
+import useUserStore from '@/stores/useUserStore';
+import TopBar from '@/components/Common/TopBar/TopBar';
 import {
   MyPageWrapper,
   ProfileWrapper,
@@ -23,15 +24,25 @@ const MyPage = () => {
     characterType: '',
   });
 
-  console.log('userInfo:', userInfo);
+  const userId = useUserStore((state) => state.userId);
+
+  console.log('userInfo 마이페이지에서 확인:', userInfo);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
+      if (!userId) return;
+
       try {
-        const response = await fetch('/api/userInfo'); // API 호출
+        const response = await fetch(`/api/userInfo`, {
+          headers: {
+            'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
+          },
+        });
+
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
+
         const data = await response.json();
         setUserInfo(data); // 유저 데이터 설정
       } catch (error) {
@@ -40,7 +51,7 @@ const MyPage = () => {
     };
 
     fetchUserInfo();
-  }, []);
+  }, [userId]);
 
   const handleLogout = () => {
     // 로그아웃 로직
@@ -52,7 +63,6 @@ const MyPage = () => {
       <TopBar NavType="default" label="마이페이지" />
       <MyPageWrapper>
         <ProfileWrapper>
-          {/* 유저 정보 컴포넌트에 추가 될 API 데이터: 프로필 사진, 유저 LV  */}
           <ProfileInfo
             email={userInfo.email}
             nickname={userInfo.nickname}
