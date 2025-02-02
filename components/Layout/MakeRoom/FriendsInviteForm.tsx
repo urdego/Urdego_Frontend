@@ -14,7 +14,7 @@ import {
   CancelButton,
 } from './FriendsInviteForm.styles';
 import toast from 'react-hot-toast';
-import useUserStore from '@stores/useUserStore';
+// import useUserStore from '@stores/useUserStore';
 import InviteButton from '@layout/MakeRoom/InviteButton';
 
 interface UserInfo {
@@ -36,7 +36,7 @@ const FriendsInviteForm = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<UserInfo[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
-  const currentUserNickname = useUserStore((state) => state.nickname);
+  // const currentUserNickname = useUserStore((state) => state.nickname);
 
   const handleUserSelect = (user: UserInfo) => {
     setSelectedUser(user);

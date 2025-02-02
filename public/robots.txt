@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://urdego-fe.vercel.app
+
+# Sitemaps
+Sitemap: https://urdego-fe.vercel.app/sitemap.xml
