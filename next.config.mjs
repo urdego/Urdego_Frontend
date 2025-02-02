@@ -2,20 +2,25 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-  openAnalyzer: false,
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-  openAnalyzer: true,
+  reactStrictMode: false, // 개발 중 오류를 줄이기 위해 false 설정 (필요 시 true 변경 가능)
+  swcMinify: true, // SWC 기반 코드 최적화 활성화
+
   compiler: {
     styledComponents: {
-      displayName: true,
-      ssr: true,
+      displayName: true, // 개발 중 스타일 컴포넌트의 디버깅 편의성을 높이기 위한 설정
+      ssr: true, // 서버사이드 렌더링을 위해 true 유지
     },
   },
+
+  webpack: (config) => {
+    config.cache = false; // ✅ Webpack 캐시 문제 해결 (필요 시 활성화)
+    return config;
+  },
+
   async rewrites() {
     return [
       {
@@ -28,8 +33,9 @@ const nextConfig = {
       },
     ];
   },
+
   images: {
-    domains: ['urdego.site'],
+    domains: ['urdego.site'], // ✅ 외부 이미지 사용을 위해 허용할 도메인 추가
   },
 };
 
