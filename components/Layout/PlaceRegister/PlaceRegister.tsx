@@ -1,7 +1,7 @@
 import PlacePreview from './PlacePreview';
 import PlaceInput from './PlaceInput';
 import PlaceSearchButton from './PlaceSearchButton';
-import { TrashIcon } from './PlaceRegisterIcon';
+import { DeleteIcon } from './PlaceRegisterIcon';
 import {
   PlaceContentResetButton,
   PlaceRegistertext,
@@ -30,7 +30,7 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
         <div>{title}</div>
         {index !== 0 && (
           <PlaceContentResetButton onClick={handlePlaceRemove}>
-            <TrashIcon />
+            <DeleteIcon />
           </PlaceContentResetButton>
         )}
       </PlaceRegistertext>
