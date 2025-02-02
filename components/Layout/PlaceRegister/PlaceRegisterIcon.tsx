@@ -11,7 +11,7 @@ interface DeleteIconProps {
 }
 
 export const DeleteIcon = ({ width = 14 }: DeleteIconProps) => (
-  <Image src={DeleteIconSrc} width={width} alt="Trash Icon" />
+  <Image src={DeleteIconSrc} width={width} height={width} alt="Trash Icon" />
 );
 
 export const ClearIcon = () => <Image src={ClearIconSrc} alt="Clear Icon" />;
