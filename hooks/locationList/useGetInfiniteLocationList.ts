@@ -35,11 +35,9 @@ const useGetInfiniteLocationList = () => {
   const [isLoadMore, setIsLoadMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const { userId } = useUserStore(); //TODO: 사용하도록 변경
+  const { userId } = useUserStore();
 
   const fetchLocationList = async () => {
-    const userId = 2; //! test를 위한 용도
-
     setIsLoading(true);
 
     const params = new URLSearchParams();

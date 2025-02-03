@@ -1,28 +1,26 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import LoadingSpinnerGif from '@/styles/Icon/LoadingSpinner.gif';
-import { LoadingOverlay, SpinnerWrapper } from './LoadingSpinner.style';
+import dynamic from 'next/dynamic';
+import { LoadingOverlay } from './LoadingSpinner.style';
+import animationData from '@styles/lottie/loading.json';
 
 interface LoadingSpinnerComponentProps {
   isLocationRegister?: boolean;
 }
 
-const LoadingSpinnerComponent: React.FC<LoadingSpinnerComponentProps> = ({
+// 동적 import로 LottieComponent 가져오는 방법으로 변경
+const LottieComponent = dynamic(
+  () => import('@components/Common/Lottie/LottieComponent'),
+  { ssr: false }
+);
+
+const LoadingSpinnerComponent = ({
   isLocationRegister = false,
-}) => {
+}: LoadingSpinnerComponentProps) => {
   return (
     <LoadingOverlay $isLocationRegister={isLocationRegister}>
-      <SpinnerWrapper>
-        <Image
-          src={LoadingSpinnerGif}
-          alt="로딩 중..."
-          width={185}
-          height={185}
-          loading="lazy"
-        />
-      </SpinnerWrapper>
+      <LottieComponent animationData={animationData} />
     </LoadingOverlay>
   );
 };
