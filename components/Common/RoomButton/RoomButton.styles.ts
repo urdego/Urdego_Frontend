@@ -44,7 +44,7 @@ export const Participant = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 3.5px;
   width: 44px;
 
   color: ${colors.etc.white};
