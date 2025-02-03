@@ -1,6 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://urdego-fe.vercel.app', // 배포된 사이트 도메인
+  siteUrl: 'https://urdego.vercel.app', // 배포된 사이트 도메인
+
   generateRobotsTxt: true, // robots.txt 자동 생성
   sitemapSize: 5000, // 한 개의 sitemap에 포함될 최대 URL 수
   changefreq: 'daily', // 페이지 변경 빈도
@@ -12,6 +13,6 @@ module.exports = {
         allow: '/',
       },
     ],
-    additionalSitemaps: ['https://urdego-fe.vercel.app/sitemap.xml'],
+    additionalSitemaps: ['https://urdego.vercel.app/sitemap.xml'],
   },
 };
