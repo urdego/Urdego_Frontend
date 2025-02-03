@@ -2,27 +2,27 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import RoomButton from '@/components/Common/RoomButton/RoomButton';
 import { PageWrapper } from '@/app/commonPage.styles';
-import { RoomButtonGrid, ListTitle, SubTitle } from './groupList.styles';
-import MakeRoom from '@/components/Common/MakeRoom/MakeRoom';
+import { RoomButtonGrid, ListTitle, SubTitle } from './waitingRoomList.styles';
+import { RefreshIcon } from '@/components/Common/RoomButton/WaitingRoomListIcon';
 
-const GroupList = () => {
+const WaitingRoomList = () => {
   const roomButtons = Array.from({ length: 20 }, (_, index) => (
     <RoomButton
       key={index}
       title={`방제목 ${index + 1}`}
-      hostUser="유저명"
-      groupMemberCount={3}
+      round={1}
+      currMemberCount={3}
       maxMemberCount={8}
     />
   ));
 
   return (
     <>
-      <TopBar NavType="other" label="그룹 리스트" />
+      <TopBar NavType="default" label="대기방" />
       <PageWrapper>
         <SubTitle>
-          <ListTitle>내가 속한 그룹</ListTitle>
-          <MakeRoom />
+          <ListTitle>참여 가능한 방</ListTitle>
+          <RefreshIcon onClick={() => alert('OK')} />
         </SubTitle>
         <RoomButtonGrid>{roomButtons}</RoomButtonGrid>
       </PageWrapper>
@@ -30,4 +30,4 @@ const GroupList = () => {
   );
 };
 
-export default GroupList;
+export default WaitingRoomList;
