@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axiosInstance from '@/lib/axios';
 import Image from 'next/image';
 import {
@@ -20,12 +20,14 @@ import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 
 interface HomeBoxProps {
+  selectedCharacter: string | null;
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isBottomSheetOpen: boolean;
 }
 
 const HomeBox = ({
+  selectedCharacter,
   setSelectedCharacter,
   setIsBottomSheetOpen,
   isBottomSheetOpen,
@@ -39,23 +41,6 @@ const HomeBox = ({
 
   const characters = useCharacterData({ ownCharacters });
   const userId = useUserStore((state) => state.userId);
-
-  // API로 캐릭터 정보 가져오기
-  useEffect(() => {
-    const fetchUserCharacter = async () => {
-      try {
-        const response = await axiosInstance.get('/api/character');
-        const characterType = response.data.characterType;
-        setLocalSelectedCharacter(characterType);
-        setSelectedCharacter(characterType);
-      } catch (error) {
-        console.error('캐릭터 정보 조회 에러:', error);
-        setLocalSelectedCharacter('BASIC');
-        setSelectedCharacter('BASIC');
-      }
-    };
-    fetchUserCharacter();
-  }, [setSelectedCharacter]);
 
   // 캐릭터 클릭 처리
   const handleCharacterClick = (key: string) => {
@@ -145,7 +130,7 @@ const HomeBox = ({
               <GridItem
                 key={character.key}
                 onClick={() => handleCharacterClick(character.key)}
-                $isSelected={localSelectedCharacter === character.key}
+                $isSelected={selectedCharacter === character.key}
               >
                 <Image src={character.displayImage} alt={character.key} />
               </GridItem>
