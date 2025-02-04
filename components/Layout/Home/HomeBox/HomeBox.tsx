@@ -18,6 +18,7 @@ import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBo
 import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
+import { SuccessToast } from '../Character/SuccessToast';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -77,6 +78,7 @@ const HomeBox = ({
       });
 
       if (response.status === 200) {
+        SuccessToast({ message: '변신 성공!' });
         console.log('캐릭터 저장 성공:', response.data);
         setIsBottomSheetOpen(false);
       } else {
