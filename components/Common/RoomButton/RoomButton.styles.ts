@@ -1,11 +1,18 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
+import { StaticImageData } from 'next/image';
 
-export const RoomButtonWrapper = styled.div`
+export const RoomButtonWrapper = styled.div<{
+  $hostCharacter: StaticImageData;
+}>`
   width: 100%;
   height: 120px;
   border-radius: 12px;
-  background-color: skyblue;
+  background-color: ${colors.etc.white};
+  background-image: url(${(props) => props.$hostCharacter.src});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   padding: 12px 12px 16px 12px;
 
   display: flex;
@@ -25,7 +32,7 @@ export const RoomButtonContainer = styled.div`
   gap: 4px;
 `;
 
-export const Round = styled.div<{ round: number }>`
+export const Round = styled.div<{ $round: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,7 +42,11 @@ export const Round = styled.div<{ round: number }>`
 
   color: ${colors.etc.white};
   background-color: ${(props) =>
-    props.round === 3 ? '#00b7ff' : props.round === 2 ? '#42C700' : '#FFBF00'};
+    props.$round === 3
+      ? '#00b7ff'
+      : props.$round === 2
+        ? '#42C700'
+        : '#FFBF00'};
   backdrop-filter: blur(2px);
 `;
 
