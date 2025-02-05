@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import SnowMan0 from '@/styles/Icon/Character/basic.png';
+import Charac from '@/styles/Icon/Character/basic.png';
 
 import {
   Card,
@@ -34,7 +34,7 @@ const PositionCard = ({
             <Level>Lv.{level}</Level>
             <Username>{username}</Username>
             <Character>
-              <Image src={SnowMan0} alt="snowman" />
+              <Image src={Charac} alt="snowman" width={83} height={83} />
             </Character>
             {isHost ? (
               <HostLabel $isHost={true}>방장</HostLabel>

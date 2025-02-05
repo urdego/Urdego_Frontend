@@ -50,23 +50,15 @@ export const Username = styled.div`
   letter-spacing: -0.12px;
   color: ${colors.etc.black};
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 `;
 
 export const Character = styled.div`
   flex: 1;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
   position: relative;
-
-  img {
-    position: absolute;
-    right: 0;
-    left: -52px;
-    width: 260%;
-    object-fit: contain;
-  }
 `;
 
 export const HostLabel = styled.div<{ $isHost?: boolean }>`
