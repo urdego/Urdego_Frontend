@@ -12,7 +12,7 @@ export const RoomButtonWrapper = styled.div<{
   background-image: url(${(props) => props.$hostCharacter.src});
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: right bottom;
   padding: 12px 12px 16px 12px;
 
   display: flex;
