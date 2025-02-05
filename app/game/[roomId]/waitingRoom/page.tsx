@@ -2,10 +2,10 @@
 
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import Button from '@/components/Common/Button/Button';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
 import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
 import ContentsBox from '@/styles/Icon/ContentsBox.png';
+import WButton from '@/components/Layout/WaitingRoom/WButton';
 // import { useUserStatus } from '@/hooks/inGame/useUserStatus';
 // import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
 // import { useGameStart } from '@/hooks/inGame/useGameStart';
@@ -62,15 +62,16 @@ const WaitingRoom = () => {
           )}
         </UserList>
         <Footer>
-          {/* 왼쪽 - 아이콘 버튼 */}
-          <Button
+          {/* 왼쪽 - 컨텐츠 버튼 */}
+          <WButton
             buttonType="icon"
             icon={ContentsBox}
-            onClick={() => console.log('도감 버튼 클릭')}
+            onClick={() => console.log('컨텐츠 버튼 클릭')}
           />
-          {/* 오른쪽 - 대기방용 버튼 */}
-          <Button
-            buttonType="forWaitingRoom"
+
+          {/* 오른쪽 - 준비 완료 버튼 */}
+          <WButton
+            buttonType="default"
             label="준비완료"
             onClick={() => console.log('준비 버튼 클릭')}
           />
