@@ -1,5 +1,5 @@
+import colors from '@styles/color/palette';
 import styled from 'styled-components';
-import colors from '@/styles/color/palette';
 import AddIcon from '@/styles/Icon/Game/Add';
 import { css } from 'styled-components';
 
@@ -36,10 +36,15 @@ export const Level = styled.div`
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%;
-  letter-spacing: -0.12px;
-  color: ${colors.etc.black};
+  color: ${colors.purple[50]};
+  border-radius: 4px;
+  background: ${colors.purple[95]};
+  height: 20px;
+  padding: 0 10px;
   text-align: center;
+  line-height: 20px;
+  margin: 0 auto;
+  margin-bottom: 3px;
 `;
 
 export const Username = styled.div`
@@ -50,7 +55,6 @@ export const Username = styled.div`
   letter-spacing: -0.12px;
   color: ${colors.etc.black};
   text-align: center;
-  margin-bottom: 5px;
 `;
 
 export const Character = styled.div`

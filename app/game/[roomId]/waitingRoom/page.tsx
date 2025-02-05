@@ -20,7 +20,7 @@ const WaitingRoom = () => {
       { id: 2, name: '유저2', isHost: false, isReady: true },
       { id: 3, name: '유저3', isHost: false, isReady: false },
       { id: 4, name: '유저4', isHost: false, isReady: false },
-      { id: 5, name: '유저5', isHost: false, isReady: false },
+      { id: 5, name: '유저5', isHost: false, isReady: true },
       // { id: 6, name: '유저6', isHost: false, isReady: false },
     ],
   };
