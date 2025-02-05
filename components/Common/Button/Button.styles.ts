@@ -87,7 +87,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
       width: 48px;
       height: 48px;
       border-radius: 8px;
-      border: 1px solid ${colors.purple[50]};
+      border: 2px solid ${colors.purple[50]};
       padding: 8px;
       display: flex;
       align-items: center;
