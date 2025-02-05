@@ -43,7 +43,7 @@ export const Round = styled.div<{ $round: number }>`
   color: ${colors.etc.white};
   background-color: ${(props) =>
     props.$round === 3
-      ? '#00b7ff'
+      ? '#AE6B00'
       : props.$round === 2
         ? '#42C700'
         : '#FFBF00'};
