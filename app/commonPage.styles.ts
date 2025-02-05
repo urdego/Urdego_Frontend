@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BackgroundImage from '@styles/Image/WaitingRoom/BackgroundImageL.png';
+import BackgroundImage from '@styles/Image/WaitingRoom/waiting-r-1x.png';
 
 export const PageWrapper = styled.div`
   width: 100%;
