@@ -48,4 +48,5 @@ export const Footer = styled.footer`
   background-color: ${colors.etc.white};
   box-shadow: 0px -4px 24px rgba(0, 0, 0, 0.1);
   gap: 16px;
+  z-index: 101;
 `;

@@ -11,7 +11,7 @@ export const BackgroundOverlay = styled(motion.div)`
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 100;
   display: flex;
   justify-content: center;
 `;
@@ -25,7 +25,8 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   background: ${colors.etc.white};
   border-radius: 4px 4px 0 0;
   padding: 12px 16px;
-  z-index: 1000;
+  z-index: 100;
+  bottom: 70px;
   overflow: hidden;
 `;
 
