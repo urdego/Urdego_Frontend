@@ -5,6 +5,7 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import Button from '@/components/Common/Button/Button';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
 import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
+import ContentsBox from '@/styles/Icon/ContentsBox.png';
 // import { useUserStatus } from '@/hooks/inGame/useUserStatus';
 // import { useReadyStatus } from '@/hooks/inGame/useReadyStatus';
 // import { useGameStart } from '@/hooks/inGame/useGameStart';
@@ -61,27 +62,18 @@ const WaitingRoom = () => {
           )}
         </UserList>
         <Footer>
-          {isManager ? (
-            <Button
-              buttonType={
-                allPlayersReady && users.length >= 2 ? 'purple' : 'gray'
-              }
-              buttonSize="large"
-              buttonHeight="default"
-              label={users.length >= 2 ? '게임시작' : '게임시작 대기중...'}
-              onClick={startGame}
-              styleType="coloredBackground"
-            />
-          ) : (
-            <Button
-              buttonType={currentUser?.isReady ? 'gray' : 'purple'}
-              buttonSize="large"
-              buttonHeight="default"
-              label={currentUser?.isReady ? '준비완료' : '준비하기'}
-              onClick={toggleReady}
-              styleType="coloredBackground"
-            />
-          )}
+          {/* 왼쪽 - 아이콘 버튼 */}
+          <Button
+            buttonType="icon"
+            icon={ContentsBox}
+            onClick={() => console.log('도감 버튼 클릭')}
+          />
+          {/* 오른쪽 - 대기방용 버튼 */}
+          <Button
+            buttonType="forWaitingRoom"
+            label="준비완료"
+            onClick={() => console.log('준비 버튼 클릭')}
+          />
         </Footer>
       </WaitingWrapper>
     </>
