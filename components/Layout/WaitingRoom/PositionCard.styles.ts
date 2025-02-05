@@ -53,7 +53,7 @@ export const Username = styled.div`
   font-weight: 700;
   line-height: 150%;
   letter-spacing: -0.12px;
-  color: ${colors.etc.black};
+  color: ${colors.gray[50]};
   text-align: center;
 `;
 
