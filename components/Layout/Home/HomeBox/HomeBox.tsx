@@ -18,24 +18,26 @@ import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBo
 import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
+import { SuccessToast } from '../Character/SuccessToast';
 
 interface HomeBoxProps {
+  selectedCharacter: string | null;
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string | null>>;
   setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isBottomSheetOpen: boolean;
 }
 
 const HomeBox = ({
+  selectedCharacter,
   setSelectedCharacter,
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
-  const initialCharacter = 'WOOL';
   const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
   const [isLocationListVisible, setLocationListVisible] = useState(false);
-  const [selectedCharacter, setSelectedCharacterLocal] = useState<
+  const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
-  >(initialCharacter);
+  >('BASIC');
   const [isButtonVisible, setButtonVisible] = useState(false);
 
   const characters = useCharacterData({ ownCharacters });
@@ -44,9 +46,9 @@ const HomeBox = ({
   // 캐릭터 클릭 처리
   const handleCharacterClick = (key: string) => {
     if (ownCharacters.includes(key)) {
-      setSelectedCharacterLocal(key);
+      setLocalSelectedCharacter(key);
       setSelectedCharacter(key);
-      setButtonVisible(true); // 캐릭터 선택 후 버튼 보이기
+      setButtonVisible(true);
     } else {
       console.error('보유하지 않은 캐릭터 선택 불가! ', key);
     }
@@ -58,29 +60,27 @@ const HomeBox = ({
     setButtonVisible(false);
   };
 
+  // 위치 목록 토글
   const toggleLocationList = () => {
     setLocationListVisible((prev) => !prev);
   };
 
-  // 저장하기 버튼 클릭 처리
+  // 캐릭터 저장 처리
   const handleSaveClick = async () => {
-    if (!selectedCharacter) {
-      console.error('선택된 캐릭터가 없습니다.');
-      return;
-    }
-
-    if (!userId) {
-      console.error('유저 ID를 찾을 수 없습니다.');
+    if (!localSelectedCharacter || !userId) {
+      console.error('필수 정보가 없습니다.');
       return;
     }
 
     try {
-      const response = await axiosInstance.post(`/api/character`, {
-        characterName: selectedCharacter,
+      const response = await axiosInstance.post('/api/character', {
+        characterName: localSelectedCharacter,
       });
 
       if (response.status === 200) {
+        SuccessToast({ message: '변신 성공!' });
         console.log('캐릭터 저장 성공:', response.data);
+        setIsBottomSheetOpen(false);
       } else {
         console.error('캐릭터 저장 실패:', response.data);
       }
@@ -107,7 +107,7 @@ const HomeBox = ({
         <CharacterSelect onClick={handleCharacterSelect}>
           <Image
             src={CharacterSelectIcon}
-            alt="CharacterSelectIcon Icon"
+            alt="Character Select Icon"
             width={24}
             height={24}
           />
@@ -117,7 +117,7 @@ const HomeBox = ({
           isOpen={isBottomSheetOpen}
           onClose={() => setIsBottomSheetOpen(false)}
           title={`캐릭터 (${ownCharacters.length}/9)`}
-          selectedCharacter={selectedCharacter}
+          selectedCharacter={localSelectedCharacter}
           footerContent={
             <Button
               label="저장하기"
