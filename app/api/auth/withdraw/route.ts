@@ -12,13 +12,19 @@ export async function refreshKakaoToken(refreshToken: string) {
 
   const response = await fetch(KAKAO_TOKEN_URI, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+    },
     body: new URLSearchParams({
       grant_type: 'refresh_token',
       client_id: process.env.KAKAO_CLIENT_ID!,
       refresh_token: refreshToken,
+      client_secret: process.env.KAKAO_CLIENT_SECRET!, // (+ client_secret 활성화했기에 추가)
     }),
   });
+
+  const tokenData = await response.json();
+  console.log('카카오 토큰 갱신 응답:', tokenData);
 
   if (!response.ok) {
     console.error(
@@ -29,7 +35,7 @@ export async function refreshKakaoToken(refreshToken: string) {
     throw new Error('카카오 토큰 갱신 실패');
   }
 
-  return response.json(); // 새로운 access_token 반환
+  return tokenData; // access_token 및 refresh_token 반환
 }
 
 export async function POST(req: NextRequest) {

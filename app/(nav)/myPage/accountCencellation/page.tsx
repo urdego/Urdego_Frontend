@@ -120,8 +120,11 @@ const AccountCancellation = () => {
         throw new Error('회원 탈퇴 실패');
       }
 
-      // 모든 처리가 완료된 후 로그아웃
-      signOut({ callbackUrl: '/' });
+      // signOut의 콜백으로 리다이렉션 처리
+      await signOut({
+        callbackUrl: '/',
+        redirect: true,
+      });
     } catch (error) {
       console.error('회원 탈퇴 중 에러:', error);
     }
