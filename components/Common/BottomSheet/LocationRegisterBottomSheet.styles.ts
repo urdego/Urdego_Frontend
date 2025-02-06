@@ -15,21 +15,25 @@ export const ContentHeader = styled.div`
   padding: 8px 0;
 `;
 
-export const ContentContainer = styled.div``;
-
 export const ButtonLayout = styled.div`
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
 
   width: 100%;
+  min-width: 340px;
+  max-width: 430px;
+  margin: 0 auto;
 
-  bottom: 80px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 16px;
 
   box-shadow: 0px -4px 24px 0px rgba(0, 0, 0, 0.1);
   background: ${colors.etc.white};
+
+  z-index: 10;
 `;
