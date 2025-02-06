@@ -71,6 +71,12 @@ export const HeaderHandler = styled.div`
 `;
 
 export const ContentHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 8px 0;
   color: #000;
   font-size: 16px;
   font-style: normal;
