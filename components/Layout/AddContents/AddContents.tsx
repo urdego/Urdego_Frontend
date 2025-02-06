@@ -27,7 +27,7 @@ interface AddContentsProps {
 
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -38,6 +38,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   } = useGetInfiniteLocationList();
 
   const isInitialLoad = contents.length === 0;
+  const isFetched = useRef(false);
 
   useEffect(() => {
     const currentRef = contentRef.current;
@@ -45,7 +46,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     const handleScroll = () => {
       if (currentRef) {
         const { scrollTop, scrollHeight, clientHeight } = currentRef;
-        // 무한 스크롤 조건: 스크롤이 하단에 도달했으며, 로딩 중이 아니고, 추가 데이터가 있음
         if (
           scrollHeight - scrollTop <= clientHeight + 1 &&
           !isLoading &&
@@ -68,9 +68,16 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
 
   useEffect(() => {
     if (!isVisible) {
-      setSelectedLocations([]); // 선택 항목 초기화
+      setSelectedLocations([]);
     }
   }, [isVisible]);
+
+  useEffect(() => {
+    if (isVisible && contents.length === 0 && !isFetched.current) {
+      isFetched.current = true;
+      fetchLocationList();
+    }
+  }, [isVisible, contents.length, fetchLocationList]);
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -78,13 +85,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     }
   };
 
-  const handleLocationSelect = (name: string) => {
-    if (selectedLocations.includes(name)) {
-      const newLocations = selectedLocations.filter((i) => i !== name);
+  const handleLocationSelect = (id: number) => {
+    if (selectedLocations.includes(id)) {
+      const newLocations = selectedLocations.filter((i) => i !== id);
       setSelectedLocations(newLocations);
     } else {
       if (selectedLocations.length < 5) {
-        setSelectedLocations([...selectedLocations, name]);
+        setSelectedLocations([...selectedLocations, id]);
       }
     }
   };
@@ -93,29 +100,29 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     setSelectedLocations([]);
   };
 
-  const getLocationNumber = (name: string) => {
-    return selectedLocations.indexOf(name) + 1;
+  const getLocationNumber = (id: number) => {
+    return selectedLocations.indexOf(id) + 1;
   };
 
   const renderGridItems = () => {
     return contents.map((content) => (
       <GridItem
-        key={content.contentName}
-        onClick={() => handleLocationSelect(content.contentName)}
+        key={content.contentId}
+        onClick={() => handleLocationSelect(content.contentId)}
       >
         <Image
           src={content.url}
           alt={content.contentName}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ objectFit: 'cover' }}
         />
+
         <SelectIndicator
-          selected={selectedLocations.includes(content.contentName)}
+          selected={selectedLocations.includes(content.contentId)}
         >
-          {selectedLocations.includes(content.contentName) && (
-            <SelectNumber>
-              {getLocationNumber(content.contentName)}
-            </SelectNumber>
+          {selectedLocations.includes(content.contentId) && (
+            <SelectNumber>{getLocationNumber(content.contentId)}</SelectNumber>
           )}
         </SelectIndicator>
         <LocationName>{content.contentName}</LocationName>
