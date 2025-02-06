@@ -15,6 +15,7 @@ import {
   HeaderTitle,
   Level,
   SearchBarWrapper,
+  UserId,
 } from '@components/Layout/InviteUser/InviteUser.styles';
 import Image from 'next/image';
 import SearchIcon from '@styles/Icon/search-btn.svg';
@@ -27,11 +28,11 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
   const [isExpand, setIsExpand] = useState(false);
 
   const [users, setUsers] = useState([
-    { id: 1, level: 5, status: '게임중', invited: false },
-    { id: 2, level: 5, status: '게임중', invited: false },
-    { id: 3, level: 5, status: '온라인', invited: false },
-    { id: 4, level: 5, status: '온라인', invited: false },
-    { id: 5, level: 5, status: '오프라인', invited: true },
+    { id: '셉셉이', level: 5, status: '게임중', invited: false },
+    { id: '날라리', level: 5, status: '게임중', invited: false },
+    { id: '프론트맨', level: 5, status: '온라인', invited: false },
+    { id: '계란맨', level: 5, status: '온라인', invited: false },
+    { id: '누구신지', level: 5, status: '오프라인', invited: true },
   ]);
 
   // 클릭 이벤트가 백그라운드에만 적용되도록 수정
@@ -41,7 +42,7 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
     }
   };
 
-  const handleInvite = (userId: number) => {
+  const handleInvite = (userId: string) => {
     setUsers(
       users.map((user) =>
         user.id === userId ? { ...user, invited: !user.invited } : user
@@ -84,8 +85,9 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
               <UserItem key={user.id}>
                 <UserAvatar />
                 <UserInfo>
-                  <Level>LV.{user.level} 친구</Level>
-                  <UserStatus $status={user.status}>{user.status}</UserStatus>
+                  <UserId>{user.id}</UserId>
+                  <Level>LV.{user.level}</Level>
+                  {/* <UserStatus $status={user.status}>{user.status}</UserStatus> */}
                 </UserInfo>
                 <InviteButton
                   $invited={user.invited}
