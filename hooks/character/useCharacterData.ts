@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import LockIcon from '@/styles/Icon/Home/Lock.svg';
 import BasicCharacter from '@/styles/Icon/Character/basic.png';
 import AngularCharacter from '@/styles/Icon/Character/angular.png';
-import BumpyCharacter from '@/styles/Icon/Character/bumpy.png';
+import BumphyCharacter from '@/styles/Icon/Character/bumphy.png';
 import DotCharacter from '@/styles/Icon/Character/dot.png';
 import PlanetCharacter from '@/styles/Icon/Character/planet.png';
 import SharpCharacter from '@/styles/Icon/Character/sharp.png';
@@ -13,7 +13,7 @@ import WoolCharacter from '@/styles/Icon/Character/wool.png';
 const CHARACTER_LIST = [
   { key: 'BASIC', image: BasicCharacter },
   { key: 'ANGULAR', image: AngularCharacter },
-  { key: 'BUMPY', image: BumpyCharacter },
+  { key: 'BUMPHY', image: BumphyCharacter },
   { key: 'DOT', image: DotCharacter },
   { key: 'PLANET', image: PlanetCharacter },
   { key: 'SHARP', image: SharpCharacter },

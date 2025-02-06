@@ -6,13 +6,12 @@ import Button from '@/components/Common/Button/Button';
 import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useState } from 'react';
+import { useCharacterState } from '@/hooks/character/useCharacterState';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  // 디폴트 값 'BASIC'
-  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(
-    'WOOL'
-  );
+  const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
+    useCharacterState({});
 
   return (
     <>
@@ -25,6 +24,7 @@ const Home = () => {
         </TopWrapper>
         <BottomWrapper>
           <HomeBox
+            selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             setIsBottomSheetOpen={setIsBottomSheetOpen}
             isBottomSheetOpen={isBottomSheetOpen}
