@@ -21,7 +21,7 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   bottom: 0;
   width: 100%;
   max-width: 430px;
-  height: 50vh;
+  height: 75vh;
   background: ${colors.etc.white};
   border-radius: 4px 4px 0 0;
   padding: 12px 16px;
@@ -42,7 +42,7 @@ export const HeaderHandler = styled.div`
   height: 4px;
   background: ${colors.gray[50]};
   border-radius: 100px;
-  margin: 8px 0;
+  margin: 3px 0;
 `;
 
 export const HeaderTitle = styled.h2`
@@ -56,8 +56,7 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin: 8px 0;
 `;
 
 export const ContentWrapper = styled.div`

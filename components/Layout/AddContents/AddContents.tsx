@@ -1,4 +1,4 @@
-import { useState, ReactNode, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -17,17 +17,18 @@ import {
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
+import SearchBar from '@/components/Common/SearchBar/SearchBar';
 
 interface AddContentsProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
-  children?: ReactNode;
 }
 
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState(''); // ✅ 검색어 상태 유지
   const contentRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -67,12 +68,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   }, [isLoading, isLoadMore, fetchLocationList]);
 
   useEffect(() => {
-    if (!isVisible) {
-      setSelectedLocations([]);
-    }
-  }, [isVisible]);
-
-  useEffect(() => {
     if (isVisible && contents.length === 0 && !isFetched.current) {
       isFetched.current = true;
       fetchLocationList();
@@ -81,19 +76,19 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      setIsExpand(false);
       setIsVisible(false);
     }
   };
 
   const handleLocationSelect = (id: number) => {
-    if (selectedLocations.includes(id)) {
-      const newLocations = selectedLocations.filter((i) => i !== id);
-      setSelectedLocations(newLocations);
-    } else {
-      if (selectedLocations.length < 5) {
-        setSelectedLocations([...selectedLocations, id]);
-      }
-    }
+    setSelectedLocations((prev) =>
+      prev.includes(id)
+        ? prev.filter((i) => i !== id)
+        : prev.length < 5
+          ? [...prev, id]
+          : prev
+    );
   };
 
   const handleAllCancel = () => {
@@ -104,8 +99,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     return selectedLocations.indexOf(id) + 1;
   };
 
+  // 검색어를 적용한 결과 목록
+  const filteredContents = contents.filter((content) =>
+    content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const renderGridItems = () => {
-    return contents.map((content) => (
+    return filteredContents.map((content) => (
       <GridItem
         key={content.contentId}
         onClick={() => handleLocationSelect(content.contentId)}
@@ -117,7 +117,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
           sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: 'cover' }}
         />
-
         <SelectIndicator
           selected={selectedLocations.includes(content.contentId)}
         >
@@ -161,6 +160,8 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
               <CancelButtonText>전체 해제</CancelButtonText>
             </AllCancelButton>
           </TitleContainer>
+          {/* ✅ 검색어를 유지한 상태에서 검색 가능 */}
+          <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
         </HeaderWrapper>
         <ContentWrapper ref={contentRef}>
           <GridContainer>

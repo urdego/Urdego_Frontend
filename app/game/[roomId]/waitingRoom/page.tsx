@@ -61,7 +61,7 @@ const WaitingRoom = () => {
           <WButton
             buttonType="icon"
             icon={ContentsBox}
-            onClick={() => setIsAddContentsVisible(true)}
+            onClick={() => setIsAddContentsVisible((prev) => !prev)}
           />
 
           {/* 오른쪽 - 준비 완료 버튼 */}
@@ -77,7 +77,7 @@ const WaitingRoom = () => {
       <AddContents
         isVisible={isAddContentsVisible}
         setIsVisible={setIsAddContentsVisible}
-        title="컨텐츠 선택"
+        title="장소 선택(최대 5개)"
       />
     </>
   );

@@ -42,7 +42,7 @@ export const StyledWButton = styled.button<StyledWButtonProps>`
   ${({ $buttonType }) =>
     $buttonType === 'icon' &&
     css`
-      width: 48px;
+      width: 53px;
       height: 48px;
       border-radius: 8px;
       background-color: ${colors.etc.white};
@@ -61,7 +61,7 @@ export const IconWrapper = styled.span<{ $buttonType?: string }>`
   justify-content: center;
   align-items: center;
   margin-right: ${({ $buttonType }) => ($buttonType === 'icon' ? '0' : '8px')};
-  margin-left: ${({ $buttonType }) => ($buttonType === 'icon' ? '0' : '4px')};
+  margin-left: ${({ $buttonType }) => ($buttonType === 'icon' ? '0' : '8px')};
 
   img {
     width: ${({ $buttonType }) => ($buttonType === 'icon' ? '24px' : '20px')};
