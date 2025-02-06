@@ -7,7 +7,7 @@ export const Card = styled.div<{ $isEmpty?: boolean }>`
   width: 104px;
   min-height: 172px;
   background-color: ${({ $isEmpty }) =>
-    $isEmpty ? colors.etc.card : colors.etc.card};
+    $isEmpty ? colors.etc.emptyCard : colors.etc.card};
   border: ${({ $isEmpty }) =>
     $isEmpty ? `2px solid ${colors.etc.white}` : 'none'};
   border-radius: 12px;
