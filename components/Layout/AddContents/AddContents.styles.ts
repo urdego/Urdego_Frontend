@@ -56,7 +56,7 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 8px 0;
+  margin: 5px 0;
 `;
 
 export const ContentWrapper = styled.div`
@@ -71,6 +71,7 @@ export const ContentWrapper = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+  padding: 8px 0;
 `;
 
 export const AllCancelButton = styled.button`
