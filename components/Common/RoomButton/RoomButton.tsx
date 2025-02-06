@@ -4,9 +4,9 @@ import {
   RoomButtonWrapper,
   Round,
 } from './RoomButton.styles';
-import { PersonIcon } from './WaitingRoomListIcon';
+import { CharacterIcon, PersonIcon } from './WaitingRoomListIcon';
 
-import BasicIcon from '@styles/Icon/waitingRoomList/basic.png';
+import BasicIcon from '@styles/Icon/Character/basic.png';
 import AngularIcon from '@styles/Icon/waitingRoomList/angular.png';
 import BumpyIcon from '@styles/Icon/waitingRoomList/bumpy.png';
 import DotIcon from '@styles/Icon/waitingRoomList/dot.png';
@@ -47,6 +47,7 @@ const RoomButton = ({
 
   return (
     <RoomButtonWrapper $hostCharacter={handleHostCharacter()}>
+      <CharacterIcon />
       <p>{title}</p>
       <RoomButtonContainer>
         <Round $round={round}>{round}R</Round>

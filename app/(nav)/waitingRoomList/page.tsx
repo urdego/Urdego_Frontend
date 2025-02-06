@@ -10,9 +10,11 @@ const WaitingRoomList = () => {
   const roomButtons = Array.from({ length: 20 }, (_, index) => (
     <RoomButton
       key={`key${index}`}
-      hostType={'basic'}
-      title={`방제목 ${index + 1}`}
-      round={1}
+      hostType={
+        index % 3 === 0 ? 'basic' : index % 2 === 0 ? 'angular' : 'wool'
+      }
+      title={`아아아아아아아아아아아아`}
+      round={index % 3 === 0 ? 3 : index % 2 === 0 ? 2 : 1}
       currMemberCount={3}
       maxMemberCount={8}
     />

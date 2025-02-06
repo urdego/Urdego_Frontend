@@ -6,17 +6,17 @@ export const RoomButtonWrapper = styled.div<{
   $hostCharacter: StaticImageData;
 }>`
   width: 100%;
-  height: 120px;
+  height: 50px;
   border-radius: 12px;
   background-color: ${colors.etc.white};
-  background-image: url(${(props) => props.$hostCharacter.src});
+  /* background-image: url(${(props) => props.$hostCharacter.src});
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: 60px 10px;
+  background-position: left; */
   padding: 12px 12px 16px 12px;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
 
   font-size: 14px;
