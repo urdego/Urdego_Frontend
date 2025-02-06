@@ -8,7 +8,7 @@ import Image from 'next/image';
 interface WButtonProps {
   buttonType?: 'icon' | 'default';
   disabled?: boolean;
-  label?: string; // icon 타입에서는 label이 optional
+  label?: string; // icon 타입에서는 label이 필요하지 않을 수 있음
   icon?: string | StaticImageData;
   onClick?: () => void;
 }
@@ -28,11 +28,14 @@ const WButton = ({
     >
       {icon && (
         <IconWrapper $buttonType={buttonType}>
-          {typeof icon === 'string' ? (
-            <Image src={icon} alt="" width={20} height={20} />
-          ) : (
-            <Image src={icon.src} alt="" width={20} height={20} />
-          )}
+          <Image
+            src={icon}
+            alt="Button icon"
+            width={20}
+            height={20}
+            // 아이콘 버튼일 경우 이미지가 LCP 요소일 가능성이 있으므로 priority 적용
+            priority={buttonType === 'icon'}
+          />
         </IconWrapper>
       )}
       {buttonType !== 'icon' && label}
