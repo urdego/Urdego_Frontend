@@ -11,7 +11,7 @@ export const RefreshIcon = ({ onClick }: RefreshIconProps) => (
 );
 
 export const CharacterIcon = () => (
-  <Image src={BasicIconSrc} width={30} height={30} alt="Basic Icon" />
+  <Image src={BasicIconSrc} width={40} height={40} alt="Basic Icon" />
 );
 
 export const PersonIcon = () => <Image src={PersonIconSrc} alt="Person Icon" />;
