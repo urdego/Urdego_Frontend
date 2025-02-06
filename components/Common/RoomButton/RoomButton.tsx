@@ -46,7 +46,7 @@ const RoomButton = ({
   };
 
   return (
-    <RoomButtonWrapper $hostCharacter={handleHostCharacter()}>
+    <RoomButtonWrapper>
       <CharacterIcon />
       <p>{title}</p>
       <RoomButtonContainer>

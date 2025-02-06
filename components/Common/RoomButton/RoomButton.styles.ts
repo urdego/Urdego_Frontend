@@ -1,18 +1,11 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
-import { StaticImageData } from 'next/image';
 
-export const RoomButtonWrapper = styled.div<{
-  $hostCharacter: StaticImageData;
-}>`
+export const RoomButtonWrapper = styled.div`
   width: 100%;
   height: 50px;
   border-radius: 12px;
   background-color: ${colors.etc.white};
-  /* background-image: url(${(props) => props.$hostCharacter.src});
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left; */
   padding: 12px 12px 16px 12px;
 
   display: flex;
