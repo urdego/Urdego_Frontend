@@ -6,11 +6,9 @@ import {
   HeaderHandler,
   HeaderTitle,
   ContentWrapper,
-  AllCancelButton,
   GridContainer,
   GridItem,
   SelectNumber,
-  CancelButtonText,
   TitleContainer,
   LocationName,
   SelectIndicator,
@@ -91,10 +89,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     );
   };
 
-  const handleAllCancel = () => {
-    setSelectedLocations([]);
-  };
-
   const getLocationNumber = (id: number) => {
     return selectedLocations.indexOf(id) + 1;
   };
@@ -155,10 +149,9 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <HeaderWrapper>
           <HeaderHandler />
           <TitleContainer>
+            취소하기
             {title && <HeaderTitle>{title}</HeaderTitle>}
-            <AllCancelButton onClick={handleAllCancel}>
-              <CancelButtonText>전체 해제</CancelButtonText>
-            </AllCancelButton>
+            선택완료
           </TitleContainer>
           {/* ✅ 검색어를 유지한 상태에서 검색 가능 */}
           <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />

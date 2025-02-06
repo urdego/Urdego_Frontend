@@ -11,7 +11,7 @@ export const BackgroundOverlay = styled(motion.div)`
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 200;
   display: flex;
   justify-content: center;
 `;
@@ -25,8 +25,7 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   background: ${colors.etc.white};
   border-radius: 4px 4px 0 0;
   padding: 12px 16px;
-  z-index: 100;
-  bottom: 70px;
+  z-index: 200;
   overflow: hidden;
 `;
 
@@ -56,7 +55,8 @@ export const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 5px 0;
+  padding: 8px 0;
+  margin: 8px 0;
 `;
 
 export const ContentWrapper = styled.div`
@@ -71,7 +71,7 @@ export const ContentWrapper = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
-  padding: 8px 0;
+  padding: 16px 0;
 `;
 
 export const AllCancelButton = styled.button`
@@ -91,7 +91,7 @@ export const CancelButtonText = styled.span`
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 4px;
   width: 100%;
 `;
 

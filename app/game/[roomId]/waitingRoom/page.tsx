@@ -77,7 +77,7 @@ const WaitingRoom = () => {
       <AddContents
         isVisible={isAddContentsVisible}
         setIsVisible={setIsAddContentsVisible}
-        title="장소 선택 (최대 5개)"
+        title="장소 선택"
       />
     </>
   );
