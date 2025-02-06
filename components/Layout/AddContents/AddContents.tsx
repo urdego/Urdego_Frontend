@@ -98,6 +98,11 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleCancelClick = () => {
+    setIsExpand(false);
+    setIsVisible(false);
+  };
+
   const renderGridItems = () => {
     return filteredContents.map((content) => (
       <GridItem
@@ -149,9 +154,9 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <HeaderWrapper>
           <HeaderHandler />
           <TitleContainer>
-            취소하기
+            <span onClick={handleCancelClick}>취소하기</span>
             {title && <HeaderTitle>{title}</HeaderTitle>}
-            선택완료
+            <span>선택완료</span>
           </TitleContainer>
           {/* ✅ 검색어를 유지한 상태에서 검색 가능 */}
           <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
