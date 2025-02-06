@@ -9,7 +9,7 @@ export const SearchBarWrapper = styled.div`
   background: ${colors.gray[95]};
   border-radius: 999px;
   padding: 8px 16px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   gap: 8px;
 `;
 
