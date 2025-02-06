@@ -8,6 +8,8 @@ import {
 } from './PlaceSearchButton.styles';
 import { ClearIcon, SearchIcon } from './PlaceRegisterIcon';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
+import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/LocationRegisterBottomSheet';
 
 interface PlaceSearchButtonProps {
   index: number;
@@ -21,6 +23,7 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   const handleMoveToLocationRegister = () => {
     router.push(`/locationRegister/${index}`);
   };
+  const { isOpen, setIsOpen, toggleBottomSheet } = useToggleBottomSheet();
 
   return (
     <>
@@ -36,11 +39,12 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
           </PlaceResetButton>
         </PlaceTexthButtonWrapper>
       ) : (
-        <PlaceSearchButtonWrapper onClick={handleMoveToLocationRegister}>
+        <PlaceSearchButtonWrapper onClick={toggleBottomSheet}>
           <SearchIcon />
           <LocationRegisterText>위치 추가하기</LocationRegisterText>
         </PlaceSearchButtonWrapper>
       )}
+      {isOpen && <LocationRegisterBottomSheet setIsOpen={setIsOpen} />}
     </>
   );
 };
