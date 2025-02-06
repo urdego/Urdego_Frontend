@@ -8,12 +8,12 @@ import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
 import ContentsBox from '@/styles/Icon/ContentsBox.png';
 import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
+import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 
 const WaitingRoom = () => {
-  // 모달 상태 관리
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
+  const [isInviteVisible, setIsInviteVisible] = useState(false);
 
-  // Mock 데이터 사용
   const mockData = {
     currentUser: { name: '테스트유저', isReady: false },
     isManager: true,
@@ -52,19 +52,20 @@ const WaitingRoom = () => {
           ))}
           {Array.from({ length: Math.max(0, 6 - users.length) }).map(
             (_, index) => (
-              <PositionCard key={`empty-${index}`} isEmpty={true} />
+              <PositionCard
+                key={`empty-${index}`}
+                isEmpty={true}
+                onClick={() => setIsInviteVisible(true)} // 클릭 이벤트 추가
+              />
             )
           )}
         </UserList>
         <Footer>
-          {/* 왼쪽 - 컨텐츠 버튼 */}
           <WButton
             buttonType="icon"
             icon={ContentsBox}
             onClick={() => setIsAddContentsVisible((prev) => !prev)}
           />
-
-          {/* 오른쪽 - 준비 완료 버튼 */}
           <WButton
             buttonType="default"
             label="준비완료"
@@ -73,12 +74,13 @@ const WaitingRoom = () => {
         </Footer>
       </WaitingWrapper>
 
-      {/* 컨텐츠 추가 모달 */}
       <AddContents
         isVisible={isAddContentsVisible}
         setIsVisible={setIsAddContentsVisible}
         title="장소 선택"
       />
+
+      {isInviteVisible && <InviteUser setInviteVisible={setIsInviteVisible} />}
     </>
   );
 };
