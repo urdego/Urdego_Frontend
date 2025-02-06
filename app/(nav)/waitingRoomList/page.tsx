@@ -11,9 +11,9 @@ const WaitingRoomList = () => {
     <RoomButton
       key={`key${index}`}
       hostType={
-        index % 3 === 0 ? 'basic' : index % 2 === 0 ? 'angular' : 'wool'
+        index % 3 === 0 ? 'basic' : index % 2 === 0 ? 'angular' : 'star'
       }
-      title={`아아아아아아아아아아아아`}
+      title={`방 제목`}
       round={index % 3 === 0 ? 3 : index % 2 === 0 ? 2 : 1}
       currMemberCount={3}
       maxMemberCount={8}
