@@ -1,5 +1,6 @@
 import {
   Participant,
+  RoomButtonHeader,
   RoomButtonContainer,
   RoomButtonWrapper,
   Round,
@@ -47,8 +48,10 @@ const RoomButton = ({
 
   return (
     <RoomButtonWrapper>
-      <CharacterIcon />
-      <p>{title}</p>
+      <RoomButtonHeader>
+        <CharacterIcon />
+        <p>{title}</p>
+      </RoomButtonHeader>
       <RoomButtonContainer>
         <Round $round={round}>{round}R</Round>
         <Participant>

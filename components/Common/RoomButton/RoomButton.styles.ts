@@ -6,7 +6,7 @@ export const RoomButtonWrapper = styled.div`
   height: 50px;
   border-radius: 12px;
   background-color: ${colors.etc.white};
-  padding: 12px 12px 16px 12px;
+  padding: 13px 20px;
 
   display: flex;
   flex-direction: row;
@@ -16,6 +16,13 @@ export const RoomButtonWrapper = styled.div`
   font-size: 14px;
   font-weight: 400;
   line-height: 150%;
+`;
+
+export const RoomButtonHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 `;
 
 export const RoomButtonContainer = styled.div`
