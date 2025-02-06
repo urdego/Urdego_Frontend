@@ -67,9 +67,7 @@ const GoogleMap = ({
             .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
         }
         onLoad={() => {
-          setTimeout(() => {
-            setIsMapLoad(true);
-          }, 500);
+          setIsMapLoad(true);
         }}
       >
         {isMapLoad ? (
