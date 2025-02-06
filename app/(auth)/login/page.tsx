@@ -9,16 +9,23 @@ import { LogoContainer, LoginTitle, SocialButton } from './Login.styles';
 import KakaoLogin from '@/styles/Icon/Login/KakaoLogin.svg';
 import AppleLogin from '@/styles/Icon/Login/AppleLogin.svg';
 import useUserStore from '@/stores/useUserStore';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const { data: session } = useSession();
   const userId = useUserStore((state) => state.userId);
   const nickname = useUserStore((state) => state.nickname);
+  const router = useRouter();
 
   // store 값 변화 감지
   useEffect(() => {
     console.log('로그인 페이지 - 유저 스토어 정보:', { userId, nickname });
-  }, [userId, nickname]);
+
+    // 로그인된 경우 /home으로 리다이렉션
+    if (session) {
+      router.push('/home');
+    }
+  }, [userId, nickname, session, router]);
 
   return (
     <LoginWrapper>
@@ -39,12 +46,16 @@ const LoginPage = () => {
             />
             <LoginTitle>어데고?!</LoginTitle>
             <SocialButton
-              onClick={() => signIn('kakao', { callbackUrl: '/home' })}
+              onClick={() =>
+                signIn('kakao', { callbackUrl: '/home', redirect: true })
+              }
             >
               <Image src={KakaoLogin} alt="kakao-login" />
             </SocialButton>
             <SocialButton
-              onClick={() => signIn('apple', { callbackUrl: '/home' })}
+              onClick={() =>
+                signIn('apple', { callbackUrl: '/home', redirect: true })
+              }
             >
               <Image src={AppleLogin} alt="apple-login" />
             </SocialButton>

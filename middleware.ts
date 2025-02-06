@@ -36,6 +36,14 @@ export default withAuth(
       );
     }
 
+    // 로그인된 경우 /home으로 리다이렉션
+    if (
+      request.nextUrl.pathname === '/login' ||
+      (request.nextUrl.pathname === '/' && request.nextauth.token)
+    ) {
+      return NextResponse.redirect(new URL('/home', request.url));
+    }
+
     // userId와 인코딩된 nickname을 헤더에 추가
     const response = NextResponse.next();
     response.headers.set('User-Id', userId);

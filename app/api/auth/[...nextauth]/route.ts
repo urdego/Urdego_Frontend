@@ -154,6 +154,10 @@ const authOptions: NextAuthOptions = {
         return false;
       }
     },
+    async redirect() {
+      // 로그인 성공 후 리다이렉션 URL 설정
+      return '/home';
+    },
 
     async jwt({ token, account, user }) {
       // 초기 로그인 시 토큰 설정
