@@ -18,7 +18,10 @@ export const BackgroundOverlay = styled(motion.div)`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const BottomSheetWrapper = styled(motion.div)<{ $isExpand: boolean }>`
+export const BottomSheetWrapper = styled(motion.div)<{
+  $isExpand: boolean;
+  $initHeight: string;
+}>`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -32,7 +35,8 @@ export const BottomSheetWrapper = styled(motion.div)<{ $isExpand: boolean }>`
   max-width: 430px;
   margin: 0 auto;
 
-  height: ${({ $isExpand }) => ($isExpand ? '100vh' : '50vh')};
+  height: ${({ $isExpand, $initHeight }) =>
+    $isExpand ? '100vh' : $initHeight === 'short' ? '50vh' : '80vh'};
 
   background: ${colors.etc.white};
   border-radius: ${({ $isExpand }) => ($isExpand ? '0' : '4px 4px 0px 0px')};
