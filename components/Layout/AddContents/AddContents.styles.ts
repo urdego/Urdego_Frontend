@@ -44,19 +44,24 @@ export const HeaderHandler = styled.div`
   margin: 3px 0;
 `;
 
-export const HeaderTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${colors.etc.black};
-`;
-
 export const TitleContainer = styled.div`
+  position: relative; /* 기준점 설정 */
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
   margin: 8px 0;
+`;
+
+export const HeaderTitle = styled.h2`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: ${colors.etc.black};
+  white-space: nowrap; /* 줄바꿈 방지 */
 `;
 
 export const ContentWrapper = styled.div`

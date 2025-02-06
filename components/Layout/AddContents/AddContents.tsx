@@ -154,7 +154,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <HeaderWrapper>
           <HeaderHandler />
           <TitleContainer>
-            <span onClick={handleCancelClick}>취소하기</span>
+            <span onClick={handleCancelClick}>닫기</span>
             {title && <HeaderTitle>{title}</HeaderTitle>}
             <span>선택완료</span>
           </TitleContainer>

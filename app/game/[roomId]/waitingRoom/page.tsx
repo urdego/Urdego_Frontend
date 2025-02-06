@@ -27,8 +27,8 @@ const WaitingRoom = () => {
     ],
   };
 
-  const { currentUser, isManager, allPlayersReady, users } = mockData;
   const toggleReady = () => console.log('준비하기 클릭');
+  const { currentUser, isManager, allPlayersReady, users } = mockData;
   const startGame = () => {
     if (!allPlayersReady) {
       showReadyToast('아직 모든 팀원이 준비되지 않았습니다.');
