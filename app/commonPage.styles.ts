@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BackgroundImage from '@styles/Image/WaitingRoom/waiting-r-1x.png';
+import BackgroundImage from '@styles/Image/WaitingRoom/room-list-fit-4x.png';
 
 export const PageWrapper = styled.div`
   width: 100%;
@@ -20,8 +20,8 @@ export const WaitingRoomListPageWrapper = styled.div`
   min-height: calc(100vh - 40px);
   padding: 0 16px 100px 16px;
   background-image: url(${BackgroundImage.src});
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: bottom;
   background-attachment: fixed;
 `;
