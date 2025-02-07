@@ -13,13 +13,7 @@ import InGameWebSocket from '@/lib/websocket/gameWebsocket';
 import useWebSocketStore, { RoundData } from '@/stores/useWebSocketStore';
 import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
 
-import {
-  PageWrapper,
-  Footer,
-  HintText,
-  HintWrapper,
-  HintIcon,
-} from './game.styles';
+import { PageWrapper, Footer, HintText, HintWrapper } from './game.styles';
 
 interface GamePageProps {
   params: {
@@ -139,7 +133,6 @@ const GamePage = ({ params }: GamePageProps) => {
               key={roundState?.roundId}
             />
             <HintWrapper>
-              <HintIcon>힌트</HintIcon>
               <HintText>
                 {roundState?.hint || '문화생활을 할 수 있는 장소'}
               </HintText>

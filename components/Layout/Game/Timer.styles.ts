@@ -3,12 +3,10 @@ import colors from '@/styles/color/palette';
 
 export const TimerContainer = styled.div`
   display: flex;
-  width: 375px;
-  padding: 16px 16px 10px 24px;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 2px;
+  width: calc(100% - 32px);
+  margin: 8px 16px 0;
 `;
 
 export const TimerText = styled.div`
