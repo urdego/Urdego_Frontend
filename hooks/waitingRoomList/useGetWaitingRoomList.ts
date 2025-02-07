@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-interface WaitingRoomList {
+export interface WaitingRoomList {
   roomId: string;
   status: string;
   roomName: string;
@@ -13,7 +13,10 @@ const useGetWaitingRoomList = () => {
   const [waitingRoomList, setWaitingRoomList] = useState<
     WaitingRoomList[] | null
   >(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchWaitingRoomList = async () => {
+    setIsLoading(true);
     const response = await fetch('/api/waitingRoomList');
     if (!response.ok) {
       return;
@@ -21,8 +24,17 @@ const useGetWaitingRoomList = () => {
 
     const data = await response.json();
     setWaitingRoomList(data);
+    setIsLoading(false);
   };
-  return { waitingRoomList, fetchWaitingRoomList };
+
+  useEffect(() => {
+    const handleWaitingRoomList = async () => {
+      await fetchWaitingRoomList();
+    };
+    handleWaitingRoomList();
+  }, []);
+
+  return { waitingRoomList, isLoading, fetchWaitingRoomList };
 };
 
 export default useGetWaitingRoomList;
