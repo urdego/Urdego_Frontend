@@ -1,12 +1,6 @@
-import LoadingSpinnerComponent from '@/components/Common/LoadingSpinner/LoadingSpinner';
 import useConvertLocationToAddress from '@/hooks/placeRegister/useConvertLocationToAddress';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
-import {
-  AdvancedMarker,
-  APIProvider,
-  Map,
-  MapMouseEvent,
-} from '@vis.gl/react-google-maps';
+import { AdvancedMarker, Map, MapMouseEvent } from '@vis.gl/react-google-maps';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import UserMarkerSrc from '@styles/Icon/UserMarker.svg';
@@ -27,7 +21,6 @@ const GoogleMap = ({
   isLocationSelected,
   setIsLocationSelected,
 }: GoogleMapProps) => {
-  const [isMapLoad, setIsMapLoad] = useState(true);
   const [markerPosition, setMarkerPosition] = useState<MarkerPosition>({
     lat: 0,
     lng: 0,
@@ -59,32 +52,26 @@ const GoogleMap = ({
   };
 
   return (
-    <div>
-      {isMapLoad ? (
-        <Map
-          mapId={'LocationRegisterPage'}
-          style={{ height: `calc(100vh - 40px)` }}
-          defaultCenter={{ lat: 36.5, lng: 127.5 }}
-          defaultZoom={8}
-          gestureHandling={'greedy'}
-          disableDefaultUI={true}
-          onClick={handleMapClick}
-        >
-          {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-            <AdvancedMarker position={markerPosition} clickable={true}>
-              <Image
-                src={UserMarkerSrc}
-                width={50}
-                height={53}
-                alt="UserMarker Icon"
-              />
-            </AdvancedMarker>
-          )}
-        </Map>
-      ) : (
-        <LoadingSpinnerComponent isLocationRegister={true} />
+    <Map
+      mapId={'LocationRegisterPage'}
+      style={{ height: `calc(100vh - 40px)` }}
+      defaultCenter={{ lat: 36.5, lng: 127.5 }}
+      defaultZoom={8}
+      gestureHandling={'greedy'}
+      disableDefaultUI={true}
+      onClick={handleMapClick}
+    >
+      {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
+        <AdvancedMarker position={markerPosition} clickable={true}>
+          <Image
+            src={UserMarkerSrc}
+            width={50}
+            height={53}
+            alt="UserMarker Icon"
+          />
+        </AdvancedMarker>
       )}
-    </div>
+    </Map>
   );
 };
 
