@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Client } from '@stomp/stompjs';
+import { useEffect, useState } from 'react';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 import { TopWrapper, BottomWrapper } from './Home.styles';
 import HomeBox from '@/components/Layout/Home/HomeBox/HomeBox';
@@ -11,43 +11,17 @@ import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
 
-const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
-
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
     useCharacterState();
 
-  /* 웹소켓 연결 */
-  const socketClientRef = useRef<Client | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
+  /* 웹소켓 연결, 상태 가져오기 */
+  const { isConnected, connectWebSocket } = useWebSocketStore();
 
   useEffect(() => {
-    if (!socketClientRef.current) {
-      console.log('웹소켓 연결 시도...');
-
-      const client = new Client({
-        brokerURL: WEBSOCKET_URL,
-        reconnectDelay: 5000, // 자동 재연결 (5초 후)
-        onConnect: () => {
-          console.log('웹소켓 연결 성공!');
-          socketClientRef.current = client;
-          setIsConnected(true);
-        },
-        onStompError: (frame) => {
-          console.error('STOMP 오류 발생:', frame);
-        },
-      });
-
-      client.activate();
-    } else {
-      console.log('웹소켓이 이미 연결된 상태입니다.');
-    }
-
-    return () => {
-      console.log('페이지 언마운트: 웹소켓 연결 유지');
-    };
-  }, []);
+    connectWebSocket();
+  }, [connectWebSocket]);
 
   return (
     <>
