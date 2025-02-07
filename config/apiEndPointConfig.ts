@@ -11,7 +11,6 @@ export const API_URL_CONFIG = {
   },
   USER_SERVICE: {
     USERS: '/api/user-service/users',
-
   },
   NOTIFICATION: {
     SSE: '/api/notification-service/sse/connect/',
@@ -28,6 +27,7 @@ export const API_URL_CONFIG = {
     PUBLISH: '/group-service/publish/group',
   },
   GAME: {
+    WAITING_ROOM_LIST: '/api/game-service/room/list',
     SUBMIT_ANSWER: '/api/game-service/submissions',
     WS_URL: {
       PROD: 'wss://urdego.com/api/game-service/connect',
