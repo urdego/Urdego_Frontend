@@ -5,18 +5,26 @@ import RoomButton from '@/components/Common/RoomButton/RoomButton';
 import { WaitingRoomListPageWrapper } from '@/app/commonPage.styles';
 import { RoomButtonGrid, ListTitle, SubTitle } from './waitingRoomList.styles';
 import { RefreshIcon } from '@/components/Common/RoomButton/WaitingRoomListIcon';
+import { useEffect } from 'react';
+import useGetWaitingRoomList from '@/hooks/waitingRoomList/useGetWaitingRoomList';
 
 const WaitingRoomList = () => {
-  const roomButtons = Array.from({ length: 20 }, (_, index) => (
+  const { waitingRoomList, fetchWaitingRoomList } = useGetWaitingRoomList();
+  useEffect(() => {
+    const handleWaitingRoomList = async () => {
+      await fetchWaitingRoomList();
+    };
+    handleWaitingRoomList();
+  }, []);
+
+  const roomButtons = waitingRoomList?.map((item, index) => (
     <RoomButton
       key={`key${index}`}
-      hostType={
-        index % 3 === 0 ? 'basic' : index % 2 === 0 ? 'angular' : 'star'
-      }
-      title={`방 제목`}
-      round={index % 3 === 0 ? 3 : index % 2 === 0 ? 2 : 1}
-      currMemberCount={3}
-      maxMemberCount={8}
+      hostType={'basic'}
+      title={item.roomName}
+      round={item.totalRounds}
+      currMemberCount={item.currentPlayersCount}
+      maxMemberCount={item.maxPlayer}
     />
   ));
 
@@ -26,7 +34,7 @@ const WaitingRoomList = () => {
       <WaitingRoomListPageWrapper>
         <SubTitle>
           <ListTitle>참여 가능한 방</ListTitle>
-          <RefreshIcon onClick={() => alert('OK')} />
+          <RefreshIcon onClick={fetchWaitingRoomList} />
         </SubTitle>
         <RoomButtonGrid>{roomButtons}</RoomButtonGrid>
       </WaitingRoomListPageWrapper>
