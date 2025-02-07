@@ -11,6 +11,7 @@ import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState, useEffect } from 'react';
 import InGameWebSocket from '@/lib/websocket/gameWebsocket';
 import useWebSocketStore, { RoundData } from '@/stores/useWebSocketStore';
+import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
 
 import {
   PageWrapper,
@@ -132,15 +133,17 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent
-              images={roundState?.contentUrls || []}
+              images={
+                roundState?.contentUrls || [...Array(3).fill(SwiperTestImage)]
+              }
               key={roundState?.roundId}
             />
-            {roundState?.hint && (
-              <HintWrapper>
-                <HintIcon>힌트</HintIcon>
-                <HintText> {roundState.hint}</HintText>
-              </HintWrapper>
-            )}
+            <HintWrapper>
+              <HintIcon>힌트</HintIcon>
+              <HintText>
+                {roundState?.hint || '문화생활을 할 수 있는 장소'}
+              </HintText>
+            </HintWrapper>
           </>
         )}
 
