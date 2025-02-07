@@ -85,7 +85,7 @@ const RoundRank = ({
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
       {currentRound < maxRounds && (
-        <Timer initialTime={1000000} onTimeEnd={handleNextRound} />
+        <Timer initialTime={100000} onTimeEnd={handleNextRound} />
       )}
       <MapComponent
         mode="rank"
