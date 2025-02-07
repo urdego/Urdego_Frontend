@@ -17,5 +17,5 @@ export const RoomButtonGrid = styled.div`
   display: grid;
   place-items: center;
   grid-template-columns: repeat(1, 1fr);
-  gap: 16px;
+  gap: 8px;
 `;

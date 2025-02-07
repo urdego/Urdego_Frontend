@@ -29,8 +29,7 @@ export const RoomButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 24px;
-
-  gap: 4px;
+  gap: 6px;
 `;
 
 export const Round = styled.div<{ $round: number }>`
