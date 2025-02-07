@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import {
   PlaceSearchButtonWrapper,
   PlaceTexthButtonWrapper,
@@ -17,21 +16,14 @@ interface PlaceSearchButtonProps {
 }
 
 const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
-  const router = useRouter();
   const { setPlaceInput } = usePlaceRegisterStore();
-
-  const handleMoveToLocationRegister = () => {
-    router.push(`/locationRegister/${index}`);
-  };
   const { isOpen, setIsOpen, toggleBottomSheet } = useToggleBottomSheet();
 
   return (
     <>
       {value ? (
         <PlaceTexthButtonWrapper>
-          <LocationText onClick={handleMoveToLocationRegister}>
-            {value}
-          </LocationText>
+          <LocationText onClick={toggleBottomSheet}>{value}</LocationText>
           <PlaceResetButton
             onClick={() => setPlaceInput(index, 'address', null)}
           >
