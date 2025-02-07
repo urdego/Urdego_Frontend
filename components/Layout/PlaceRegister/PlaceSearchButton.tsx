@@ -36,13 +36,11 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
           <LocationRegisterText>위치 추가하기</LocationRegisterText>
         </PlaceSearchButtonWrapper>
       )}
-      {isOpen && (
-        <LocationRegisterBottomSheet
-          index={index}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-        />
-      )}
+      <LocationRegisterBottomSheet
+        index={index}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </>
   );
 };

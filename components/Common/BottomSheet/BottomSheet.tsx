@@ -28,13 +28,14 @@ const BottomSheet = ({
   return (
     <>
       <BackgroundOverlay
+        $isOpen={isOpen}
         initial={{ x: '-50%' }}
         onClick={() => setIsOpen(false)}
       />
       <BottomSheetWrapper
         $isExpand={isExpand}
         $initHeight={initHeight}
-        initial={{ x: '-50%' }}
+        initial={{ x: '-50%', y: '100%' }}
         animate={{ y: isOpen ? '0%' : '100%' }}
         exit={{ y: '100%' }}
         transition={{ type: 'tween' }}

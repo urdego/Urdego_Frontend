@@ -2,7 +2,7 @@ import colors from '@/styles/color/palette';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const BackgroundOverlay = styled(motion.div)`
+export const BackgroundOverlay = styled(motion.div)<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 50%;
@@ -10,7 +10,7 @@ export const BackgroundOverlay = styled(motion.div)`
   width: 100%;
   min-width: 340px;
   max-width: 430px;
-  height: 100vh;
+  height: ${({ $isOpen }) => ($isOpen ? '100vh' : '0')};
 
   margin: 0 auto;
 

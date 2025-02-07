@@ -47,7 +47,6 @@ const GoogleMap = ({
     if (latLng) {
       // 클릭한 위치를 마커의 위치로 저장
       const newPosition = { lat: latLng.lat, lng: latLng.lng };
-      console.log('Clicked position:', latLng);
       setMarkerPosition(newPosition);
 
       // 역지오코딩으로 도로명 주소 반환
