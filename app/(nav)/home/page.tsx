@@ -11,15 +11,14 @@ import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
 
-/** ✅ WebSocket STOMP URL (ws:// 프로토콜 사용) */
-const WEBSOCKET_URL = 'ws://urdego.site/urdego/connect';
+const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
     useCharacterState();
 
-  /** ✅ 웹소켓 연결 */
+  /* 웹소켓 연결 */
   const socketClientRef = useRef<Client | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -28,7 +27,7 @@ const Home = () => {
       console.log('웹소켓 연결 시도...');
 
       const client = new Client({
-        brokerURL: WEBSOCKET_URL, // ✅ ws:// 프로토콜 사용
+        brokerURL: WEBSOCKET_URL,
         reconnectDelay: 5000, // 자동 재연결 (5초 후)
         onConnect: () => {
           console.log('웹소켓 연결 성공!');
