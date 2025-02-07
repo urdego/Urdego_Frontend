@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BackgroundImage from '@styles/Image/WaitingRoom/Background_OnlyHill.png';
+import BackgroundImage from '@styles/Image/WaitingRoomList/Background_FullHill.png';
 
 export const PageWrapper = styled.div`
   width: 100%;
@@ -19,9 +19,14 @@ export const WaitingRoomListPageWrapper = styled.div`
   height: 100%;
   min-height: calc(100vh - 40px);
   padding: 0 16px 100px 16px;
+  background-color: rgba(202, 228, 255, 1);
   background-image: url(${BackgroundImage.src});
-  background-size: contain;
+  background-size: 100% auto;
   background-repeat: no-repeat;
-  background-position: bottom;
+  background-position: center bottom;
   background-attachment: fixed;
+
+  @media screen and (min-width: 430px) {
+    background-size: 430px auto;
+  }
 `;
