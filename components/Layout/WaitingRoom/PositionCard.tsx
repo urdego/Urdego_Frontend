@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import SnowMan0 from '@/styles/Icon/Character/basic.png';
+import Charac from '@/styles/Icon/Character/basic.png';
 
 import {
   Card,
@@ -17,6 +17,7 @@ interface PositionCardProps {
   isHost?: boolean;
   isReady?: boolean;
   isEmpty?: boolean;
+  onClick?: () => void; // onClick 추가
 }
 
 const PositionCard = ({
@@ -25,28 +26,27 @@ const PositionCard = ({
   isHost = false,
   isReady = false,
   isEmpty = false,
+  onClick, // onClick 추가
 }: PositionCardProps) => {
   return (
-    <>
-      <Card $isEmpty={isEmpty}>
-        {!isEmpty ? (
-          <>
-            <Level>Lv.{level}</Level>
-            <Username>{username}</Username>
-            <Character>
-              <Image src={SnowMan0} alt="snowman" />
-            </Character>
-            {isHost ? (
-              <HostLabel $isHost={true}>방장</HostLabel>
-            ) : (
-              isReady && <HostLabel $isHost={false}>준비완료</HostLabel>
-            )}
-          </>
-        ) : (
-          <EmptyCardIcon />
-        )}
-      </Card>
-    </>
+    <Card $isEmpty={isEmpty} onClick={isEmpty ? onClick : undefined}>
+      {!isEmpty ? (
+        <>
+          <Level>Lv.{level}</Level>
+          <Username>{username}</Username>
+          <Character>
+            <Image src={Charac} alt="snowman" width={83} height={83} />
+          </Character>
+          {isHost ? (
+            <HostLabel $isHost={true}>방장</HostLabel>
+          ) : (
+            isReady && <HostLabel $isHost={false}>준비완료</HostLabel>
+          )}
+        </>
+      ) : (
+        <EmptyCardIcon />
+      )}
+    </Card>
   );
 };
 

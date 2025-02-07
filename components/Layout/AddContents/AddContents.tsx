@@ -1,4 +1,4 @@
-import { useState, ReactNode, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -6,28 +6,27 @@ import {
   HeaderHandler,
   HeaderTitle,
   ContentWrapper,
-  AllCancelButton,
   GridContainer,
   GridItem,
   SelectNumber,
-  CancelButtonText,
   TitleContainer,
   LocationName,
   SelectIndicator,
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
+import SearchBar from '@/components/Common/SearchBar/SearchBar';
 
 interface AddContentsProps {
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
-  children?: ReactNode;
 }
 
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState(''); // ✅ 검색어 상태 유지
   const contentRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -38,6 +37,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   } = useGetInfiniteLocationList();
 
   const isInitialLoad = contents.length === 0;
+  const isFetched = useRef(false);
 
   useEffect(() => {
     const currentRef = contentRef.current;
@@ -45,7 +45,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     const handleScroll = () => {
       if (currentRef) {
         const { scrollTop, scrollHeight, clientHeight } = currentRef;
-        // 무한 스크롤 조건: 스크롤이 하단에 도달했으며, 로딩 중이 아니고, 추가 데이터가 있음
         if (
           scrollHeight - scrollTop <= clientHeight + 1 &&
           !isLoading &&
@@ -67,55 +66,61 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   }, [isLoading, isLoadMore, fetchLocationList]);
 
   useEffect(() => {
-    if (!isVisible) {
-      setSelectedLocations([]); // 선택 항목 초기화
+    if (isVisible && contents.length === 0 && !isFetched.current) {
+      isFetched.current = true;
+      fetchLocationList();
     }
-  }, [isVisible]);
+  }, [isVisible, contents.length, fetchLocationList]);
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      setIsExpand(false);
       setIsVisible(false);
     }
   };
 
-  const handleLocationSelect = (name: string) => {
-    if (selectedLocations.includes(name)) {
-      const newLocations = selectedLocations.filter((i) => i !== name);
-      setSelectedLocations(newLocations);
-    } else {
-      if (selectedLocations.length < 5) {
-        setSelectedLocations([...selectedLocations, name]);
-      }
-    }
+  const handleLocationSelect = (id: number) => {
+    setSelectedLocations((prev) =>
+      prev.includes(id)
+        ? prev.filter((i) => i !== id)
+        : prev.length < 5
+          ? [...prev, id]
+          : prev
+    );
   };
 
-  const handleAllCancel = () => {
-    setSelectedLocations([]);
+  const getLocationNumber = (id: number) => {
+    return selectedLocations.indexOf(id) + 1;
   };
 
-  const getLocationNumber = (name: string) => {
-    return selectedLocations.indexOf(name) + 1;
+  // 검색어를 적용한 결과 목록
+  const filteredContents = contents.filter((content) =>
+    content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleCancelClick = () => {
+    setIsExpand(false);
+    setIsVisible(false);
   };
 
   const renderGridItems = () => {
-    return contents.map((content) => (
+    return filteredContents.map((content) => (
       <GridItem
-        key={content.contentName}
-        onClick={() => handleLocationSelect(content.contentName)}
+        key={content.contentId}
+        onClick={() => handleLocationSelect(content.contentId)}
       >
         <Image
           src={content.url}
           alt={content.contentName}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          style={{ objectFit: 'cover' }}
         />
         <SelectIndicator
-          selected={selectedLocations.includes(content.contentName)}
+          selected={selectedLocations.includes(content.contentId)}
         >
-          {selectedLocations.includes(content.contentName) && (
-            <SelectNumber>
-              {getLocationNumber(content.contentName)}
-            </SelectNumber>
+          {selectedLocations.includes(content.contentId) && (
+            <SelectNumber>{getLocationNumber(content.contentId)}</SelectNumber>
           )}
         </SelectIndicator>
         <LocationName>{content.contentName}</LocationName>
@@ -149,11 +154,12 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <HeaderWrapper>
           <HeaderHandler />
           <TitleContainer>
+            <span onClick={handleCancelClick}>닫기</span>
             {title && <HeaderTitle>{title}</HeaderTitle>}
-            <AllCancelButton onClick={handleAllCancel}>
-              <CancelButtonText>전체 해제</CancelButtonText>
-            </AllCancelButton>
+            <span>선택완료</span>
           </TitleContainer>
+          {/* ✅ 검색어를 유지한 상태에서 검색 가능 */}
+          <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
         </HeaderWrapper>
         <ContentWrapper ref={contentRef}>
           <GridContainer>

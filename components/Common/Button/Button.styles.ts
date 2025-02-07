@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import colors from '@styles/color/palette';
 
 interface StyledButtonProps {
-  $buttonType: 'purple' | 'gray' | 'lightGray';
+  $buttonType: 'purple' | 'gray' | 'lightGray' | 'icon' | 'forWaitingRoom';
   $buttonSize: 'small' | 'large';
   $buttonHeight: 'default' | 'short' | 'long';
   $styleType: 'whiteBackground' | 'coloredBackground';
@@ -10,11 +10,9 @@ interface StyledButtonProps {
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
-  // buttonHeight default에서 중앙 정렬을 위한 부분
   display: flex;
   justify-content: center;
   align-items: center;
-
   cursor: pointer;
   border-radius: 8px;
   padding: 16px;
@@ -23,8 +21,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.16px;
-
-  transition: 0.5s ease;
+  transition: 0.3s ease;
   white-space: nowrap;
 
   ${({ $buttonSize }) =>
@@ -58,7 +55,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
           color: ${$buttonType === 'purple'
             ? colors.purple[50]
             : colors.gray[70]};
-          font-weight: 700;
         `
       : css`
           background-color: ${$buttonType === 'purple'
@@ -68,7 +64,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
               : colors.gray[90]};
           border: none;
           color: ${colors.etc.white};
-          font-weight: 700;
         `}
 
   &:hover {
@@ -79,28 +74,54 @@ export const StyledButton = styled.button<StyledButtonProps>`
     opacity: 0.7;
   }
 
-  /* 아이콘 위치가 'right'인 경우 아이콘을 오른쪽에 배치(홈 버튼 사용) */
   ${({ $iconPosition }) =>
     $iconPosition === 'right' &&
     css`
       flex-direction: row-reverse;
     `}
+
+  /* 🔹 "icon" 버튼 스타일 */
+  ${({ $buttonType }) =>
+    $buttonType === 'icon' &&
+    css`
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      border: 2px solid ${colors.purple[50]};
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: ${colors.etc.white};
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    `}
+
+  /* 🔹 "forWaitingRoom" 버튼 스타일 */
+  ${({ $buttonType }) =>
+    $buttonType === 'forWaitingRoom' &&
+    css`
+      width: 100%;
+      border-radius: 8px;
+      background-color: ${colors.purple[50]};
+      color: ${colors.etc.white};
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: 0px -4px 16px rgba(0, 0, 0, 0.1);
+    `}
 `;
 
-export const IconWrapper = styled.span`
-  // 이미지 중앙 정렬을 위한 부분
+export const IconWrapper = styled.span<{ $buttonType?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  margin-right: 8px;
-  margin-left: 4px; /* 아이콘이 오른쪽일 때 간격 */
-  vertical-align: middle;
+  margin-right: ${({ $buttonType }) => ($buttonType === 'icon' ? '0' : '8px')};
+  margin-left: ${({ $buttonType }) => ($buttonType === 'icon' ? '0' : '4px')};
 
   img {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    display: inline-block;
+    width: ${({ $buttonType }) => ($buttonType === 'icon' ? '24px' : '16px')};
+    height: ${({ $buttonType }) => ($buttonType === 'icon' ? '24px' : '16px')};
   }
 `;

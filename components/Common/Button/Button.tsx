@@ -6,12 +6,12 @@ import { StaticImageData } from 'next/image';
 import Image from 'next/image';
 
 interface ButtonProps {
-  buttonType?: 'purple' | 'gray' | 'lightGray';
+  buttonType?: 'purple' | 'gray' | 'lightGray' | 'icon' | 'forWaitingRoom';
   buttonSize?: 'small' | 'large';
   buttonHeight?: 'default' | 'short' | 'long';
   styleType?: 'whiteBackground' | 'coloredBackground';
   disabled?: boolean;
-  label: string;
+  label?: string; // icon 타입에서는 label이 optional
   icon?: string | StaticImageData;
   onClick?: () => void;
   $iconPosition?: 'left' | 'right';
@@ -39,15 +39,15 @@ const Button = ({
       $iconPosition={$iconPosition}
     >
       {icon && (
-        <IconWrapper>
+        <IconWrapper $buttonType={buttonType}>
           {typeof icon === 'string' ? (
-            <Image src={icon} alt="" width={12} height={12} />
+            <Image src={icon} alt="" width={16} height={16} />
           ) : (
-            <Image src={icon.src} alt="" width={12} height={12} />
+            <Image src={icon.src} alt="" width={16} height={16} />
           )}
         </IconWrapper>
       )}
-      {label}
+      {buttonType !== 'icon' && label}
     </StyledButton>
   );
 };

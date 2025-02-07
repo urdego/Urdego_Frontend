@@ -22,7 +22,17 @@ export async function POST(req: NextRequest) {
         headers: { Authorization: `Bearer ${token.accessToken}` },
       });
       if (!kakaoResponse.ok) {
-        throw new Error('카카오 연결 해제 실패');
+        const errorData = await kakaoResponse.json();
+        console.error('카카오 연결 해제 실패:', {
+          status: kakaoResponse.status,
+          error: errorData,
+        });
+        return NextResponse.json(
+          {
+            error: `카카오 연결 해제 실패: ${errorData.msg || '알 수 없는 오류'}`,
+          },
+          { status: kakaoResponse.status }
+        );
       }
     } else if (token.provider === 'apple') {
       const appleResponse = await fetch(APPLE_UNLINK_URI, {

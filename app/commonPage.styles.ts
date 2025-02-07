@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import BackgroundImage from '@styles/Image/WaitingRoomList/Background_FullHill.png';
+import colors from '@/styles/color/palette';
 
 export const PageWrapper = styled.div`
   width: 100%;
@@ -12,6 +13,7 @@ export const HomePageWrapper = styled.div`
   min-height: calc(100vh - 40px);
   padding: 0 0 80px 0;
   background: linear-gradient(180deg, #fff 10%, #cabeff 100%);
+  /* background-color: ${colors.purple[90]}; */
 `;
 
 export const WaitingRoomListPageWrapper = styled.div`

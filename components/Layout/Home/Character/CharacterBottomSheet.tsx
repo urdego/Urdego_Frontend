@@ -25,7 +25,7 @@ const CharacterBottomSheet: React.FC<CommonBottomSheetProps> = ({
   title,
   children,
   footerContent,
-  selectedCharacter, // 선택된 캐릭터 prop 추가
+  selectedCharacter,
 }) => {
   const [isButtonVisible, setIsButtonVisible] = useState(false);
 
