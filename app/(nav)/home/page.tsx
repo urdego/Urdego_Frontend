@@ -5,14 +5,15 @@ import { HomePageWrapper } from '@/app/commonPage.styles';
 import Button from '@/components/Common/Button/Button';
 import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
-import { useState } from 'react';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
+
+import { useState } from 'react';
+import Link from 'next/link';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
     useCharacterState({});
-
   return (
     <>
       <HomePageWrapper>
@@ -29,12 +30,14 @@ const Home = () => {
             setIsBottomSheetOpen={setIsBottomSheetOpen}
             isBottomSheetOpen={isBottomSheetOpen}
           />
-          <Button
-            label="방 입장하기"
-            icon={EnterArrowIcon}
-            buttonHeight="long"
-            $iconPosition="right"
-          />
+          <Link href="/waitingRoomList">
+            <Button
+              label="방 입장하기"
+              icon={EnterArrowIcon}
+              buttonHeight="long"
+              $iconPosition="right"
+            />
+          </Link>
         </BottomWrapper>
       </HomePageWrapper>
     </>

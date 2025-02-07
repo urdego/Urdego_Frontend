@@ -1,11 +1,15 @@
 import { DotContainer, Dot } from './DotLoadingSpinner.styles';
 
-const DotLoadingSpinner = () => {
+type COLOR = 'white' | 'gray';
+interface DotLoadingSpinnerProps {
+  color?: COLOR;
+}
+const DotLoadingSpinner = ({ color = 'gray' }: DotLoadingSpinnerProps) => {
   return (
     <DotContainer>
-      <Dot />
-      <Dot />
-      <Dot />
+      <Dot $color={color} />
+      <Dot $color={color} />
+      <Dot $color={color} />
     </DotContainer>
   );
 };
