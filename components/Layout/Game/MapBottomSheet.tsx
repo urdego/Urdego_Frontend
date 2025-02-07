@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PanInfo } from 'framer-motion';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import Button from '@/components/Common/Button/Button';
@@ -39,11 +39,30 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }
   };
 
+  // 바텀시트 외부 클릭 시 닫히도록 처리
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mapRef.current && !mapRef.current.contains(event.target as Node)) {
+        onClose(); // 바텀시트 외부를 클릭하면 닫기
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside); // 마운트 시 이벤트 리스너 추가
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside); // 언마운트 시 이벤트 리스너 제거
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside); // cleanup
+    };
+  }, [isOpen, onClose]);
+
   return (
     <StyledMotion
       initial={{ y: '100%' }}
       animate={{ y: isOpen ? '0%' : '100%' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      transition={{ type: 'spring', stiffness: 200, damping: 35 }}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.2}
@@ -61,8 +80,8 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         <div
           ref={mapRef}
           onTouchStart={() => setIsDraggable(false)} // 지도 터치 시 드래그 비활성화
-          onTouchEnd={() => setIsDraggable(true)} //  지도에서 손을 떼면 다시 드래그 활성화
-          onTouchMove={(e) => e.stopPropagation()} //  이벤트 전파 차단
+          onTouchEnd={() => setIsDraggable(true)} // 지도에서 손을 떼면 다시 드래그 활성화
+          onTouchMove={(e) => e.stopPropagation()} // 이벤트 전파 차단
         >
           <MapComponent
             mode="game"
@@ -73,7 +92,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
         <BottomSheetFooter>
           <Button
-            label="위치 선택"
+            label="정답 제출"
             buttonType={hasSubmitted ? 'gray' : 'purple'}
             buttonSize="large"
             onClick={handleSubmitAnswer}
