@@ -27,7 +27,7 @@ const GoogleMap = ({
   isLocationSelected,
   setIsLocationSelected,
 }: GoogleMapProps) => {
-  const [isMapLoad, setIsMapLoad] = useState(false);
+  const [isMapLoad, setIsMapLoad] = useState(true);
   const [markerPosition, setMarkerPosition] = useState<MarkerPosition>({
     lat: 0,
     lng: 0,
@@ -60,40 +60,30 @@ const GoogleMap = ({
 
   return (
     <div>
-      <APIProvider
-        apiKey={
-          process.env
-            .NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
-        }
-        onLoad={() => {
-          setIsMapLoad(true);
-        }}
-      >
-        {isMapLoad ? (
-          <Map
-            mapId={'LocationRegisterPage'}
-            style={{ height: `calc(100vh - 40px)` }}
-            defaultCenter={{ lat: 36.5, lng: 127.5 }}
-            defaultZoom={8}
-            gestureHandling={'greedy'}
-            disableDefaultUI={true}
-            onClick={handleMapClick}
-          >
-            {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
-              <AdvancedMarker position={markerPosition} clickable={true}>
-                <Image
-                  src={UserMarkerSrc}
-                  width={50}
-                  height={53}
-                  alt="UserMarker Icon"
-                />
-              </AdvancedMarker>
-            )}
-          </Map>
-        ) : (
-          <LoadingSpinnerComponent isLocationRegister={true} />
-        )}
-      </APIProvider>
+      {isMapLoad ? (
+        <Map
+          mapId={'LocationRegisterPage'}
+          style={{ height: `calc(100vh - 40px)` }}
+          defaultCenter={{ lat: 36.5, lng: 127.5 }}
+          defaultZoom={8}
+          gestureHandling={'greedy'}
+          disableDefaultUI={true}
+          onClick={handleMapClick}
+        >
+          {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
+            <AdvancedMarker position={markerPosition} clickable={true}>
+              <Image
+                src={UserMarkerSrc}
+                width={50}
+                height={53}
+                alt="UserMarker Icon"
+              />
+            </AdvancedMarker>
+          )}
+        </Map>
+      ) : (
+        <LoadingSpinnerComponent isLocationRegister={true} />
+      )}
     </div>
   );
 };
