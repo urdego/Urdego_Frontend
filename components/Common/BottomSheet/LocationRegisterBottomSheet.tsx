@@ -9,10 +9,12 @@ import { ContentHeader } from './BottomSheet.styles';
 import Button from '../Button/Button';
 
 interface LocationRegisterBottomSheetProps {
+  index: number;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const LocationRegisterBottomSheet = ({
+  index,
   isOpen,
   setIsOpen,
 }: LocationRegisterBottomSheetProps) => {
@@ -23,7 +25,7 @@ const LocationRegisterBottomSheet = ({
       <LocationRegisterWrapper>
         <ContentHeader>위치를 선택해주세요.</ContentHeader>
         <GoogleMap
-          index={1}
+          index={index}
           isLocationSelected={isLocationSelected}
           setIsLocationSelected={setIsLocationSelected}
         />

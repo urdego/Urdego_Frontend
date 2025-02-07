@@ -45,7 +45,11 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
         </PlaceSearchButtonWrapper>
       )}
       {isOpen && (
-        <LocationRegisterBottomSheet isOpen={isOpen} setIsOpen={setIsOpen} />
+        <LocationRegisterBottomSheet
+          index={index}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
       )}
     </>
   );
