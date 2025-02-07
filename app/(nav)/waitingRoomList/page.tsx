@@ -22,7 +22,7 @@ const WaitingRoomList = () => {
         </SubTitle>
         <RoomButtonGrid>
           {isLoading ? (
-            <DotLoadingSpinner />
+            <DotLoadingSpinner color="white" />
           ) : (
             <RoomButtonList waitingRoomList={waitingRoomList} />
           )}

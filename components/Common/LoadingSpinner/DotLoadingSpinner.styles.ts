@@ -22,10 +22,11 @@ export const DotContainer = styled.div`
   margin: auto;
 `;
 
-export const Dot = styled.div`
+export const Dot = styled.div<{ $color: 'white' | 'gray' }>`
   width: 11px;
   height: 11px;
-  background-color: ${colors.gray[90]};
+  background-color: ${({ $color }) =>
+    $color === 'white' ? colors.etc.white : colors.gray[90]};
   border-radius: 50%;
   animation: ${fadeInOut} 1.5s infinite ease-in-out;
 
