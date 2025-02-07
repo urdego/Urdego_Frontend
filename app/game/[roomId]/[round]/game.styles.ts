@@ -1,4 +1,3 @@
-'use client';
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 
@@ -52,4 +51,41 @@ export const HintWrapper = styled.div`
   max-height: 64px;
   justify-content: center;
   align-items: center;
+  user-select: none;
+`;
+
+export const AnswerAddress = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 4px 16px;
+  flex-direction: column;
+  align-items: center;
+  background-color: ${colors.etc.white};
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+`;
+
+export const PlaceName = styled.p`
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.12px;
+  color: ${colors.gray[60]};
+  text-align: center;
+  text-overflow: ellipsis;
+`;
+
+export const PlaceAddress = styled.p`
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.12px;
+  color: ${colors.gray[60]};
+  text-align: center;
+  text-overflow: ellipsis;
 `;

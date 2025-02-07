@@ -6,7 +6,7 @@ export const TimerContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 32px);
-  margin: 8px 16px 0;
+  margin: 8px 16px 10px;
 `;
 
 export const TimerText = styled.div`
