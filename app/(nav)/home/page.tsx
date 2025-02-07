@@ -1,4 +1,8 @@
 'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+
 import { TopWrapper, BottomWrapper } from './Home.styles';
 import HomeBox from '@/components/Layout/Home/HomeBox/HomeBox';
 import { HomePageWrapper } from '@/app/commonPage.styles';
@@ -7,13 +11,45 @@ import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
 
-import { useState } from 'react';
-import Link from 'next/link';
+/** ✅ WebSocket STOMP URL (ws:// 프로토콜 사용) */
+const WEBSOCKET_URL = 'ws://urdego.site/urdego/connect';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
-    useCharacterState({});
+    useCharacterState();
+
+  /** ✅ 웹소켓 연결 */
+  const socketClientRef = useRef<Client | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    if (!socketClientRef.current) {
+      console.log('웹소켓 연결 시도...');
+
+      const client = new Client({
+        brokerURL: WEBSOCKET_URL, // ✅ ws:// 프로토콜 사용
+        reconnectDelay: 5000, // 자동 재연결 (5초 후)
+        onConnect: () => {
+          console.log('웹소켓 연결 성공!');
+          socketClientRef.current = client;
+          setIsConnected(true);
+        },
+        onStompError: (frame) => {
+          console.error('STOMP 오류 발생:', frame);
+        },
+      });
+
+      client.activate();
+    } else {
+      console.log('웹소켓이 이미 연결된 상태입니다.');
+    }
+
+    return () => {
+      console.log('페이지 언마운트: 웹소켓 연결 유지');
+    };
+  }, []);
+
   return (
     <>
       <HomePageWrapper>
@@ -30,14 +66,13 @@ const Home = () => {
             setIsBottomSheetOpen={setIsBottomSheetOpen}
             isBottomSheetOpen={isBottomSheetOpen}
           />
-          <Link href="/waitingRoomList">
-            <Button
-              label="방 입장하기"
-              icon={EnterArrowIcon}
-              buttonHeight="long"
-              $iconPosition="right"
-            />
-          </Link>
+          <Button
+            label="방 입장하기"
+            icon={EnterArrowIcon}
+            buttonHeight="long"
+            $iconPosition="right"
+            disabled={!isConnected}
+          />
         </BottomWrapper>
       </HomePageWrapper>
     </>
