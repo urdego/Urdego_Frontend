@@ -21,7 +21,7 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   bottom: 0;
   width: 100%;
   max-width: 430px;
-  height: ${({ $isExpand }) => ($isExpand ? '100vh' : '60vh')};
+  height: ${({ $isExpand }) => ($isExpand ? '100vh' : '75vh')};
   background: ${colors.etc.white};
   border-radius: ${({ $isExpand }) => ($isExpand ? '0' : '20px 20px 0 0')};
   padding: 16px;
@@ -82,26 +82,47 @@ export const UserAvatar = styled.div`
 
 export const UserInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px; /* 요소 간 간격 조정 */
   flex-grow: 1;
   margin-left: 16px;
 `;
 
-export const Level = styled.span`
-  font-size: 14px;
+export const UserId = styled.span`
+  font-size: 16px;
   font-weight: 400;
   color: ${colors.etc.black};
 `;
 
+export const Level = styled.span`
+  font-size: 12px; /* 폰트 크기 조정 */
+  font-weight: 400;
+  color: ${colors.gray[70]};
+`;
+
 export const UserStatus = styled.span<{ $status: string }>`
+  font-size: 14px; /* 폰트 크기 조정 */
   color: ${({ $status }) =>
     $status === '온라인'
       ? colors.etc.green
       : $status === '게임중'
         ? colors.alert[50]
         : colors.gray[70]};
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: '●';
+    font-size: 8px;
+    color: ${({ $status }) =>
+      $status === '온라인'
+        ? colors.etc.green
+        : $status === '게임중'
+          ? colors.alert[50]
+          : colors.gray[70]};
+  }
 `;
 
 export const InviteButton = styled.button<{ $invited: boolean }>`

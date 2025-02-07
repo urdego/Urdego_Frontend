@@ -25,6 +25,7 @@ const colors = {
     white: 'rgba(255, 255, 255, 1)',
     green: 'rgba(67, 195, 59, 1)',
     card: 'rgba(255, 255, 255, 0.6)',
+    emptyCard: 'rgba(255, 255, 255, 0.3)',
     blue: 'rgba(0, 122, 255, 1)',
   },
   alert: {

@@ -11,7 +11,7 @@ export const BackgroundOverlay = styled(motion.div)`
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 200;
   display: flex;
   justify-content: center;
 `;
@@ -21,11 +21,11 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   bottom: 0;
   width: 100%;
   max-width: 430px;
-  height: 50vh;
+  height: 75vh;
   background: ${colors.etc.white};
   border-radius: 4px 4px 0 0;
   padding: 12px 16px;
-  z-index: 1000;
+  z-index: 200;
   overflow: hidden;
 `;
 
@@ -41,28 +41,33 @@ export const HeaderHandler = styled.div`
   height: 4px;
   background: ${colors.gray[50]};
   border-radius: 100px;
-  margin: 8px 0;
-`;
-
-export const HeaderTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${colors.etc.black};
+  margin: 3px 0;
 `;
 
 export const TitleContainer = styled.div`
+  position: relative; /* 기준점 설정 */
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  padding: 8px 0;
+  margin: 8px 0;
+`;
+
+export const HeaderTitle = styled.h2`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: ${colors.etc.black};
+  white-space: nowrap; /* 줄바꿈 방지 */
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 100px); // HeaderWrapper 높이를 고려한 조정
+  height: calc(100% - 100px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
@@ -71,6 +76,7 @@ export const ContentWrapper = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+  padding: 16px 0;
 `;
 
 export const AllCancelButton = styled.button`
@@ -89,8 +95,8 @@ export const CancelButtonText = styled.span`
 
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
   width: 100%;
 `;
 
@@ -100,6 +106,10 @@ export const GridItem = styled.div`
   background: ${colors.gray[90]};
   cursor: pointer;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 
   &:hover {
     background: ${colors.gray[95]};
@@ -127,11 +137,14 @@ export const SelectNumber = styled.span`
 `;
 
 export const LocationName = styled.span`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   font-size: 14px;
   color: ${colors.etc.white};
+  text-align: center;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   text-align: center;
 `;
