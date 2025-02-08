@@ -156,3 +156,14 @@ export const CloseButton = styled.span`
   font-weight: 400;
   cursor: pointer;
 `;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${colors.gray[50]};
+`;

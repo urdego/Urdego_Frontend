@@ -13,6 +13,7 @@ import {
   LocationName,
   SelectIndicator,
   CloseButton,
+  LoadingWrapper,
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
@@ -28,8 +29,8 @@ interface AddContentsProps {
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
-  const [searchQuery, setSearchQuery] = useState(''); // ✅ 검색어 상태 유지
-  const [isAlertOpen, setIsAlertOpen] = useState(false); // ✅ 알림 모달 상태
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -89,7 +90,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
       } else if (prev.length < 5) {
         return [...prev, id];
       } else {
-        setIsAlertOpen(true); // ✅ 최대 선택 개수 초과 시 알림 모달 표시
+        setIsAlertOpen(true);
         return prev;
       }
     });
@@ -99,7 +100,6 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     return selectedLocations.indexOf(id) + 1;
   };
 
-  // 검색어를 적용한 결과 목록
   const filteredContents = contents.filter((content) =>
     content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -109,7 +109,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     setIsVisible(false);
   };
 
+  const LoadingIndicator = () => {
+    return <LoadingWrapper>불러오는 중입니다...</LoadingWrapper>;
+  };
+
   const renderGridItems = () => {
+    if (isInitialLoad) return <LoadingIndicator />;
+
     return filteredContents.map((content) => (
       <GridItem
         key={content.contentId}
@@ -168,10 +174,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
             <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
           </HeaderWrapper>
           <ContentWrapper ref={contentRef}>
-            <GridContainer>
-              {isInitialLoad && <div>장소를 불러오는 중입니다...</div>}
-              {renderGridItems()}
-            </GridContainer>
+            <GridContainer>{renderGridItems()}</GridContainer>
           </ContentWrapper>
         </BottomSheet>
       </BackgroundOverlay>
