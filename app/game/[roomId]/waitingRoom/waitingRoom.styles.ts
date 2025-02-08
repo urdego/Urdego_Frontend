@@ -59,13 +59,13 @@ export const FullScreenImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black; /* 이미지 외 빈 공간을 검은색으로 처리 */
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
 `;
 
 export const FullScreenImage = styled.img`
   max-width: 100vw;
   max-height: 100vh;
-  object-fit: contain; /* 비율 유지하며 화면에 맞춤 */
+  object-fit: contain;
   cursor: pointer;
 `;
