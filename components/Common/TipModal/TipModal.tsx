@@ -21,11 +21,11 @@ const TipModal = ({ setIsTipOpen }: TipModalProps) => {
       </ModalHeader>
       <ModalContainer>
         <p>
-          - 설정 &gt; 개인정보 보호 및 보안 &gt; 위치 서비스 &gt; 카메라와
-          어데고?! 앱을 사용하는 동안으로 변경
+          &middot; 설정 &gt; 개인정보 보호 및 보안 &gt; 위치 서비스 &gt;
+          카메라와 어데고?! 앱을 사용하는 동안으로 변경
         </p>
         <p>
-          - 설정 &gt; 개인정보 보호 및 보안 &gt; 사진 &gt; 어데고?! &gt;
+          &middot; 설정 &gt; 개인정보 보호 및 보안 &gt; 사진 &gt; 어데고?! &gt;
           전체접근으로 변경
         </p>
       </ModalContainer>

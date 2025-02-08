@@ -6,6 +6,15 @@ export const LocationRegisterWrapper = styled.div`
   height: 100%;
 `;
 
+export const ContentHeader = styled.div`
+  color: #000;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  padding: 8px 0;
+`;
+
 export const ButtonLayout = styled.div`
   position: fixed;
   display: flex;
@@ -18,7 +27,7 @@ export const ButtonLayout = styled.div`
   max-width: 430px;
   margin: 0 auto;
 
-  bottom: 80px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   padding: 12px 16px;

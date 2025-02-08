@@ -2,7 +2,7 @@ import colors from '@/styles/color/palette';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const BackgroundOverlay = styled(motion.div)`
+export const BackgroundOverlay = styled(motion.div)<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 50%;
@@ -10,7 +10,7 @@ export const BackgroundOverlay = styled(motion.div)`
   width: 100%;
   min-width: 340px;
   max-width: 430px;
-  height: 100vh;
+  height: ${({ $isOpen }) => ($isOpen ? '100vh' : '0')};
 
   margin: 0 auto;
 
@@ -18,7 +18,10 @@ export const BackgroundOverlay = styled(motion.div)`
   background: rgba(0, 0, 0, 0.5);
 `;
 
-export const BottomSheetWrapper = styled(motion.div)<{ $isExpand: boolean }>`
+export const BottomSheetWrapper = styled(motion.div)<{
+  $isExpand: boolean;
+  $initHeight: string;
+}>`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -32,7 +35,8 @@ export const BottomSheetWrapper = styled(motion.div)<{ $isExpand: boolean }>`
   max-width: 430px;
   margin: 0 auto;
 
-  height: ${({ $isExpand }) => ($isExpand ? '100vh' : '50vh')};
+  height: ${({ $isExpand, $initHeight }) =>
+    $isExpand ? '100vh' : $initHeight === 'short' ? '50vh' : '80vh'};
 
   background: ${colors.etc.white};
   border-radius: ${({ $isExpand }) => ($isExpand ? '0' : '4px 4px 0px 0px')};
@@ -67,6 +71,12 @@ export const HeaderHandler = styled.div`
 `;
 
 export const ContentHeader = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 8px 0;
   color: #000;
   font-size: 16px;
   font-style: normal;

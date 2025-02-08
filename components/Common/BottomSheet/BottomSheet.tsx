@@ -7,23 +7,36 @@ import {
   HeaderWrapper,
 } from './BottomSheet.styles';
 
+type InitHeightProps = 'long' | 'short';
 interface BottomSheetProps {
   children: React.ReactNode;
+  isOpen?: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  initHeight?: InitHeightProps;
 }
 
-const BottomSheet = ({ children, setIsOpen }: BottomSheetProps) => {
+const BottomSheet = ({
+  children,
+  isOpen = true,
+  setIsOpen,
+  initHeight = 'short',
+}: BottomSheetProps) => {
   const { isExpand, onDragEnd } = useBottomSheet({
     setIsOpen,
   });
 
   return (
     <>
-      <BackgroundOverlay initial={{ x: '-50%' }} />
+      <BackgroundOverlay
+        $isOpen={isOpen}
+        initial={{ x: '-50%' }}
+        onClick={() => setIsOpen(false)}
+      />
       <BottomSheetWrapper
         $isExpand={isExpand}
-        initial={{ x: '-50%' }}
-        animate={{ y: '0%' }}
+        $initHeight={initHeight}
+        initial={{ x: '-50%', y: '100%' }}
+        animate={{ y: isOpen ? '0%' : '100%' }}
         exit={{ y: '100%' }}
         transition={{ type: 'tween' }}
         drag="y"
