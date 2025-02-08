@@ -33,12 +33,12 @@ const LocationRegisterBottomSheet = ({
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             styleType="whiteBackground"
-            label="취소하기"
+            label="취소"
             onClick={() => setIsLocationSelected(false)}
           />
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
-            label="선택하기"
+            label="선택"
             onClick={() => isLocationSelected && setIsOpen(false)}
           />
         </ButtonLayout>
