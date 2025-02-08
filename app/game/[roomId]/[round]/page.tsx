@@ -142,7 +142,7 @@ const GamePage = ({ params }: GamePageProps) => {
 
         <Footer>
           <Button
-            label={isBottomSheetOpen ? '정답 선택하기' : '위치 선택'}
+            label={isBottomSheetOpen ? '정답 선택' : '위치 선택'}
             buttonType={hasSubmitted ? 'gray' : 'purple'}
             buttonSize="large"
             onClick={toggleBottomSheet}

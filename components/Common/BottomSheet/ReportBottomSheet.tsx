@@ -66,7 +66,7 @@ const ReportBottomSheet: React.FC<ReportBottomSheetProps> = ({
       <BottomSheetWrapper>
         <BottomSheetHeader>
           <DragHandle />
-          <Title>신고하기</Title>
+          <Title>콘텐츠 신고</Title>
         </BottomSheetHeader>
 
         {/* 신고 항목 리스트 */}
@@ -89,13 +89,13 @@ const ReportBottomSheet: React.FC<ReportBottomSheetProps> = ({
 
         <BottomSheetFooter>
           <Button
-            label="취소하기"
+            label="취소"
             buttonSize="small"
             styleType="whiteBackground"
             onClick={onClose}
           />
           <Button
-            label="신고하기"
+            label="신고"
             buttonSize="small"
             styleType="coloredBackground"
             onClick={handleSubmit}
