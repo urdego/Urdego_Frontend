@@ -164,7 +164,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         </HeaderWrapper>
         <ContentWrapper ref={contentRef}>
           <GridContainer>
-            {isInitialLoad && <div>Loading...</div>}
+            {isInitialLoad && <div>장소를 불러오는 중입니다...</div>}
             {renderGridItems()}
           </GridContainer>
         </ContentWrapper>
