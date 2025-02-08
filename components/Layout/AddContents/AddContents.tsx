@@ -12,6 +12,7 @@ import {
   TitleContainer,
   LocationName,
   SelectIndicator,
+  CloseButton,
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
@@ -154,7 +155,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
         <HeaderWrapper>
           <HeaderHandler />
           <TitleContainer>
-            <span onClick={handleCancelClick}>닫기</span>
+            <CloseButton onClick={handleCancelClick}>닫기</CloseButton>
             {title && <HeaderTitle>{title}</HeaderTitle>}
             <span>선택완료</span>
           </TitleContainer>

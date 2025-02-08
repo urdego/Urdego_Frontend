@@ -150,3 +150,9 @@ export const LocationName = styled.span`
   left: 0;
   text-align: center;
 `;
+
+export const CloseButton = styled.span`
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+`;
