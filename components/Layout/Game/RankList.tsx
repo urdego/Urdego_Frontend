@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import GoldMedal from '@/styles/Icon/Game/Rank/Gold.svg';
+import SilverMedal from '@/styles/Icon/Game/Rank/Sliver.svg';
+import BronzeMedal from '@/styles/Icon/Game/Rank/Bronze.svg';
 import {
   Container,
   ButtonContainer,
@@ -13,13 +16,6 @@ import {
   Name,
   Score,
 } from './RankList.styles';
-import UserProfile from '@/styles/Icon/UserProfile.svg';
-
-// interface User {
-//   rank: number;
-//   name: string;
-//   score: number;
-// }
 
 const RankList = ({
   handleToggle,
@@ -37,14 +33,112 @@ const RankList = ({
     handleToggle(round);
   };
 
-  const rankData = [
-    { rank: 1, name: '유저1', score: 100, totalScore: 600 },
-    { rank: 2, name: '유저2', score: 90, totalScore: 550 },
-    { rank: 3, name: '유저3', score: 80, totalScore: 500 },
-    { rank: 4, name: '유저4', score: 70, totalScore: 450 },
-    { rank: 5, name: '유저5', score: 60, totalScore: 400 },
-    { rank: 6, name: '유저6', score: 50, totalScore: 350 },
-  ];
+  const mockData = {
+    roundScore: [
+      {
+        rank: 1,
+        userId: 1,
+        nickname: '가가가',
+        score: 150,
+        characterType: 'basic',
+      },
+      {
+        rank: 2,
+        userId: 2,
+        nickname: '나나나',
+        score: 120,
+        characterType: 'dot',
+      },
+      {
+        rank: 3,
+        userId: 3,
+        nickname: '다다다',
+        score: 100,
+        characterType: 'basic',
+      },
+      {
+        rank: 4,
+        userId: 4,
+        nickname: '라라라',
+        score: 70,
+        characterType: 'basic',
+      },
+      {
+        rank: 5,
+        userId: 5,
+        nickname: '마마마',
+        score: 50,
+        characterType: 'basic',
+      },
+      {
+        rank: 6,
+        userId: 6,
+        nickname: '바바바',
+        score: 10,
+        characterType: 'basic',
+      },
+    ],
+    totalScore: [
+      {
+        rank: 1,
+        userId: 1,
+        nickname: '가가가',
+        score: 420,
+        characterType: 'basic',
+      },
+      {
+        rank: 2,
+        userId: 2,
+        nickname: '나나나',
+        score: 380,
+        characterType: 'dot',
+      },
+      {
+        rank: 3,
+        userId: 3,
+        nickname: '다다다',
+        score: 340,
+        characterType: 'basic',
+      },
+      {
+        rank: 4,
+        userId: 4,
+        nickname: '라라라',
+        score: 340,
+        characterType: 'basic',
+      },
+      {
+        rank: 5,
+        userId: 5,
+        nickname: '마마마',
+        score: 340,
+        characterType: 'basic',
+      },
+      {
+        rank: 6,
+        userId: 6,
+        nickname: '바바바',
+        score: 340,
+        characterType: 'basic',
+      },
+    ],
+  };
+
+  const currentData =
+    activeTab === 'thisRound' ? mockData.roundScore : mockData.totalScore;
+
+  const getRankDisplay = (rank: number) => {
+    switch (rank) {
+      case 1:
+        return <Image src={GoldMedal} alt="1등" width={24} height={24} />;
+      case 2:
+        return <Image src={SilverMedal} alt="2등" width={24} height={24} />;
+      case 3:
+        return <Image src={BronzeMedal} alt="3등" width={24} height={24} />;
+      default:
+        return <Rank>{rank}</Rank>;
+    }
+  };
 
   return (
     <Container>
@@ -64,19 +158,17 @@ const RankList = ({
         </Button>
       </ButtonContainer>
       <ListContainer>
-        {rankData.map((user) => (
-          <UserRow key={user.rank}>
-            <Rank>{user.rank}</Rank>
+        {currentData.map((user) => (
+          <UserRow key={user.userId}>
+            {getRankDisplay(user.rank)}
             <Image
-              src={UserProfile}
-              alt={`${user.name}의 프로필 이미지`}
+              src={`/character/${user.characterType}.png`}
+              alt={`${user.nickname}의 프로필 이미지`}
               width={32}
               height={32}
             />
-            <Name>{user.name}</Name>
-            <Score>
-              {activeTab === 'thisRound' ? user.score : user.totalScore}점
-            </Score>
+            <Name>{user.nickname}</Name>
+            <Score>{user.score}점</Score>
           </UserRow>
         ))}
       </ListContainer>

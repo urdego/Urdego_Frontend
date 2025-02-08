@@ -54,6 +54,15 @@ export const ListContainer = styled.div`
   gap: 12px;
   padding: 16px 0;
   overflow-y: auto;
+  min-height: 340px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scroll-behavior: smooth;
 `;
 
 export const UserRow = styled.div`
