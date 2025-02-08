@@ -9,7 +9,8 @@ interface UserResponse {
   nickname: string;
   platformId: string;
   platformType: 'KAKAO';
-  characterType: string;
+  activeCharacter: string;
+  ownedCharacters: string[];
   exp: number;
   role: string;
 }
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.json({
-      characterType: response.data.characterType,
+      characterType: response.data.activeCharacter,
       exp: response.data.exp,
     });
   } catch (error) {
