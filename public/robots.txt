@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://urdego-fe.vercel.app
+Host: https://urdego.vercel.app
 
 # Sitemaps
-Sitemap: https://urdego-fe.vercel.app/sitemap.xml
+Sitemap: https://urdego.vercel.app/sitemap.xml

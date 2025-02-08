@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { WaitingWrapper, UserList, Footer } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
-import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
+// import { showReadyToast } from '@/components/Common/Toast/ReadyToast';
 import ContentsBox from '@/styles/Icon/ContentsBox.png';
 import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
@@ -28,14 +28,14 @@ const WaitingRoom = () => {
   };
 
   const toggleReady = () => console.log('준비하기 클릭');
-  const { currentUser, isManager, allPlayersReady, users } = mockData;
-  const startGame = () => {
-    if (!allPlayersReady) {
-      showReadyToast('아직 모든 팀원이 준비되지 않았습니다.');
-      return;
-    }
-    console.log('게임 시작');
-  };
+  const { users } = mockData;
+  // const startGame = () => {
+  //   if (!allPlayersReady) {
+  //     showReadyToast('아직 모든 팀원이 준비되지 않았습니다.');
+  //     return;
+  //   }
+  //   console.log('게임 시작');
+  // };
 
   return (
     <>
