@@ -66,7 +66,7 @@ export const Character = styled.div`
   img {
     position: absolute;
     right: 0;
-    left: -50px;
+    left: -55px;
     width: 260%;
     object-fit: contain;
     transform: translateY(12px);
