@@ -35,7 +35,7 @@ const PositionCard = ({
           <Level>Lv.{level}</Level>
           <Username>{username}</Username>
           <Character>
-            <Image src={Charac} alt="snowman" width={83} height={83} />
+            <Image src={Charac} alt="snowman" />
           </Character>
           {isHost ? (
             <HostLabel $isHost={true}>방장</HostLabel>
