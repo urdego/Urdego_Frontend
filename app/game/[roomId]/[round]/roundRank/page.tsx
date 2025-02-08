@@ -40,7 +40,7 @@ const RoundRank = ({
 }) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1;
-  const maxRounds = 1;
+  const maxRounds = 2;
   const messages = useWebSocketStore((state) => state.messages);
   const [currentRoundData] = useState<'thisRound' | 'totalRound'>(
     currentRound >= maxRounds ? 'totalRound' : 'thisRound'
@@ -86,7 +86,7 @@ const RoundRank = ({
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
       {currentRound < maxRounds && (
-        <Timer initialTime={100000} onTimeEnd={handleNextRound} />
+        <Timer initialTime={10} onTimeEnd={handleNextRound} />
       )}
       <MapComponent
         mode="rank"
