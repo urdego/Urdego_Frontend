@@ -40,7 +40,7 @@ const RoundRank = ({
 }) => {
   const router = useRouter();
   const currentRound = Number(params.round) || 1;
-  const maxRounds = 2;
+  const maxRounds = 1;
   const messages = useWebSocketStore((state) => state.messages);
   const [currentRoundData] = useState<'thisRound' | 'totalRound'>(
     currentRound >= maxRounds ? 'totalRound' : 'thisRound'
@@ -58,10 +58,11 @@ const RoundRank = ({
         )
         .map((coord, index) => ({
           rank: index + 1,
-          name: coord.nickname,
+          userId: index + 1,
+          nickname: coord.nickname,
           score:
             currentRoundData === 'thisRound' ? coord.score : coord.totalScore,
-          totalScore: coord.totalScore,
+          characterType: 'basic',
         }));
 
   const currentRoundDataRef = useRef<'thisRound' | 'totalRound'>(
@@ -112,6 +113,8 @@ const RoundRank = ({
         initialActiveButton={
           currentRound >= maxRounds ? 'totalRound' : 'thisRound'
         }
+        currentRound={currentRound}
+        maxRounds={maxRounds}
       />
       {currentRound >= maxRounds && (
         <Footer>

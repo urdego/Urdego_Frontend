@@ -17,13 +17,27 @@ import {
   Score,
 } from './RankList.styles';
 
-const RankList = ({
-  handleToggle,
-  initialActiveButton,
-}: {
+interface RankListProps {
+  rankData?: {
+    rank: number;
+    userId: number;
+    nickname: string;
+    score: number;
+    characterType: string;
+  }[];
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
   initialActiveButton: 'thisRound' | 'totalRound';
-}) => {
+  currentRound: number;
+  maxRounds: number;
+}
+
+const RankList = ({
+  rankData,
+  handleToggle,
+  initialActiveButton,
+  currentRound,
+  maxRounds,
+}: RankListProps) => {
   const [activeTab, setActiveTab] = useState<'thisRound' | 'totalRound'>(
     initialActiveButton
   );
@@ -124,8 +138,12 @@ const RankList = ({
     ],
   };
 
-  const currentData =
-    activeTab === 'thisRound' ? mockData.roundScore : mockData.totalScore;
+  const currentData: RankListProps['rankData'] =
+    (rankData ?? []).length > 0
+      ? (rankData ?? [])
+      : activeTab === 'thisRound'
+        ? mockData.roundScore
+        : mockData.totalScore;
 
   const getRankDisplay = (rank: number) => {
     switch (rank) {
@@ -143,19 +161,31 @@ const RankList = ({
   return (
     <Container>
       <ButtonContainer>
-        <ActiveIndicator $activeIndex={activeTab === 'thisRound' ? 0 : 1} />
-        <Button
-          $active={activeTab === 'thisRound'}
-          onClick={() => handleButtonClick('thisRound')}
-        >
-          이번 라운드
-        </Button>
-        <Button
-          $active={activeTab === 'totalRound'}
-          onClick={() => handleButtonClick('totalRound')}
-        >
-          총 라운드
-        </Button>
+        {currentRound >= maxRounds ? (
+          <Button
+            $active={true}
+            isFinal={true}
+            onClick={() => handleButtonClick('totalRound')}
+          >
+            최종 점수 결과
+          </Button>
+        ) : (
+          <>
+            <ActiveIndicator $activeIndex={activeTab === 'thisRound' ? 0 : 1} />
+            <Button
+              $active={activeTab === 'thisRound'}
+              onClick={() => handleButtonClick('thisRound')}
+            >
+              {currentRound} 라운드
+            </Button>
+            <Button
+              $active={activeTab === 'totalRound'}
+              onClick={() => handleButtonClick('totalRound')}
+            >
+              총 라운드
+            </Button>
+          </>
+        )}
       </ButtonContainer>
       <ListContainer>
         {currentData.map((user) => (

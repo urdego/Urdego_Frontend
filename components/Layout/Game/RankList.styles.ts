@@ -16,14 +16,14 @@ export const ButtonContainer = styled.div`
   overflow: hidden;
 `;
 
-export const Button = styled.button<{ $active: boolean }>`
+export const Button = styled.button<{ $active: boolean; isFinal?: boolean }>`
   flex: 1;
   padding: 12px 20px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  background: transparent;
+  background: ${({ isFinal }) => (isFinal ? colors.etc.white : 'transparent')};
   border: none;
   position: relative;
   z-index: 1;
