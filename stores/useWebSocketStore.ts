@@ -47,3 +47,5 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     }
   },
 }));
+
+export default useWebSocketStore;

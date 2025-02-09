@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useWebSocketStore } from '@/stores/useWebSocketStore';
+import useWebSocketStore from '@/stores/useWebSocketStore';
 
 import { TopWrapper, BottomWrapper } from './Home.styles';
 import HomeBox from '@/components/Layout/Home/HomeBox/HomeBox';
