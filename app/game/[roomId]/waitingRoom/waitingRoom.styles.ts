@@ -20,7 +20,7 @@ export const UserList = styled.div`
   grid-template-areas:
     'pos1 pos2 pos3'
     'pos4 pos5 pos6';
-  gap: 24px;
+  gap: 12px;
   justify-content: center;
   align-content: center;
   padding: 20px;

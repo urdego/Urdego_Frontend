@@ -41,7 +41,8 @@ const WaitingRoom = () => {
     const allReady = users.every((user) => user.isReady);
     if (!allReady) {
       AlertToast({
-        message: '모든 유저가 준비 완료 상태여야 합니다.',
+        message:
+          '모든 유저가 준비 완료 상태여야 합니다. 배가 많이 고프다 하지만 참아야겠지',
       });
       return;
     }

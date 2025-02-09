@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import toast, { Toast } from 'react-hot-toast';
-import { ToastContainer, Message } from './AlertToast.styles';
+import { ToastContainer, Message, IconWrapper } from './AlertToast.styles';
 import alertIcon from '@/styles/Icon/Toast/alert.svg';
 
 interface AlertToastProps {
@@ -17,8 +17,9 @@ export const AlertToast = ({ message }: AlertToastProps) => {
           marginTop: '20px',
         }}
       >
-        <Image src={alertIcon} alt="alert icon" width={24} height={24} />
-
+        <IconWrapper>
+          <Image src={alertIcon} alt="alert icon" width={24} height={24} />
+        </IconWrapper>
         <Message>{message}</Message>
       </ToastContainer>
     ),
