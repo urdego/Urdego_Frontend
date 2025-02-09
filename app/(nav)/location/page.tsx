@@ -13,8 +13,9 @@ import {
   LocationHeader,
   LocationLayout,
 } from './Location.styles';
+import LocationSearchButton from '@/components/Layout/Location/LocationSearchButton';
 
-const PlacePage = () => {
+const LocationPage = () => {
   // 무한 스크롤 로직
   const { locationList, totalCount, isLoading, isLoadMore, fetchLocationList } =
     useGetInfiniteLocationList();
@@ -36,8 +37,8 @@ const PlacePage = () => {
             </>
             <p>편집</p>
           </LocationHeader>
-          <p>검색</p>
-          <LocationContent>
+          <LocationSearchButton />
+          {/* <LocationContent>
             {locationList.map((location, index) => (
               <LocationList key={`key+${index}`} location={location} />
             ))}
@@ -50,11 +51,11 @@ const PlacePage = () => {
                 올린 장소가 없습니다. 장소를 등록해주세요! 😊
               </NoContentText>
             )}
-          </LocationContent>
+          </LocationContent> */}
         </LocationLayout>
       </LocationPageWrapper>
     </>
   );
 };
 
-export default PlacePage;
+export default LocationPage;

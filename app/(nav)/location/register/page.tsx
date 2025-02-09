@@ -23,7 +23,7 @@ import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 import TipModal from '@/components/Common/TipModal/TipModal';
 import { useState } from 'react';
 
-const PlaceRegisterPage = () => {
+const LocationRegisterPage = () => {
   // client state 불러오는 custom hook
   const { handleUploadFiles } = useUploadFiles();
   const { handleAddPlaceList } = useControlButtons();
@@ -78,4 +78,4 @@ const PlaceRegisterPage = () => {
   );
 };
 
-export default PlaceRegisterPage;
+export default LocationRegisterPage;
