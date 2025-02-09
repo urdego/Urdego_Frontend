@@ -13,7 +13,7 @@ import {
   LocationHeader,
   LocationLayout,
 } from './Location.styles';
-import LocationSearchButton from '@/components/Layout/Location/LocationSearchButton';
+import LocationSearchButton from '@/components/Layout/Location/LocationSearchBox';
 
 const LocationPage = () => {
   // 무한 스크롤 로직
