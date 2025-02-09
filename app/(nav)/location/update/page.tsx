@@ -13,7 +13,7 @@ const LocationUpdatepage = () => {
   }, [placeList]);
   return (
     <>
-      <TopBar label="장소" NavType="default" />
+      <TopBar label="장소" NavType="locationUpdate" />
       <PageWrapper>
         <PlaceRegister index={0} title={''} place={placeList[0]} />
       </PageWrapper>

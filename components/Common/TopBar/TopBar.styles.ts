@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 interface StyledTopBarProps {
-  $NavType: 'default' | 'other' | 'main' | 'game' | 'room';
+  $NavType: 'default' | 'other' | 'main' | 'game' | 'room' | 'locationUpdate';
   isMapView?: boolean;
 }
 
@@ -18,7 +18,7 @@ export const Nav = styled.nav<StyledTopBarProps>`
   z-index: 100;
 
   ${({ $NavType }) =>
-    $NavType === 'default'
+    $NavType === 'default' || 'locationUpdate'
       ? css`
           background-color: white;
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
@@ -100,4 +100,8 @@ export const IconWrapper = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+`;
+
+export const EditButtonWrapper = styled.div`
+  padding-right: 16px;
 `;
