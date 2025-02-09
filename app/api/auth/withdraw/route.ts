@@ -5,7 +5,7 @@ const KAKAO_UNLINK_URI = 'https://kapi.kakao.com/v1/user/unlink';
 const APPLE_UNLINK_URI = 'https://appleid.apple.com/auth/revoke';
 const KAKAO_TOKEN_URI = 'https://kauth.kakao.com/oauth/token';
 
-export async function refreshKakaoToken(refreshToken: string) {
+async function refreshKakaoToken(refreshToken: string) {
   if (!refreshToken || typeof refreshToken !== 'string') {
     throw new Error('유효한 Refresh Token이 없습니다.');
   }
