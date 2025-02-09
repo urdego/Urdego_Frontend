@@ -19,6 +19,7 @@ import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
+import { useCharacterState } from '@/hooks/character/useCharacterState'; // useCharacterState import
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -33,14 +34,14 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
-  const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
+  const { character: activeCharacter, ownCharacters } = useCharacterState();
   const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
-  >('BASIC');
+  >(activeCharacter || 'BASIC'); // activeCharacter로 초기화
   const [isButtonVisible, setButtonVisible] = useState(false);
 
-  const characters = useCharacterData({ ownCharacters });
+  const characters = useCharacterData({ ownCharacters }); // ownCharacters 사용
   const userId = useUserStore((state) => state.userId);
 
   // 캐릭터 클릭 처리
