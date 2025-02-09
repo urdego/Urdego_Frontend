@@ -21,6 +21,7 @@ import { usePathname } from 'next/navigation';
 const NavBar = () => {
   const [selected, setSelected] = useState<string>('home');
   const pathname = usePathname();
+  const location = usePathname();
 
   useEffect(() => {
     // URL에서 '/' 다음 경로를 추출해서 가져오기
@@ -41,8 +42,8 @@ const NavBar = () => {
         </NavItem>
       </Link>
       <Link href="/location/register" passHref>
-        <NavItem onClick={() => setSelected('locationRegister')}>
-          {selected === 'locationRegister' ? <MapColorIcon /> : <MapIcon />}
+        <NavItem>
+          {location === '/location/register' ? <MapColorIcon /> : <MapIcon />}
           <NavBarText>장소등록</NavBarText>
         </NavItem>
       </Link>
