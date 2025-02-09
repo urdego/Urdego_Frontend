@@ -9,6 +9,13 @@ export const LocationLayout = styled.div`
 export const LocationHeader = styled.div`
   display: flex;
   flex-direction: row;
+  gap: 8px;
+`;
+
+export const InHeader = styled.div`
+  display: flex;
+  flex: 1;
+  gap: 4px;
 `;
 
 export const LocationContent = styled.div`

@@ -12,6 +12,8 @@ import {
   LocationContent,
   LocationHeader,
   LocationLayout,
+  PreHeader,
+  InHeader,
 } from './Location.styles';
 import LocationSearchButton from '@/components/Layout/Location/LocationSearchBox';
 
@@ -30,11 +32,12 @@ const LocationPage = () => {
       <LocationPageWrapper>
         <LocationLayout>
           <LocationHeader>
-            <>
-              <p>총 {totalCount}곳</p>
+            <p>총 {totalCount}곳</p>
+            <InHeader>
               <p>등록순</p>
+              <p>&middot;</p>
               <p>최신순</p>
-            </>
+            </InHeader>
             <p>편집</p>
           </LocationHeader>
           <LocationSearchButton />
