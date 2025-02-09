@@ -32,7 +32,7 @@ const PlaceRegister = ({ index, title, place }: PlaceRegisterProps) => {
           </PlaceContentResetButton>
         )}
       </PlaceRegistertext>
-      <PlacePreview index={index} />
+      <PlacePreview index={index} place={place} />
       <PlaceInput
         placeholder="장소명"
         value={place.title}

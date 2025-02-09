@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import { Place } from '@/stores/placeRegisterStore';
 import ImageUpload from './ImageUpload';
 import {
   PlacePreviewWrapper,
@@ -15,9 +15,10 @@ import Skeleton from '@/components/Common/Skeleton/Skeleton';
 
 interface PlacePreviewProps {
   index: number;
+  place: Place;
 }
 
-const PlacePreview = ({ index }: PlacePreviewProps) => {
+const PlacePreview = ({ index, place }: PlacePreviewProps) => {
   // client state 불러오는 custom hook
   const { handleFilesUpload } = useRegisterFiles({
     index,
@@ -25,14 +26,13 @@ const PlacePreview = ({ index }: PlacePreviewProps) => {
   const { handlePartFileRemove } = useControlInput({ index });
 
   // store state 불러오는 로직
-  const { placeList } = usePlaceRegisterStore();
   const { isPreviewLoading } = useLoadingStore();
 
   return (
     <PlacePreviewWrapper>
       <ImageUpload
         handleFilesUpload={handleFilesUpload}
-        currCount={placeList[index].previewFile.length}
+        currCount={place.previewFile.length}
         totalCount={3}
       />
       {isPreviewLoading[index]?.every(
@@ -43,7 +43,7 @@ const PlacePreview = ({ index }: PlacePreviewProps) => {
               <Skeleton width={60} height={60} />
             </PreviewImage>
           ))
-        : placeList[index].previewFile.map((file, previewIndex) => (
+        : place.previewFile.map((file, previewIndex) => (
             <PreviewImage key={`item${previewIndex}`}>
               <PreviewImageRemoveButton
                 onClick={() => handlePartFileRemove(previewIndex)}
