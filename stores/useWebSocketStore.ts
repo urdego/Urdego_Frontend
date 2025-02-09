@@ -1,155 +1,49 @@
 import { create } from 'zustand';
+import { Client } from '@stomp/stompjs';
 
-export type UserRole = 'MANAGER' | 'MEMBER';
+const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
 
-export interface User {
-  id: number;
-  name: string;
-  isHost: boolean;
-  isReady: boolean;
-  role: UserRole;
+interface WebSocketState {
+  client: Client | null;
+  isConnected: boolean;
+  connectWebSocket: () => void;
+  disconnectWebSocket: () => void;
 }
 
-interface WaitingRoomData {
-  waitingRoomParticipants: {
-    nickname: string;
-    status: string;
-    id: number;
-  }[];
-}
+export const useWebSocketStore = create<WebSocketState>((set, get) => ({
+  client: null,
+  isConnected: false,
 
-interface GameStartData {
-  action: 'startGame';
-  gameId: string;
-  joinedUser: string[];
-  totalRounds: number;
-}
+  connectWebSocket: () => {
+    if (get().client) {
+      console.log('WebSocket is already connected.');
+      return;
+    }
 
-export interface RoundData {
-  roundId: number;
-  roundNum: number;
-  roundTimer: number;
-  contentUrls: string[];
-  hint?: string;
-}
+    console.log('Attempting WebSocket connection...');
 
-export interface ResultData {
-  answerCoordinate: {
-    lat: number;
-    lng: number;
-  };
-  submitCoordinates: {
-    nickname: string;
-    lat: number;
-    lng: number;
-    score: number;
-    totalScore: number;
-  }[];
-}
-
-export interface ScoreData {
-  roundId: number;
-  answerCoordinate: {
-    lat: number;
-    lng: number;
-  };
-  submitCoordinates: {
-    nickname: string;
-    lat: number;
-    lng: number;
-    score: number;
-    totalScore: number;
-  }[];
-}
-
-interface WebSocketMessage {
-  data: WaitingRoomData | GameStartData | RoundData | ResultData | ScoreData;
-  eventType?:
-    | 'PARTICIPANT'
-    | 'READY'
-    | 'START'
-    | 'ROUND_START'
-    | 'RESULT'
-    | 'SCORE'
-    | 'ROUND_END';
-}
-
-interface WebSocketStore {
-  messages: WebSocketMessage[];
-  users: User[];
-  hostNickname: string | null;
-  scoreData: ScoreData | null;
-  addMessage: (message: WebSocketMessage) => void;
-  clearMessages: () => void;
-  setUsers: (users: User[]) => void;
-  setHostNickname: (nickname: string) => void;
-  setScoreData: (scoreData: ScoreData | null) => void;
-}
-
-export interface GameState {
-  roundState?: {
-    roundId: number;
-    roundNum: number;
-    roundTimer: number;
-    contentUrls: string[];
-    hint?: string;
-  };
-  scoreState?: {
-    answerCoordinate: {
-      lat: number;
-      lng: number;
-    };
-    submitCoordinates: {
-      nickname: string;
-      lat: number;
-      lng: number;
-      score: number;
-      totalScore: number;
-    }[];
-  };
-}
-
-const useWebSocketStore = create<WebSocketStore>((set) => ({
-  messages: [],
-  users: [],
-  hostNickname: null,
-  scoreData: null,
-  addMessage: (message) => {
-    set((state) => {
-      // WaitingRoomData 타입인 경우에만 users 업데이트
-      if ('waitingRoomParticipants' in message.data) {
-        const updatedUsers = message.data.waitingRoomParticipants.map(
-          (participant): User => ({
-            id: participant.id,
-            name: participant.nickname,
-            isHost: participant.nickname === state.hostNickname,
-            isReady:
-              participant.status === 'Ready' ||
-              participant.nickname === state.hostNickname,
-            role:
-              participant.nickname === state.hostNickname
-                ? 'MANAGER'
-                : 'MEMBER',
-          })
-        );
-
-        return {
-          ...state,
-          messages: [...state.messages, message],
-          users: updatedUsers,
-        };
-      }
-
-      return {
-        ...state,
-        messages: [...state.messages, message],
-      };
+    const client = new Client({
+      brokerURL: WEBSOCKET_URL,
+      reconnectDelay: 0,
+      onConnect: () => {
+        console.log('WebSocket connected successfully.');
+        set({ isConnected: true });
+      },
+      onStompError: (frame) => {
+        console.error('STOMP error:', frame);
+      },
     });
-  },
-  clearMessages: () => set({ messages: [], hostNickname: null }),
-  setUsers: (users) => set({ users }),
-  setHostNickname: (nickname) => set({ hostNickname: nickname }),
-  setScoreData: (scoreData) => set({ scoreData }),
-}));
 
-export default useWebSocketStore;
+    client.activate();
+    set({ client });
+  },
+
+  disconnectWebSocket: () => {
+    const { client } = get();
+    if (client) {
+      console.log('Disconnecting WebSocket...');
+      client.deactivate();
+      set({ client: null, isConnected: false });
+    }
+  },
+}));
