@@ -15,7 +15,7 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContainer = styled.div`
-  background-color: rgba(179, 179, 179, 0.95);
+  background-color: rgba(179, 179, 179, 1);
   border-radius: 16px;
   width: fit-content;
   min-width: 270px;

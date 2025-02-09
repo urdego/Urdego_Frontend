@@ -45,7 +45,7 @@ const WaitingRoom = () => {
         </FullScreenImageWrapper>
       ) : (
         <>
-          <TopBar label="게임 대기방" NavType="room" exitIcon />
+          <TopBar label="방제목" NavType="room" exitIcon />
           <WaitingWrapper>
             <UserList>
               {users.map((user) => (
