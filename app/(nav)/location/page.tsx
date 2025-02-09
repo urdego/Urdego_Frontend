@@ -29,7 +29,7 @@ const LocationPage = () => {
   });
 
   // 모달 로직
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       <TopBar NavType="default" label="등록한 장소" />
@@ -44,7 +44,7 @@ const LocationPage = () => {
             </InHeader>
             <p>편집</p>
           </LocationHeader>
-          <LocationSearchBox />
+          <LocationSearchBox onClick={() => setIsModalOpen(true)} />
           {/* <LocationContent>
             {locationList.map((location, index) => (
               <LocationList key={`key+${index}`} location={location} />

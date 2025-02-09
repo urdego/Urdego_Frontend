@@ -6,11 +6,15 @@ import { useState } from 'react';
 
 interface LocationSearchBoxProps {
   isInputMode?: boolean;
+  onClick?: () => void;
 }
-const LocationSearchBox = ({ isInputMode = false }: LocationSearchBoxProps) => {
+const LocationSearchBox = ({
+  isInputMode = false,
+  onClick,
+}: LocationSearchBoxProps) => {
   const [locationName, setLocationName] = useState('');
   return (
-    <LocationSearchButtonWrapper>
+    <LocationSearchButtonWrapper onClick={onClick}>
       <Image src={SearchIconSrc} alt="Search Icon" />
       <Input
         type="text"

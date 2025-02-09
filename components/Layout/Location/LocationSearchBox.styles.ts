@@ -11,6 +11,8 @@ export const LocationSearchButtonWrapper = styled.div`
   padding: 6px 12px;
   border-radius: 999px;
   background: ${colors.gray[95]};
+
+  cursor: pointer;
 `;
 
 export const Input = styled.input`
@@ -29,5 +31,9 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
+  }
+
+  &:disabled {
+    pointer-events: none;
   }
 `;
