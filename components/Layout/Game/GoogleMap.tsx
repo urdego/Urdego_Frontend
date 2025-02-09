@@ -30,7 +30,7 @@ const MapContainer = styled.div<MapContainerProps>`
   ${({ mode }) =>
     mode === 'game'
       ? css`
-          height: calc(100vh - 35vh);
+          height: calc(100vh - 45vh);
         `
       : css`
           height: 250px;

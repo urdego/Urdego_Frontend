@@ -9,6 +9,7 @@ import {
   BottomSheetFooter,
   Title,
   StyledMotion,
+  MapContainer,
 } from './MapBottomSheet.styles';
 
 export interface MapBottomSheetProps {
@@ -77,7 +78,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
         </BottomSheetHeader>
 
         {/* 지도 내부 드래그 중에는 바텀시트가 움직이지 않도록 이벤트 차단 */}
-        <div
+        <MapContainer
           ref={mapRef}
           onTouchStart={() => setIsDraggable(false)} // 지도 터치 시 드래그 비활성화
           onTouchEnd={() => setIsDraggable(true)} // 지도에서 손을 떼면 다시 드래그 활성화
@@ -88,7 +89,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
             onCoordinateSelect={onCoordinateSelect}
             answerCoordinate={null}
           />
-        </div>
+        </MapContainer>
 
         <BottomSheetFooter>
           <Button
