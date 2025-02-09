@@ -12,10 +12,11 @@ import {
   LocationContent,
   LocationHeader,
   LocationLayout,
-  PreHeader,
   InHeader,
 } from './Location.styles';
-import LocationSearchButton from '@/components/Layout/Location/LocationSearchBox';
+import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
+import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
+import { useState } from 'react';
 
 const LocationPage = () => {
   // 무한 스크롤 로직
@@ -26,6 +27,9 @@ const LocationPage = () => {
       fetchLocationList();
     },
   });
+
+  // 모달 로직
+  const [isModalOpen, setIsModalOpen] = useState(true);
   return (
     <>
       <TopBar NavType="default" label="등록한 장소" />
@@ -40,7 +44,7 @@ const LocationPage = () => {
             </InHeader>
             <p>편집</p>
           </LocationHeader>
-          <LocationSearchButton />
+          <LocationSearchBox />
           {/* <LocationContent>
             {locationList.map((location, index) => (
               <LocationList key={`key+${index}`} location={location} />
@@ -57,6 +61,7 @@ const LocationPage = () => {
           </LocationContent> */}
         </LocationLayout>
       </LocationPageWrapper>
+      {isModalOpen && <LocationSearchModal />}
     </>
   );
 };

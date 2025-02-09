@@ -3,7 +3,7 @@ import SearchIconSrc from '@styles/Icon/search-btn.svg';
 import ClearIconSrc from '@styles/Icon/Clear.svg';
 import { Input, LocationSearchButtonWrapper } from './LocationSearchBox.styles';
 
-const LocationSearchButton = () => {
+const LocationSearchBox = () => {
   return (
     <LocationSearchButtonWrapper>
       <Image src={SearchIconSrc} alt="Search Icon" />
@@ -13,4 +13,4 @@ const LocationSearchButton = () => {
   );
 };
 
-export default LocationSearchButton;
+export default LocationSearchBox;
