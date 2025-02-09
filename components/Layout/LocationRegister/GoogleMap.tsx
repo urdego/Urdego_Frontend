@@ -9,7 +9,7 @@ import {
 } from '@vis.gl/react-google-maps';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import UserMarkerSrc from '@styles/Icon/UserMarker.svg';
+import UserMarkerSrc from '@styles/Icon/Game/UserMarker.svg';
 
 interface GoogleMapProps {
   index: number;
