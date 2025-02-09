@@ -3,51 +3,77 @@ import colors from '@/styles/color/palette';
 
 export const Container = styled.div`
   width: 100%;
-  padding-top: 6px;
+  height: 100%;
+  padding: 8px 16px;
+  background-color: #f4effa;
 `;
 
 export const ButtonContainer = styled.div`
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  padding: 8px 24px 16px 24px;
+  background-color: ${colors.gray[90]};
+  border-radius: 999px;
+  overflow: hidden;
 `;
 
-export const Button = styled.button<{ $active: boolean }>`
+export const Button = styled.button<{ $active: boolean; isFinal?: boolean }>`
   flex: 1;
-  padding: 8px 20px;
-  background-color: ${({ $active }) =>
-    $active ? colors.purple[50] : 'transparent'};
-  color: ${({ $active }) => ($active ? colors.etc.white : colors.gray[70])};
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
+  padding: 12px 20px;
   font-size: 16px;
-  text-align: center;
   font-weight: 700;
-  line-height: 150%;
+  cursor: pointer;
+  text-align: center;
+  background: ${({ isFinal }) => (isFinal ? colors.etc.white : 'transparent')};
+  border: none;
+  position: relative;
+  z-index: 1;
+
+  color: ${({ $active }) => ($active ? colors.purple[50] : colors.gray[70])};
+  box-shadow: ${({ $active }) =>
+    $active ? `inset 0 0 0 2px ${colors.purple[50]}` : 'none'};
+  border-radius: 999px;
   transition:
-    background-color 0.3s,
-    color 0.3s;
+    color 0.3s ease-in-out,
+    box-shadow 0.5s ease-in-out;
+`;
+
+export const ActiveIndicator = styled.div<{ $activeIndex: number }>`
+  position: absolute;
+  top: 0;
+  left: ${({ $activeIndex }) => ($activeIndex === 0 ? '0%' : '50%')};
+  width: 50%;
+  height: 100%;
+  background-color: ${colors.etc.white};
+  border-radius: 999px;
+  transition: left 0.3s ease-in-out;
 `;
 
 export const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 16px 0;
+  overflow-y: auto;
+  min-height: 340px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  scroll-behavior: smooth;
 `;
 
 export const UserRow = styled.div`
   display: flex;
   align-items: center;
+  align-self: stretch;
+  height: 54px;
   gap: 12px;
-  padding: 8px 16px;
+  padding: 0px 24px 0px 20px;
   background-color: ${colors.etc.white};
-  border-radius: 4px;
-
-  &:nth-child(1) {
-    background-color: ${colors.purple[95]};
-  }
+  border-radius: 8px;
 `;
 
 export const Rank = styled.span`
@@ -58,14 +84,18 @@ export const Rank = styled.span`
 
 export const Name = styled.span`
   flex: 1;
-  font-size: 14px;
-  font-weight: normal;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
   line-height: 150%;
   color: ${colors.etc.black};
 `;
 
 export const Score = styled.span`
-  font-size: 14px;
+  font-size: 16px;
+  text-align: right;
   font-weight: 700;
+  font-style: normal;
+  line-height: 150%;
   color: ${colors.purple[50]};
 `;

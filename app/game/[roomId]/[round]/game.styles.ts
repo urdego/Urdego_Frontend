@@ -1,4 +1,3 @@
-'use client';
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 
@@ -34,30 +33,59 @@ export const Footer = styled.footer`
 `;
 
 export const HintText = styled.p`
-  border-radius: 8px;
   font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.16px;
   color: ${colors.etc.black};
   text-align: center;
+
+  background: ${colors.gray[90]};
+  padding: 8px 12px;
+  border-radius: 8px;
 `;
 
 export const HintWrapper = styled.div`
   display: flex;
-  align-items: center;
+  max-height: 64px;
   justify-content: center;
-  gap: 8px;
-  z-index: 10;
-  padding-top: 8px;
-`;
-export const HintIcon = styled.div`
-  display: flex;
-  width: 36px;
-  height: 28px;
-  font-size: 16px;
-  font-weight: 400;
-  color: ${colors.etc.white};
-  background-color: ${colors.purple[50]};
-  padding: 2px 4px;
-  border-radius: 4px;
-  text-align: center;
   align-items: center;
+  user-select: none;
+`;
+
+export const AnswerAddress = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 4px 16px;
+  flex-direction: column;
+  align-items: center;
+  background-color: ${colors.etc.white};
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  flex: 1 0 0;
+`;
+
+export const PlaceName = styled.p`
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.12px;
+  color: ${colors.gray[60]};
+  text-align: center;
+  text-overflow: ellipsis;
+`;
+
+export const PlaceAddress = styled.p`
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.12px;
+  color: ${colors.gray[60]};
+  text-align: center;
+  text-overflow: ellipsis;
 `;

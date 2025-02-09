@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import colors from '@/styles/color/palette';
-import UserMarker from '@/styles/Icon/UserMarker.svg';
-import AnswerMarker from '@/styles/Icon/AnswerMarker.svg';
+import UserMarker from '@/styles/Icon/Game/Marker/pin-mine-basic.png';
+import AnswerMarker from '@/styles/Icon/Game/AnswerMarker.svg';
 
 interface MapContainerProps {
   mode: 'game' | 'rank';
@@ -27,15 +27,14 @@ interface MapComponentProps {
 const MapContainer = styled.div<MapContainerProps>`
   width: 100%;
   position: relative;
-
   ${({ mode }) =>
     mode === 'game'
       ? css`
-          height: calc(100vh - 35vh);
+          height: calc(100vh - 45vh);
         `
       : css`
           height: 250px;
-        `}
+        `};
 `;
 
 const MapComponent: React.FC<MapComponentProps> = ({
@@ -101,7 +100,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
       map: mapRef.current!,
       icon: {
         url: UserMarker.src,
-        scaledSize: new google.maps.Size(50, 53), // TODO: 사이즈 조절
+        scaledSize: new google.maps.Size(52, 52),
       },
       animation: google.maps.Animation.DROP,
     });
@@ -149,7 +148,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         map: mapRef.current!,
         icon: {
           url: AnswerMarker.src,
-          scaledSize: new google.maps.Size(50, 53), // TODO: 사이즈 조절
+          scaledSize: new google.maps.Size(48, 48),
         },
       });
       markerRefs.current.push(answerMarker);
@@ -160,7 +159,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         mapRef.current?.panTo(answerCoordinate); // 위치로 이동
         setTimeout(() => {
           if (mapRef.current) {
-            smoothZoom(mapRef.current, 15, 7); // 부드럽게 줌인 (7에서 15까지)
+            smoothZoom(mapRef.current, 17, 7); // 부드럽게 줌인 (7에서 15까지)
           }
         }, 500);
       }, 100);

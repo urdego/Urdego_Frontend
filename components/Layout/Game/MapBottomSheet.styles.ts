@@ -51,3 +51,7 @@ export const Title = styled.div`
   font-weight: 700;
   text-align: center;
 `;
+
+export const MapContainer = styled.div`
+  padding: 16px;
+`;

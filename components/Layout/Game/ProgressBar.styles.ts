@@ -11,7 +11,8 @@ export const ProgressBarContainer = styled.div`
 
 export const ProgressBarFill = styled.div<{ width: number }>`
   height: 100%;
-  background-color: ${colors.purple[60]};
   border-radius: 4px;
+  background-color: ${({ width }) =>
+    width < 50 ? colors.alert[50] : colors.etc.green};
   width: ${({ width }) => width}%;
 `;

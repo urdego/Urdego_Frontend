@@ -11,14 +11,9 @@ import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState, useEffect } from 'react';
 import InGameWebSocket from '@/lib/websocket/gameWebsocket';
 import useWebSocketStore, { RoundData } from '@/stores/useWebSocketStore';
+import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
 
-import {
-  PageWrapper,
-  Footer,
-  HintText,
-  HintWrapper,
-  HintIcon,
-} from './game.styles';
+import { PageWrapper, Footer, HintText, HintWrapper } from './game.styles';
 
 interface GamePageProps {
   params: {
@@ -132,21 +127,22 @@ const GamePage = ({ params }: GamePageProps) => {
         ) : (
           <>
             <SwiperComponent
-              images={roundState?.contentUrls || []}
+              images={
+                roundState?.contentUrls || [...Array(3).fill(SwiperTestImage)]
+              }
               key={roundState?.roundId}
             />
-            {roundState?.hint && (
-              <HintWrapper>
-                <HintIcon>힌트</HintIcon>
-                <HintText> {roundState.hint}</HintText>
-              </HintWrapper>
-            )}
+            <HintWrapper>
+              <HintText>
+                {roundState?.hint || '문화생활을 할 수 있는 장소'}
+              </HintText>
+            </HintWrapper>
           </>
         )}
 
         <Footer>
           <Button
-            label={isBottomSheetOpen ? '정답 선택하기' : '위치 선택'}
+            label={isBottomSheetOpen ? '정답 선택' : '위치 선택'}
             buttonType={hasSubmitted ? 'gray' : 'purple'}
             buttonSize="large"
             onClick={toggleBottomSheet}
