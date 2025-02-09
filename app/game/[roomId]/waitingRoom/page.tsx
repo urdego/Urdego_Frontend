@@ -15,6 +15,7 @@ import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
+import { AlertToast } from '@/components/Common/Toast/AlertToast';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -34,8 +35,18 @@ const WaitingRoom = () => {
     ],
   };
 
-  const toggleReady = () => console.log('준비하기 클릭');
   const { users } = mockData;
+
+  const toggleReady = () => {
+    const allReady = users.every((user) => user.isReady);
+    if (!allReady) {
+      AlertToast({
+        message: '모든 유저가 준비 완료 상태여야 합니다.',
+      });
+      return;
+    }
+    console.log('준비하기 클릭');
+  };
 
   return (
     <>
