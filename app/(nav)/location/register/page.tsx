@@ -11,7 +11,7 @@ import {
   ModalLayout,
   PlaceLayout,
   PlaceRegisterWrapper,
-} from './PlaceRegister.styles';
+} from './LocationRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';

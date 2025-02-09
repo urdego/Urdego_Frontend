@@ -1,5 +1,4 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Nav,
@@ -19,21 +18,13 @@ import {
 import { usePathname } from 'next/navigation';
 
 const NavBar = () => {
-  const [selected, setSelected] = useState<string>('home');
   const pathname = usePathname();
-  const location = usePathname();
-
-  useEffect(() => {
-    // URL에서 '/' 다음 경로를 추출해서 가져오기
-    const path = pathname.split('/')[1];
-    setSelected(path === 'waitingRoomList' ? 'home' : path);
-  }, [pathname]);
 
   return (
     <Nav>
       <Link href="/home" passHref>
-        <NavItem onClick={() => setSelected('home')}>
-          {selected === 'home' || selected === 'waitingRoomList' ? (
+        <NavItem>
+          {pathname === '/home' || pathname === '/waitingRoomList' ? (
             <HomeColorIcon />
           ) : (
             <HomeIcon />
@@ -43,19 +34,19 @@ const NavBar = () => {
       </Link>
       <Link href="/location/register" passHref>
         <NavItem>
-          {location === '/location/register' ? <MapColorIcon /> : <MapIcon />}
+          {pathname === '/location/register' ? <MapColorIcon /> : <MapIcon />}
           <NavBarText>장소등록</NavBarText>
         </NavItem>
       </Link>
       <Link href="/rank" passHref>
-        <NavItem onClick={() => setSelected('rank')}>
-          {selected === 'rank' ? <StarColorIcon /> : <StarIcon />}
+        <NavItem>
+          {pathname === '/rank' ? <StarColorIcon /> : <StarIcon />}
           <NavBarText>랭킹</NavBarText>
         </NavItem>
       </Link>
       <Link href="/myPage" passHref>
-        <NavItem onClick={() => setSelected('myPage')}>
-          {selected === 'myPage' ? <MypageColorIcon /> : <MypageIcon />}
+        <NavItem>
+          {pathname === '/myPage' ? <MypageColorIcon /> : <MypageIcon />}
           <NavBarText>마이페이지</NavBarText>
         </NavItem>
       </Link>
