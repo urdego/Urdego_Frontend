@@ -24,7 +24,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     const client = new Client({
       brokerURL: WEBSOCKET_URL,
-      reconnectDelay: 5000,
+      reconnectDelay: 0,
       onConnect: () => {
         console.log('WebSocket connected successfully.');
         set({ isConnected: true });
@@ -36,6 +36,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     client.activate();
     set({ client });
+    console.log(client);
   },
 
   disconnectWebSocket: () => {

@@ -16,12 +16,12 @@ const Home = () => {
   const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
     useCharacterState();
 
-  /* 웹소켓 연결, 상태 가져오기 */
+  /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
 
   useEffect(() => {
-    connectWebSocket();
-  }, [connectWebSocket]);
+    if (!isConnected) connectWebSocket();
+  }, []);
 
   return (
     <>
