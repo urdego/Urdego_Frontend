@@ -10,6 +10,7 @@ import Button from '@/components/Common/Button/Button';
 import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
+import Link from 'next/link';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -39,13 +40,15 @@ const Home = () => {
             setIsBottomSheetOpen={setIsBottomSheetOpen}
             isBottomSheetOpen={isBottomSheetOpen}
           />
-          <Button
-            label="방 입장하기"
-            icon={EnterArrowIcon}
-            buttonHeight="long"
-            $iconPosition="right"
-            disabled={!isConnected}
-          />
+          <Link href="/waitingRoomList">
+            <Button
+              label="방 입장하기"
+              icon={EnterArrowIcon}
+              buttonHeight="long"
+              $iconPosition="right"
+              disabled={!isConnected}
+            />
+          </Link>
         </BottomWrapper>
       </HomePageWrapper>
     </>
