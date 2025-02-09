@@ -10,12 +10,12 @@ const LocationUpdatepage = () => {
   const { placeList } = usePlaceRegisterStore();
   useEffect(() => {
     console.log(placeList);
-  }, []);
+  }, [placeList]);
   return (
     <>
-      <TopBar />
+      <TopBar label="장소" NavType="default" />
       <PageWrapper>
-        {/* <PlaceRegister index={1} title={'aa'} place={placeList[1]} /> */}
+        <PlaceRegister index={0} title={''} place={placeList[0]} />
       </PageWrapper>
     </>
   );
