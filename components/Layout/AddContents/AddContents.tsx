@@ -12,10 +12,13 @@ import {
   TitleContainer,
   LocationName,
   SelectIndicator,
+  CloseButton,
+  LoadingWrapper,
 } from '@/components/Layout/AddContents/AddContents.styles';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import Image from 'next/image';
 import SearchBar from '@/components/Common/SearchBar/SearchBar';
+import AlertModal from '@/components/Common/AlertModal/AlertModal';
 
 interface AddContentsProps {
   isVisible: boolean;
@@ -26,7 +29,8 @@ interface AddContentsProps {
 const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState<number[]>([]);
-  const [searchQuery, setSearchQuery] = useState(''); // ✅ 검색어 상태 유지
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -80,20 +84,22 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   };
 
   const handleLocationSelect = (id: number) => {
-    setSelectedLocations((prev) =>
-      prev.includes(id)
-        ? prev.filter((i) => i !== id)
-        : prev.length < 5
-          ? [...prev, id]
-          : prev
-    );
+    setSelectedLocations((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((i) => i !== id);
+      } else if (prev.length < 5) {
+        return [...prev, id];
+      } else {
+        setIsAlertOpen(true);
+        return prev;
+      }
+    });
   };
 
   const getLocationNumber = (id: number) => {
     return selectedLocations.indexOf(id) + 1;
   };
 
-  // 검색어를 적용한 결과 목록
   const filteredContents = contents.filter((content) =>
     content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -103,7 +109,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     setIsVisible(false);
   };
 
+  const LoadingIndicator = () => {
+    return <LoadingWrapper>불러오는 중입니다...</LoadingWrapper>;
+  };
+
   const renderGridItems = () => {
+    if (isInitialLoad) return <LoadingIndicator />;
+
     return filteredContents.map((content) => (
       <GridItem
         key={content.contentId}
@@ -131,44 +143,49 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   if (!isVisible) return null;
 
   return (
-    <BackgroundOverlay onClick={handleBackgroundClick}>
-      <BottomSheet
-        $isExpand={isExpand}
-        initial={{ y: '100%' }}
-        animate={{ y: '0%' }}
-        exit={{ y: '100%' }}
-        transition={{ type: 'tween' }}
-        drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.2}
-        onDragEnd={(event, info) => {
-          const isScrollToBottom = info.delta.y > 5 || info.offset.y > 150;
-          if (isScrollToBottom) {
-            setIsExpand(false);
-            setIsVisible(false);
-          } else {
-            setIsExpand(true);
-          }
-        }}
-      >
-        <HeaderWrapper>
-          <HeaderHandler />
-          <TitleContainer>
-            <span onClick={handleCancelClick}>닫기</span>
-            {title && <HeaderTitle>{title}</HeaderTitle>}
-            <span>선택완료</span>
-          </TitleContainer>
-          {/* ✅ 검색어를 유지한 상태에서 검색 가능 */}
-          <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
-        </HeaderWrapper>
-        <ContentWrapper ref={contentRef}>
-          <GridContainer>
-            {isInitialLoad && <div>Loading...</div>}
-            {renderGridItems()}
-          </GridContainer>
-        </ContentWrapper>
-      </BottomSheet>
-    </BackgroundOverlay>
+    <>
+      <BackgroundOverlay onClick={handleBackgroundClick}>
+        <BottomSheet
+          $isExpand={isExpand}
+          initial={{ y: '100%' }}
+          animate={{ y: '0%' }}
+          exit={{ y: '100%' }}
+          transition={{ type: 'tween' }}
+          drag="y"
+          dragConstraints={{ top: 0, bottom: 0 }}
+          dragElastic={0.2}
+          onDragEnd={(event, info) => {
+            const isScrollToBottom = info.delta.y > 5 || info.offset.y > 150;
+            if (isScrollToBottom) {
+              setIsExpand(false);
+              setIsVisible(false);
+            } else {
+              setIsExpand(true);
+            }
+          }}
+        >
+          <HeaderWrapper>
+            <HeaderHandler />
+            <TitleContainer>
+              <CloseButton onClick={handleCancelClick}>닫기</CloseButton>
+              {title && <HeaderTitle>{title}</HeaderTitle>}
+              <span>선택완료</span>
+            </TitleContainer>
+            <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
+          </HeaderWrapper>
+          <ContentWrapper ref={contentRef}>
+            <GridContainer>{renderGridItems()}</GridContainer>
+          </ContentWrapper>
+        </BottomSheet>
+      </BackgroundOverlay>
+      <AlertModal
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        onConfirm={() => setIsAlertOpen(false)}
+        title="장소 선택은 최대 5개까지 가능합니다."
+        confirmOnly={true}
+      />
+    </>
   );
 };
 

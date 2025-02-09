@@ -15,7 +15,7 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContainer = styled.div`
-  background-color: ${colors.gray[95]};
+  background-color: rgba(179, 179, 179, 1);
   border-radius: 16px;
   width: fit-content;
   min-width: 270px;
@@ -43,8 +43,4 @@ export const Button = styled.button<{ $confirm?: boolean }>`
   color: ${colors.etc.blue};
   background: transparent;
   border: none;
-
-  &:first-child {
-    border-right: 1px solid ${colors.gray[80]};
-  }
 `;
