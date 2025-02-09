@@ -23,7 +23,13 @@ const LocationSearchBox = ({
         onChange={(e) => setLocationName(e.target.value)}
         disabled={!isInputMode}
       />
-      {locationName && <Image src={ClearIconSrc} alt="Remove Button" />}
+      {locationName && (
+        <Image
+          src={ClearIconSrc}
+          alt="Remove Button"
+          onClick={() => setLocationName('')}
+        />
+      )}
     </LocationSearchButtonWrapper>
   );
 };
