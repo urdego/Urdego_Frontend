@@ -3,10 +3,10 @@
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { WaitingRoomListPageWrapper } from '@/app/commonPage.styles';
 import { RoomButtonGrid, ListTitle, SubTitle } from './waitingRoomList.styles';
-import { RefreshIcon } from '@/components/Common/RoomButton/WaitingRoomListIcon';
+import { RefreshIcon } from '@/components/Layout/RoomButton/WaitingRoomListIcon';
 import useGetWaitingRoomList from '@/hooks/waitingRoomList/useGetWaitingRoomList';
 import DotLoadingSpinner from '@/components/Common/LoadingSpinner/DotLoadingSpinner';
-import RoomButtonList from '@/components/Common/RoomButton/RoomButtonList';
+import RoomButtonList from '@/components/Layout/RoomButton/RoomButtonList';
 
 const WaitingRoomList = () => {
   const { waitingRoomList, isLoading, fetchWaitingRoomList } =
