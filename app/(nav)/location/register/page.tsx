@@ -20,7 +20,7 @@ import useControlButtons from '@/hooks/placeRegister/useControlButtons';
 import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import PlayerTip from '@/components/Common/Lottie/PlayerTip';
-import TipModal from '@/components/Common/TipModal/TipModal';
+import TipModal from '@/components/Layout/TipModal/TipModal';
 import { useState } from 'react';
 
 const LocationRegisterPage = () => {
