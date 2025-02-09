@@ -36,7 +36,6 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     client.activate();
     set({ client });
-    console.log(client);
   },
 
   disconnectWebSocket: () => {
