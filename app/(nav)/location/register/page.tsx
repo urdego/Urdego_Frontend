@@ -39,11 +39,12 @@ const LocationRegisterPage = () => {
       <PageWrapper>
         <PlaceRegisterWrapper>
           <PlaceLayout>
-            {placeList.map((_, index) => (
+            {placeList.map((item, index) => (
               <PlaceRegister
                 key={index}
                 index={index}
                 title={'장소 ' + (index + 1)}
+                place={item}
               />
             ))}
             <Button

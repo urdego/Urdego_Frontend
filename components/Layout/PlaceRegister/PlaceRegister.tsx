@@ -8,21 +8,19 @@ import {
   PlaceRegisterWrapper,
 } from './PlaceRegister.styles';
 
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import { Place } from '@/stores/placeRegisterStore';
 import useControlInput from '@/hooks/placeRegister/useControlInput';
 
 interface PlaceRegisterProps {
   index: number;
   title: string;
+  place: Place;
 }
 
-const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
+const PlaceRegister = ({ index, title, place }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
   const { handleTitleChange, handleHintChange, handlePlaceRemove } =
     useControlInput({ index });
-
-  // store state 불러오는 로직
-  const { placeList } = usePlaceRegisterStore();
 
   return (
     <PlaceRegisterWrapper>
@@ -37,13 +35,13 @@ const PlaceRegister = ({ index, title }: PlaceRegisterProps) => {
       <PlacePreview index={index} />
       <PlaceInput
         placeholder="장소명"
-        value={placeList[index].title}
+        value={place.title}
         onChange={handleTitleChange}
       />
-      <PlaceSearchButton index={index} value={placeList[index].address} />
+      <PlaceSearchButton index={index} value={place.address} />
       <PlaceInput
         placeholder="(선택) 힌트를 작성해주세요"
-        value={placeList[index].hint}
+        value={place.hint}
         onChange={handleHintChange}
       />
     </PlaceRegisterWrapper>
