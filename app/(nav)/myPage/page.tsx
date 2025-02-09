@@ -22,7 +22,7 @@ const MyPage = () => {
   const [userInfo, setUserInfo] = useState({
     email: '',
     nickname: '',
-    characterType: '',
+    activeCharacter: '',
   });
 
   const userId = useUserStore((state) => state.userId);
@@ -67,7 +67,7 @@ const MyPage = () => {
           <ProfileInfo
             email={userInfo.email}
             nickname={userInfo.nickname}
-            characterType={userInfo.characterType}
+            activeCharacter={userInfo.activeCharacter}
           />
 
           <SmallButtonWrapper>

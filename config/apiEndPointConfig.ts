@@ -9,7 +9,7 @@ export const API_URL_CONFIG = {
     NICKNAME: '/api/user-service/users/nickname',
   },
   USER_SERVICE: {
-    CHARACTER: '/api/user-service/users/character',
+    CHARACTER_CHANGE: '/api/user-service/users/character/change',
     USERS: '/api/user-service/users',
   },
   NOTIFICATION: {

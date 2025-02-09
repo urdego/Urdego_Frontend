@@ -11,10 +11,14 @@ import Image from 'next/image';
 interface ProfileInfoProps {
   email: string;
   nickname: string;
-  characterType: string;
+  activeCharacter: string;
 }
 
-const ProfileInfo = ({ email, nickname, characterType }: ProfileInfoProps) => {
+const ProfileInfo = ({
+  email,
+  nickname,
+  activeCharacter,
+}: ProfileInfoProps) => {
   return (
     <ProfileInfoWrapper>
       <ImageWrapper>
@@ -22,7 +26,7 @@ const ProfileInfo = ({ email, nickname, characterType }: ProfileInfoProps) => {
       </ImageWrapper>
       <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
-      <div>{characterType || '캐릭터 타입 없음'}</div>
+      <div>{activeCharacter || '캐릭터 타입 없음'}</div>
     </ProfileInfoWrapper>
   );
 };

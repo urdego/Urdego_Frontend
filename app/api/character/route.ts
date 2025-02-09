@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await axiosInstance.post(
-      `${API_URL_CONFIG.USER_SERVICE.CHARACTER}/${userId}`,
+      `${API_URL_CONFIG.USER_SERVICE.CHARACTER_CHANGE}/${userId}`,
       { characterName },
       {
         headers: {
