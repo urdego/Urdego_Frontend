@@ -40,9 +40,9 @@ const NavBar = () => {
           <NavBarText>홈</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/place/register" passHref>
-        <NavItem onClick={() => setSelected('placeRegister')}>
-          {selected === '/place/register' ? <MapColorIcon /> : <MapIcon />}
+      <Link href="/location/register" passHref>
+        <NavItem onClick={() => setSelected('locationRegister')}>
+          {selected === 'locationRegister' ? <MapColorIcon /> : <MapIcon />}
           <NavBarText>장소등록</NavBarText>
         </NavItem>
       </Link>
