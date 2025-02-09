@@ -6,12 +6,15 @@ import {
   ModalWrapper,
 } from './LocationSearchModal.styles';
 
-const LocationSearchModal = () => {
+interface LocationSearchModalProps {
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
   return (
     <ModalWrapper>
       <ModalHeader>
-        <LocationSearchBox />
-        <CancelButton>취소</CancelButton>
+        <LocationSearchBox isInputMode={true} />
+        <CancelButton onClick={() => setIsModalOpen(false)}>취소</CancelButton>
       </ModalHeader>
       <ModalContainer></ModalContainer>
     </ModalWrapper>

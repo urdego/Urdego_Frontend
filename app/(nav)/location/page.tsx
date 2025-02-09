@@ -61,7 +61,7 @@ const LocationPage = () => {
           </LocationContent> */}
         </LocationLayout>
       </LocationPageWrapper>
-      {isModalOpen && <LocationSearchModal />}
+      {isModalOpen && <LocationSearchModal setIsModalOpen={setIsModalOpen} />}
     </>
   );
 };
