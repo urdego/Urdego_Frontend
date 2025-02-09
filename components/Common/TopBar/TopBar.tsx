@@ -131,7 +131,7 @@ const TopBar = ({
           )}
           <Label>{label}</Label>
           <EditButtonWrapper onClick={handleLocationUpdate}>
-            수정
+            완료
           </EditButtonWrapper>
         </>
       )}
