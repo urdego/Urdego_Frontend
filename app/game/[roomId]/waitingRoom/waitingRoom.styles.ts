@@ -1,4 +1,3 @@
-'use client';
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
 import BackgroundImage from '@/styles/Image/WaitingRoom/BackgroundImageL.png';
@@ -49,4 +48,24 @@ export const Footer = styled.footer`
   box-shadow: 0px -4px 24px rgba(0, 0, 0, 0.1);
   gap: 16px;
   z-index: 101;
+`;
+
+export const FullScreenImageWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+`;
+
+export const FullScreenImage = styled.img`
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+  cursor: pointer;
 `;

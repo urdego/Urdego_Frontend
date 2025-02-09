@@ -12,9 +12,16 @@ interface AlertModalProps {
   onClose: () => void;
   onConfirm: () => void;
   title: string;
+  confirmOnly?: boolean;
 }
 
-const AlertModal = ({ isOpen, onClose, onConfirm, title }: AlertModalProps) => {
+const AlertModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  confirmOnly = false,
+}: AlertModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -25,7 +32,7 @@ const AlertModal = ({ isOpen, onClose, onConfirm, title }: AlertModalProps) => {
           <Button $confirm onClick={onConfirm}>
             확인
           </Button>
-          <Button onClick={onClose}>취소</Button>
+          {!confirmOnly && <Button onClick={onClose}>취소</Button>}
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>

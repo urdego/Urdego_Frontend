@@ -4,7 +4,7 @@ import RefreshIconSrc from '@styles/Icon/waitingRoomList/Refresh.svg';
 import PersonIconSrc from '@styles/Icon/waitingRoomList/Person.svg';
 import BasicIcon from '@styles/Icon/Character/basic.png';
 import AngularIcon from '@styles/Icon/Character/angular.png';
-import BumpyIcon from '@styles/Icon/Character/bumpy.png';
+import BumpyIcon from '@styles/Icon/Character/bumphy.png';
 import DotIcon from '@styles/Icon/Character/dot.png';
 import PlanetIcon from '@styles/Icon/Character/planet.png';
 import SharpIcon from '@styles/Icon/Character/sharp.png';

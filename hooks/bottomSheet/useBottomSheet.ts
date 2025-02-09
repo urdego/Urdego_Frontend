@@ -15,7 +15,7 @@ const useBottomSheet = ({ setIsOpen }: useBottomSheetProps) => {
     event: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
-    const isScrollToBottom = info.delta.y > 5 || info.offset.y > 150;
+    const isScrollToBottom = info.delta.y > 20 || info.offset.y > 200;
     if (isScrollToBottom) {
       // 스크롤 아래로 내리는 경우
       setIsExpand(false);

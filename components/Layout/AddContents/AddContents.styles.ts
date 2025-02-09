@@ -21,10 +21,10 @@ export const BottomSheet = styled(motion.div)<{ $isExpand: boolean }>`
   bottom: 0;
   width: 100%;
   max-width: 430px;
-  height: 75vh;
+  height: 80vh;
   background: ${colors.etc.white};
   border-radius: 4px 4px 0 0;
-  padding: 12px 16px;
+  /* padding: 12px 16px; */
   z-index: 200;
   overflow: hidden;
 `;
@@ -34,6 +34,7 @@ export const HeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 12px 16px;
 `;
 
 export const HeaderHandler = styled.div`
@@ -76,7 +77,8 @@ export const ContentWrapper = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
-  padding: 16px 0;
+  /* margin: 12px; */
+  padding-bottom: 60px;
 `;
 
 export const AllCancelButton = styled.button`
@@ -147,4 +149,21 @@ export const LocationName = styled.span`
   bottom: 0;
   left: 0;
   text-align: center;
+`;
+
+export const CloseButton = styled.span`
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+`;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: 16px;
+  font-weight: 600;
+  color: ${colors.gray[50]};
 `;

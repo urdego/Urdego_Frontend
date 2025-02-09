@@ -35,7 +35,7 @@ export const Card = styled.div<{ $isEmpty?: boolean }>`
 export const Level = styled.div`
   font-size: 12px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   color: ${colors.purple[50]};
   border-radius: 4px;
   background: ${colors.purple[95]};
@@ -60,8 +60,17 @@ export const Username = styled.div`
 export const Character = styled.div`
   flex: 1;
   display: flex;
+  align-items: center;
   justify-content: center;
   position: relative;
+  img {
+    position: absolute;
+    right: 0;
+    left: -55px;
+    width: 260%;
+    object-fit: contain;
+    transform: translateY(12px);
+  }
 `;
 
 export const HostLabel = styled.div<{ $isHost?: boolean }>`

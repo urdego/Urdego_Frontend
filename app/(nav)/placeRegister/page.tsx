@@ -1,6 +1,4 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
@@ -23,25 +21,16 @@ import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 import TipModal from '@/components/Common/TipModal/TipModal';
+import { useState } from 'react';
 
 const PlaceRegisterPage = () => {
-  const searchParams = useSearchParams();
-  const source = searchParams.get('source');
-
-  useEffect(() => {
-    // placeRegister 들어오면 PlaceList 정보 초기화
-    if (source !== 'locationRegister') {
-      initEntirePlaceList();
-    }
-  }, [searchParams]);
-
   // client state 불러오는 custom hook
   const { handleUploadFiles } = useUploadFiles();
   const { handleAddPlaceList } = useControlButtons();
 
   // store state 불러오는 로직
   const { isInputComplete, isSubmitReady } = usePlaceRegisterModeStore();
-  const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
+  const { placeList } = usePlaceRegisterStore();
   const [isTipOpen, setIsTipOpen] = useState(false);
 
   return (

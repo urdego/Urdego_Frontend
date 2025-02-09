@@ -1,5 +1,6 @@
-import Script from 'next/script';
-import React from 'react';
+'use client';
+
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 export default function PlaceRegisterLayout({
   children,
@@ -7,13 +8,12 @@ export default function PlaceRegisterLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      <Script
-        id="google-maps-script"
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY}&libraries=places&loading=async`}
-        strategy="afterInteractive"
-      />
+    <APIProvider
+      apiKey={
+        process.env.NEXT_PUBLIC_LOCATION_REGISTER_GOOGLE_MAPS_API_KEY as string
+      }
+    >
       {children}
-    </>
+    </APIProvider>
   );
 }
