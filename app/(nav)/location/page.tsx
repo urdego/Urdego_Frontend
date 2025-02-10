@@ -17,6 +17,7 @@ import {
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const LocationPage = () => {
   // 무한 스크롤 로직
@@ -45,9 +46,14 @@ const LocationPage = () => {
             <p>편집</p>
           </LocationHeader>
           <LocationSearchBox onClick={() => setIsModalOpen(true)} />
-          {/* <LocationContent>
+          <LocationContent>
             {locationList.map((location, index) => (
-              <LocationList key={`key+${index}`} location={location} />
+              <Link
+                href={`/location/update/${location.contentId}`}
+                key={`key+${index}`}
+              >
+                <LocationList location={location} />
+              </Link>
             ))}
             {isLoading && <DotLoadingSpinner />}
             {!isLoading && isLoadMore && (
@@ -58,7 +64,7 @@ const LocationPage = () => {
                 올린 장소가 없습니다. 장소를 등록해주세요! 😊
               </NoContentText>
             )}
-          </LocationContent> */}
+          </LocationContent>
         </LocationLayout>
       </LocationPageWrapper>
       {isModalOpen && <LocationSearchModal setIsModalOpen={setIsModalOpen} />}
