@@ -12,15 +12,15 @@ export const SuccessToast = ({ message }: SuccessToastProps) => {
         style={{
           opacity: t.visible ? 1 : 0,
           transform: `translateY(${t.visible ? 0 : 20}px)`,
-          marginTop: '20px',
+          marginBottom: '280px',
         }}
       >
-        <Message>{message}</Message>
+        <Message dangerouslySetInnerHTML={{ __html: message }} />
       </ToastContainer>
     ),
     {
       duration: 2000,
-      position: 'top-center',
+      position: 'bottom-center',
     }
   );
 };

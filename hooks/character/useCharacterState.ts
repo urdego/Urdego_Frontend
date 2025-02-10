@@ -19,10 +19,9 @@ export const useCharacterState = ({
 }: UseCharacterStateProps = {}): UseCharacterStateReturn => {
   const [character, setCharacter] = useState<string | null>('BASIC');
   const [ownCharacters, setOwnCharacters] = useState<string[]>([]);
-  const [level, setLevel] = useState<number>(1); // 레벨 상태 추가
+  const [level, setLevel] = useState<number | null>(null); // 레벨 상태 추가
   const [exp, setExp] = useState<number>(0); // 경험치 상태 추가
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
@@ -31,7 +30,6 @@ export const useCharacterState = ({
         const ownCharacters = response.data.ownedCharacters;
         const userLevel = response.data.level;
         const userExp = response.data.exp;
-        console.log('가져온 캐릭터 정보:', response.data);
 
         setCharacter(activeCharacter);
         setOwnCharacters(ownCharacters);
@@ -56,7 +54,7 @@ export const useCharacterState = ({
     setCharacter,
     isLoading,
     ownCharacters,
-    level,
+    level: level || 1,
     exp,
   };
 };

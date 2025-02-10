@@ -19,7 +19,7 @@ import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
-import { useCharacterState } from '@/hooks/character/useCharacterState'; // useCharacterState import
+import { useCharacterState } from '@/hooks/character/useCharacterState';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -34,7 +34,12 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
-  const { character: activeCharacter, ownCharacters } = useCharacterState();
+  const {
+    character: activeCharacter,
+    ownCharacters,
+    level,
+    exp,
+  } = useCharacterState();
   const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
@@ -93,7 +98,7 @@ const HomeBox = ({
   return (
     <HomeBoxWrapper>
       <TopWrapper>
-        <Level />
+        <Level level={level} exp={exp} />
       </TopWrapper>
       <BottomWrapper>
         <PlaceRegister onClick={toggleLocationList}>

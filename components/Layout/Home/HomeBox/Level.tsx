@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   InfoRow,
   LevelText,
@@ -8,11 +9,15 @@ import {
   ProgressNum,
 } from './Level.styles';
 import useUserStore from '@/stores/useUserStore';
-import { useCharacterState } from '@/hooks/character/useCharacterState';
 
-export const Level = () => {
-  const { level, exp } = useCharacterState(); // 레벨과 경험치 가져오기
+interface LevelProps {
+  level: number;
+  exp: number;
+}
+
+export const Level: React.FC<LevelProps> = ({ level, exp }) => {
   const nickname = useUserStore((state) => state.nickname);
+  const [progress, setProgress] = useState(0);
 
   const levelStandards = [
     { level: 9, minExp: 2500 },
@@ -35,12 +40,16 @@ export const Level = () => {
   );
 
   // 경험치에 따른 게이지 퍼센트 계산
-  const progress =
+  const calculatedProgress =
     currentLevelStandard && nextLevelStandard
       ? ((exp - currentLevelStandard.minExp) /
           (nextLevelStandard.minExp - currentLevelStandard.minExp)) *
         100
       : 0;
+
+  useEffect(() => {
+    setProgress(calculatedProgress);
+  }, [calculatedProgress]);
 
   return (
     <>

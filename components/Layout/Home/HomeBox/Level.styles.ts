@@ -51,7 +51,7 @@ export const ProgressBar = styled.div<{ $progress: number }>`
   background-color: #947dff;
   border-radius: 4px;
   width: 0;
-  animation: fillProgress 1s ease-out forwards;
+  animation: fillProgress 3s ease-out forwards;
 
   @keyframes fillProgress {
     from {
