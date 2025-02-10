@@ -49,8 +49,11 @@ const LocationPage = () => {
           <LocationContent>
             {locationList.map((location, index) => (
               <Link
-                href={`/location/update/${location.contentId}`}
                 key={`key+${index}`}
+                href={{
+                  pathname: `/location/update/${location.contentId}`,
+                  query: { location: JSON.stringify(location) },
+                }}
               >
                 <LocationList location={location} />
               </Link>

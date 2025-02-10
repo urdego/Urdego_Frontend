@@ -4,13 +4,17 @@ import { PageWrapper } from '@/app/commonPage.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 const LocationUpdatepage = () => {
+  const searchParams = useSearchParams();
+  const locationData = searchParams.get('location') as string;
+
   const { placeList } = usePlaceRegisterStore();
   useEffect(() => {
-    console.log(placeList);
-  }, [placeList]);
+    console.log(JSON.parse(locationData));
+  }, [locationData]);
   return (
     <>
       <TopBar label="장소" NavType="locationUpdate" />
