@@ -1,5 +1,3 @@
-'use client';
-
 import useBottomSheet from '@/hooks/bottomSheet/useBottomSheet';
 import {
   BackgroundOverlay,
@@ -14,14 +12,16 @@ import NumSelectForm from './NumSelectForm';
 
 interface CreateRoomBottomSheetProps {
   isOpen: boolean;
-  setIsOpen: () => void; // 닫힐 때 실행할 함수로 변경
+  setIsOpen: () => void;
   onRoomTitleChange: (title: string) => void;
+  onTotalRoundsChange: (rounds: number) => void;
 }
 
 const CreateRoomBottomSheet = ({
   isOpen,
   setIsOpen,
   onRoomTitleChange,
+  onTotalRoundsChange,
 }: CreateRoomBottomSheetProps) => {
   const { isExpand, onDragEnd } = useBottomSheet({
     setIsOpen,
@@ -50,7 +50,11 @@ const CreateRoomBottomSheet = ({
             label="방 제목 설정"
             onChange={(e) => onRoomTitleChange(e.target.value)}
           />
-          <NumSelectForm label="라운드 (최대 3라운드)" maxValue={3} />
+          <NumSelectForm
+            label="라운드 (최대 3라운드)"
+            maxValue={3}
+            onChange={onTotalRoundsChange}
+          />
           <RoomTitleInput
             placeholder="1분 (변경불가)"
             label="타이머"
