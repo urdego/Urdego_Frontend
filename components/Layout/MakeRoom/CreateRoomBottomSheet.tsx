@@ -14,12 +14,14 @@ import NumSelectForm from './NumSelectForm';
 
 interface CreateRoomBottomSheetProps {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: () => void; // 닫힐 때 실행할 함수로 변경
+  onRoomTitleChange: (title: string) => void;
 }
 
 const CreateRoomBottomSheet = ({
   isOpen,
   setIsOpen,
+  onRoomTitleChange,
 }: CreateRoomBottomSheetProps) => {
   const { isExpand, onDragEnd } = useBottomSheet({
     setIsOpen,
@@ -27,7 +29,7 @@ const CreateRoomBottomSheet = ({
 
   return (
     <>
-      <BackgroundOverlay $isOpen={isOpen} onClick={() => setIsOpen(false)} />
+      <BackgroundOverlay $isOpen={isOpen} onClick={setIsOpen} />
       <BottomSheetWrapper
         $isExpand={isExpand}
         animate={{ y: isOpen ? '0%' : '100%' }}
@@ -46,6 +48,7 @@ const CreateRoomBottomSheet = ({
           <RoomTitleInput
             placeholder="방 제목을 입력해주세요"
             label="방 제목 설정"
+            onChange={(e) => onRoomTitleChange(e.target.value)}
           />
           <NumSelectForm label="라운드 (최대 3라운드)" maxValue={3} />
           <RoomTitleInput
