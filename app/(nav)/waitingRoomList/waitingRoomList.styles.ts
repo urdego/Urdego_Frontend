@@ -20,6 +20,7 @@ export const RoomButtonGrid = styled.div`
   grid-template-columns: repeat(1, 1fr);
   gap: 8px;
 `;
+
 export const Footer = styled.footer`
   position: fixed;
   bottom: 0;

@@ -48,7 +48,7 @@ export const HeaderHandler = styled.div`
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
   height: 100%;
   gap: 8px;
@@ -56,4 +56,12 @@ export const ContentWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+export const StyledTitle = styled.h2`
+  margin: 8px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100%;
 `;

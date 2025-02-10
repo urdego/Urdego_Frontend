@@ -7,6 +7,7 @@ import {
   ContentWrapper,
   HeaderHandler,
   HeaderWrapper,
+  StyledTitle,
 } from '@/components/Layout/MakeRoom/CreateRoomBottomSheet.styles';
 import RoomTitleInput from './RoomTitleInput';
 import NumSelectForm from './NumSelectForm';
@@ -41,7 +42,7 @@ const CreateRoomBottomSheet = ({
           <HeaderHandler />
         </HeaderWrapper>
         <ContentWrapper>
-          <h2 style={{ textAlign: 'center', fontWeight: 'bold' }}>방 만들기</h2>
+          <StyledTitle>방 만들기</StyledTitle>
           <RoomTitleInput
             placeholder="방 제목을 입력해주세요"
             label="방 제목 설정"
