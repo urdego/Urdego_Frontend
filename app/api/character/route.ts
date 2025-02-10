@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
       activeCharacter: response.data.activeCharacter,
       exp: response.data.exp,
       ownedCharacters: response.data.ownedCharacters,
+      level: response.data.level,
     });
   } catch (error) {
     console.error('유저 정보 조회 에러:', error);

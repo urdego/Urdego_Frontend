@@ -4,6 +4,8 @@ import axiosInstance from '@/lib/axios';
 interface UseCharacterStateReturn {
   character: string | null;
   ownCharacters: string[]; // 사용자별 보유 캐릭터 목록
+  level: number;
+  exp: number;
   setCharacter: Dispatch<SetStateAction<string | null>>;
   isLoading: boolean;
 }
@@ -17,6 +19,8 @@ export const useCharacterState = ({
 }: UseCharacterStateProps = {}): UseCharacterStateReturn => {
   const [character, setCharacter] = useState<string | null>('BASIC');
   const [ownCharacters, setOwnCharacters] = useState<string[]>([]);
+  const [level, setLevel] = useState<number>(1); // 레벨 상태 추가
+  const [exp, setExp] = useState<number>(0); // 경험치 상태 추가
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,10 +29,14 @@ export const useCharacterState = ({
         const response = await axiosInstance.get('/api/character');
         const activeCharacter = response.data.activeCharacter;
         const ownCharacters = response.data.ownedCharacters;
+        const userLevel = response.data.level;
+        const userExp = response.data.exp;
         console.log('가져온 캐릭터 정보:', response.data);
 
         setCharacter(activeCharacter);
         setOwnCharacters(ownCharacters);
+        setLevel(userLevel); // 레벨 설정
+        setExp(userExp); // 경험치 설정
         onCharacterLoad?.(activeCharacter);
       } catch (error) {
         console.error('캐릭터 정보 조회 에러:', error);
@@ -43,5 +51,12 @@ export const useCharacterState = ({
     fetchCharacter();
   }, [onCharacterLoad]);
 
-  return { character, setCharacter, isLoading, ownCharacters };
+  return {
+    character,
+    setCharacter,
+    isLoading,
+    ownCharacters,
+    level,
+    exp,
+  };
 };
