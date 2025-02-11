@@ -1,9 +1,10 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import axiosInstance from '@/lib/axios';
+import useUserStore from '@/stores/useUserStore';
 
 interface UseCharacterStateReturn {
   character: string | null;
-  ownCharacters: string[]; // 사용자별 보유 캐릭터 목록
+  ownCharacters: string[];
   level: number;
   exp: number;
   setCharacter: Dispatch<SetStateAction<string | null>>;
@@ -17,11 +18,14 @@ interface UseCharacterStateProps {
 export const useCharacterState = ({
   onCharacterLoad,
 }: UseCharacterStateProps = {}): UseCharacterStateReturn => {
-  const [character, setCharacter] = useState<string | null>('BASIC');
+  const [character, setCharacter] = useState<string | null>('');
   const [ownCharacters, setOwnCharacters] = useState<string[]>([]);
-  const [level, setLevel] = useState<number | null>(null); // 레벨 상태 추가
-  const [exp, setExp] = useState<number>(0); // 경험치 상태 추가
+  const [level, setLevel] = useState<number | null>(null);
+  const [exp, setExp] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { setActiveCharacter } = useUserStore();
+
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
@@ -31,10 +35,11 @@ export const useCharacterState = ({
         const userLevel = response.data.level;
         const userExp = response.data.exp;
 
+        setActiveCharacter(activeCharacter); // 전역 상태 업데이트
         setCharacter(activeCharacter);
         setOwnCharacters(ownCharacters);
-        setLevel(userLevel); // 레벨 설정
-        setExp(userExp); // 경험치 설정
+        setLevel(userLevel);
+        setExp(userExp);
         onCharacterLoad?.(activeCharacter);
       } catch (error) {
         console.error('캐릭터 정보 조회 에러:', error);
@@ -47,7 +52,7 @@ export const useCharacterState = ({
     };
 
     fetchCharacter();
-  }, [onCharacterLoad]);
+  }, [onCharacterLoad, setActiveCharacter]);
 
   return {
     character,
