@@ -117,7 +117,7 @@ const HomeBox = ({
             width={24}
             height={24}
           />
-          캐릭터
+          캐릭터 도감
         </CharacterSelect>
         <CharacterBottomSheet
           isOpen={isBottomSheetOpen}
