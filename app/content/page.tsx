@@ -22,7 +22,7 @@ import useControlScroll from '@/hooks/modal/useControlScroll';
 const LocationPage = () => {
   // 무한 스크롤 로직
   const { locationList, totalCount, isLoading, isLoadMore, fetchLocationList } =
-    useGetInfiniteLocationList();
+    useGetInfiniteLocationList('recent');
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
       fetchLocationList();
