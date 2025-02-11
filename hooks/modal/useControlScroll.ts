@@ -10,6 +10,7 @@ const useControlScroll = ({ isModalOpen }: { isModalOpen: boolean }) => {
   const allowSrcoll = () => {
     document.body.style.overflow = 'unset';
   };
+
   useEffect(() => {
     if (isModalOpen) {
       preventScroll();

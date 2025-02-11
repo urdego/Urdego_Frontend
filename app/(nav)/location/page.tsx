@@ -12,11 +12,12 @@ import {
   LocationContent,
   LocationHeader,
   LocationLayout,
-  InHeader,
+  SortHeader,
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import useControlScroll from '@/hooks/modal/useControlScroll';
 
 const LocationPage = () => {
   // 무한 스크롤 로직
@@ -30,15 +31,7 @@ const LocationPage = () => {
 
   // 모달 로직
   const [isModalOpen, setIsModalOpen] = useState(false);
-  useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = 'calc(100vw - 100%)';
-    } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '0';
-    }
-  }, [isModalOpen]);
+  useControlScroll({ isModalOpen });
   return (
     <>
       <TopBar NavType="default" label="등록한 장소" />
@@ -46,12 +39,11 @@ const LocationPage = () => {
         <LocationLayout>
           <LocationHeader>
             <p>총 {totalCount}곳</p>
-            <InHeader>
+            <SortHeader>
               <p>등록순</p>
               <p>&middot;</p>
               <p>최신순</p>
-            </InHeader>
-            <p>편집</p>
+            </SortHeader>
           </LocationHeader>
           <LocationSearchBox onClick={() => setIsModalOpen(true)} />
           <LocationContent>

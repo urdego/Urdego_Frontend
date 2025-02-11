@@ -9,12 +9,13 @@ export const LocationLayout = styled.div`
 export const LocationHeader = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   gap: 8px;
 `;
 
-export const InHeader = styled.div`
+export const SortHeader = styled.div`
   display: flex;
-  flex: 1;
+  flex-direction: row;
   gap: 4px;
 `;
 
