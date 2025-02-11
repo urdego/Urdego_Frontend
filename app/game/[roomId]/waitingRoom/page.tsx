@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   WaitingWrapper,
   UserList,
@@ -16,11 +16,24 @@ import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
 import { AlertToast } from '@/components/Common/Toast/AlertToast';
+import useGameStore from '@/stores/useGameStore';
+import useUserStore from '@/stores/useUserStore';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
+  const { sendMessage } = useWebSocketFunctions();
+  const { roomId } = useGameStore();
+  const { userId } = useUserStore();
+
+  useEffect(() => {
+    sendMessage('PLAYER_JOIN', {
+      roomId: String(roomId),
+      userId: String(userId),
+    });
+  }, []);
 
   const mockData = {
     currentUser: { name: '테스트유저', isReady: false },

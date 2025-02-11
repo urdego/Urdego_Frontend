@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import { WaitingRoomListPageWrapper } from '@/app/commonPage.styles';
 import {
@@ -16,20 +17,49 @@ import RoomButtonList from '@/components/Common/RoomButton/RoomButtonList';
 import Button from '@/components/Common/Button/Button';
 import CreateRoomBottomSheet from '@/components/Layout/MakeRoom/CreateRoomBottomSheet';
 import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 const WaitingRoomList = () => {
+  const router = useRouter();
   const { waitingRoomList, isLoading, fetchWaitingRoomList } =
     useGetWaitingRoomList();
 
   const { userId } = useUserStore();
-  const { subscribeToRoom, sendMessage } = useWebSocketFunctions(); // WebSocket 구독 & 메시지 발행 함수 가져오기
+  const { subscribeToRoom } = useWebSocketFunctions(); // WebSocket 구독 함수 가져오기
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [buttonType, setButtonType] = useState<'purple' | 'gray'>('purple');
   const [buttonLabel, setButtonLabel] = useState('방 만들기');
   const [roomTitle, setRoomTitle] = useState('');
   const [totalRounds, setTotalRounds] = useState(1); // 라운드 기본값 1
+  const { roomId, setRoomId } = useGameStore();
   const MAX_PLAYERS = 6; // 항상 6으로 고정
+
+  // 방 제목 입력 핸들러
+  const handleRoomTitleChange = (title: string) => {
+    setRoomTitle(title);
+    if (title.trim() !== '') {
+      setButtonType('purple'); // 방 제목이 입력되면 보라색 버튼 활성화
+      setButtonLabel('버튼을 누르면 방이 생성됩니다');
+    } else {
+      setButtonType('gray'); // 방 제목이 비어있으면 회색 버튼 유지
+      setButtonLabel('방 만들기');
+    }
+  };
+
+  // 라운드 변경 핸들러
+  const handleTotalRoundsChange = (rounds: number) => {
+    setTotalRounds(rounds);
+  };
+
+  // 바텀시트 닫기 (초기화)
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetOpen(false);
+    setButtonType('purple'); // 초기 상태로 복구
+    setButtonLabel('방 만들기'); // 초기 텍스트 복구
+    setRoomTitle(''); // 방 제목 초기화
+    setTotalRounds(1); // 라운드 초기화
+  };
 
   // 방 만들기 버튼 클릭 (기능 변경)
   const handleButtonClick = async () => {
@@ -71,53 +101,21 @@ const WaitingRoomList = () => {
       console.log('✅ 방 생성 응답 데이터:', result);
 
       const { roomId } = result;
+      setRoomId(roomId);
 
       // ✅ WebSocket을 통한 방 구독 (roomId 활용)
       subscribeToRoom(roomId, (message) => {
-        console.log(`📩 WebSocket 메시지 수신 (Room: ${roomId}):`, message);
+        console.log(
+          `📩 WaitingRoomList에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+          message
+        );
       });
 
-      // ✅ WebSocket을 통해 `PLAYER_JOINED` 메시지 발행
-      sendMessage('PLAYER_JOIN', {
-        roomId,
-        userId: String(userId), // userId를 String으로 변환
-      });
-
-      console.log(
-        `📤 PLAYER_JOINED 메시지 발행 (Room: ${roomId}, User: ${userId})`
-      );
-
-      fetchWaitingRoomList(); // 방 목록 새로고침
-      handleCloseBottomSheet();
+      // ✅ waitingRoom 페이지로 이동
+      router.push(`game/[roomId]/waitingRoom`.replace('[roomId]', roomId));
     } catch (error) {
       console.error('방 생성 오류:', error);
     }
-  };
-
-  // 방 제목 입력 핸들러
-  const handleRoomTitleChange = (title: string) => {
-    setRoomTitle(title);
-    if (title.trim() !== '') {
-      setButtonType('purple'); // 방 제목이 입력되면 보라색 버튼 활성화
-      setButtonLabel('버튼을 누르면 방이 생성됩니다');
-    } else {
-      setButtonType('gray'); // 방 제목이 비어있으면 회색 버튼 유지
-      setButtonLabel('방 만들기');
-    }
-  };
-
-  // 라운드 변경 핸들러
-  const handleTotalRoundsChange = (rounds: number) => {
-    setTotalRounds(rounds);
-  };
-
-  // 바텀시트 닫기 (초기화)
-  const handleCloseBottomSheet = () => {
-    setIsBottomSheetOpen(false);
-    setButtonType('purple'); // 초기 상태로 복구
-    setButtonLabel('방 만들기'); // 초기 텍스트 복구
-    setRoomTitle(''); // 방 제목 초기화
-    setTotalRounds(1); // 라운드 초기화
   };
 
   return (
