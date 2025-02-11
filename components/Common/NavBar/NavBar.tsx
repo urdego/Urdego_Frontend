@@ -32,9 +32,9 @@ const NavBar = () => {
           <NavBarText>홈</NavBarText>
         </NavItem>
       </Link>
-      <Link href="/location/register" passHref>
+      <Link href="/locationRegister" passHref>
         <NavItem>
-          {pathname === '/location/register' ? <MapColorIcon /> : <MapIcon />}
+          {pathname === '/locationRegister' ? <MapColorIcon /> : <MapIcon />}
           <NavBarText>장소등록</NavBarText>
         </NavItem>
       </Link>

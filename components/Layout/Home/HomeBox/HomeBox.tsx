@@ -11,7 +11,6 @@ import {
   GridItem,
 } from './HomeBox.styles';
 import Level from '@/components/Layout/Home/HomeBox/Level';
-import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationListBottomSheet';
 import PlaceRegisterIcon from '@/styles/Icon/Home/PlaceRegister.svg';
 import CharacterSelectIcon from '@/styles/Icon/Home/CharacterSelect.svg';
 import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBottomSheet';
@@ -19,6 +18,7 @@ import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
+import { useRouter } from 'next/navigation';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -33,8 +33,8 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
+  const router = useRouter();
   const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
-  const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
   >('BASIC');
@@ -58,11 +58,6 @@ const HomeBox = ({
   const handleCharacterSelect = () => {
     setIsBottomSheetOpen(true);
     setButtonVisible(false);
-  };
-
-  // 위치 목록 토글
-  const toggleLocationList = () => {
-    setLocationListVisible((prev) => !prev);
   };
 
   // 캐릭터 저장 처리
@@ -95,7 +90,7 @@ const HomeBox = ({
         <Level />
       </TopWrapper>
       <BottomWrapper>
-        <PlaceRegister onClick={toggleLocationList}>
+        <PlaceRegister onClick={() => router.push('/content')}>
           <Image
             src={PlaceRegisterIcon}
             alt="Place Register Icon"
@@ -140,12 +135,6 @@ const HomeBox = ({
           </GridContainer>
         </CharacterBottomSheet>
       </BottomWrapper>
-
-      {isLocationListVisible && (
-        <LocationListBottomSheet
-          setLocationListVisible={setLocationListVisible}
-        />
-      )}
     </HomeBoxWrapper>
   );
 };
