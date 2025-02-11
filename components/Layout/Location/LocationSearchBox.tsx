@@ -6,28 +6,31 @@ import { useState } from 'react';
 
 interface LocationSearchBoxProps {
   isInputMode?: boolean;
+  searchKeyword?: string;
+  setSearchKeyword?: React.Dispatch<React.SetStateAction<string>>;
   onClick?: () => void;
 }
 const LocationSearchBox = ({
   isInputMode = false,
+  searchKeyword,
+  setSearchKeyword,
   onClick,
 }: LocationSearchBoxProps) => {
-  const [locationName, setLocationName] = useState('');
   return (
     <LocationSearchButtonWrapper onClick={onClick}>
       <Image src={SearchIconSrc} alt="Search Icon" />
       <Input
         type="text"
         placeholder="검색"
-        value={locationName}
-        onChange={(e) => setLocationName(e.target.value)}
+        value={searchKeyword}
+        onChange={(e) => setSearchKeyword(e.target.value)}
         disabled={!isInputMode}
       />
-      {locationName && (
+      {searchKeyword && (
         <Image
           src={ClearIconSrc}
           alt="Remove Button"
-          onClick={() => setLocationName('')}
+          onClick={() => setSearchKeyword('')}
         />
       )}
     </LocationSearchButtonWrapper>
