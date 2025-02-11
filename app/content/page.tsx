@@ -13,6 +13,7 @@ import {
   LocationHeader,
   LocationLayout,
   SortHeader,
+  SortText,
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
@@ -52,9 +53,19 @@ const LocationPage = () => {
           <LocationHeader>
             <p>총 {totalCount}곳</p>
             <SortHeader>
-              <p onClick={() => setSortType('oldest')}>등록순</p>
+              <SortText
+                $isActive={sortType === 'oldest'}
+                onClick={() => setSortType('oldest')}
+              >
+                등록순
+              </SortText>
               <p>&middot;</p>
-              <p onClick={() => setSortType('recent')}>최신순</p>
+              <SortText
+                $isActive={sortType === 'recent'}
+                onClick={() => setSortType('recent')}
+              >
+                최신순
+              </SortText>
             </SortHeader>
           </LocationHeader>
           <LocationSearchBox onClick={() => setIsModalOpen(true)} />

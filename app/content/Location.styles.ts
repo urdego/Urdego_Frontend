@@ -1,3 +1,4 @@
+import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const LocationLayout = styled.div`
@@ -24,6 +25,7 @@ export const LocationContent = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+  padding-top: 12px;
 `;
 
 export const NoContentText = styled.div`
@@ -39,4 +41,8 @@ export const IntersectionObserverArea = styled.div`
   width: 100%;
   min-height: 100px;
   visibility: hidden;
+`;
+
+export const SortText = styled.div<{ $isActive: boolean }>`
+  color: ${({ $isActive }) => ($isActive ? colors.etc.black : colors.gray[70])};
 `;
