@@ -15,13 +15,15 @@ import DotLoadingSpinner from '@/components/Common/LoadingSpinner/DotLoadingSpin
 import RoomButtonList from '@/components/Common/RoomButton/RoomButtonList';
 import Button from '@/components/Common/Button/Button';
 import CreateRoomBottomSheet from '@/components/Layout/MakeRoom/CreateRoomBottomSheet';
-import useUserStore from '@/stores/useUserStore'; // Zustand에서 유저 정보 가져오기
+import useUserStore from '@/stores/useUserStore';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 const WaitingRoomList = () => {
   const { waitingRoomList, isLoading, fetchWaitingRoomList } =
     useGetWaitingRoomList();
 
-  const { userId } = useUserStore(); // Zustand에서 유저 ID 가져오기
+  const { userId } = useUserStore();
+  const { subscribeToRoom } = useWebSocketFunctions(); // WebSocket 구독 함수 가져오기
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [buttonType, setButtonType] = useState<'purple' | 'gray'>('purple');
   const [buttonLabel, setButtonLabel] = useState('방 만들기');
@@ -32,7 +34,6 @@ const WaitingRoomList = () => {
   // 방 만들기 버튼 클릭 (기능 변경)
   const handleButtonClick = async () => {
     if (!isBottomSheetOpen) {
-      // 바텀시트가 닫혀있으면 열기
       setIsBottomSheetOpen(true);
       setButtonType('gray'); // 바텀시트 열릴 때 버튼을 gray로 변경
       return;
@@ -68,6 +69,12 @@ const WaitingRoomList = () => {
 
       const result = await response.json();
       console.log('방 생성 응답 데이터:', result);
+
+      // ✅ WebSocket을 통한 방 구독 (roomId 활용)
+      const { roomId } = result;
+      subscribeToRoom(roomId, (message) => {
+        console.log(`📩 WebSocket 메시지 수신 (Room: ${roomId}):`, message);
+      });
 
       fetchWaitingRoomList(); // 방 목록 새로고침
       handleCloseBottomSheet();
