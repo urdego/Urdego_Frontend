@@ -40,7 +40,7 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
 
   const fetchLocationList = async () => {
     setIsLoading(true);
-
+    console.log(userId);
     const params = new URLSearchParams();
     params.append('limit', (16).toString());
     if (cursorIdx) {
@@ -51,13 +51,12 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
     }
 
     try {
-      const response = await fetch(`/api/content/${userId}?${params}`);
+      const response = await fetch(`/api/content?${params}`);
       if (!response.ok) {
         throw new Error('데이터를 가져오는 것에 실패했습니다!');
       }
 
       const data: GetLocationListResponse = await response.json();
-      console.log(data);
       if (data) {
         setLocationList((prev) => [...prev, ...data.contents]);
         if (data.totalContent) {
