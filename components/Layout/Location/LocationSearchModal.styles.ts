@@ -20,12 +20,20 @@ export const ModalWrapper = styled.div`
   z-index: 999;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const ModalHeader = styled.div`
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   flex-direction: row;
   gap: 4px;
+  background: ${colors.etc.white};
 `;
 
 export const ModalContainer = styled.div`
