@@ -37,6 +37,9 @@ export const ModalHeader = styled.div`
 `;
 
 export const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding-top: 20px;
 `;
 

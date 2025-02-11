@@ -28,18 +28,6 @@ const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
         {locationList.map((location, index) => (
           <LocationList key={`key+${index}`} location={location} />
         ))}
-        {locationList.map((location, index) => (
-          <LocationList key={`key+${index}`} location={location} />
-        ))}
-        {locationList.map((location, index) => (
-          <LocationList key={`key+${index}`} location={location} />
-        ))}
-        {locationList.map((location, index) => (
-          <LocationList key={`key+${index}`} location={location} />
-        ))}
-        {locationList.map((location, index) => (
-          <LocationList key={`key+${index}`} location={location} />
-        ))}
       </ModalContainer>
     </ModalWrapper>
   );
