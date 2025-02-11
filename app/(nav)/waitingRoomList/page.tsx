@@ -23,7 +23,7 @@ const WaitingRoomList = () => {
     useGetWaitingRoomList();
 
   const { userId } = useUserStore();
-  const { subscribeToRoom } = useWebSocketFunctions(); // WebSocket 구독 함수 가져오기
+  const { subscribeToRoom, sendMessage } = useWebSocketFunctions(); // WebSocket 구독 & 메시지 발행 함수 가져오기
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [buttonType, setButtonType] = useState<'purple' | 'gray'>('purple');
   const [buttonLabel, setButtonLabel] = useState('방 만들기');
@@ -44,7 +44,7 @@ const WaitingRoomList = () => {
       return;
     }
 
-    // 방 생성 API 요청
+    // ✅ 방 생성 API 요청
     try {
       const requestData = {
         userId,
@@ -68,13 +68,24 @@ const WaitingRoomList = () => {
       }
 
       const result = await response.json();
-      console.log('방 생성 응답 데이터:', result);
+      console.log('✅ 방 생성 응답 데이터:', result);
+
+      const { roomId } = result;
 
       // ✅ WebSocket을 통한 방 구독 (roomId 활용)
-      const { roomId } = result;
       subscribeToRoom(roomId, (message) => {
         console.log(`📩 WebSocket 메시지 수신 (Room: ${roomId}):`, message);
       });
+
+      // ✅ WebSocket을 통해 `PLAYER_JOINED` 메시지 발행
+      sendMessage('PLAYER_JOIN', {
+        roomId,
+        userId: String(userId), // userId를 String으로 변환
+      });
+
+      console.log(
+        `📤 PLAYER_JOINED 메시지 발행 (Room: ${roomId}, User: ${userId})`
+      );
 
       fetchWaitingRoomList(); // 방 목록 새로고침
       handleCloseBottomSheet();
