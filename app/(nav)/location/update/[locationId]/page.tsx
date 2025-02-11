@@ -3,7 +3,7 @@
 import { PageWrapper } from '@/app/commonPage.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
-import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -14,7 +14,10 @@ const LocationUpdatepage = () => {
 
   const { placeList, setPlaceInput } = usePlaceRegisterStore();
   useEffect(() => {
-    setPlaceInput(0, 'title', location.contentName);
+    if (location) {
+      setPlaceInput(0, 'title', location.contentName);
+      setPlaceInput(0, 'title', location.contentName);
+    }
   }, []);
   return (
     <>
