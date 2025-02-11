@@ -77,6 +77,7 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
 
   return {
     locationList,
+    setLocationList,
     totalCount,
     isLoading,
     isLoadMore,

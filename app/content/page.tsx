@@ -16,13 +16,25 @@ import {
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useControlScroll from '@/hooks/modal/useControlScroll';
 
 const LocationPage = () => {
+  const [sortType, setSortType] = useState<'oldest' | 'recent'>('oldest');
+
   // 무한 스크롤 로직
-  const { locationList, totalCount, isLoading, isLoadMore, fetchLocationList } =
-    useGetInfiniteLocationList('recent');
+  useEffect(() => {
+    setLocationList([]);
+    fetchLocationList();
+  }, [sortType]);
+  const {
+    locationList,
+    setLocationList,
+    totalCount,
+    isLoading,
+    isLoadMore,
+    fetchLocationList,
+  } = useGetInfiniteLocationList(sortType);
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
       fetchLocationList();
@@ -40,9 +52,9 @@ const LocationPage = () => {
           <LocationHeader>
             <p>총 {totalCount}곳</p>
             <SortHeader>
-              <p>등록순</p>
+              <p onClick={() => setSortType('oldest')}>등록순</p>
               <p>&middot;</p>
-              <p>최신순</p>
+              <p onClick={() => setSortType('recent')}>최신순</p>
             </SortHeader>
           </LocationHeader>
           <LocationSearchBox onClick={() => setIsModalOpen(true)} />
@@ -54,7 +66,7 @@ const LocationPage = () => {
             {!isLoading && isLoadMore && (
               <IntersectionObserverArea ref={targetElementRef} />
             )}
-            {!isLoadMore && locationList.length === 0 && (
+            {!isLoading && !isLoadMore && locationList.length === 0 && (
               <NoContentText>
                 올린 장소가 없습니다. 장소를 등록해주세요! 😊
               </NoContentText>
