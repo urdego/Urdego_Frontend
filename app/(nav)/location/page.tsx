@@ -16,7 +16,7 @@ import {
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const LocationPage = () => {
   // 무한 스크롤 로직
@@ -30,6 +30,15 @@ const LocationPage = () => {
 
   // 모달 로직
   const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = 'calc(100vw - 100%)';
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '0';
+    }
+  }, [isModalOpen]);
   return (
     <>
       <TopBar NavType="default" label="등록한 장소" />

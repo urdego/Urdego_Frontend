@@ -2,21 +2,34 @@ import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
   width: 100%;
-  height: 100%;
-  min-height: calc(100vh);
+  min-width: 340px;
+  max-width: 430px;
+  height: 100vh;
+  max-height: calc(100vh);
+
+  margin: 0 auto;
+
   background: ${colors.etc.white};
-  padding: 12px 16px 92px 16px;
+  padding: 12px 16px 20px 16px;
   z-index: 999;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 export const ModalHeader = styled.div`
   display: flex;
   flex-direction: row;
   gap: 4px;
+`;
+
+export const ModalContainer = styled.div`
+  padding-top: 20px;
 `;
 
 export const CancelButton = styled.div`
@@ -26,5 +39,3 @@ export const CancelButton = styled.div`
   white-space: nowrap;
   padding: 4px;
 `;
-
-export const ModalContainer = styled.div``;

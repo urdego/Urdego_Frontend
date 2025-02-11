@@ -1,3 +1,4 @@
+import LocationList from '../Home/LocationList/LocationList';
 import LocationSearchBox from './LocationSearchBox';
 import {
   CancelButton,
@@ -11,7 +12,8 @@ interface LocationSearchModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
-  const { searchKeyword, setSearchKeyword } = useSearchLocationList();
+  const { locationList, searchKeyword, setSearchKeyword } =
+    useSearchLocationList();
   return (
     <ModalWrapper>
       <ModalHeader>
@@ -22,7 +24,23 @@ const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
         />
         <CancelButton onClick={() => setIsModalOpen(false)}>취소</CancelButton>
       </ModalHeader>
-      <ModalContainer></ModalContainer>
+      <ModalContainer>
+        {locationList.map((location, index) => (
+          <LocationList key={`key+${index}`} location={location} />
+        ))}
+        {locationList.map((location, index) => (
+          <LocationList key={`key+${index}`} location={location} />
+        ))}
+        {locationList.map((location, index) => (
+          <LocationList key={`key+${index}`} location={location} />
+        ))}
+        {locationList.map((location, index) => (
+          <LocationList key={`key+${index}`} location={location} />
+        ))}
+        {locationList.map((location, index) => (
+          <LocationList key={`key+${index}`} location={location} />
+        ))}
+      </ModalContainer>
     </ModalWrapper>
   );
 };

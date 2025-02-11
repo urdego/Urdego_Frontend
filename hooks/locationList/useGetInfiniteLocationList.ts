@@ -1,7 +1,7 @@
 import useUserStore from '@/stores/useUserStore';
 import { useState } from 'react';
 
-interface Location {
+export interface Location {
   contentId: number;
   contentName: string;
   address: string;
