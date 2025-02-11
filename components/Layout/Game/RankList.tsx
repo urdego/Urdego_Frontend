@@ -23,7 +23,7 @@ interface RankListProps {
     userId: number;
     nickname: string;
     score: number;
-    characterType: string;
+    activeCharacter: string;
   }[];
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
   initialActiveButton: 'thisRound' | 'totalRound';
@@ -54,42 +54,42 @@ const RankList = ({
         userId: 1,
         nickname: '가가가',
         score: 150,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 2,
         userId: 2,
         nickname: '나나나',
         score: 120,
-        characterType: 'dot',
+        activeCharacter: 'dot',
       },
       {
         rank: 3,
         userId: 3,
         nickname: '다다다',
         score: 100,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 4,
         userId: 4,
         nickname: '라라라',
         score: 70,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 5,
         userId: 5,
         nickname: '마마마',
         score: 50,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 6,
         userId: 6,
         nickname: '바바바',
         score: 10,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
     ],
     totalScore: [
@@ -98,42 +98,42 @@ const RankList = ({
         userId: 1,
         nickname: '가가가',
         score: 420,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 2,
         userId: 2,
         nickname: '나나나',
         score: 380,
-        characterType: 'dot',
+        activeCharacter: 'dot',
       },
       {
         rank: 3,
         userId: 3,
         nickname: '다다다',
         score: 340,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 4,
         userId: 4,
         nickname: '라라라',
         score: 340,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 5,
         userId: 5,
         nickname: '마마마',
         score: 340,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
       {
         rank: 6,
         userId: 6,
         nickname: '바바바',
         score: 340,
-        characterType: 'basic',
+        activeCharacter: 'basic',
       },
     ],
   };
@@ -192,7 +192,7 @@ const RankList = ({
           <UserRow key={user.userId}>
             {getRankDisplay(user.rank)}
             <Image
-              src={`/character/${user.characterType}.png`}
+              src={`/character/${user.activeCharacter}.png`}
               alt={`${user.nickname}의 프로필 이미지`}
               width={32}
               height={32}

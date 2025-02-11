@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import {
@@ -21,7 +22,7 @@ const MyPage = () => {
   const [userInfo, setUserInfo] = useState({
     email: '',
     nickname: '',
-    characterType: '',
+    activeCharacter: '',
   });
 
   const userId = useUserStore((state) => state.userId);
@@ -53,9 +54,9 @@ const MyPage = () => {
     fetchUserInfo();
   }, [userId]);
 
-  const handleLogout = () => {
-    // 로그아웃 로직
+  const handleLogout = async () => {
     setIsLogoutModalOpen(false);
+    await signOut({ callbackUrl: '/' }); // 로그아웃 후 홈으로 리디렉션
   };
 
   return (
@@ -66,7 +67,7 @@ const MyPage = () => {
           <ProfileInfo
             email={userInfo.email}
             nickname={userInfo.nickname}
-            characterType={userInfo.characterType}
+            activeCharacter={userInfo.activeCharacter}
           />
 
           <SmallButtonWrapper>

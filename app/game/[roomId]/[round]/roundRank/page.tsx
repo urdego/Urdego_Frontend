@@ -62,7 +62,7 @@ const RoundRank = ({
           nickname: coord.nickname,
           score:
             currentRoundData === 'thisRound' ? coord.score : coord.totalScore,
-          characterType: 'basic',
+          activeCharacter: 'basic',
         }));
 
   const currentRoundDataRef = useRef<'thisRound' | 'totalRound'>(
