@@ -2,7 +2,6 @@ import Image from 'next/image';
 import SearchIconSrc from '@styles/Icon/search-btn.svg';
 import ClearIconSrc from '@styles/Icon/Clear.svg';
 import { Input, LocationSearchButtonWrapper } from './LocationSearchBox.styles';
-import { useState } from 'react';
 
 interface LocationSearchBoxProps {
   isInputMode?: boolean;
@@ -13,7 +12,7 @@ interface LocationSearchBoxProps {
 const LocationSearchBox = ({
   isInputMode = false,
   searchKeyword,
-  setSearchKeyword,
+  setSearchKeyword = () => {},
   onClick,
 }: LocationSearchBoxProps) => {
   return (
