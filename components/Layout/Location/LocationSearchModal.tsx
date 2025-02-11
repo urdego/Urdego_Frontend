@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import LocationSearchBox from './LocationSearchBox';
 import {
   CancelButton,
@@ -6,13 +5,13 @@ import {
   ModalHeader,
   ModalWrapper,
 } from './LocationSearchModal.styles';
+import useSearchLocationList from '@/hooks/locationList/useSearchLocationList';
 
 interface LocationSearchModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
-  const [searchKeyword, setSearchKeyword] = useState('');
-
+  const { searchKeyword, setSearchKeyword } = useSearchLocationList();
   return (
     <ModalWrapper>
       <ModalHeader>
