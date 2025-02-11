@@ -38,6 +38,8 @@ const useSearchLocationList = () => {
   useEffect(() => {
     if (searchKeyword) {
       fetchSearchResult();
+    } else {
+      setLocationList([]);
     }
   }, [searchKeyword]);
 
