@@ -2,9 +2,15 @@ import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const LocationListWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
+  flex: 1;
   gap: 16px;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const LocationImageContainer = styled.div`

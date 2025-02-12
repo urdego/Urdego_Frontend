@@ -9,6 +9,7 @@ import {
 } from './LocationList.styles';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { useState } from 'react';
+import useScrollDetech from '@/hooks/locationList/useScrollDetech';
 
 interface LocationListProps {
   location: { contentName: string; address: string; url: string };
@@ -16,8 +17,15 @@ interface LocationListProps {
 
 const LocationList = ({ location }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
+  const { scrollRef, handleDragStart, handleDragMove, handleDragEnd } =
+    useScrollDetech();
   return (
-    <LocationListWrapper>
+    <LocationListWrapper
+      ref={scrollRef}
+      onMouseDown={handleDragStart}
+      onMouseMove={handleDragMove}
+      onMouseUp={handleDragEnd}
+    >
       <LocationImageContainer>
         {isLoading ? <Skeleton width={48} height={48} /> : null}
         <Image
