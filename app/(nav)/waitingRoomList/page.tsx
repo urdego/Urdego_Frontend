@@ -74,7 +74,7 @@ const WaitingRoomList = () => {
       return;
     }
 
-    // ✅ 방 생성 API 요청
+    // 방 생성 로직
     try {
       const requestData = {
         userId,
@@ -85,6 +85,7 @@ const WaitingRoomList = () => {
 
       console.log('방 생성 요청 데이터:', requestData);
 
+      // ✅ 방 생성 API 요청
       const response = await fetch('/api/makeRoom', {
         method: 'POST',
         headers: {
@@ -98,18 +99,10 @@ const WaitingRoomList = () => {
       }
 
       const result = await response.json();
-      console.log('✅ 방 생성 응답 데이터:', result);
+      console.log('방 생성 응답 데이터:', result);
 
       const { roomId } = result;
       setRoomId(roomId);
-
-      // ✅ WebSocket을 통한 방 구독 (roomId 활용)
-      // subscribeToRoom(roomId, (message) => {
-      //   console.log(
-      //     `📩 WaitingRoomList에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
-      //     message
-      //   );
-      // });
 
       // ✅ waitingRoom 페이지로 이동
       router.push(`game/[roomId]/waitingRoom`.replace('[roomId]', roomId));
