@@ -31,6 +31,11 @@ export const LocationContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 `;
 
 export const SkeletonLocationContainer = styled.div`
@@ -64,4 +69,9 @@ export const IconContainer = styled.div`
   height: 60px;
   background: #de3730;
   padding: 3px 4px;
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 `;
