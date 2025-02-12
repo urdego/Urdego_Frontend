@@ -28,6 +28,7 @@ const LocationPage = () => {
     setLocationList([]);
     fetchLocationList();
   }, [sortType]);
+
   const {
     locationList,
     setLocationList,

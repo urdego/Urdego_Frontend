@@ -1,4 +1,3 @@
-import useUserStore from '@/stores/useUserStore';
 import { useState } from 'react';
 
 export interface Location {
@@ -36,11 +35,8 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
   const [isLoadMore, setIsLoadMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { userId } = useUserStore();
-
   const fetchLocationList = async () => {
     setIsLoading(true);
-    console.log(userId);
     const params = new URLSearchParams();
     params.append('limit', (16).toString());
     if (cursorIdx) {
