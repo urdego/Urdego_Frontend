@@ -3,16 +3,18 @@ import styled from 'styled-components';
 
 export const LocationListWrapper = styled.div<{ $isSwipe: number }>`
   position: relative;
-  width: 100%;
+  width: calc(100% + 40px);
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  padding: 6px 0;
+  gap: 12px;
   top: 0;
   left: ${({ $isSwipe }) => ($isSwipe === 0 ? '0px' : '-24px')};
-  overflow-x: scroll;
+  overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;
   }
+  cursor: pointer;
   transition: 0.2s ease;
 `;
 
@@ -52,7 +54,14 @@ export const LocationDetail = styled.div`
 `;
 
 export const IconContainer = styled.div`
-  position: relative;
+  position: absolute;
   top: 0;
   right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: #de3730;
+  padding: 3px 4px;
 `;

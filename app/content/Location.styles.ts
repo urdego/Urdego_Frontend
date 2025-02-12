@@ -22,10 +22,10 @@ export const SortHeader = styled.div`
 
 export const LocationContent = styled.div`
   position: relative;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
   padding-top: 12px;
 `;
 
