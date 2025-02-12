@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import colors from '@/styles/color/palette';
 import loginBackground from '@/styles/Icon/Login/login-bg.png';
 
 export const LoginWrapper = styled.div`
