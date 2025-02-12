@@ -17,10 +17,11 @@ interface LocationListProps {
 
 const LocationList = ({ location }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { scrollRef, handleDragStart, handleDragMove, handleDragEnd } =
+  const { scrollRef, isSwipe, handleDragStart, handleDragMove, handleDragEnd } =
     useScrollDetech();
   return (
     <LocationListWrapper
+      $isSwipe={isSwipe}
       ref={scrollRef}
       onMouseDown={handleDragStart}
       onMouseMove={handleDragMove}

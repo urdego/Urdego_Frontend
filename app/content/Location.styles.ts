@@ -29,8 +29,6 @@ export const LocationContent = styled.div`
   padding-top: 12px;
 `;
 
-export const LocationListContainer = styled.div``;
-
 export const NoContentText = styled.div`
   display: flex;
   justify-content: center;

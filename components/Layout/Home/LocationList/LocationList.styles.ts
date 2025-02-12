@@ -1,7 +1,7 @@
 import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
-export const LocationListWrapper = styled.div`
+export const LocationListWrapper = styled.div<{ $isSwipe: number }>`
   position: relative;
   width: 100%;
   display: flex;
@@ -9,11 +9,12 @@ export const LocationListWrapper = styled.div`
   flex: 1;
   gap: 16px;
   top: 0;
-  left: -50px;
+  left: ${({ $isSwipe }) => ($isSwipe === 0 ? '0px' : '-50px')};
   overflow-x: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
+  transition: 0.2s ease;
 `;
 
 export const LocationImageContainer = styled.div`
