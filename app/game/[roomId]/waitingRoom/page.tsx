@@ -36,6 +36,12 @@ interface RoomPayload {
   status: string;
 }
 
+// WebSocket 메시지 타입 정의
+interface WebSocketMessage {
+  messageType: string;
+  payload: RoomPayload;
+}
+
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
@@ -44,23 +50,24 @@ const WaitingRoom = () => {
   const { roomId } = useGameStore();
   const { userId } = useUserStore();
   const [roomData, setRoomData] = useState<RoomPayload>({
-    currentPlayers: [], // Player[] 타입의 빈 배열
+    currentPlayers: [],
     readyStatus: {},
     host: '',
     allReady: false,
     status: 'WAITING',
     roomId: '',
-  } as RoomPayload);
+  });
   const hasJoined = useRef(false);
 
   useEffect(() => {
-    subscribeToRoom(String(roomId), (message) => {
+    subscribeToRoom(String(roomId), (message: any) => {
       console.log(
         `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
         message
       );
-      if (message.messageType === 'PLAYER_JOIN') {
-        setRoomData(message.payload);
+      const wsMessage = message as WebSocketMessage;
+      if (wsMessage.messageType === 'PLAYER_JOIN') {
+        setRoomData(wsMessage.payload);
       }
     });
 
