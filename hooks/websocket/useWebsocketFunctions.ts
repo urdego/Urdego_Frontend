@@ -5,7 +5,10 @@ export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
   const [subscribedRoom, setSubscribedRoom] = useState<string | null>(null);
 
-  const subscribeToRoom = (roomId: string, onMessageReceived: (message: string) => void) => {
+  const subscribeToRoom = (
+    roomId: string,
+    onMessageReceived: (message: string) => void
+  ) => {
     if (client && isConnected) {
       if (subscribedRoom === roomId) {
         console.log(`Already subscribed to room: ${roomId}`);

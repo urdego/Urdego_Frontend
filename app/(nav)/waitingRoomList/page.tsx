@@ -104,12 +104,12 @@ const WaitingRoomList = () => {
       setRoomId(roomId);
 
       // ✅ WebSocket을 통한 방 구독 (roomId 활용)
-      subscribeToRoom(roomId, (message) => {
-        console.log(
-          `📩 WaitingRoomList에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
-          message
-        );
-      });
+      // subscribeToRoom(roomId, (message) => {
+      //   console.log(
+      //     `📩 WaitingRoomList에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+      //     message
+      //   );
+      // });
 
       // ✅ waitingRoom 페이지로 이동
       router.push(`game/[roomId]/waitingRoom`.replace('[roomId]', roomId));

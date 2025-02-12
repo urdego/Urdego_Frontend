@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   WaitingWrapper,
   UserList,
@@ -20,46 +20,69 @@ import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
+interface Player {
+  userId: number;
+  nickname: string;
+  activeCharacter: string;
+  level: number;
+}
+
+interface RoomPayload {
+  allReady: boolean;
+  currentPlayers: Player[];
+  host: string;
+  readyStatus: { [key: string]: boolean };
+  roomId: string;
+  status: string;
+}
+
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
-  const { sendMessage } = useWebSocketFunctions();
+  const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
   const { roomId } = useGameStore();
   const { userId } = useUserStore();
+  const [roomData, setRoomData] = useState<RoomPayload>({
+    currentPlayers: [], // Player[] 타입의 빈 배열
+    readyStatus: {},
+    host: '',
+    allReady: false,
+    status: 'WAITING',
+    roomId: '',
+  } as RoomPayload);
+  const hasJoined = useRef(false);
 
   useEffect(() => {
-    sendMessage('PLAYER_JOIN', {
-      roomId: String(roomId),
-      userId: String(userId),
+    subscribeToRoom(String(roomId), (message) => {
+      console.log(
+        `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+        message
+      );
+      if (message.messageType === 'PLAYER_JOIN') {
+        setRoomData(message.payload);
+      }
     });
+
+    if (roomId && !hasJoined.current) {
+      sendMessage('PLAYER_JOIN', {
+        roomId: String(roomId),
+        userId: String(userId),
+      });
+      hasJoined.current = true;
+    }
   }, []);
 
-  const mockData = {
-    currentUser: { name: '테스트유저', isReady: false },
-    isManager: true,
-    allPlayersReady: false,
-    users: [
-      { id: 1, name: '유저1', isHost: true, isReady: true },
-      { id: 2, name: '유저2', isHost: false, isReady: true },
-      { id: 3, name: '유저3', isHost: false, isReady: false },
-      { id: 4, name: '유저4', isHost: false, isReady: false },
-      { id: 5, name: '유저5', isHost: false, isReady: true },
-    ],
-  };
+  const users = roomData.currentPlayers.map((player) => {
+    return {
+      id: player.userId,
+      name: player.nickname,
+      isHost: player.nickname === roomData.host,
+      isReady: roomData.readyStatus[player.nickname] || false,
+    };
+  });
 
-  const { users } = mockData;
-
-  const toggleReady = () => {
-    const allReady = users.every((user) => user.isReady);
-    if (!allReady) {
-      AlertToast({
-        message: '모든 유저가 준비 완료 상태여야 합니다.',
-      });
-      return;
-    }
-    console.log('준비하기 클릭');
-  };
+  const toggleReady = () => {};
 
   return (
     <>
