@@ -48,8 +48,8 @@ const PositionCard = ({
               <Image
                 src={selectedCharacter.displayImage.src}
                 alt={activeCharacter}
-                width={selectedCharacter.displayImage.width}
-                height={selectedCharacter.displayImage.height}
+                width={180}
+                height={180}
               />
             ) : (
               <div>No Image</div>

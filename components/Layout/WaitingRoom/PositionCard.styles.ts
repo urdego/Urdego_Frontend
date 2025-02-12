@@ -69,7 +69,7 @@ export const Character = styled.div`
     left: -55px;
     width: 260%;
     object-fit: contain;
-    transform: translateY(12px);
+    transform: translateY(10px);
   }
 `;
 
