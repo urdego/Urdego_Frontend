@@ -55,10 +55,10 @@ export const SlideContainer = styled.div`
     pointer-events: none; // dot이 스와이프를 방해하지 않도록 설정
 
     li {
-      margin: 0 2px;
+      margin: 0 0.2px;
 
       button:before {
-        font-size: 8px;
+        font-size: 10px;
         color: ${colors.gray[90]};
         opacity: 1;
       }
