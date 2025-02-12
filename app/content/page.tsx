@@ -14,6 +14,7 @@ import {
   LocationLayout,
   SortHeader,
   SortText,
+  LocationListContainer,
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';

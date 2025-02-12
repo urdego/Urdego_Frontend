@@ -2,11 +2,14 @@ import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
 export const LocationListWrapper = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: row;
   flex: 1;
   gap: 16px;
+  top: 0;
+  left: -50px;
   overflow-x: scroll;
   &::-webkit-scrollbar {
     display: none;

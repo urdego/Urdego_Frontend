@@ -21,12 +21,15 @@ export const SortHeader = styled.div`
 `;
 
 export const LocationContent = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
   padding-top: 12px;
 `;
+
+export const LocationListContainer = styled.div``;
 
 export const NoContentText = styled.div`
   display: flex;
