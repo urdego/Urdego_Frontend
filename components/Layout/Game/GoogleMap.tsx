@@ -5,9 +5,13 @@ import styled, { css } from 'styled-components';
 import colors from '@/styles/color/palette';
 import UserMarker from '@/styles/Icon/Game/Marker/pin-mine-basic.png';
 import AnswerMarker from '@/styles/Icon/Game/AnswerMarker.svg';
+import useCharacterMarker from '@/hooks/character/useCharacterMarker';
 
 interface MapContainerProps {
   mode: 'game' | 'rank';
+}
+interface GoogleMapProps {
+  markers: Array<{ lat: number; lng: number; characterType: string }>;
 }
 
 interface MapComponentProps {
@@ -49,6 +53,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const mapElementRef = useRef<HTMLDivElement>(null);
   const markerRefs = useRef<google.maps.Marker[]>([]);
   const polylineRefs = useRef<google.maps.Polyline[]>([]);
+  const markerIcon = useCharacterMarker();
 
   // 지도 초기화 함수
   const initializeMap = () => {
@@ -99,7 +104,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
       position,
       map: mapRef.current!,
       icon: {
-        url: UserMarker.src,
+        url: markerIcon,
         scaledSize: new google.maps.Size(52, 52),
       },
       animation: google.maps.Animation.DROP,

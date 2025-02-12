@@ -3,7 +3,7 @@ import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { AdvancedMarker, Map, MapMouseEvent } from '@vis.gl/react-google-maps';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import UserMarkerSrc from '@styles/Icon/Game/UserMarker.svg';
+import useCharacterMarker from '@/hooks/character/useCharacterMarker';
 
 interface GoogleMapProps {
   index: number;
@@ -27,6 +27,8 @@ const GoogleMap = ({
   });
   const { setPlaceInput } = usePlaceRegisterStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
+  const markerIcon = useCharacterMarker();
+  console.log('markerIcon', markerIcon);
 
   useEffect(() => {
     // 마커의 위치와 도로명 주소 초기화
@@ -64,7 +66,7 @@ const GoogleMap = ({
       {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
         <AdvancedMarker position={markerPosition} clickable={true}>
           <Image
-            src={UserMarkerSrc}
+            src={markerIcon}
             width={50}
             height={53}
             alt="UserMarker Icon"
