@@ -1,9 +1,18 @@
 import colors from '@/styles/color/palette';
 import styled from 'styled-components';
 
+export const ScrollWapper = styled.div`
+  position: relative;
+  width: calc(100% + 16px);
+  padding: 0 16px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+`;
+
 export const LocationListWrapper = styled.div<{ $isSwipe: number }>`
   position: relative;
-  width: calc(100% + 40px);
+  width: 100%;
   display: flex;
   flex-direction: row;
   padding: 6px 0;
@@ -59,9 +68,7 @@ export const LocationDetail = styled.div`
 `;
 
 export const IconContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;

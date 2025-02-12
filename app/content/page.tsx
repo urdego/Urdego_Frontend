@@ -14,6 +14,7 @@ import {
   LocationLayout,
   SortHeader,
   SortText,
+  TextHeader,
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
@@ -52,24 +53,26 @@ const LocationPage = () => {
       <LocationPageWrapper>
         <LocationLayout>
           <LocationHeader>
-            <p>총 {totalCount}곳</p>
-            <SortHeader>
-              <SortText
-                $isActive={sortType === 'oldest'}
-                onClick={() => setSortType('oldest')}
-              >
-                등록순
-              </SortText>
-              <p>&middot;</p>
-              <SortText
-                $isActive={sortType === 'recent'}
-                onClick={() => setSortType('recent')}
-              >
-                최신순
-              </SortText>
-            </SortHeader>
+            <TextHeader>
+              <p>총 {totalCount}곳</p>
+              <SortHeader>
+                <SortText
+                  $isActive={sortType === 'oldest'}
+                  onClick={() => setSortType('oldest')}
+                >
+                  등록순
+                </SortText>
+                <p>&middot;</p>
+                <SortText
+                  $isActive={sortType === 'recent'}
+                  onClick={() => setSortType('recent')}
+                >
+                  최신순
+                </SortText>
+              </SortHeader>
+            </TextHeader>
+            <LocationSearchBox onClick={() => setIsModalOpen(true)} />
           </LocationHeader>
-          <LocationSearchBox onClick={() => setIsModalOpen(true)} />
           <LocationContent>
             {locationList.map((location, index) => (
               <LocationList key={`key+${index}`} location={location} />

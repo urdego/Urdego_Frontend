@@ -9,6 +9,13 @@ export const LocationLayout = styled.div`
 
 export const LocationHeader = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px;
+`;
+
+export const TextHeader = styled.div`
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 8px;
@@ -20,9 +27,10 @@ export const SortHeader = styled.div`
   gap: 4px;
 `;
 
+export const SearchHeader = styled.div``;
+
 export const LocationContent = styled.div`
   position: relative;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

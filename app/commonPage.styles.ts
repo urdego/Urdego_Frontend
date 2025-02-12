@@ -19,7 +19,7 @@ export const HomePageWrapper = styled.div`
 export const LocationPageWrapper = styled.div`
   width: 100%;
   min-height: calc(100vh - 40px);
-  padding: 12px 16px 24px 16px;
+  padding: 12px 0px 24px 0px;
 `;
 
 export const WaitingRoomListPageWrapper = styled.div`
