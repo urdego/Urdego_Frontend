@@ -10,15 +10,16 @@ import Button from '@/components/Common/Button/Button';
 import EnterArrowIcon from '@/styles/Icon/Home/EnterArrowIcon.svg';
 import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
-import useUserStore from '@/stores/useUserStore';
 import LoadingSpinner from '@/components/Common/LoadingSpinner/LoadingSpinner';
 import Link from 'next/link';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const { character: selectedCharacter, setCharacter: setSelectedCharacter } =
-    useCharacterState();
-  const activeCharacter = useUserStore((state) => state.activeCharacter);
+  const {
+    character: selectedCharacter,
+    setCharacter: setSelectedCharacter,
+    isLoading,
+  } = useCharacterState();
 
   /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
@@ -27,14 +28,12 @@ const Home = () => {
     if (!isConnected) connectWebSocket();
   }, []);
 
-  useEffect(() => {
-    console.log('홈 페이지 - 활성 캐릭터:', activeCharacter);
-  }, [activeCharacter]);
-
   return (
     <>
       <HomePageWrapper>
-        {activeCharacter ? ( // activeCharacter가 빈 문자열이 아닐 때만 렌더링
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
           <>
             <TopWrapper>
               <UserCharacter
@@ -60,8 +59,6 @@ const Home = () => {
               </Link>
             </BottomWrapper>
           </>
-        ) : (
-          <LoadingSpinner />
         )}
       </HomePageWrapper>
     </>
