@@ -6,10 +6,12 @@ import {
   LocationTitle,
   LocationDetail,
   SkeletonLocationContainer,
+  IconContainer,
 } from './LocationList.styles';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { useState } from 'react';
 import useScrollDetech from '@/hooks/locationList/useScrollDetech';
+import { DeleteIcon } from '../../Location/ContentIcon';
 
 interface LocationListProps {
   location: { contentName: string; address: string; url: string };
@@ -49,6 +51,11 @@ const LocationList = ({ location }: LocationListProps) => {
           <LocationTitle>{location?.contentName}</LocationTitle>
           <LocationDetail>{location?.address}</LocationDetail>
         </LocationContainer>
+      )}
+      {isSwipe !== 0 && (
+        <IconContainer>
+          <DeleteIcon />
+        </IconContainer>
       )}
     </LocationListWrapper>
   );

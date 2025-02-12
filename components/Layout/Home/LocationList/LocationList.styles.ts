@@ -6,10 +6,9 @@ export const LocationListWrapper = styled.div<{ $isSwipe: number }>`
   width: 100%;
   display: flex;
   flex-direction: row;
-  flex: 1;
   gap: 16px;
   top: 0;
-  left: ${({ $isSwipe }) => ($isSwipe === 0 ? '0px' : '-50px')};
+  left: ${({ $isSwipe }) => ($isSwipe === 0 ? '0px' : '-24px')};
   overflow-x: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -50,4 +49,10 @@ export const LocationDetail = styled.div`
   font-size: 14px;
   font-weight: 400;
   line-height: 150%;
+`;
+
+export const IconContainer = styled.div`
+  position: relative;
+  top: 0;
+  right: 0px;
 `;
