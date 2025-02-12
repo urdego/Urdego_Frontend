@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Slider from 'react-slick';
 import {
   OnBoardingWrapper,
@@ -15,6 +16,7 @@ import 'slick-carousel/slick/slick-theme.css';
 const OnBoarding = () => {
   const sliderRef = useRef<Slider>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   const settings = {
     dots: true,
@@ -32,6 +34,9 @@ const OnBoarding = () => {
     },
     afterChange: (current: number) => {
       setCurrentSlide(current);
+      if (current === slides.length - 1) {
+        router.push('/login');
+      }
     },
   };
 
