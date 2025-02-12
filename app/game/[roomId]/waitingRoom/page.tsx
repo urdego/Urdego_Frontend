@@ -1,3 +1,4 @@
+// WaitingRoom.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -79,17 +80,21 @@ const WaitingRoom = () => {
     }
   }, []);
 
+  // 기존의 플레이어 정보에 activeCharacter 정보도 함께 포함
   const users = roomData.currentPlayers.map((player) => {
     return {
       id: player.userId,
       name: player.nickname,
       level: player.level,
+      activeCharacter: player.activeCharacter, // 추가된 부분
       isHost: player.nickname === roomData.host,
       isReady: roomData.readyStatus[player.nickname] || false,
     };
   });
 
-  const toggleReady = () => {};
+  const toggleReady = () => {
+    // 준비 상태 토글 관련 로직 구현
+  };
 
   return (
     <>
@@ -107,6 +112,7 @@ const WaitingRoom = () => {
                   key={user.id}
                   username={user.name}
                   level={user.level}
+                  activeCharacter={user.activeCharacter} // activeCharacter prop 전달
                   isHost={user.isHost}
                   isReady={user.isReady}
                 />
