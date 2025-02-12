@@ -70,7 +70,6 @@ const WaitingRoom = () => {
         setRoomData(wsMessage.payload);
       }
     });
-
     if (roomId && !hasJoined.current) {
       sendMessage('PLAYER_JOIN', {
         roomId: String(roomId),
@@ -84,6 +83,7 @@ const WaitingRoom = () => {
     return {
       id: player.userId,
       name: player.nickname,
+      level: player.level,
       isHost: player.nickname === roomData.host,
       isReady: roomData.readyStatus[player.nickname] || false,
     };
@@ -106,6 +106,7 @@ const WaitingRoom = () => {
                 <PositionCard
                   key={user.id}
                   username={user.name}
+                  level={user.level}
                   isHost={user.isHost}
                   isReady={user.isReady}
                 />
