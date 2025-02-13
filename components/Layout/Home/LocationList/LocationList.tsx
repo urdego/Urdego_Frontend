@@ -14,6 +14,7 @@ import { useState } from 'react';
 import useScrollDetech from '@/hooks/locationList/useScrollDetech';
 import { DeleteIcon } from '../../Location/ContentIcon';
 import { Location } from '@/hooks/locationList/useGetInfiniteLocationList';
+import useDeleteLocation from '@/hooks/locationList/useDeleteLocation';
 
 interface LocationListProps {
   location: Location;
@@ -23,17 +24,7 @@ const LocationList = ({ location }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const { scrollRef, isSwipe, handleDragStart, handleDragMove, handleDragEnd } =
     useScrollDetech();
-  const handleDeleteContent = async () => {
-    console.log(location.contentId);
-    const params = new URLSearchParams();
-    params.append('contentId', location.contentId.toString());
-    const response = await fetch(`/api/content?${params}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) return;
-    const data = await response.json();
-    console.log(data);
-  };
+  const { handleDeleteLocation } = useDeleteLocation(location.contentId);
 
   return (
     <ScrollWapper>
@@ -69,7 +60,7 @@ const LocationList = ({ location }: LocationListProps) => {
         )}
       </LocationListWrapper>
       {isSwipe !== 0 && (
-        <IconContainer onClick={handleDeleteContent}>
+        <IconContainer onClick={handleDeleteLocation}>
           <DeleteIcon />
         </IconContainer>
       )}
