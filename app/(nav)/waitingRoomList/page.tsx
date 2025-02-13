@@ -18,7 +18,6 @@ import Button from '@/components/Common/Button/Button';
 import CreateRoomBottomSheet from '@/components/Layout/MakeRoom/CreateRoomBottomSheet';
 import useUserStore from '@/stores/useUserStore';
 import useGameStore from '@/stores/useGameStore';
-import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 const WaitingRoomList = () => {
   const router = useRouter();
@@ -26,13 +25,12 @@ const WaitingRoomList = () => {
     useGetWaitingRoomList();
 
   const { userId } = useUserStore();
-  const { subscribeToRoom } = useWebSocketFunctions(); // WebSocket 구독 함수 가져오기
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [buttonType, setButtonType] = useState<'purple' | 'gray'>('purple');
   const [buttonLabel, setButtonLabel] = useState('방 만들기');
   const [roomTitle, setRoomTitle] = useState('');
   const [totalRounds, setTotalRounds] = useState(1); // 라운드 기본값 1
-  const { roomId, setRoomId } = useGameStore();
+  const { setRoomId } = useGameStore();
   const MAX_PLAYERS = 6; // 항상 6으로 고정
 
   // 방 제목 입력 핸들러
@@ -40,7 +38,7 @@ const WaitingRoomList = () => {
     setRoomTitle(title);
     if (title.trim() !== '') {
       setButtonType('purple'); // 방 제목이 입력되면 보라색 버튼 활성화
-      setButtonLabel('버튼을 누르면 방이 생성됩니다');
+      setButtonLabel('확인');
     } else {
       setButtonType('gray'); // 방 제목이 비어있으면 회색 버튼 유지
       setButtonLabel('방 만들기');
