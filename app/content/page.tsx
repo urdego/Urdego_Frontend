@@ -40,6 +40,7 @@ const LocationPage = () => {
     },
   });
 
+  // 컨텐츠 재로딩 로직
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -49,6 +50,10 @@ const LocationPage = () => {
     initLocationList();
     fetchLocationList();
   }, [sortType]);
+  const handleResetSortType = (sortType: 'oldest' | 'recent') => {
+    initLocationList();
+    setSortType(sortType);
+  };
 
   // 모달 로직
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,14 +69,14 @@ const LocationPage = () => {
               <SortHeader>
                 <SortText
                   $isActive={sortType === 'oldest'}
-                  onClick={() => setSortType('oldest')}
+                  onClick={() => handleResetSortType('oldest')}
                 >
                   등록순
                 </SortText>
                 <p>&middot;</p>
                 <SortText
                   $isActive={sortType === 'recent'}
-                  onClick={() => setSortType('recent')}
+                  onClick={() => handleResetSortType('recent')}
                 >
                   최신순
                 </SortText>
