@@ -13,15 +13,28 @@ import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { useState } from 'react';
 import useScrollDetech from '@/hooks/locationList/useScrollDetech';
 import { DeleteIcon } from '../../Location/ContentIcon';
+import { Location } from '@/hooks/locationList/useGetInfiniteLocationList';
 
 interface LocationListProps {
-  location: { contentName: string; address: string; url: string };
+  location: Location;
 }
 
 const LocationList = ({ location }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const { scrollRef, isSwipe, handleDragStart, handleDragMove, handleDragEnd } =
     useScrollDetech();
+  const handleDeleteContent = async () => {
+    console.log(location.contentId);
+    const params = new URLSearchParams();
+    params.append('contentId', location.contentId.toString());
+    const response = await fetch(`/api/content?${params}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) return;
+    const data = await response.json();
+    console.log(data);
+  };
+
   return (
     <ScrollWapper>
       <LocationListWrapper
@@ -56,7 +69,7 @@ const LocationList = ({ location }: LocationListProps) => {
         )}
       </LocationListWrapper>
       {isSwipe !== 0 && (
-        <IconContainer>
+        <IconContainer onClick={handleDeleteContent}>
           <DeleteIcon />
         </IconContainer>
       )}

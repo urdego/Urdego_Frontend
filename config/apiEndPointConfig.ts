@@ -1,7 +1,6 @@
 export const API_URL_CONFIG = {
   CONTENT: {
-    POST_MULTIPLE: '/api/content-service',
-    GET: '/api/content-service',
+    DEFAULT: '/api/content-service',
   },
   AUTH: {
     SIGNUP: '/api/user-service/users',

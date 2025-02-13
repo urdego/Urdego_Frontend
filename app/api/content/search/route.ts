@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const params = request.nextUrl.searchParams;
 
     const response = await axiosInstance.get(
-      `${API_URL_CONFIG.CONTENT.GET}/${userId}/contents/search`,
+      `${API_URL_CONFIG.CONTENT.DEFAULT}/${userId}/contents/search`,
       {
         params: Object.fromEntries(params),
       }
