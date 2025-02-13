@@ -54,7 +54,7 @@ const LocationPage = () => {
         <LocationLayout>
           <LocationHeader>
             <TextHeader>
-              <p>총 {totalCount}곳</p>
+              <p onClick={() => console.log(locationList)}>총 {totalCount}곳</p>
               <SortHeader>
                 <SortText
                   $isActive={sortType === 'oldest'}
@@ -75,7 +75,11 @@ const LocationPage = () => {
           </LocationHeader>
           <LocationContent>
             {locationList.map((location, index) => (
-              <LocationList key={`key+${index}`} location={location} />
+              <LocationList
+                key={`key+${index}`}
+                location={location}
+                setLocationList={setLocationList}
+              />
             ))}
             {isLoading && <DotLoadingSpinner />}
             {!isLoading && isLoadMore && (

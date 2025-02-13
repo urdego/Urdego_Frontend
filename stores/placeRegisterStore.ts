@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 export interface Place {
+  contentId: number;
   title: string;
   hint: string;
   file: File[];
@@ -33,6 +34,7 @@ interface Actions {
 const usePlaceRegisterStore = create<State & Actions>((set) => ({
   placeList: [
     {
+      contentId: 0,
       title: '',
       hint: '',
       file: [],
@@ -53,6 +55,7 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
     set(() => ({
       placeList: [
         {
+          contentId: 0,
           title: '',
           hint: '',
           file: [],
@@ -68,6 +71,7 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
       const updatePlace = state.placeList.map((place, index) =>
         targetIndex === index
           ? {
+              contentId: 0,
               title: '',
               hint: '',
               file: [],
@@ -85,6 +89,7 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
       placeList: [
         ...state.placeList,
         {
+          contentId: 0,
           title: '',
           hint: '',
           file: [],

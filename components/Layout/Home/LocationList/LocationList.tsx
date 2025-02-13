@@ -18,13 +18,17 @@ import useDeleteLocation from '@/hooks/locationList/useDeleteLocation';
 
 interface LocationListProps {
   location: Location;
+  setLocationList: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const LocationList = ({ location }: LocationListProps) => {
+const LocationList = ({ location, setLocationList }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const { scrollRef, isSwipe, handleDragStart, handleDragMove, handleDragEnd } =
     useScrollDetech();
-  const { handleDeleteLocation } = useDeleteLocation(location.contentId);
+  const { handleDeleteLocation } = useDeleteLocation({
+    contentId: location.contentId,
+    setLocationList,
+  });
 
   return (
     <ScrollWapper>

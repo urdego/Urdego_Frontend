@@ -16,7 +16,6 @@ const useScrollDetech = () => {
     event.preventDefault();
     if (!scrollRef.current || !isDrag) return;
     const motionType = startX - event.pageX;
-    console.log(motionType < 0 ? 'riight' : 'left');
     if (Math.abs(motionType) >= 50) {
       setIsSwipe(motionType > 0 ? 50 : 0);
     }
