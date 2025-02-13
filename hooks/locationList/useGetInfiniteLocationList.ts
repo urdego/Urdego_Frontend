@@ -28,7 +28,6 @@ type SortType = 'oldest' | 'recent';
 const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
   // 서버로부터 받아오는 정보
   const [locationList, setLocationList] = useState<Location[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [cursorIdx, setCursorIdx] = useState<number | null>(null);
 
   // 무한 스크롤 관련 정보
@@ -55,9 +54,6 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
       const data: GetLocationListResponse = await response.json();
       if (data) {
         setLocationList((prev) => [...prev, ...data.contents]);
-        if (data.totalContent) {
-          setTotalCount(data.totalContent);
-        }
         setCursorIdx(data.cursorIdx);
         if (!data.cursorIdx) {
           setIsLoadMore(false);
@@ -79,7 +75,6 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
   return {
     locationList,
     setLocationList,
-    totalCount,
     isLoading,
     isLoadMore,
     fetchLocationList,

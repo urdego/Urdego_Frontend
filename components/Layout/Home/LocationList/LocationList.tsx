@@ -23,11 +23,18 @@ interface LocationListProps {
 
 const LocationList = ({ location, setLocationList }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
-  const { scrollRef, isSwipe, handleDragStart, handleDragMove, handleDragEnd } =
-    useScrollDetech();
+  const {
+    scrollRef,
+    isSwipe,
+    setIsSwipe,
+    handleDragStart,
+    handleDragMove,
+    handleDragEnd,
+  } = useScrollDetech();
   const { handleDeleteLocation } = useDeleteLocation({
     contentId: location.contentId,
     setLocationList,
+    setIsSwipe,
   });
 
   return (

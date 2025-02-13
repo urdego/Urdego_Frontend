@@ -29,7 +29,6 @@ const LocationPage = () => {
   const {
     locationList,
     setLocationList,
-    totalCount,
     isLoading,
     isLoadMore,
     fetchLocationList,
@@ -61,7 +60,7 @@ const LocationPage = () => {
         <LocationLayout>
           <LocationHeader>
             <TextHeader>
-              <p onClick={() => console.log(locationList)}>총 {totalCount}곳</p>
+              <p>총 {locationList.length}곳</p>
               <SortHeader>
                 <SortText
                   $isActive={sortType === 'oldest'}

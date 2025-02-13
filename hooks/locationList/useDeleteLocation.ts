@@ -4,10 +4,12 @@ import { Location } from './useGetInfiniteLocationList';
 interface UseDeleteLocationProps {
   contentId: number;
   setLocationList: React.Dispatch<React.SetStateAction<Location[]>>;
+  setIsSwipe: React.Dispatch<React.SetStateAction<number>>;
 }
 const useDeleteLocation = ({
   contentId,
   setLocationList,
+  setIsSwipe,
 }: UseDeleteLocationProps) => {
   const handleDeleteLocation = async () => {
     const params = new URLSearchParams();
@@ -18,6 +20,7 @@ const useDeleteLocation = ({
     });
 
     if (!response.ok) return;
+    setIsSwipe(0);
     setLocationList((prevList) =>
       prevList.filter((location) => location.contentId !== contentId)
     );

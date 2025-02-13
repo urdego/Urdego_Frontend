@@ -28,6 +28,7 @@ const useScrollDetech = () => {
   return {
     scrollRef,
     isSwipe,
+    setIsSwipe,
     handleDragStart,
     handleDragMove,
     handleDragEnd,
