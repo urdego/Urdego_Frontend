@@ -50,7 +50,7 @@ export const Level = styled.div`
 export const Username = styled.div`
   font-size: 12px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.12px;
   color: ${colors.gray[50]};
