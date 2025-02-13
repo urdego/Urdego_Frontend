@@ -18,18 +18,14 @@ import {
 } from './Location.styles';
 import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
 import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useControlScroll from '@/hooks/modal/useControlScroll';
 
 const LocationPage = () => {
   const [sortType, setSortType] = useState<'oldest' | 'recent'>('oldest');
+  const isInitialMount = useRef(true);
 
   // 무한 스크롤 로직
-  useEffect(() => {
-    setLocationList([]);
-    fetchLocationList();
-  }, [sortType]);
-
   const {
     locationList,
     setLocationList,
@@ -43,6 +39,16 @@ const LocationPage = () => {
       fetchLocationList();
     },
   });
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    setLocationList([]);
+    fetchLocationList();
+  }, [sortType]);
 
   // 모달 로직
   const [isModalOpen, setIsModalOpen] = useState(false);
