@@ -71,6 +71,11 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
     }
   };
 
+  const initLocationList = () => {
+    setLocationList([]);
+    setCursorIdx(null);
+  };
+
   return {
     locationList,
     setLocationList,
@@ -78,6 +83,7 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
     isLoading,
     isLoadMore,
     fetchLocationList,
+    initLocationList,
   };
 };
 

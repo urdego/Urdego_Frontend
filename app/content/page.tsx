@@ -33,6 +33,7 @@ const LocationPage = () => {
     isLoading,
     isLoadMore,
     fetchLocationList,
+    initLocationList,
   } = useGetInfiniteLocationList(sortType);
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
@@ -46,7 +47,7 @@ const LocationPage = () => {
       return;
     }
 
-    setLocationList([]);
+    initLocationList();
     fetchLocationList();
   }, [sortType]);
 
