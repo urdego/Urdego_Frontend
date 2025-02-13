@@ -41,7 +41,7 @@ const WaitingRoomList = () => {
       setButtonLabel('확인');
     } else {
       setButtonType('gray'); // 방 제목이 비어있으면 회색 버튼 유지
-      setButtonLabel('방 만들기');
+      setButtonLabel('확인');
     }
   };
 
@@ -64,6 +64,7 @@ const WaitingRoomList = () => {
     if (!isBottomSheetOpen) {
       setIsBottomSheetOpen(true);
       setButtonType('gray'); // 바텀시트 열릴 때 버튼을 gray로 변경
+      setButtonLabel('확인');
       return;
     }
 
