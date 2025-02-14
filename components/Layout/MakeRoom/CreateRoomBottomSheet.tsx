@@ -1,5 +1,3 @@
-'use client';
-
 import useBottomSheet from '@/hooks/bottomSheet/useBottomSheet';
 import {
   BackgroundOverlay,
@@ -7,18 +5,23 @@ import {
   ContentWrapper,
   HeaderHandler,
   HeaderWrapper,
+  StyledTitle,
 } from '@/components/Layout/MakeRoom/CreateRoomBottomSheet.styles';
 import RoomTitleInput from './RoomTitleInput';
 import NumSelectForm from './NumSelectForm';
 
 interface CreateRoomBottomSheetProps {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: () => void;
+  onRoomTitleChange: (title: string) => void;
+  onTotalRoundsChange: (rounds: number) => void;
 }
 
 const CreateRoomBottomSheet = ({
   isOpen,
   setIsOpen,
+  onRoomTitleChange,
+  onTotalRoundsChange,
 }: CreateRoomBottomSheetProps) => {
   const { isExpand, onDragEnd } = useBottomSheet({
     setIsOpen,
@@ -26,7 +29,7 @@ const CreateRoomBottomSheet = ({
 
   return (
     <>
-      <BackgroundOverlay $isOpen={isOpen} onClick={() => setIsOpen(false)} />
+      <BackgroundOverlay $isOpen={isOpen} onClick={setIsOpen} />
       <BottomSheetWrapper
         $isExpand={isExpand}
         animate={{ y: isOpen ? '0%' : '100%' }}
@@ -41,12 +44,17 @@ const CreateRoomBottomSheet = ({
           <HeaderHandler />
         </HeaderWrapper>
         <ContentWrapper>
-          <h2 style={{ textAlign: 'center', fontWeight: 'bold' }}>방 만들기</h2>
+          <StyledTitle>방 만들기</StyledTitle>
           <RoomTitleInput
             placeholder="방 제목을 입력해주세요"
             label="방 제목 설정"
+            onChange={(e) => onRoomTitleChange(e.target.value)}
           />
-          <NumSelectForm label="라운드 (최대 3라운드)" maxValue={3} />
+          <NumSelectForm
+            label="라운드 (최대 3라운드)"
+            maxValue={3}
+            onChange={onTotalRoundsChange}
+          />
           <RoomTitleInput
             placeholder="1분 (변경불가)"
             label="타이머"

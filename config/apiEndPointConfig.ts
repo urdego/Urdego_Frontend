@@ -28,6 +28,7 @@ export const API_URL_CONFIG = {
   },
   GAME: {
     WAITING_ROOM_LIST: '/api/game-service/room/list',
+    CREATE_ROOM: '/api/game-service/room/create',
     SUBMIT_ANSWER: '/api/game-service/submissions',
     WS_URL: {
       PROD: 'wss://urdego.com/api/game-service/connect',

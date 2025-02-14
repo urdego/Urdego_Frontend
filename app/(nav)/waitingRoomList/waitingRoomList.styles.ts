@@ -16,10 +16,28 @@ export const ListTitle = styled.h2`
 
 export const RoomButtonGrid = styled.div`
   display: grid;
-  place-items: center;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: 1fr;
   gap: 8px;
+  max-height: 72vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  /* WebKit 기반 브라우저에서만 적용 가능 */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+  }
 `;
+
 export const Footer = styled.footer`
   position: fixed;
   bottom: 0;
