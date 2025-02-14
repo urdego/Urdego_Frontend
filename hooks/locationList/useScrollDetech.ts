@@ -13,13 +13,13 @@ const useScrollDetech = () => {
     return event.pageX;
   };
 
-  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
+  const handleScrollStart = (event: React.MouseEvent | React.TouchEvent) => {
     if (!scrollRef.current) return;
     setIsDrag(true);
     setStartX(getPageX(event) + scrollRef.current.scrollLeft);
   };
 
-  const handleDragMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleScrollMove = (event: React.MouseEvent | React.TouchEvent) => {
     if (!scrollRef.current || !isDrag) return;
 
     const motionType = startX - getPageX(event);
@@ -28,7 +28,7 @@ const useScrollDetech = () => {
     }
   };
 
-  const handleDragEnd = () => {
+  const handleScrollEnd = () => {
     setIsDrag(false);
   };
 
@@ -36,9 +36,9 @@ const useScrollDetech = () => {
     scrollRef,
     isSwipe,
     setIsSwipe,
-    handleDragStart,
-    handleDragMove,
-    handleDragEnd,
+    handleScrollStart,
+    handleScrollMove,
+    handleScrollEnd,
   };
 };
 

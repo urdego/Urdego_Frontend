@@ -27,9 +27,9 @@ const LocationList = ({ location, setLocationList }: LocationListProps) => {
     scrollRef,
     isSwipe,
     setIsSwipe,
-    handleDragStart,
-    handleDragMove,
-    handleDragEnd,
+    handleScrollStart,
+    handleScrollMove,
+    handleScrollEnd,
   } = useScrollDetech();
   const { handleDeleteLocation } = useDeleteLocation({
     contentId: location.contentId,
@@ -42,12 +42,12 @@ const LocationList = ({ location, setLocationList }: LocationListProps) => {
       <LocationListWrapper
         $isSwipe={isSwipe}
         ref={scrollRef}
-        onTouchStart={handleDragStart}
-        onTouchMove={handleDragMove}
-        onTouchEnd={handleDragEnd}
-        onMouseDown={handleDragStart}
-        onMouseMove={handleDragMove}
-        onMouseUp={handleDragEnd}
+        onTouchStart={handleScrollStart}
+        onTouchMove={handleScrollMove}
+        onTouchEnd={handleScrollEnd}
+        onMouseDown={handleScrollStart}
+        onMouseMove={handleScrollMove}
+        onMouseUp={handleScrollEnd}
         style={{ touchAction: 'none' }}
       >
         <LocationImageContainer>
