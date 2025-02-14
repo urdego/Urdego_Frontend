@@ -19,28 +19,7 @@ import { AlertToast } from '@/components/Common/Toast/AlertToast';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
-
-interface Player {
-  userId: number;
-  nickname: string;
-  activeCharacter: string;
-  level: number;
-}
-
-interface RoomPayload {
-  allReady: boolean;
-  currentPlayers: Player[];
-  host: string;
-  readyStatus: { [key: string]: boolean };
-  roomId: string;
-  status: string;
-}
-
-// WebSocket 메시지 타입 정의
-interface WebSocketMessage {
-  messageType: string;
-  payload: RoomPayload;
-}
+import { RoomPayload } from '@/hooks/websocket/useWebsocket.types';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -60,14 +39,13 @@ const WaitingRoom = () => {
   const hasJoined = useRef(false);
 
   useEffect(() => {
-    subscribeToRoom(String(roomId), (message: any) => {
+    subscribeToRoom(String(roomId), (message) => {
       console.log(
         `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
         message
       );
-      const wsMessage = message as WebSocketMessage;
-      if (wsMessage.messageType === 'PLAYER_JOIN') {
-        setRoomData(wsMessage.payload);
+      if (message.messageType === 'PLAYER_JOIN') {
+        setRoomData(message.payload);
       }
     });
     if (roomId && !hasJoined.current) {
@@ -79,20 +57,19 @@ const WaitingRoom = () => {
     }
   }, []);
 
-  // 기존의 플레이어 정보에 activeCharacter 정보도 함께 포함
   const users = roomData.currentPlayers.map((player) => {
     return {
       id: player.userId,
       name: player.nickname,
       level: player.level,
-      activeCharacter: player.activeCharacter, // 추가된 부분
+      activeCharacter: player.activeCharacter,
       isHost: player.nickname === roomData.host,
       isReady: roomData.readyStatus[player.nickname] || false,
     };
   });
 
   const toggleReady = () => {
-    // 준비 상태 토글 관련 로직 구현
+    // 준비 상태 토글 관련 로직 구현 필요 (추후 작업)
   };
 
   return (
