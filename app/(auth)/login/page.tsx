@@ -3,9 +3,8 @@
 import { useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { LoginWrapper } from './Login.styles';
-import LoginThumbnail from '@/styles/Icon/Login/LoginThumbnail.svg';
 import Image from 'next/image';
-import { LogoContainer, LoginTitle, SocialButton } from './Login.styles';
+import { LogoContainer, SocialButton } from './Login.styles';
 import KakaoLogin from '@/styles/Icon/Login/KakaoLogin.svg';
 import AppleLogin from '@/styles/Icon/Login/AppleLogin.svg';
 import useUserStore from '@/stores/useUserStore';
@@ -37,14 +36,6 @@ const LoginPage = () => {
       ) : (
         <>
           <LogoContainer>
-            <Image
-              src={LoginThumbnail}
-              alt="login-thumbnail"
-              width={272}
-              height={268}
-              priority
-            />
-            <LoginTitle>어데고?!</LoginTitle>
             <SocialButton
               onClick={() =>
                 signIn('kakao', { callbackUrl: '/home', redirect: true })
