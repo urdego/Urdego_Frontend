@@ -6,16 +6,23 @@ const useScrollDetech = () => {
   const [startX, setStartX] = useState(0);
   const [isSwipe, setIsSwipe] = useState(0);
 
-  const handleDragStart = (event: React.MouseEvent<HTMLDivElement>) => {
+  const getPageX = (event: React.MouseEvent | React.TouchEvent) => {
+    if ('touches' in event) {
+      return event.touches[0].pageX;
+    }
+    return event.pageX;
+  };
+
+  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
     if (!scrollRef.current) return;
     setIsDrag(true);
-    setStartX(event.pageX + scrollRef.current.scrollLeft);
+    setStartX(getPageX(event) + scrollRef.current.scrollLeft);
   };
 
   const handleDragMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
     if (!scrollRef.current || !isDrag) return;
-    const motionType = startX - event.pageX;
+
+    const motionType = startX - getPageX(event);
     if (Math.abs(motionType) >= 50) {
       setIsSwipe(motionType > 0 ? 50 : 0);
     }

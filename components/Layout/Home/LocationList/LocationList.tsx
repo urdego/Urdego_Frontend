@@ -42,9 +42,13 @@ const LocationList = ({ location, setLocationList }: LocationListProps) => {
       <LocationListWrapper
         $isSwipe={isSwipe}
         ref={scrollRef}
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
         onMouseDown={handleDragStart}
         onMouseMove={handleDragMove}
         onMouseUp={handleDragEnd}
+        style={{ touchAction: 'none' }}
       >
         <LocationImageContainer>
           {isLoading ? <Skeleton width={48} height={48} /> : null}
