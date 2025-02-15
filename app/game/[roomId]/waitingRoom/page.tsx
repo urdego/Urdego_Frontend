@@ -88,7 +88,7 @@ const WaitingRoom = () => {
                   key={user.id}
                   username={user.name}
                   level={user.level}
-                  activeCharacter={user.activeCharacter} // activeCharacter prop 전달
+                  activeCharacter={user.activeCharacter}
                   isHost={user.isHost}
                   isReady={user.isReady}
                 />
