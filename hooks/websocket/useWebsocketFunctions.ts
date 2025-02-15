@@ -1,6 +1,7 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
 import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
+import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
 
 export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
@@ -16,7 +17,7 @@ export const useWebSocketFunctions = () => {
         return;
       }
 
-      const subscriptionPath = `/urdego/sub/${roomId}`;
+      const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ROOM(roomId);
       console.log(`Subscribing to room: ${subscriptionPath}`);
 
       client.subscribe(subscriptionPath, (message) => {
@@ -31,9 +32,16 @@ export const useWebSocketFunctions = () => {
     }
   };
 
-  const sendMessage = (messageType: string, payload: object) => {
+  const sendMessage = (
+    messageType: string,
+    payload: object,
+    destinationType: 'room' | 'game'
+  ) => {
     if (client && isConnected) {
-      const destination = `/urdego/pub/room/event`;
+      const destination =
+        destinationType === 'room'
+          ? WEBSOCKET_CONFIG.PUBLISH_ROOM_EVENT
+          : WEBSOCKET_CONFIG.PUBLISH_GAME_EVENT;
       const message = { messageType, payload };
 
       client.publish({ destination, body: JSON.stringify(message) });
