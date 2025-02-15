@@ -11,13 +11,10 @@ import { Swiper as SwiperType } from 'swiper/types';
 import Image from 'next/image';
 import 'swiper/css';
 
-interface SwiperProps {
-  images: string[];
-}
-
-const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
+const SwiperComponent = ({ contents }: { contents: string[] }) => {
+  console.log('SwiperComponent contents:', contents);
   // 이미지가 없을 경우 처리
-  if (!images || images.length === 0) {
+  if (!contents || contents.length === 0) {
     console.log('이미지가 없습니다.');
     return null;
   }
@@ -39,16 +36,23 @@ const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
         centeredSlides={true} // 슬라이드 중앙 정렬
         slidesPerView={1.4} // 모바일 기본값 (작은 화면에서 1.4개씩 보이도록 설정)
         spaceBetween={-50} // 슬라이드 간 간격 설정
-        loop={images.length > 3} // 슬라이드가 2장 이상일 경우에만 무한 스크롤
+        loop={contents.length > 3} // 슬라이드가 2장 이상일 경우에만 무한 스크롤
         initialSlide={0} // 초기 슬라이드 설정(TODO: 라운드별로 다른 이미지 보여주기)
         onSwiper={applySlideStyles}
         onSlideChange={applySlideStyles}
       >
-        {images.map((src, index) => (
+        {contents.map((content, index) => (
           <SwiperSlide key={index}>
             <StyledSwiperSlide>
               <ImageContainer>
-                <Image src={src} alt={`Slide ${index}`} priority={true} />
+                <Image
+                  key={index}
+                  src={content}
+                  alt={`Slide ${index + 1}`}
+                  priority={true}
+                  width={262}
+                  height={280}
+                />
               </ImageContainer>
             </StyledSwiperSlide>
           </SwiperSlide>

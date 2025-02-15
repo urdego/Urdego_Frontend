@@ -12,6 +12,9 @@ export interface RoomPayload {
   readyStatus: { [key: string]: boolean };
   roomId: string;
   status: string;
+  roundNum: number;
+  contents: string[];
+  hint: string;
 }
 
 export interface WebSocketMessage {
