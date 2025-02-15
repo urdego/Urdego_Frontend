@@ -9,8 +9,10 @@ interface UserResponse {
   nickname: string;
   platformId: string;
   platformType: 'KAKAO';
-  characterType: string;
+  activeCharacter: string;
+  ownedCharacters: string[];
   exp: number;
+  level: number;
   role: string;
 }
 
@@ -30,8 +32,10 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.json({
-      characterType: response.data.characterType,
+      activeCharacter: response.data.activeCharacter,
       exp: response.data.exp,
+      ownedCharacters: response.data.ownedCharacters,
+      level: response.data.level,
     });
   } catch (error) {
     console.error('유저 정보 조회 에러:', error);
@@ -54,8 +58,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 캐릭터 변경 POST 요청
     const response = await axiosInstance.post(
-      `${API_URL_CONFIG.USER_SERVICE.CHARACTER}/${userId}`,
+      `${API_URL_CONFIG.USER_SERVICE.CHARACTER_CHANGE}/${userId}`,
       { characterName },
       {
         headers: {

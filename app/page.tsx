@@ -3,32 +3,20 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Slider from 'react-slick';
-import Button from '@/components/Common/Button/Button';
 import {
-  PageWrapper,
   OnBoardingWrapper,
-  ButtonContainer,
-  TextWrapper,
-  ImageWrapper,
   SlideContainer,
   SlideContent,
   SlideTitle,
   SlideDescription,
-  SlideStaticImage,
-  SlideDynamicImage,
 } from './onBoarding.styles';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import OnBoarding1 from '@/styles/Icon/OnBoarding/OnBoarding1.svg';
-import OnBoarding2 from '@/styles/Icon/OnBoarding2.svg';
-import OnBoarding3 from '@/styles/Icon/OnBoarding/OnBoardingPlace.gif';
-import OnBoarding4 from '@/styles/Icon/OnBoarding/OnBoardingGame.gif';
-import Image from 'next/image';
 
 const OnBoarding = () => {
-  const router = useRouter();
   const sliderRef = useRef<Slider>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const router = useRouter();
 
   const settings = {
     dots: true,
@@ -39,94 +27,58 @@ const OnBoarding = () => {
     arrows: false,
     pauseOnHover: true,
     cssEase: 'linear',
-    fade: true,
+    swipe: true,
+    swipeToSlide: true,
     beforeChange: (current: number, next: number) => {
       setCurrentSlide(next);
+    },
+    afterChange: (current: number) => {
+      setCurrentSlide(current);
+      if (current === slides.length - 1) {
+        router.push('/login');
+      }
     },
   };
 
   const slides = [
     {
-      title: '“어데고?!”',
-      description: `가족, 커플, 친구들과 함께 방문했던 장소를 
-새롭게 추억하며 위치를 맞춰보세요!`,
-      image: OnBoarding1,
+      title: '장소 위 유추 게임',
+      description: `첫 여행, 드라이브 갔던 바다, 좋아하는 카페
+      당신의 발자취를 기억해보는 시간을 가져보세요.`,
     },
     {
-      title: '장소 등록하기',
-      description: '하단의 네비게이션 바의 ‘장소등록’을 탭해주세요.',
-      image: OnBoarding2,
-      width: 300,
-      height: 500,
+      title: `추억이 있거나
+      방문한 장소 등록`,
+      description: `하단의 “장소등록”을 눌러
+      가봤던 혹은 좋았던 장소를 기록해 보세요.`,
     },
     {
-      title: '장소 등록하기',
-      description: `장소 사진, 장소명, 위치추가하기, 힌트 작성을 해주세요.
-장소는 한 번에 최대 3개씩 등록이 가능합니다.`,
-      image: OnBoarding3,
+      title: '간편하게 장소 자동 등록',
+      description: `'어데고?!'가 알려주는 팁을 통해
+      일일이 등록하지 말고 자동으로 등록해보세요.`,
     },
     {
-      title: '정답 제출하기',
-      description: `추억이 담긴 장소에 대해 유추를 하며,
-함께 장소의 위치를 찾으며 얻는 “재미”를 느껴보세요!`,
-      image: OnBoarding4,
+      title: '장소를 상기하며 위치 추리',
+      description: `추억을 나눈 사람 혹은 다른 사람들과
+      즐겁게 추억을 되새겨보세요.`,
     },
   ];
 
   return (
-    <PageWrapper>
-      <OnBoardingWrapper>
+    <>
+      <OnBoardingWrapper $currentSlide={currentSlide}>
         <SlideContainer>
           <Slider ref={sliderRef} {...settings}>
             {slides.map((slide, index) => (
               <SlideContent key={index}>
-                <ImageWrapper $isSecondSlide={index === 1}>
-                  {index === 0 || index === 1 ? (
-                    <SlideStaticImage
-                      src={slide.image}
-                      alt={`온보딩 이미지 ${index + 1}`}
-                    />
-                  ) : (
-                    <SlideDynamicImage>
-                      <Image
-                        src={slide.image}
-                        alt={`온보딩 이미지 ${index + 1}`}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        sizes="(max-width:430px) 100vw"
-                      />
-                    </SlideDynamicImage>
-                  )}
-                </ImageWrapper>
-                <TextWrapper $isFirstSlide={index === 0}>
-                  <SlideTitle>{slide.title}</SlideTitle>
-                  <SlideDescription>{slide.description}</SlideDescription>
-                </TextWrapper>
+                <SlideTitle>{slide.title}</SlideTitle>
+                <SlideDescription>{slide.description}</SlideDescription>
               </SlideContent>
             ))}
           </Slider>
         </SlideContainer>
-        <ButtonContainer>
-          {currentSlide === slides.length - 1 ? (
-            <Button
-              label="시작하기"
-              onClick={() => router.push('/login')}
-              buttonType="purple"
-              buttonSize="large"
-            />
-          ) : (
-            <Button
-              label="다음으로"
-              onClick={() => {
-                sliderRef.current?.slickNext();
-              }}
-              buttonType="purple"
-              buttonSize="large"
-            />
-          )}
-        </ButtonContainer>
       </OnBoardingWrapper>
-    </PageWrapper>
+    </>
   );
 };
 

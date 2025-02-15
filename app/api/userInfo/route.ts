@@ -17,12 +17,15 @@ export async function GET(req: Request) {
       `${API_URL_CONFIG.USER_SERVICE.USERS}/${userId}`
     );
 
-    const { email, nickname, characterType } = response.data;
+    const { email, nickname, activeCharacter, exp, level } = response.data;
+    console.log('유저 정보:', response.data);
 
     return NextResponse.json({
       email,
       nickname,
-      characterType,
+      activeCharacter,
+      level,
+      exp,
     });
   } catch (error) {
     console.error('Error fetching user data:', error);

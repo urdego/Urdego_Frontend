@@ -37,7 +37,7 @@ const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
       <Swiper
         grabCursor={true} // 마우스 커서 잡기 설정
         centeredSlides={true} // 슬라이드 중앙 정렬
-        slidesPerView={1.5} // 슬라이드가 일부 겹쳐 보이도록 설정
+        slidesPerView={1.4} // 모바일 기본값 (작은 화면에서 1.4개씩 보이도록 설정)
         spaceBetween={-50} // 슬라이드 간 간격 설정
         loop={images.length > 3} // 슬라이드가 2장 이상일 경우에만 무한 스크롤
         initialSlide={0} // 초기 슬라이드 설정(TODO: 라운드별로 다른 이미지 보여주기)
@@ -48,13 +48,7 @@ const SwiperComponent: React.FC<SwiperProps> = ({ images }) => {
           <SwiperSlide key={index}>
             <StyledSwiperSlide>
               <ImageContainer>
-                <Image
-                  src={src}
-                  alt={`Slide ${index}`}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  priority={true}
-                />
+                <Image src={src} alt={`Slide ${index}`} priority={true} />
               </ImageContainer>
             </StyledSwiperSlide>
           </SwiperSlide>

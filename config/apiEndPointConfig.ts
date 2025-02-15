@@ -8,7 +8,7 @@ export const API_URL_CONFIG = {
     NICKNAME: '/api/user-service/users/nickname',
   },
   USER_SERVICE: {
-    CHARACTER: '/api/user-service/users/character',
+    CHARACTER_CHANGE: '/api/user-service/users/character/change',
     USERS: '/api/user-service/users',
   },
   NOTIFICATION: {
@@ -27,6 +27,7 @@ export const API_URL_CONFIG = {
   },
   GAME: {
     WAITING_ROOM_LIST: '/api/game-service/room/list',
+    CREATE_ROOM: '/api/game-service/room/create',
     SUBMIT_ANSWER: '/api/game-service/submissions',
     WS_URL: {
       PROD: 'wss://urdego.com/api/game-service/connect',

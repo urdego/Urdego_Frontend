@@ -1,55 +1,71 @@
 import styled from 'styled-components';
 import colors from '@/styles/color/palette';
-import Image from 'next/image';
+import OnBoarding1 from '@/styles/Icon/OnBoarding/onboarding-01.png';
+import OnBoarding2 from '@/styles/Icon/OnBoarding/onboarding-02.png';
+import OnBoarding3 from '@/styles/Icon/OnBoarding/onboarding-03.png';
+import OnBoarding4 from '@/styles/Icon/OnBoarding/onboarding-04.png';
 
-export const PageWrapper = styled.div`
-  width: 100%;
-  min-height: calc(100vh - 60px);
-`;
+const backgrounds = [
+  OnBoarding1.src,
+  OnBoarding2.src,
+  OnBoarding3.src,
+  OnBoarding4.src,
+];
 
-export const OnBoardingWrapper = styled.div`
+export const OnBoardingWrapper = styled.div<{ $currentSlide: number }>`
   width: 100%;
-  height: 100%;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  min-height: 100vh;
+  background-image: url('${({ $currentSlide }) => backgrounds[$currentSlide]}');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  touch-action: none; // 브라우저 기본 터치 동작 비활성화
 `;
 
 export const SlideContainer = styled.div`
-  flex: 1;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
   position: relative;
 
-  // 자동 슬라이드 기능
-  .slick-slider {
-    flex: 1;
-    .slick-track,
-    .slick-list {
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+  .slick-slider,
+  .slick-list,
+  .slick-track {
+    height: 100vh; // 전체 높이 적용
   }
 
+  .slick-slide {
+    display: flex; // 높이 100% 유지 (중요)
+    align-items: center; // 중앙 정렬
+    justify-content: center; // 중앙 정렬
+    height: 100%;
+    padding-top: 124px;
+
+    > div {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .slick-dots {
-    position: fixed;
-    bottom: 148px;
-    width: 100%;
+    position: absolute;
+    top: 100px; // 슬라이드의 title 위로 이동
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1; // 다른 요소 위에 표시되도록 설정
+    pointer-events: none; // dot이 스와이프를 방해하지 않도록 설정
+
     li {
-      margin: 0 2px;
+      margin: 0 0.2px;
 
       button:before {
-        font-size: 12px;
+        font-size: 10px;
         color: ${colors.gray[90]};
         opacity: 1;
       }
     }
 
     li.slick-active button:before {
-      color: ${colors.purple[50]};
+      color: ${colors.etc.black};
       opacity: 1;
     }
   }
@@ -58,31 +74,19 @@ export const SlideContainer = styled.div`
 export const SlideContent = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; // 상단 정렬로 변경
+  justify-content: center; // 중앙 정렬
   text-align: center;
-  padding-top: 40px;
-  height: 100%; // 전체 높이 사용
-`;
-
-export const ImageWrapper = styled.div<{ $isSecondSlide?: boolean }>`
-  width: 100%;
-  padding-top: ${({ $isSecondSlide }) => ($isSecondSlide ? '0px' : '0')};
-`;
-
-export const TextWrapper = styled.div<{ $isFirstSlide?: boolean }>`
-  width: 100%;
-  max-width: 430px;
-  padding: 0;
-  text-align: ${({ $isFirstSlide }) => ($isFirstSlide ? 'center' : 'left')};
-  box-sizing: border-box;
-  margin-left: ${({ $isFirstSlide }) => ($isFirstSlide ? 'auto' : '0')};
-  margin-right: ${({ $isFirstSlide }) => ($isFirstSlide ? 'auto' : '0')};
 `;
 
 export const SlideTitle = styled.h2`
-  padding-top: 30px;
+  display: flex;
+  height: 72px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
   font-size: 24px;
   font-weight: 700;
   line-height: 150%;
@@ -96,46 +100,4 @@ export const SlideDescription = styled.p`
   line-height: 150%;
   letter-spacing: -0.16px;
   white-space: pre-line;
-`;
-
-export const SlideStaticImage = styled(Image)`
-  width: 100%;
-  max-width: 300px;
-  max-height: 350px;
-  height: 100%;
-  min-height: 450px;
-  object-fit: contain;
-  margin: 0 auto;
-`;
-
-export const SlideDynamicImage = styled.div`
-  position: relative;
-  width: 224px;
-  height: 448px;
-  margin: 0 auto;
-  img {
-    border-radius: 12.8px;
-  }
-`;
-
-export const ButtonContainer = styled.div`
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  min-width: 375px;
-  max-width: 430px;
-  margin: 0 auto;
-
-  bottom: 78px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 16px;
-
-  background: transparent;
-
-  box-sizing: border-box;
-  z-index: 10;
 `;

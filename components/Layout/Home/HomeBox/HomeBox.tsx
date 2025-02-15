@@ -18,7 +18,7 @@ import Button from '@/components/Common/Button/Button';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
-import { useRouter } from 'next/navigation';
+import { useCharacterState } from '@/hooks/character/useCharacterState';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -33,14 +33,19 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
-  const router = useRouter();
-  const ownCharacters = ['BASIC', 'DOT', 'ANGULAR', 'BUMPY', 'WOOL'];
+  const {
+    character: activeCharacter,
+    ownCharacters,
+    level,
+    exp,
+  } = useCharacterState();
+  const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
-  >('BASIC');
+  >(activeCharacter || 'BASIC'); // activeCharacter로 초기화
   const [isButtonVisible, setButtonVisible] = useState(false);
 
-  const characters = useCharacterData({ ownCharacters });
+  const characters = useCharacterData({ ownCharacters }); // ownCharacters 사용
   const userId = useUserStore((state) => state.userId);
 
   // 캐릭터 클릭 처리
@@ -87,7 +92,7 @@ const HomeBox = ({
   return (
     <HomeBoxWrapper>
       <TopWrapper>
-        <Level />
+        <Level level={level} exp={exp} />
       </TopWrapper>
       <BottomWrapper>
         <PlaceRegister onClick={() => router.push('/content')}>
@@ -106,7 +111,7 @@ const HomeBox = ({
             width={24}
             height={24}
           />
-          캐릭터
+          캐릭터 도감
         </CharacterSelect>
         <CharacterBottomSheet
           isOpen={isBottomSheetOpen}

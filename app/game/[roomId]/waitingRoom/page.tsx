@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   WaitingWrapper,
   UserList,
@@ -15,27 +15,62 @@ import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
+import { AlertToast } from '@/components/Common/Toast/AlertToast';
+import useGameStore from '@/stores/useGameStore';
+import useUserStore from '@/stores/useUserStore';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import { RoomPayload } from '@/hooks/websocket/useWebsocket.types';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
+  const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
+  const { roomId } = useGameStore();
+  const { userId } = useUserStore();
+  const [roomData, setRoomData] = useState<RoomPayload>({
+    currentPlayers: [],
+    readyStatus: {},
+    host: '',
+    allReady: false,
+    status: 'WAITING',
+    roomId: '',
+  });
+  const hasJoined = useRef(false);
 
-  const mockData = {
-    currentUser: { name: '테스트유저', isReady: false },
-    isManager: true,
-    allPlayersReady: false,
-    users: [
-      { id: 1, name: '유저1', isHost: true, isReady: true },
-      { id: 2, name: '유저2', isHost: false, isReady: true },
-      { id: 3, name: '유저3', isHost: false, isReady: false },
-      { id: 4, name: '유저4', isHost: false, isReady: false },
-      { id: 5, name: '유저5', isHost: false, isReady: true },
-    ],
+  useEffect(() => {
+    subscribeToRoom(String(roomId), (message) => {
+      console.log(
+        `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+        message
+      );
+      if (message.messageType === 'PLAYER_JOIN') {
+        setRoomData(message.payload);
+      }
+    });
+    if (roomId && !hasJoined.current) {
+      sendMessage('PLAYER_JOIN', {
+        roomId: String(roomId),
+        userId: String(userId),
+      });
+      hasJoined.current = true;
+    }
+  }, []);
+
+  const users = roomData.currentPlayers.map((player) => {
+    return {
+      id: player.userId,
+      name: player.nickname,
+      level: player.level,
+      activeCharacter: player.activeCharacter,
+      isHost: player.nickname === roomData.host,
+      isReady: roomData.readyStatus[player.nickname] || false,
+    };
+  });
+
+  const toggleReady = () => {
+    // 준비 상태 토글 관련 로직 구현 필요 (추후 작업)
   };
-
-  const toggleReady = () => console.log('준비하기 클릭');
-  const { users } = mockData;
 
   return (
     <>
@@ -52,6 +87,8 @@ const WaitingRoom = () => {
                 <PositionCard
                   key={user.id}
                   username={user.name}
+                  level={user.level}
+                  activeCharacter={user.activeCharacter} // activeCharacter prop 전달
                   isHost={user.isHost}
                   isReady={user.isReady}
                 />

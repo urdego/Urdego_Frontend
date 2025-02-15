@@ -1,5 +1,6 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
+import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
 
 export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
@@ -7,7 +8,7 @@ export const useWebSocketFunctions = () => {
 
   const subscribeToRoom = (
     roomId: string,
-    onMessageReceived: (message: string) => void
+    onMessageReceived: (message: WebSocketMessage) => void // 타입 변경
   ) => {
     if (client && isConnected) {
       if (subscribedRoom === roomId) {
@@ -20,6 +21,7 @@ export const useWebSocketFunctions = () => {
 
       client.subscribe(subscriptionPath, (message) => {
         console.log(`Message received in room ${roomId}:`, message.body);
+        // message.body를 JSON으로 파싱한 값을 onMessageReceived에 전달합니다.
         onMessageReceived(JSON.parse(message.body));
       });
 
@@ -34,10 +36,7 @@ export const useWebSocketFunctions = () => {
       const destination = `/urdego/pub/room/event`;
       const message = { messageType, payload };
 
-      client.publish({
-        destination,
-        body: JSON.stringify(message),
-      });
+      client.publish({ destination, body: JSON.stringify(message) });
 
       console.log('Message sent:', message);
     } else {

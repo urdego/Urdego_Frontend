@@ -1,33 +1,49 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
 import { AxiosError } from 'axios';
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const fullUrl = `${API_URL_CONFIG.GROUP.CREATE}`;
+    const body = await req.json();
+    const { userId, roomName, maxPlayers, totalRounds } = body;
 
-    console.log('Requesting to URL:', fullUrl);
+    if (
+      !userId ||
+      !roomName ||
+      maxPlayers === undefined ||
+      totalRounds === undefined
+    ) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
 
-    const response = await axiosInstance({
-      method: 'POST',
-      url: fullUrl,
-      data: body,
-      headers: {
-        'Content-Type': 'application/json',
+    console.log('방 생성 요청 데이터:', body);
+    console.log('요청 엔드포인트:', API_URL_CONFIG.GAME.CREATE_ROOM);
+
+    const response = await axiosInstance.post(
+      API_URL_CONFIG.GAME.CREATE_ROOM,
+      {
+        userId,
+        roomName,
+        maxPlayers,
+        totalRounds,
       },
-    });
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    console.log('방 생성 응답 데이터:', response.data);
 
     return NextResponse.json(response.data);
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof AxiosError) {
-      console.error('Error in makeRoom route:', {
-        status: error.response?.status,
-        title: error.response?.statusText,
-        message: error.message,
-        data: error.response?.data,
-      });
+      console.error('방 생성 오류:', error.response?.data || error.message);
 
       return NextResponse.json(
         {
@@ -38,9 +54,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error('Unknown error:', error);
+    console.error('알 수 없는 오류:', error);
     return NextResponse.json(
-      { error: '방 생성에 실패했습니다.' },
+      { error: '방 생성 중 예상치 못한 오류가 발생했습니다.' },
       { status: 500 }
     );
   }
