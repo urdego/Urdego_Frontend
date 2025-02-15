@@ -13,7 +13,7 @@ import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { PageWrapper, Footer, HintText, HintWrapper } from './game.styles';
 import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
 import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
-
+import { useUserStore } from '@/store/userStore';
 interface GamePageProps {
   params: {
     roomId: string;
@@ -94,11 +94,16 @@ const GamePage = ({ params }: GamePageProps) => {
     setHasSubmitted(true); // 제출 상태 업데이트
 
     try {
+      const questionId = `${params.roomId}:${currentRound}`; // TODO: 질문 아이디 관리 필요
+      const userId = useUserStore.getState().user.userId;
+      const { lat, lng } = currentSelectedCoordinate || { lat: 0, lng: 0 };
       sendMessage(
-        'QUESTION_GIVE',
+        'ANSWER_SUBMIT',
         {
-          roomId: params.roomId,
-          roundNum: Number(params.round),
+          questionId,
+          userId,
+          latitude: lat,
+          longitude: lng,
         },
         'game' // 메시지 전송 경로 설정
       );

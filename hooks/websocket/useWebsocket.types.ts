@@ -11,6 +11,9 @@ export interface RoomPayload {
   host: string;
   readyStatus: { [key: string]: boolean };
   roomId: string;
+  userId?: string;
+  latitude?: number;
+  longitude?: number;
   status: string;
   roundNum: number;
   contents: string[];
