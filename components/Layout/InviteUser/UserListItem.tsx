@@ -8,15 +8,7 @@ import {
   InviteButton,
 } from '@/components/Layout/InviteUser/InviteUser.styles';
 import useCharacterData from '@/hooks/character/useCharacterData';
-
-interface IUser {
-  userId: number;
-  nickname: string;
-  level: number;
-  activeCharacter: string;
-  ownedCharacters: string[];
-  invited: boolean;
-}
+import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
 
 interface UserListItemProps {
   user: IUser;
