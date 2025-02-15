@@ -15,7 +15,7 @@ interface UserListItemProps {
   onInvite: (userId: number) => void;
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({ user, onInvite }) => {
+function UserListItem({ user, onInvite }: UserListItemProps) {
   const { userId, nickname, level, activeCharacter, ownedCharacters, invited } =
     user;
 
@@ -45,6 +45,6 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, onInvite }) => {
       </InviteButton>
     </UserItem>
   );
-};
+}
 
 export default UserListItem;
