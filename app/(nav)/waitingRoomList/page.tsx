@@ -19,7 +19,6 @@ import CreateRoomBottomSheet from '@/components/Layout/MakeRoom/CreateRoomBottom
 import useUserStore from '@/stores/useUserStore';
 import useGameStore from '@/stores/useGameStore';
 
-
 const WaitingRoomList = () => {
   const router = useRouter();
   const { waitingRoomList, isLoading, fetchWaitingRoomList } =
