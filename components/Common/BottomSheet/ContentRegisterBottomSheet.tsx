@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
   ButtonLayout,
   LocationRegisterWrapper,
-} from './LocationRegisterBottomSheet.styles';
+} from './ContentRegisterBottomSheet.styles';
 import { ContentHeader } from './BottomSheet.styles';
 import Button from '../Button/Button';
 
@@ -13,7 +13,7 @@ interface LocationRegisterBottomSheetProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const LocationRegisterBottomSheet = ({
+const ContentRegisterBottomSheet = ({
   index,
   isOpen,
   setIsOpen,
@@ -47,4 +47,4 @@ const LocationRegisterBottomSheet = ({
   );
 };
 
-export default LocationRegisterBottomSheet;
+export default ContentRegisterBottomSheet;

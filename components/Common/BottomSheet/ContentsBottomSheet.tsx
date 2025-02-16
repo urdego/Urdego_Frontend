@@ -3,8 +3,8 @@ import {
   ContentContainer,
   NoContentText,
   IntersectionObserverArea,
-} from './LocationListBottomSheet.styles';
-import LocationList from '@/components/Layout/Home/LocationList/LocationList';
+} from './ContentsBottomSheet.styles';
+import LocationList from '@/components/Layout/Home/Contents/Contents';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
 import BottomSheet from './BottomSheet';
@@ -14,12 +14,17 @@ interface LocationListBottomSheetProps {
   setLocationListVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LocationListBottomSheet = ({
+const ContentsBottomSheet = ({
   setLocationListVisible,
 }: LocationListBottomSheetProps) => {
   // 무한 스크롤 로직
-  const { locationList, totalCount, isLoading, isLoadMore, fetchLocationList } =
-    useGetInfiniteLocationList();
+  const {
+    locationList,
+    setLocationList,
+    isLoading,
+    isLoadMore,
+    fetchLocationList,
+  } = useGetInfiniteLocationList();
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
       fetchLocationList();
@@ -29,10 +34,14 @@ const LocationListBottomSheet = ({
   return (
     <>
       <BottomSheet setIsOpen={setLocationListVisible}>
-        <ContentHeader>올린 장소 ({totalCount})</ContentHeader>
+        <ContentHeader>올린 장소 ({locationList.length})</ContentHeader>
         <ContentContainer>
           {locationList.map((location, index) => (
-            <LocationList key={`key+${index}`} location={location} />
+            <LocationList
+              key={`key+${index}`}
+              location={location}
+              setLocationList={setLocationList}
+            />
           ))}
           {isLoading && <DotLoadingSpinner />}
           {!isLoading && isLoadMore && (
@@ -49,4 +58,4 @@ const LocationListBottomSheet = ({
   );
 };
 
-export default LocationListBottomSheet;
+export default ContentsBottomSheet;

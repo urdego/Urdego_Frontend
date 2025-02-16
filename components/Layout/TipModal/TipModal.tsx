@@ -1,4 +1,4 @@
-import { DeleteIcon } from '@/components/Layout/PlaceRegister/PlaceRegisterIcon';
+import { DeleteIcon } from '@/components/Layout/ContentRegister/ContentRegisterIcon';
 import {
   IconLayout,
   ModalContainer,

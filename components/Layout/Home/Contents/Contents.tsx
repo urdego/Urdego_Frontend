@@ -8,11 +8,11 @@ import {
   SkeletonLocationContainer,
   IconContainer,
   ScrollWapper,
-} from './LocationList.styles';
+} from './Contents.styles';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { useState } from 'react';
 import useScrollDetech from '@/hooks/locationList/useScrollDetech';
-import { DeleteIcon } from '../../Location/ContentIcon';
+import { DeleteIcon } from './ContentIcon';
 import { Location } from '@/hooks/locationList/useGetInfiniteLocationList';
 import useDeleteLocation from '@/hooks/locationList/useDeleteLocation';
 
@@ -21,7 +21,7 @@ interface LocationListProps {
   setLocationList: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const LocationList = ({ location, setLocationList }: LocationListProps) => {
+const Contents = ({ location, setLocationList }: LocationListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const {
     scrollRef,
@@ -83,4 +83,4 @@ const LocationList = ({ location, setLocationList }: LocationListProps) => {
   );
 };
 
-export default LocationList;
+export default Contents;

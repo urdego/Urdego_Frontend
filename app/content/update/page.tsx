@@ -2,12 +2,12 @@
 
 import { PageWrapper } from '@/app/commonPage.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
+import PlaceRegister from '@/components/Layout/ContentRegister/ContentRegisterItem';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-const LocationUpdatepage = () => {
+const ContentUpdatePage = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('location') as string;
   const location = JSON.parse(searchQuery);
@@ -29,4 +29,4 @@ const LocationUpdatepage = () => {
   );
 };
 
-export default LocationUpdatepage;
+export default ContentUpdatePage;

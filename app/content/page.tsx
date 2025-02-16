@@ -3,7 +3,7 @@
 import { LocationPageWrapper } from '@/app/commonPage.styles';
 import DotLoadingSpinner from '@/components/Common/LoadingSpinner/DotLoadingSpinner';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import LocationList from '@/components/Layout/Home/LocationList/LocationList';
+import LocationList from '@/components/Layout/Home/Contents/Contents';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
 import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
 import {
@@ -15,13 +15,13 @@ import {
   SortHeader,
   SortText,
   TextHeader,
-} from './Location.styles';
-import LocationSearchBox from '@/components/Layout/Location/LocationSearchBox';
-import LocationSearchModal from '@/components/Layout/Location/LocationSearchModal';
+} from './Contents.styles';
+import LocationSearchBox from '@/components/Layout/Home/Contents/ContentSearchInput';
+import LocationSearchModal from '@/components/Layout/Home/Contents/ContentSearchModal';
 import { useEffect, useRef, useState } from 'react';
 import useControlScroll from '@/hooks/modal/useControlScroll';
 
-const LocationPage = () => {
+const ContentsPage = () => {
   const [sortType, setSortType] = useState<'oldest' | 'recent'>('oldest');
   const isInitialMount = useRef(true);
 
@@ -109,4 +109,4 @@ const LocationPage = () => {
   );
 };
 
-export default LocationPage;
+export default ContentsPage;

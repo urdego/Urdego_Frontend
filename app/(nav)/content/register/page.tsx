@@ -1,7 +1,7 @@
 'use client';
 
 import TopBar from '@/components/Common/TopBar/TopBar';
-import PlaceRegister from '@/components/Layout/PlaceRegister/PlaceRegister';
+import PlaceRegister from '@/components/Layout/ContentRegister/ContentRegisterItem';
 import Button from '@/components/Common/Button/Button';
 import PlusIconSrc from '@styles/Icon/Plus.svg';
 import {
@@ -11,7 +11,7 @@ import {
   ModalLayout,
   PlaceLayout,
   PlaceRegisterWrapper,
-} from './LocationRegister.styles';
+} from './ContentRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
 
 import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
@@ -23,7 +23,7 @@ import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 import TipModal from '@/components/Layout/TipModal/TipModal';
 import { useState } from 'react';
 
-const LocationRegisterPage = () => {
+const ContentRegisterPage = () => {
   // client state 불러오는 custom hook
   const { handleUploadFiles } = useUploadFiles();
   const { handleAddPlaceList } = useControlButtons();
@@ -79,4 +79,4 @@ const LocationRegisterPage = () => {
   );
 };
 
-export default LocationRegisterPage;
+export default ContentRegisterPage;

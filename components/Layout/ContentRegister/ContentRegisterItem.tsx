@@ -1,12 +1,12 @@
-import PlacePreview from './PlacePreview';
-import PlaceInput from './PlaceInput';
-import PlaceSearchButton from './PlaceSearchButton';
-import { DeleteIcon } from './PlaceRegisterIcon';
+import PlacePreview from './ImagePreview';
+import PlaceInput from './InputCard';
+import PlaceSearchButton from './LocationSearchButton';
+import { DeleteIcon } from './ContentRegisterIcon';
 import {
   PlaceContentResetButton,
   PlaceRegistertext,
   PlaceRegisterWrapper,
-} from './PlaceRegister.styles';
+} from './ContentRegisterItem.styles';
 
 import { Place } from '@/stores/placeRegisterStore';
 import useControlInput from '@/hooks/placeRegister/useControlInput';
@@ -17,7 +17,7 @@ interface PlaceRegisterProps {
   place: Place;
 }
 
-const PlaceRegister = ({ index, title, place }: PlaceRegisterProps) => {
+const ContentRegisterItem = ({ index, title, place }: PlaceRegisterProps) => {
   // client state 불러오는 custom hook
   const { handleTitleChange, handleHintChange, handlePlaceRemove } =
     useControlInput({ index });
@@ -48,4 +48,4 @@ const PlaceRegister = ({ index, title, place }: PlaceRegisterProps) => {
   );
 };
 
-export default PlaceRegister;
+export default ContentRegisterItem;

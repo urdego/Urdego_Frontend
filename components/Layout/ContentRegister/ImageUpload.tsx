@@ -4,7 +4,7 @@ import {
   ImageUploadInput,
   ImageUploadWrapper,
 } from './ImageUpload.styles';
-import { GalleryIcon } from './PlaceRegisterIcon';
+import { GalleryIcon } from './ContentRegisterIcon';
 
 interface ImageUploadProps {
   currCount: number;

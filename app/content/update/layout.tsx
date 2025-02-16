@@ -2,7 +2,7 @@
 
 import { APIProvider } from '@vis.gl/react-google-maps';
 
-export default function PlaceRegisterLayout({
+export default function ContentUpdateLayout({
   children,
 }: {
   children: React.ReactNode;

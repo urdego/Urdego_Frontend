@@ -2,8 +2,8 @@ import {
   ContentInput,
   ContentResetButton,
   PlaceInputWrapper,
-} from './PlaceInput.styles';
-import { ClearIcon } from './PlaceRegisterIcon';
+} from './InputCard.styles';
+import { ClearIcon } from './ContentRegisterIcon';
 
 interface PlaceInputProps {
   placeholder: string;
@@ -11,7 +11,7 @@ interface PlaceInputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PlaceInput = ({ placeholder, value, onChange }: PlaceInputProps) => {
+const InputCard = ({ placeholder, value, onChange }: PlaceInputProps) => {
   const resetChange = () => {
     onChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
   };
@@ -33,4 +33,4 @@ const PlaceInput = ({ placeholder, value, onChange }: PlaceInputProps) => {
   );
 };
 
-export default PlaceInput;
+export default InputCard;

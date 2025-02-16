@@ -4,18 +4,18 @@ import {
   PlaceResetButton,
   LocationRegisterText,
   LocationText,
-} from './PlaceSearchButton.styles';
-import { ClearIcon, SearchIcon } from './PlaceRegisterIcon';
+} from './LocationSearchButton.styles';
+import { ClearIcon, SearchIcon } from './ContentRegisterIcon';
 import usePlaceRegisterStore from '@/stores/placeRegisterStore';
 import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
-import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/LocationRegisterBottomSheet';
+import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/ContentRegisterBottomSheet';
 
 interface PlaceSearchButtonProps {
   index: number;
   value: string | null;
 }
 
-const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
+const LocationSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   const { setPlaceInput } = usePlaceRegisterStore();
   const { isOpen, setIsOpen, toggleBottomSheet } = useToggleBottomSheet();
 
@@ -45,4 +45,4 @@ const PlaceSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   );
 };
 
-export default PlaceSearchButton;
+export default LocationSearchButton;

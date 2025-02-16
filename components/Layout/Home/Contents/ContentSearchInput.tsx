@@ -1,7 +1,10 @@
 import Image from 'next/image';
 import SearchIconSrc from '@styles/Icon/search-btn.svg';
 import ClearIconSrc from '@styles/Icon/Clear.svg';
-import { Input, LocationSearchButtonWrapper } from './LocationSearchBox.styles';
+import {
+  Input,
+  LocationSearchButtonWrapper,
+} from './ContentSearchInput.styles';
 
 interface LocationSearchBoxProps {
   isInputMode?: boolean;

@@ -1,18 +1,18 @@
-import LocationList from '../Home/LocationList/LocationList';
-import LocationSearchBox from './LocationSearchBox';
+import LocationList from './Contents';
+import LocationSearchBox from './ContentSearchInput';
 import {
   CancelButton,
   ModalContainer,
   ModalHeader,
   ModalWrapper,
-} from './LocationSearchModal.styles';
+} from './ContentSearchModal.styles';
 import useSearchLocationList from '@/hooks/locationList/useSearchLocationList';
 
 interface LocationSearchModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
-  const { locationList, searchKeyword, setSearchKeyword } =
+const ContentSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
+  const { locationList, setLocationList, searchKeyword, setSearchKeyword } =
     useSearchLocationList();
   return (
     <ModalWrapper>
@@ -26,11 +26,15 @@ const LocationSearchModal = ({ setIsModalOpen }: LocationSearchModalProps) => {
       </ModalHeader>
       <ModalContainer>
         {locationList.map((location, index) => (
-          <LocationList key={`key+${index}`} location={location} />
+          <LocationList
+            key={`key+${index}`}
+            location={location}
+            setLocationList={setLocationList}
+          />
         ))}
       </ModalContainer>
     </ModalWrapper>
   );
 };
 
-export default LocationSearchModal;
+export default ContentSearchModal;

@@ -6,8 +6,8 @@ import {
   PlacePreviewWrapper,
   PreviewImage,
   PreviewImageRemoveButton,
-} from './PlacePreview.styles';
-import { BlackClearIcon } from './PlaceRegisterIcon';
+} from './ImagePreview.styles';
+import { BlackClearIcon } from './ContentRegisterIcon';
 import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
 import useControlInput from '@/hooks/placeRegister/useControlInput';
 import useLoadingStore from '@/stores/loadingStore';
@@ -18,7 +18,7 @@ interface PlacePreviewProps {
   place: Place;
 }
 
-const PlacePreview = ({ index, place }: PlacePreviewProps) => {
+const ImagePreview = ({ index, place }: PlacePreviewProps) => {
   // client state 불러오는 custom hook
   const { handleFilesUpload } = useRegisterFiles({
     index,
@@ -62,4 +62,4 @@ const PlacePreview = ({ index, place }: PlacePreviewProps) => {
   );
 };
 
-export default PlacePreview;
+export default ImagePreview;
