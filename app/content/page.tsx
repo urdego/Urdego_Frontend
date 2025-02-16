@@ -1,10 +1,10 @@
 'use client';
 
-import { LocationPageWrapper } from '@/app/commonPage.styles';
+import { ContentPageWrapper } from '@/app/commonPage.styles';
 import DotLoadingSpinner from '@/components/Common/LoadingSpinner/DotLoadingSpinner';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import LocationList from '@/components/Layout/Contents/Contents';
-import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents';
+import useGetInfiniteContents from '@/hooks/contents/useGetInfiniteContents';
 import useIntersectionObserver from '@/hooks/contents/useIntersectionObserver';
 import {
   IntersectionObserverArea,
@@ -33,7 +33,7 @@ const ContentsPage = () => {
     isLoadMore,
     fetchLocationList,
     initLocationList,
-  } = useGetInfiniteLocationList(sortType);
+  } = useGetInfiniteContents(sortType);
   const targetElementRef = useIntersectionObserver({
     handleIntersect: () => {
       fetchLocationList();
@@ -61,7 +61,7 @@ const ContentsPage = () => {
   return (
     <>
       <TopBar NavType="default" label="등록한 장소" />
-      <LocationPageWrapper>
+      <ContentPageWrapper>
         <LocationLayout>
           <LocationHeader>
             <TextHeader>
@@ -103,7 +103,7 @@ const ContentsPage = () => {
             )}
           </LocationContent>
         </LocationLayout>
-      </LocationPageWrapper>
+      </ContentPageWrapper>
       {isModalOpen && <LocationSearchModal setIsModalOpen={setIsModalOpen} />}
     </>
   );
