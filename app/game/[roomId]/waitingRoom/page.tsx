@@ -15,7 +15,6 @@ import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
-import { AlertToast } from '@/components/Common/Toast/AlertToast';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
@@ -35,41 +34,49 @@ const WaitingRoom = () => {
     allReady: false,
     status: 'WAITING',
     roomId: '',
+    roundNum: 0,
+    contents: [],
+    hint: '',
   });
   const hasJoined = useRef(false);
 
   useEffect(() => {
-    subscribeToRoom(String(roomId), (message) => {
-      console.log(
-        `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
-        message
-      );
-      if (message.messageType === 'PLAYER_JOIN') {
-        setRoomData(message.payload);
-      }
-    });
-    if (roomId && !hasJoined.current) {
-      sendMessage('PLAYER_JOIN', {
-        roomId: String(roomId),
-        userId: String(userId),
+    if (roomId) {
+      subscribeToRoom(String(roomId), (message) => {
+        console.log(
+          `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+          message
+        );
+        if (message.messageType === 'PLAYER_JOIN') {
+          setRoomData(message.payload);
+        }
       });
-      hasJoined.current = true;
+      if (!hasJoined.current) {
+        sendMessage(
+          'PLAYER_JOIN',
+          {
+            roomId: String(roomId),
+            userId: String(userId),
+          },
+          'room'
+        );
+        hasJoined.current = true;
+      }
     }
-  }, []);
+    // roomId, userId, subscribeToRoom, sendMessage가 바뀔 수 있으므로 의존성 배열에 추가합니다.
+  }, [roomId, userId, subscribeToRoom, sendMessage]);
 
-  const users = roomData.currentPlayers.map((player) => {
-    return {
-      id: player.userId,
-      name: player.nickname,
-      level: player.level,
-      activeCharacter: player.activeCharacter,
-      isHost: player.nickname === roomData.host,
-      isReady: roomData.readyStatus[player.nickname] || false,
-    };
-  });
+  const users = roomData.currentPlayers.map((player) => ({
+    id: player.userId,
+    name: player.nickname,
+    level: player.level,
+    activeCharacter: player.activeCharacter,
+    isHost: player.nickname === roomData.host,
+    isReady: roomData.readyStatus[player.nickname] || false,
+  }));
 
   const toggleReady = () => {
-    // 준비 상태 토글 관련 로직 구현 필요 (추후 작업)
+    // 준비 상태 토글 관련 로직 구현 (추후 작업)
   };
 
   return (
