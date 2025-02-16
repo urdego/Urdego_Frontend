@@ -25,7 +25,7 @@ interface GetLocationListResponse {
 }
 
 type SortType = 'oldest' | 'recent';
-const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
+const useGetInfiniteContents = (sortType: SortType = 'oldest') => {
   // 서버로부터 받아오는 정보
   const [locationList, setLocationList] = useState<Location[]>([]);
   const [cursorIdx, setCursorIdx] = useState<number | null>(null);
@@ -82,4 +82,4 @@ const useGetInfiniteLocationList = (sortType: SortType = 'oldest') => {
   };
 };
 
-export default useGetInfiniteLocationList;
+export default useGetInfiniteContents;

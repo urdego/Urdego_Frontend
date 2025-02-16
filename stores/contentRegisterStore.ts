@@ -31,7 +31,7 @@ interface Actions {
   ) => void;
 }
 
-const usePlaceRegisterStore = create<State & Actions>((set) => ({
+const useContentRegisterStore = create<State & Actions>((set) => ({
   placeList: [
     {
       contentId: 0,
@@ -123,4 +123,4 @@ const usePlaceRegisterStore = create<State & Actions>((set) => ({
   },
 }));
 
-export default usePlaceRegisterStore;
+export default useContentRegisterStore;

@@ -1,4 +1,4 @@
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 
 interface ReverseGeocodingProps {
   index: number;

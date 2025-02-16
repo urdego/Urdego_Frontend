@@ -1,5 +1,5 @@
-import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterModeStore from '@/stores/contentRegisterModeStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import { useEffect } from 'react';
 
 const useControlButtons = () => {

@@ -6,7 +6,7 @@ import {
   ModalHeader,
   ModalWrapper,
 } from './ContentSearchModal.styles';
-import useSearchLocationList from '@/hooks/locationList/useSearchLocationList';
+import useSearchLocationList from '@/hooks/contents/useSearchContents';
 
 interface LocationSearchModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

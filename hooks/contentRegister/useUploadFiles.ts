@@ -1,5 +1,5 @@
 import axiosInstance from '@/lib/axios';
-import usePlaceRegisterStore, { Place } from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore, { Place } from '@/stores/contentRegisterStore';
 import useUserStore from '@/stores/useUserStore';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';

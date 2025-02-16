@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { Place } from '@/stores/placeRegisterStore';
+import { Place } from '@/stores/contentRegisterStore';
 import ImageUpload from './ImageUpload';
 import {
   PlacePreviewWrapper,
@@ -8,8 +8,8 @@ import {
   PreviewImageRemoveButton,
 } from './ImagePreview.styles';
 import { BlackClearIcon } from './ContentRegisterIcon';
-import useRegisterFiles from '@/hooks/placeRegister/useRegisterFiles';
-import useControlInput from '@/hooks/placeRegister/useControlInput';
+import useRegisterFiles from '@/hooks/contentRegister/useRegisterFiles';
+import useControlInput from '@/hooks/contentRegister/useControlInput';
 import useLoadingStore from '@/stores/loadingStore';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 

@@ -3,7 +3,7 @@
 import { PageWrapper } from '@/app/commonPage.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/ContentRegister/ContentRegisterItem';
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 

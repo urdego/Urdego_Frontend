@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Location } from './useGetInfiniteLocationList';
+import { Location } from './useGetInfiniteContents';
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import useUserStore from '@/stores/useUserStore';
 
@@ -18,7 +18,7 @@ interface SearchLocationListResponse {
   ];
 }
 
-const useSearchLocationList = () => {
+const useSearchContents = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [locationList, setLocationList] = useState<Location[]>([]);
   const { userId } = useUserStore();
@@ -56,4 +56,4 @@ const useSearchLocationList = () => {
   };
 };
 
-export default useSearchLocationList;
+export default useSearchContents;

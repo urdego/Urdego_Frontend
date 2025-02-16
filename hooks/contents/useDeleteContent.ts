@@ -1,12 +1,12 @@
 import React from 'react';
-import { Location } from './useGetInfiniteLocationList';
+import { Location } from './useGetInfiniteContents';
 
 interface UseDeleteLocationProps {
   contentId: number;
   setLocationList: React.Dispatch<React.SetStateAction<Location[]>>;
   setIsSwipe: React.Dispatch<React.SetStateAction<number>>;
 }
-const useDeleteLocation = ({
+const useDeleteContent = ({
   contentId,
   setLocationList,
   setIsSwipe,
@@ -31,4 +31,4 @@ const useDeleteLocation = ({
   };
 };
 
-export default useDeleteLocation;
+export default useDeleteContent;

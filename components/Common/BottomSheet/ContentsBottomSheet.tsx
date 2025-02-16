@@ -4,9 +4,9 @@ import {
   NoContentText,
   IntersectionObserverArea,
 } from './ContentsBottomSheet.styles';
-import LocationList from '@/components/Layout/Home/Contents/Contents';
-import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
-import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
+import LocationList from '@/components/Layout/Contents/Contents';
+import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents';
+import useIntersectionObserver from '@/hooks/contents/useIntersectionObserver';
 import BottomSheet from './BottomSheet';
 import DotLoadingSpinner from '../LoadingSpinner/DotLoadingSpinner';
 

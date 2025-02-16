@@ -6,7 +6,7 @@ import {
   LocationText,
 } from './LocationSearchButton.styles';
 import { ClearIcon, SearchIcon } from './ContentRegisterIcon';
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
 import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/ContentRegisterBottomSheet';
 

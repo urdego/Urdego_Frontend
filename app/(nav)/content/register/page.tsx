@@ -14,11 +14,11 @@ import {
 } from './ContentRegister.styles';
 import { PageWrapper } from '@/app/commonPage.styles';
 
-import useUploadFiles from '@/hooks/placeRegister/useUploadFiles';
-import useControlButtons from '@/hooks/placeRegister/useControlButtons';
+import useUploadFiles from '@/hooks/contentRegister/useUploadFiles';
+import useControlButtons from '@/hooks/contentRegister/useControlButtons';
 
-import usePlaceRegisterModeStore from '@/stores/placeRegisterModeStore';
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterModeStore from '@/stores/contentRegisterModeStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 import TipModal from '@/components/Layout/TipModal/TipModal';
 import { useState } from 'react';

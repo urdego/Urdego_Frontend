@@ -10,11 +10,11 @@ interface Actions {
   setIsSubmitReady: (mode: boolean) => void;
 }
 
-const usePlaceRegisterModeStore = create<State & Actions>((set) => ({
+const useContentRegisterModeStore = create<State & Actions>((set) => ({
   isInputComplete: false,
   isSubmitReady: false,
   setIsInputComplete: (mode) => set(() => ({ isInputComplete: mode })),
   setIsSubmitReady: (mode) => set(() => ({ isSubmitReady: mode })),
 }));
 
-export default usePlaceRegisterModeStore;
+export default useContentRegisterModeStore;

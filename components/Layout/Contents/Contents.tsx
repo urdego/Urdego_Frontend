@@ -11,10 +11,10 @@ import {
 } from './Contents.styles';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { useState } from 'react';
-import useScrollDetech from '@/hooks/locationList/useScrollDetech';
+import useScrollDetech from '@/hooks/contents/useScrollDetech';
 import { DeleteIcon } from './ContentIcon';
-import { Location } from '@/hooks/locationList/useGetInfiniteLocationList';
-import useDeleteLocation from '@/hooks/locationList/useDeleteLocation';
+import { Location } from '@/hooks/contents/useGetInfiniteContents';
+import useDeleteLocation from '@/hooks/contents/useDeleteContent';
 
 interface LocationListProps {
   location: Location;

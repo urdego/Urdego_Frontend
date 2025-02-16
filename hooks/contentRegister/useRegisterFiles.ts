@@ -1,4 +1,4 @@
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import exifr from 'exifr';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import toast from 'react-hot-toast';

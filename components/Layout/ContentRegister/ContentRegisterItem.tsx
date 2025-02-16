@@ -8,8 +8,8 @@ import {
   PlaceRegisterWrapper,
 } from './ContentRegisterItem.styles';
 
-import { Place } from '@/stores/placeRegisterStore';
-import useControlInput from '@/hooks/placeRegister/useControlInput';
+import { Place } from '@/stores/contentRegisterStore';
+import useControlInput from '@/hooks/contentRegister/useControlInput';
 
 interface PlaceRegisterProps {
   index: number;

@@ -3,9 +3,9 @@
 import { LocationPageWrapper } from '@/app/commonPage.styles';
 import DotLoadingSpinner from '@/components/Common/LoadingSpinner/DotLoadingSpinner';
 import TopBar from '@/components/Common/TopBar/TopBar';
-import LocationList from '@/components/Layout/Home/Contents/Contents';
-import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
-import useIntersectionObserver from '@/hooks/locationList/useIntersectionObserver';
+import LocationList from '@/components/Layout/Contents/Contents';
+import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents';
+import useIntersectionObserver from '@/hooks/contents/useIntersectionObserver';
 import {
   IntersectionObserverArea,
   NoContentText,
@@ -16,8 +16,8 @@ import {
   SortText,
   TextHeader,
 } from './Contents.styles';
-import LocationSearchBox from '@/components/Layout/Home/Contents/ContentSearchInput';
-import LocationSearchModal from '@/components/Layout/Home/Contents/ContentSearchModal';
+import LocationSearchBox from '@/components/Layout/Contents/ContentSearchInput';
+import LocationSearchModal from '@/components/Layout/Contents/ContentSearchModal';
 import { useEffect, useRef, useState } from 'react';
 import useControlScroll from '@/hooks/modal/useControlScroll';
 
