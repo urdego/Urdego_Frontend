@@ -26,7 +26,7 @@ const WaitingRoom = () => {
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
   const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
   const { roomId } = useGameStore();
-  const { userId } = useUserStore();
+  const { userId, nickname } = useUserStore(); // 현재 클라이언트의 닉네임
   const [roomData, setRoomData] = useState<RoomPayload>({
     currentPlayers: [],
     readyStatus: {},
@@ -63,7 +63,7 @@ const WaitingRoom = () => {
         hasJoined.current = true;
       }
     }
-  }, []);
+  }, [roomId, userId, subscribeToRoom, sendMessage]);
 
   const users = roomData.currentPlayers.map((player) => ({
     id: player.userId,
@@ -115,10 +115,12 @@ const WaitingRoom = () => {
                 icon={ContentsBox}
                 onClick={() => setIsAddContentsVisible((prev) => !prev)}
               />
+              {/* 현재 클라이언트가 host일 때만 버튼 비활성화 */}
               <WButton
                 buttonType="default"
                 label="준비완료"
                 onClick={toggleReady}
+                disabled={nickname === roomData.host}
               />
             </Footer>
           </WaitingWrapper>

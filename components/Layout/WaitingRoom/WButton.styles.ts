@@ -23,9 +23,10 @@ export const StyledWButton = styled.button<StyledWButtonProps>`
   &:disabled {
     cursor: not-allowed;
     opacity: 0.7;
+    background-color: ${colors.gray[80]}; /* disabled 상태일 때 회색 배경 */
   }
 
-  /* 🔹 기본 버튼 (forWaitingRoom) */
+  /* 기본 버튼 (default) */
   ${({ $buttonType }) =>
     $buttonType === 'default' &&
     css`
@@ -38,7 +39,7 @@ export const StyledWButton = styled.button<StyledWButtonProps>`
       border: none;
     `}
 
-  /* 🔹 아이콘 버튼 */
+  /* 아이콘 버튼 (icon) */
   ${({ $buttonType }) =>
     $buttonType === 'icon' &&
     css`
