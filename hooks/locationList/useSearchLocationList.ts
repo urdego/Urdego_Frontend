@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Location } from './useGetInfiniteLocationList';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
+import useUserStore from '@/stores/useUserStore';
 
 interface SearchLocationListResponse {
   userId: number;
@@ -19,12 +21,15 @@ interface SearchLocationListResponse {
 const useSearchLocationList = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [locationList, setLocationList] = useState<Location[]>([]);
+  const { userId } = useUserStore();
 
   const fetchSearchResult = async () => {
     const params = new URLSearchParams();
     params.append('search', searchKeyword);
 
-    const response = await fetch(`/api/content/search?${params}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_URL_CONFIG.CONTENT.DEFAULT}/${userId}/contents/search?${params}`
+    );
     if (!response.ok) {
       return;
     }

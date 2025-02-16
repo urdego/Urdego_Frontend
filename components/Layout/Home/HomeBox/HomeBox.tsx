@@ -19,6 +19,7 @@ import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
+import { useRouter } from 'next/navigation';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -33,13 +34,13 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
+  const router = useRouter();
   const {
     character: activeCharacter,
     ownCharacters,
     level,
     exp,
   } = useCharacterState();
-  const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
   >(activeCharacter || 'BASIC'); // activeCharacter로 초기화
