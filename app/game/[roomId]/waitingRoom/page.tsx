@@ -63,8 +63,7 @@ const WaitingRoom = () => {
         hasJoined.current = true;
       }
     }
-    // roomId, userId, subscribeToRoom, sendMessage가 바뀔 수 있으므로 의존성 배열에 추가합니다.
-  }, [roomId, userId, subscribeToRoom, sendMessage]);
+  }, []);
 
   const users = roomData.currentPlayers.map((player) => ({
     id: player.userId,

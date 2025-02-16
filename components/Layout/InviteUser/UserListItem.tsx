@@ -6,22 +6,20 @@ import {
   UserId,
   Level,
   InviteButton,
-} from '@/components/Layout/InviteUser/InviteUser.styles';
+} from './InviteUser.styles';
 import useCharacterData from '@/hooks/character/useCharacterData';
-import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
+import { IUser } from './InviteUser.types';
 
 interface UserListItemProps {
   user: IUser;
-  onInvite: (userId: number) => void;
+  onInvite: (userId: number, nickname: string) => void;
 }
 
 function UserListItem({ user, onInvite }: UserListItemProps) {
   const { userId, nickname, level, activeCharacter, ownedCharacters, invited } =
     user;
 
-  // useCharacterData 훅을 통해 해당 유저가 보유한 캐릭터 정보를 가져옵니다.
   const characters = useCharacterData({ ownCharacters: ownedCharacters });
-  // activeCharacter에 해당하는 캐릭터 객체를 찾습니다.
   const activeChar = characters.find(
     (character) => character.key === activeCharacter
   );
@@ -40,7 +38,11 @@ function UserListItem({ user, onInvite }: UserListItemProps) {
         <UserId>{nickname}</UserId>
         <Level>LV.{level}</Level>
       </UserInfo>
-      <InviteButton $invited={invited} onClick={() => onInvite(userId)}>
+      <InviteButton
+        $invited={invited}
+        // ▼ 클릭 시 부모의 handleInvite(userId, nickname) 실행
+        onClick={() => onInvite(userId, nickname)}
+      >
         {invited ? '초대완료' : '초대하기'}
       </InviteButton>
     </UserItem>
