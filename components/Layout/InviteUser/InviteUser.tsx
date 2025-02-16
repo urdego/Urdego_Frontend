@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
@@ -15,12 +13,7 @@ import {
 } from './InviteUser.styles';
 import UserListItem from './UserListItem';
 import SearchIcon from '@styles/Icon/search-btn.svg';
-import { IUser } from './InviteUser.types';
-
-// 추가
-import useGameStore from '@/stores/useGameStore';
-import useUserStore from '@/stores/useUserStore';
-import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
 
 interface InviteUserProps {
   setInviteVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,47 +24,47 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
   const [searchWord, setSearchWord] = useState('');
   const [users, setUsers] = useState<IUser[]>([]);
 
-  // ▼ 추가: 초대 시 필요한 정보(방ID, 방이름, 보낸사람 ID/닉네임 등)를 가져온다고 가정
-  const { roomId, roomName } = useGameStore(); // 예시: roomName도 store에 있다고 가정 (추후 수정)
-  const { userId, nickname: senderNickname } = useUserStore();
-  const { sendMessage } = useWebSocketFunctions();
-
-  // 유저 검색 로직 (생략)
+  // 검색어가 변경될 때마다 API 호출하여 사용자 목록을 가져옵니다.
   useEffect(() => {
     if (!searchWord) {
       setUsers([]);
       return;
     }
-    // ...
-  }, [searchWord]);
 
-  // 1) 초대 버튼을 눌렀을 때 실행되는 함수
-  const handleInvite = (targetId: number, targetNickname: string) => {
-    // (1) 초대 상태 토글
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.userId === targetId ? { ...user, invited: !user.invited } : user
-      )
-    );
+    const fetchUsers = async () => {
+      try {
+        // 내부 라우터를 통해 API 호출 (/api/userSearch?word=검색어)
+        const url = `/api/userSearch?word=${encodeURIComponent(searchWord)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch user list');
 
-    // (2) WebSocket으로 초대 알림 보내기
-    // 명세서에 따라 payload를 구성
-    const payload = {
-      roomId: String(roomId), // 예시
-      roomName: roomName || '', // 예시
-      senderId: userId, // 보낸사람 ID
-      senderNickname, // 보낸사람 닉네임
-      targetId, // 받는사람 ID
-      targetNickname, // 받는사람 닉네임
-      action: 'INVITE',
+        // API에서 받은 데이터는 invited 필드가 없으므로 Omit<IUser, 'invited'>로 받습니다.
+        const data: Omit<IUser, 'invited'>[] = await res.json();
+
+        // UI용으로 invited 필드를 false로 추가합니다.
+        const mappedUsers: IUser[] = data.map((user) => ({
+          ...user,
+          invited: false,
+        }));
+        setUsers(mappedUsers);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    // messageType: "INVITE_PLAYER"
-    // destinationType: 'notification'
-    sendMessage('INVITE_PLAYER', payload, 'notification');
+    fetchUsers();
+  }, [searchWord]);
+
+  // 초대 상태 토글
+  const handleInvite = (userId: number) => {
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.userId === userId ? { ...user, invited: !user.invited } : user
+      )
+    );
   };
 
-  // 2) 배경 클릭 시 BottomSheet 닫기
+  // 백그라운드 클릭 시 BottomSheet 닫기
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setInviteVisible(false);
@@ -117,8 +110,7 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
               <UserListItem
                 key={user.userId}
                 user={user}
-                // ▼ 자식으로 초대 핸들러를 내려주면서, 대상 ID/닉네임을 넘김
-                onInvite={(id, nickname) => handleInvite(id, nickname)}
+                onInvite={handleInvite}
               />
             ))}
           </UserList>
