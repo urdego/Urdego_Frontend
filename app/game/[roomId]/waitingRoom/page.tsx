@@ -24,9 +24,11 @@ const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
+
   const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
   const { roomId } = useGameStore();
   const { userId, nickname } = useUserStore();
+
   const [roomData, setRoomData] = useState<RoomPayload>({
     currentPlayers: [],
     readyStatus: {},
@@ -38,8 +40,15 @@ const WaitingRoom = () => {
     contents: [],
     hint: '',
   });
+
+  // 내 준비 상태 (일반 플레이어 전용)
+  const [myIsReady, setMyIsReady] = useState(false);
+  // 일반 플레이어가 준비를 누른 후 다시 누르지 못하도록 잠금
+  const [readyLocked, setReadyLocked] = useState(false);
+
   const hasJoined = useRef(false);
 
+  // 컴포넌트 마운트 시 한 번만 실행
   useEffect(() => {
     if (roomId) {
       subscribeToRoom(String(roomId), (message) => {
@@ -51,6 +60,7 @@ const WaitingRoom = () => {
           setRoomData(message.payload);
         }
       });
+
       if (!hasJoined.current) {
         sendMessage(
           'PLAYER_JOIN',
@@ -65,6 +75,19 @@ const WaitingRoom = () => {
     }
   }, []);
 
+  // sendMessage 호출용 함수
+  const sendPlayerReadyMessage = () => {
+    sendMessage(
+      'PLAYER_READY',
+      {
+        roomId: String(roomId),
+        userId: Number(userId),
+        isReady: true,
+      },
+      'room'
+    );
+  };
+
   const users = roomData.currentPlayers.map((player) => ({
     id: player.userId,
     name: player.nickname,
@@ -74,8 +97,25 @@ const WaitingRoom = () => {
     isReady: roomData.readyStatus[player.nickname] || false,
   }));
 
+  // 준비완료 버튼 클릭 시 동작
   const toggleReady = () => {
-    // 준비 상태 토글 관련 로직 구현 (추후 작업)
+    const isHost = nickname === roomData.host;
+
+    if (isHost) {
+      // 방장은 시작 시 무조건 버튼 disabled이고,
+      // 모든 플레이어가 준비완료했을 때(allReady true) 버튼이 활성화됨.
+      if (!roomData.allReady) return;
+      console.log('방장: 게임 시작 로직 실행');
+      sendPlayerReadyMessage();
+      return;
+    }
+
+    // 일반 플레이어의 경우
+    if (!myIsReady) {
+      setMyIsReady(true);
+      setReadyLocked(true);
+      sendPlayerReadyMessage();
+    }
   };
 
   return (
@@ -115,12 +155,13 @@ const WaitingRoom = () => {
                 icon={ContentsBox}
                 onClick={() => setIsAddContentsVisible((prev) => !prev)}
               />
-              {/* 호스트인 경우, roomData.allReady가 false이면 버튼 비활성화 */}
               <WButton
                 buttonType="default"
                 label="준비완료"
                 onClick={toggleReady}
-                disabled={nickname === roomData.host && !roomData.allReady}
+                disabled={
+                  nickname === roomData.host ? !roomData.allReady : readyLocked
+                }
               />
             </Footer>
           </WaitingWrapper>
