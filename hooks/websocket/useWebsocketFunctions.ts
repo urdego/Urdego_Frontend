@@ -1,7 +1,9 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
-import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
+import { WebSocketMessage } from './useWebsocket.types';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
+
+type DestinationType = 'room' | 'game' | 'notification';
 
 export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
@@ -9,7 +11,7 @@ export const useWebSocketFunctions = () => {
 
   const subscribeToRoom = (
     roomId: string,
-    onMessageReceived: (message: WebSocketMessage) => void // 타입 변경
+    onMessageReceived: (message: WebSocketMessage) => void
   ) => {
     if (client && isConnected) {
       if (subscribedRoom === roomId) {
@@ -22,7 +24,6 @@ export const useWebSocketFunctions = () => {
 
       client.subscribe(subscriptionPath, (message) => {
         console.log(`Message received in room ${roomId}:`, message.body);
-        // message.body를 JSON으로 파싱한 값을 onMessageReceived에 전달합니다.
         onMessageReceived(JSON.parse(message.body));
       });
 
@@ -35,21 +36,30 @@ export const useWebSocketFunctions = () => {
   const sendMessage = (
     messageType: string,
     payload: object,
-    destinationType: 'room' | 'game'
+    destinationType: DestinationType
   ) => {
-    if (client && isConnected) {
-      const destination =
-        destinationType === 'room'
-          ? WEBSOCKET_CONFIG.PUBLISH_ROOM_EVENT
-          : WEBSOCKET_CONFIG.PUBLISH_GAME_EVENT;
-      const message = { messageType, payload };
-
-      client.publish({ destination, body: JSON.stringify(message) });
-
-      console.log('Message sent:', message);
-    } else {
+    if (!client || !isConnected) {
       console.warn('WebSocket is not connected.');
+      return;
     }
+
+    // destinationType에 따라 전송 경로를 분기
+    let destination = '';
+    switch (destinationType) {
+      case 'room':
+        destination = WEBSOCKET_CONFIG.PUBLISH_ROOM_EVENT;
+        break;
+      case 'game':
+        destination = WEBSOCKET_CONFIG.PUBLISH_GAME_EVENT;
+        break;
+      case 'notification':
+        destination = WEBSOCKET_CONFIG.PUBLISH_NOTIFICATION_EVENT;
+        break;
+    }
+
+    const message = { messageType, payload };
+    client.publish({ destination, body: JSON.stringify(message) });
+    console.log('Message sent:', message);
   };
 
   return { subscribeToRoom, sendMessage };
