@@ -11,7 +11,6 @@ import {
   GridItem,
 } from './HomeBox.styles';
 import Level from '@/components/Layout/Home/HomeBox/Level';
-import LocationListBottomSheet from '@/components/Common/BottomSheet/LocationListBottomSheet';
 import PlaceRegisterIcon from '@/styles/Icon/Home/PlaceRegister.svg';
 import CharacterSelectIcon from '@/styles/Icon/Home/CharacterSelect.svg';
 import CharacterBottomSheet from '@/components/Layout/Home/Character/CharacterBottomSheet';
@@ -20,6 +19,7 @@ import useCharacterData from '@/hooks/character/useCharacterData';
 import useUserStore from '@/stores/useUserStore';
 import { SuccessToast } from '../Character/SuccessToast';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
+import { useRouter } from 'next/navigation';
 
 interface HomeBoxProps {
   selectedCharacter: string | null;
@@ -34,13 +34,13 @@ const HomeBox = ({
   setIsBottomSheetOpen,
   isBottomSheetOpen,
 }: HomeBoxProps) => {
+  const router = useRouter();
   const {
     character: activeCharacter,
     ownCharacters,
     level,
     exp,
   } = useCharacterState();
-  const [isLocationListVisible, setLocationListVisible] = useState(false);
   const [localSelectedCharacter, setLocalSelectedCharacter] = useState<
     string | null
   >(activeCharacter || 'BASIC'); // activeCharacter로 초기화
@@ -64,11 +64,6 @@ const HomeBox = ({
   const handleCharacterSelect = () => {
     setIsBottomSheetOpen(true);
     setButtonVisible(false);
-  };
-
-  // 위치 목록 토글
-  const toggleLocationList = () => {
-    setLocationListVisible((prev) => !prev);
   };
 
   // 캐릭터 저장 처리
@@ -101,7 +96,7 @@ const HomeBox = ({
         <Level level={level} exp={exp} />
       </TopWrapper>
       <BottomWrapper>
-        <PlaceRegister onClick={toggleLocationList}>
+        <PlaceRegister onClick={() => router.push('/content')}>
           <Image
             src={PlaceRegisterIcon}
             alt="Place Register Icon"
@@ -146,12 +141,6 @@ const HomeBox = ({
           </GridContainer>
         </CharacterBottomSheet>
       </BottomWrapper>
-
-      {isLocationListVisible && (
-        <LocationListBottomSheet
-          setLocationListVisible={setLocationListVisible}
-        />
-      )}
     </HomeBoxWrapper>
   );
 };

@@ -1,10 +1,10 @@
 export type Character =
-  | 'basic'
-  | 'angular'
-  | 'bumpy'
-  | 'dot'
-  | 'planet'
-  | 'sharp'
-  | 'square'
-  | 'star'
-  | 'wool';
+  | 'BASIC'
+  | 'ANGULAR'
+  | 'BUMPY'
+  | 'DOT'
+  | 'PLANET'
+  | 'SHARP'
+  | 'SQUARE'
+  | 'STAR'
+  | 'WOOL';

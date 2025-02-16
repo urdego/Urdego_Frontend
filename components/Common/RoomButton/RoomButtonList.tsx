@@ -12,11 +12,11 @@ const RoomButtonList = ({
         waitingRoomList.map((item, index) => (
           <RoomButton
             key={`key${index}`}
-            hostType={'basic'}
+            hostType={item.hostInfo.activeCharacter}
             title={item.roomName}
             round={item.totalRounds}
             currMemberCount={item.currentPlayersCount}
-            maxMemberCount={item.maxPlayer}
+            maxMemberCount={item.maxPlayers}
           />
         ))}
     </>

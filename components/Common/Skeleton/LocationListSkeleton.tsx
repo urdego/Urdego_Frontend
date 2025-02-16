@@ -2,7 +2,7 @@ import {
   SkeletonLocationContainer,
   LocationImageContainer,
   LocationListWrapper,
-} from '@/components/Layout/Home/LocationList/LocationList.styles';
+} from '@/components/Layout/Contents/Contents.styles';
 import Skeleton from './Skeleton';
 
 const LocationListSkeleton = () => {

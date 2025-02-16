@@ -15,7 +15,7 @@ import {
   CloseButton,
   LoadingWrapper,
 } from '@/components/Layout/AddContents/AddContents.styles';
-import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
+import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents';
 import Image from 'next/image';
 import SearchBar from '@/components/Common/SearchBar/SearchBar';
 import AlertModal from '@/components/Common/AlertModal/AlertModal';
