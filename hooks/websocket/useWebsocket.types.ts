@@ -6,18 +6,19 @@ export interface Player {
 }
 
 export interface RoomPayload {
-  allReady: boolean;
+  roomId: string;
+  status: string;
   currentPlayers: Player[];
   host: string;
   readyStatus: { [key: string]: boolean };
-  roomId: string;
-  userId?: string;
+  allReady: boolean;
+  roomName: string;
+  contents?: string[];
+  hint?: string;
+  userId?: number;
   latitude?: number;
   longitude?: number;
-  status: string;
-  roundNum: number;
-  contents: string[];
-  hint: string;
+  roundNum?: number;
 }
 
 export interface WebSocketMessage {

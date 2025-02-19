@@ -38,7 +38,7 @@ const WaitingRoom = () => {
     roomId: '',
     roundNum: 0,
     contents: [],
-    hint: '',
+    roomName: '',
   });
 
   // 내 준비 상태 (일반 플레이어 전용)
@@ -66,7 +66,8 @@ const WaitingRoom = () => {
           'PLAYER_JOIN',
           {
             roomId: String(roomId),
-            userId: String(userId),
+            userId: Number(userId),
+            isReady: false,
           },
           'room'
         );
@@ -75,7 +76,7 @@ const WaitingRoom = () => {
     }
   }, []);
 
-  // sendMessage 호출용 함수
+  // 'PLAYER_READY' sendMessage 호출용 함수
   const sendPlayerReadyMessage = () => {
     sendMessage(
       'PLAYER_READY',
@@ -126,7 +127,7 @@ const WaitingRoom = () => {
         </FullScreenImageWrapper>
       ) : (
         <>
-          <TopBar label="방제목" NavType="room" exitIcon />
+          <TopBar label={roomData.roomName} NavType="room" exitIcon />
           <WaitingWrapper>
             <UserList>
               {users.map((user) => (
