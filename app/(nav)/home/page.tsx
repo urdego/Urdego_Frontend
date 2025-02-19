@@ -12,6 +12,8 @@ import UserCharacter from '@/components/Layout/Home/Character/UserCharacter';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
 import LoadingSpinner from '@/components/Common/LoadingSpinner/LoadingSpinner';
 import Link from 'next/link';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import useUserStore from '@/stores/useUserStore';
 
 const Home = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -23,10 +25,22 @@ const Home = () => {
 
   /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
+  /* notification 구독 */
+  const { subscribeToNotification } = useWebSocketFunctions();
+  /* 사용자 정보 가져오기 */
+  const { userId } = useUserStore();
 
   useEffect(() => {
     if (!isConnected) connectWebSocket();
   }, []);
+
+  useEffect(() => {
+    if (isConnected) {
+      subscribeToNotification(userId, (message) => {
+        console.log('Notification received:', message);
+      });
+    }
+  }, [isConnected]);
 
   return (
     <>

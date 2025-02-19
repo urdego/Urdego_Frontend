@@ -1,6 +1,6 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
-import { WebSocketMessage } from './useWebsocket.types';
+import { WebSocketMessage, InviteMessage } from './useWebsocket.types';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
 
 type DestinationType = 'room' | 'game' | 'notification';
@@ -28,6 +28,29 @@ export const useWebSocketFunctions = () => {
       });
 
       setSubscribedRoom(roomId);
+    } else {
+      console.warn('WebSocket is not connected.');
+    }
+  };
+
+  const subscribeToNotification = (
+    targetId: number,
+    onMessageReceived: (message: InviteMessage) => void
+  ) => {
+    if (client && isConnected) {
+      const subscriptionPath =
+        WEBSOCKET_CONFIG.SUBSCRIBE_NOTIFICATION(targetId);
+      console.log(`Subscribing to notifications for user ${targetId}`);
+
+      client.subscribe(subscriptionPath, (message) => {
+        console.log(
+          `Notification received for user ${targetId}:`,
+          message.body
+        );
+        onMessageReceived(JSON.parse(message.body));
+      });
+
+      console.log(`Subscribed to notifications for user ${targetId}`);
     } else {
       console.warn('WebSocket is not connected.');
     }
@@ -62,5 +85,5 @@ export const useWebSocketFunctions = () => {
     console.log('Message sent:', message);
   };
 
-  return { subscribeToRoom, sendMessage };
+  return { subscribeToRoom, subscribeToNotification, sendMessage };
 };
