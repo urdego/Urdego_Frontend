@@ -1,7 +1,8 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
-import { WebSocketMessage, InviteMessage } from './useWebsocket.types';
+import { WebSocketMessage } from './useWebsocket.types';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
+import { InviteWebSocketMessage } from '@/lib/types/notification';
 
 type DestinationType = 'room' | 'game' | 'notification';
 
@@ -35,7 +36,7 @@ export const useWebSocketFunctions = () => {
 
   const subscribeToNotification = (
     targetId: number,
-    onMessageReceived: (message: InviteMessage) => void
+    onMessageReceived: (message: InviteWebSocketMessage) => void
   ) => {
     if (client && isConnected) {
       const subscriptionPath =
