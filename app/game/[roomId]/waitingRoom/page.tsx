@@ -172,7 +172,10 @@ const WaitingRoom = () => {
             title="장소 선택"
           />
           {isInviteVisible && (
-            <InviteUser setInviteVisible={setIsInviteVisible} />
+            <InviteUser
+              setInviteVisible={setIsInviteVisible}
+              roomName={roomData.roomName}
+            />
           )}
         </>
       )}

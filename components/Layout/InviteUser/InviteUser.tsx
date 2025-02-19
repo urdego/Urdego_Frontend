@@ -15,14 +15,24 @@ import UserListItem from './UserListItem';
 import SearchIcon from '@styles/Icon/search-btn.svg';
 import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
 
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStore';
+
 interface InviteUserProps {
   setInviteVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  roomName: string; // ★ WaitingRoom에서 전달받은 방 이름
 }
 
-const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
+const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [searchWord, setSearchWord] = useState('');
   const [users, setUsers] = useState<IUser[]>([]);
+
+  // 웹소켓, 사용자, 방 정보를 가져옵니다.
+  const { sendMessage } = useWebSocketFunctions();
+  const { userId: senderId, nickname: senderNickname } = useUserStore();
+  const { roomId } = useGameStore();
 
   // 검색어가 변경될 때마다 API 호출하여 사용자 목록을 가져옵니다.
   useEffect(() => {
@@ -33,15 +43,11 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
 
     const fetchUsers = async () => {
       try {
-        // 내부 라우터를 통해 API 호출 (/api/userSearch?word=검색어)
         const url = `/api/userSearch?word=${encodeURIComponent(searchWord)}`;
         const res = await fetch(url);
         if (!res.ok) throw new Error('Failed to fetch user list');
 
-        // API에서 받은 데이터는 invited 필드가 없으므로 Omit<IUser, 'invited'>로 받습니다.
         const data: Omit<IUser, 'invited'>[] = await res.json();
-
-        // UI용으로 invited 필드를 false로 추가합니다.
         const mappedUsers: IUser[] = data.map((user) => ({
           ...user,
           invited: false,
@@ -55,13 +61,34 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
     fetchUsers();
   }, [searchWord]);
 
-  // 초대 상태 토글
-  const handleInvite = (userId: number) => {
+  // 초대 상태 토글 + 초대 시 소켓으로 알림 전송
+  const handleInvite = (targetId: number, targetNickname: string) => {
+    const targetUser = users.find((u) => u.userId === targetId);
+    if (!targetUser) return;
+
+    const newInvited = !targetUser.invited;
     setUsers((prev) =>
       prev.map((user) =>
-        user.userId === userId ? { ...user, invited: !user.invited } : user
+        user.userId === targetId ? { ...user, invited: newInvited } : user
       )
     );
+
+    // invited 가 true로 바뀔 때만 소켓 전송
+    if (newInvited) {
+      sendMessage(
+        'INVITE_PLAYER',
+        {
+          roomId: String(roomId),
+          roomName: roomName,
+          senderId: Number(senderId),
+          senderNickname: senderNickname,
+          targetId: Number(targetId),
+          targetNickname: targetNickname,
+          action: 'INVITE', // ★ 명세서 예시에 따른 고정 값
+        },
+        'notification'
+      );
+    }
   };
 
   // 백그라운드 클릭 시 BottomSheet 닫기
