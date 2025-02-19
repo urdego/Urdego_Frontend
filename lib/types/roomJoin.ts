@@ -25,17 +25,3 @@ export interface WebSocketMessage {
   messageType: string;
   payload: RoomPayload;
 }
-
-export interface InviteMessage {
-  notificationId: string;
-  senderId: number;
-  targetId: number;
-  roomId: string;
-  roomName: string;
-  senderNickname: string;
-  targetNickname: string;
-  action: string;
-  timestamp: string;
-  read: boolean;
-  accepted: boolean;
-}

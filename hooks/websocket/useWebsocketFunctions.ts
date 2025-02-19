@@ -1,6 +1,6 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
-import { WebSocketMessage } from './useWebsocket.types';
+import { WebSocketMessage } from '@/lib/types/roomJoin';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
 import { InviteWebSocketMessage } from '@/lib/types/notification';
 

@@ -18,7 +18,7 @@ import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
-import { RoomPayload } from '@/hooks/websocket/useWebsocket.types';
+import { RoomPayload } from '@/lib/types/roomJoin';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
