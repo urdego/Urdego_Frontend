@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import useWebSocketStore from '@/stores/useWebSocketStore';
 
 import { TopWrapper, BottomWrapper } from './Home.styles';
@@ -31,41 +31,52 @@ const Home = () => {
   const { subscribeToNotification } = useWebSocketFunctions();
   /* 사용자 정보 가져오기 */
   const { userId } = useUserStore();
+  /* notification 상태관리 */
+  const [notification, setNotification] =
+    useState<InviteWebSocketMessage | null>(null);
+  /* 구독 여부 확인 */
+  const hasSubscribed = useRef(false);
 
+  // 소켓 연결 전용 useEffect
   useEffect(() => {
     if (!isConnected) connectWebSocket();
   }, []);
 
+  // 구독 등록용 useEffect
   useEffect(() => {
-    if (isConnected) {
-      subscribeToNotification(userId, (message: InviteWebSocketMessage) => {
-        console.log('Notification received:', message);
+    if (!isConnected || hasSubscribed.current) return;
 
-        // Invite 메시지 타입인지 확인합니다.
-        if (message.messageType === 'INVITE_PLAYER') {
-          const inviteMessage = message as InviteWebSocketMessage;
-          if (inviteMessage.payload.action === 'INVITE') {
-            console.log('Invite notification received:', inviteMessage.payload);
-            InviteNotificationToast({
-              senderNickname: inviteMessage.payload.senderNickname,
-              targetNickname: inviteMessage.payload.targetNickname,
-              roomName: inviteMessage.payload.roomName,
-              onAccept: () => {
-                // 초대 수락 로직
-                console.log('Invitation accepted:', inviteMessage.payload);
-                // 서버 API 호출, 소켓 이벤트 등 처리
-              },
-              onDecline: () => {
-                // 초대 거절 로직
-                console.log('Invitation declined:', inviteMessage.payload);
-                // 서버 API 호출, 소켓 이벤트 등 처리
-              },
-            });
-          }
-        }
-      });
+    hasSubscribed.current = true;
+    subscribeToNotification(userId, (message: InviteWebSocketMessage) => {
+      console.log('Notification received:', message);
+      setNotification(message);
+    });
+  }, [isConnected]);
+
+  // 메시지 처리용 useEffect (notification 상태 변경 시 실행)
+  useEffect(() => {
+    if (!notification) return;
+
+    if (notification.messageType === 'INVITE_PLAYER') {
+      const inviteMessage = notification;
+      if (inviteMessage.payload.action === 'INVITE') {
+        console.log('Invite notification received:', inviteMessage.payload);
+        InviteNotificationToast({
+          senderNickname: inviteMessage.payload.senderNickname,
+          targetNickname: inviteMessage.payload.targetNickname,
+          roomName: inviteMessage.payload.roomName,
+          onAccept: () => {
+            console.log('Invitation accepted:', inviteMessage.payload);
+            // 서버 API 호출, 소켓 이벤트 등 처리
+          },
+          onDecline: () => {
+            console.log('Invitation declined:', inviteMessage.payload);
+            // 서버 API 호출, 소켓 이벤트 등 처리
+          },
+        });
+      }
     }
-  }, [isConnected, userId, subscribeToNotification]);
+  }, [notification]);
 
   return (
     <>
