@@ -136,7 +136,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     const payload = {
       roomId: String(roomId), // 예: "3135ede-8537-4ac4-af6d-cee3b60ed404"
       userId: Number(userId), // 예: 1001
-      contentsId: selectedLocations.map(String), // 예: ["123", "456", ...]
+      contentIds: selectedLocations.map(String), // 예: ["123", "456", ...]
     };
 
     // messageType: "CONTENT_SELECT"
