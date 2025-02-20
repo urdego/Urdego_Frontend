@@ -1,6 +1,10 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useState } from 'react';
-import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
+import { WebSocketMessage } from '@/lib/types/roomJoin';
+import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
+import { InviteWebSocketMessage } from '@/lib/types/notification';
+
+type DestinationType = 'room' | 'game' | 'notification';
 
 export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
@@ -8,7 +12,7 @@ export const useWebSocketFunctions = () => {
 
   const subscribeToRoom = (
     roomId: string,
-    onMessageReceived: (message: WebSocketMessage) => void // 타입 변경
+    onMessageReceived: (message: WebSocketMessage) => void
   ) => {
     if (client && isConnected) {
       if (subscribedRoom === roomId) {
@@ -16,12 +20,11 @@ export const useWebSocketFunctions = () => {
         return;
       }
 
-      const subscriptionPath = `/urdego/sub/${roomId}`;
+      const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ROOM(roomId);
       console.log(`Subscribing to room: ${subscriptionPath}`);
 
       client.subscribe(subscriptionPath, (message) => {
         console.log(`Message received in room ${roomId}:`, message.body);
-        // message.body를 JSON으로 파싱한 값을 onMessageReceived에 전달합니다.
         onMessageReceived(JSON.parse(message.body));
       });
 
@@ -31,18 +34,57 @@ export const useWebSocketFunctions = () => {
     }
   };
 
-  const sendMessage = (messageType: string, payload: object) => {
+  const subscribeToNotification = (
+    targetId: number,
+    onMessageReceived: (message: InviteWebSocketMessage) => void
+  ) => {
     if (client && isConnected) {
-      const destination = `/urdego/pub/room/event`;
-      const message = { messageType, payload };
+      const subscriptionPath =
+        WEBSOCKET_CONFIG.SUBSCRIBE_NOTIFICATION(targetId);
+      console.log(`Subscribing to notifications for user ${targetId}`);
 
-      client.publish({ destination, body: JSON.stringify(message) });
+      client.subscribe(subscriptionPath, (message) => {
+        console.log(
+          `Notification received for user ${targetId}:`,
+          message.body
+        );
+        onMessageReceived(JSON.parse(message.body));
+      });
 
-      console.log('Message sent:', message);
+      console.log(`Subscribed to notifications for user ${targetId}`);
     } else {
       console.warn('WebSocket is not connected.');
     }
   };
 
-  return { subscribeToRoom, sendMessage };
+  const sendMessage = (
+    messageType: string,
+    payload: object,
+    destinationType: DestinationType
+  ) => {
+    if (!client || !isConnected) {
+      console.warn('WebSocket is not connected.');
+      return;
+    }
+
+    // destinationType에 따라 전송 경로를 분기
+    let destination = '';
+    switch (destinationType) {
+      case 'room':
+        destination = WEBSOCKET_CONFIG.PUBLISH_ROOM_EVENT;
+        break;
+      case 'game':
+        destination = WEBSOCKET_CONFIG.PUBLISH_GAME_EVENT;
+        break;
+      case 'notification':
+        destination = WEBSOCKET_CONFIG.PUBLISH_NOTIFICATION_EVENT;
+        break;
+    }
+
+    const message = { messageType, payload };
+    client.publish({ destination, body: JSON.stringify(message) });
+    console.log('Message sent:', message);
+  };
+
+  return { subscribeToRoom, subscribeToNotification, sendMessage };
 };

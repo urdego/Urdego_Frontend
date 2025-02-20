@@ -72,14 +72,6 @@ export const UserItem = styled.div`
   padding: 8px 0;
 `;
 
-export const UserAvatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: ${colors.gray[90]};
-  flex-shrink: 0;
-`;
-
 export const UserInfo = styled.div`
   display: flex;
   flex-direction: row;

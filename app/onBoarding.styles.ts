@@ -32,6 +32,7 @@ export const SlideContainer = styled.div`
   .slick-list,
   .slick-track {
     height: 100vh; // 전체 높이 적용
+    transition: transform 0.5s ease-in-out;
   }
 
   .slick-slide {

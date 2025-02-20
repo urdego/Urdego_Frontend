@@ -15,19 +15,20 @@ import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
 import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
-import { AlertToast } from '@/components/Common/Toast/AlertToast';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
-import { RoomPayload } from '@/hooks/websocket/useWebsocket.types';
+import { RoomPayload } from '@/lib/types/roomJoin';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
+
   const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
   const { roomId } = useGameStore();
-  const { userId } = useUserStore();
+  const { userId, nickname } = useUserStore();
+
   const [roomData, setRoomData] = useState<RoomPayload>({
     currentPlayers: [],
     readyStatus: {},
@@ -35,41 +36,87 @@ const WaitingRoom = () => {
     allReady: false,
     status: 'WAITING',
     roomId: '',
+    roundNum: 0,
+    contents: [],
+    roomName: '',
   });
+
+  // 내 준비 상태 (일반 플레이어 전용)
+  const [myIsReady, setMyIsReady] = useState(false);
+  // 일반 플레이어가 준비를 누른 후 다시 누르지 못하도록 잠금
+  const [readyLocked, setReadyLocked] = useState(false);
+
   const hasJoined = useRef(false);
 
+  // 컴포넌트 마운트 시 한 번만 실행
   useEffect(() => {
-    subscribeToRoom(String(roomId), (message) => {
-      console.log(
-        `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
-        message
-      );
-      if (message.messageType === 'PLAYER_JOIN') {
-        setRoomData(message.payload);
-      }
-    });
-    if (roomId && !hasJoined.current) {
-      sendMessage('PLAYER_JOIN', {
-        roomId: String(roomId),
-        userId: String(userId),
+    if (roomId) {
+      subscribeToRoom(String(roomId), (message) => {
+        console.log(
+          `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
+          message
+        );
+        if (message.messageType === 'PLAYER_JOIN') {
+          setRoomData(message.payload);
+        }
       });
-      hasJoined.current = true;
+
+      if (!hasJoined.current) {
+        sendMessage(
+          'PLAYER_JOIN',
+          {
+            roomId: String(roomId),
+            userId: Number(userId),
+            isReady: false,
+          },
+          'room'
+        );
+        hasJoined.current = true;
+      }
     }
   }, []);
 
-  const users = roomData.currentPlayers.map((player) => {
-    return {
-      id: player.userId,
-      name: player.nickname,
-      level: player.level,
-      activeCharacter: player.activeCharacter,
-      isHost: player.nickname === roomData.host,
-      isReady: roomData.readyStatus[player.nickname] || false,
-    };
-  });
+  // 'PLAYER_READY' sendMessage 호출용 함수
+  const sendPlayerReadyMessage = () => {
+    sendMessage(
+      'PLAYER_READY',
+      {
+        roomId: String(roomId),
+        userId: Number(userId),
+        isReady: true,
+      },
+      'room'
+    );
+  };
 
+  const users = roomData.currentPlayers.map((player) => ({
+    id: player.userId,
+    name: player.nickname,
+    level: player.level,
+    activeCharacter: player.activeCharacter,
+    isHost: player.nickname === roomData.host,
+    isReady: roomData.readyStatus[player.nickname] || false,
+  }));
+
+  // 준비완료 버튼 클릭 시 동작
   const toggleReady = () => {
-    // 준비 상태 토글 관련 로직 구현 필요 (추후 작업)
+    const isHost = nickname === roomData.host;
+
+    if (isHost) {
+      // 방장은 시작 시 무조건 버튼 disabled이고,
+      // 모든 플레이어가 준비완료했을 때(allReady true) 버튼이 활성화됨.
+      if (!roomData.allReady) return;
+      console.log('방장: 게임 시작 로직 실행');
+      sendPlayerReadyMessage();
+      return;
+    }
+
+    // 일반 플레이어의 경우
+    if (!myIsReady) {
+      setMyIsReady(true);
+      setReadyLocked(true);
+      sendPlayerReadyMessage();
+    }
   };
 
   return (
@@ -80,7 +127,7 @@ const WaitingRoom = () => {
         </FullScreenImageWrapper>
       ) : (
         <>
-          <TopBar label="방제목" NavType="room" exitIcon />
+          <TopBar label={roomData.roomName} NavType="room" exitIcon />
           <WaitingWrapper>
             <UserList>
               {users.map((user) => (
@@ -88,7 +135,7 @@ const WaitingRoom = () => {
                   key={user.id}
                   username={user.name}
                   level={user.level}
-                  activeCharacter={user.activeCharacter} // activeCharacter prop 전달
+                  activeCharacter={user.activeCharacter}
                   isHost={user.isHost}
                   isReady={user.isReady}
                 />
@@ -113,6 +160,9 @@ const WaitingRoom = () => {
                 buttonType="default"
                 label="준비완료"
                 onClick={toggleReady}
+                disabled={
+                  nickname === roomData.host ? !roomData.allReady : readyLocked
+                }
               />
             </Footer>
           </WaitingWrapper>
@@ -122,7 +172,10 @@ const WaitingRoom = () => {
             title="장소 선택"
           />
           {isInviteVisible && (
-            <InviteUser setInviteVisible={setIsInviteVisible} />
+            <InviteUser
+              setInviteVisible={setIsInviteVisible}
+              roomName={roomData.roomName}
+            />
           )}
         </>
       )}

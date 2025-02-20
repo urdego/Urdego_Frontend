@@ -1,4 +1,7 @@
+'use client';
+
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import {
   BackgroundOverlay,
   BottomSheet,
@@ -19,6 +22,10 @@ import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents'
 import Image from 'next/image';
 import SearchBar from '@/components/Common/SearchBar/SearchBar';
 import AlertModal from '@/components/Common/AlertModal/AlertModal';
+import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
+import useGameStore from '@/stores/useGameStore';
+import useUserStore from '@/stores/useUserStore';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 interface AddContentsProps {
   isVisible: boolean;
@@ -33,6 +40,14 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // ★ store에서 roomId, userId 가져오기
+  const { roomId } = useGameStore();
+  const { userId } = useUserStore();
+
+  // ★ WebSocket 함수
+  const { sendMessage } = useWebSocketFunctions();
+
+  // 무한 스크롤 훅
   const {
     locationList: contents,
     fetchLocationList,
@@ -43,9 +58,9 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
   const isInitialLoad = contents.length === 0;
   const isFetched = useRef(false);
 
+  // 스크롤 이벤트 등록
   useEffect(() => {
     const currentRef = contentRef.current;
-
     const handleScroll = () => {
       if (currentRef) {
         const { scrollTop, scrollHeight, clientHeight } = currentRef;
@@ -69,6 +84,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     };
   }, [isLoading, isLoadMore, fetchLocationList]);
 
+  // 모달 열릴 때 처음 한번만 목록 가져오기
   useEffect(() => {
     if (isVisible && contents.length === 0 && !isFetched.current) {
       isFetched.current = true;
@@ -76,6 +92,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     }
   }, [isVisible, contents.length, fetchLocationList]);
 
+  // 배경 클릭 시 닫기
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setIsExpand(false);
@@ -83,6 +100,7 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     }
   };
 
+  // 장소 선택/해제
   const handleLocationSelect = (id: number) => {
     setSelectedLocations((prev) => {
       if (prev.includes(id)) {
@@ -96,23 +114,46 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
     });
   };
 
+  // 선택 순서 표시
   const getLocationNumber = (id: number) => {
     return selectedLocations.indexOf(id) + 1;
   };
 
+  // 검색
   const filteredContents = contents.filter((content) =>
     content.contentName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // 닫기 버튼
   const handleCancelClick = () => {
     setIsExpand(false);
     setIsVisible(false);
   };
 
+  // ★ 컨텐츠 선택 완료 → WebSocket으로 서버에 등록 요청
+  const handleConfirm = () => {
+    // 명세서에 맞춰 payload 구성
+    const payload = {
+      roomId: String(roomId), // 예: "3135ede-8537-4ac4-af6d-cee3b60ed404"
+      userId: Number(userId), // 예: 1001
+      contentIds: selectedLocations.map(String), // 예: ["123", "456", ...]
+    };
+
+    // messageType: "CONTENT_SELECT"
+    // destinationType: "room" → "/urdego/pub/room/event"로 전송
+    sendMessage('CONTENT_SELECT', payload, 'room');
+
+    // 모달 닫기
+    setIsExpand(false);
+    setIsVisible(false);
+  };
+
+  // 로딩 표시
   const LoadingIndicator = () => {
     return <LoadingWrapper>불러오는 중입니다...</LoadingWrapper>;
   };
 
+  // 컨텐츠 목록
   const renderGridItems = () => {
     if (isInitialLoad) return <LoadingIndicator />;
 
@@ -169,7 +210,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
             <TitleContainer>
               <CloseButton onClick={handleCancelClick}>닫기</CloseButton>
               {title && <HeaderTitle>{title}</HeaderTitle>}
-              <span>선택완료</span>
+              {/* ★ 선택완료 클릭 시 handleConfirm 실행 */}
+              <span
+                style={{ cursor: 'pointer', color: '#007aff' }}
+                onClick={handleConfirm}
+              >
+                선택완료
+              </span>
             </TitleContainer>
             <SearchBar onSearch={setSearchQuery} initialQuery={searchQuery} />
           </HeaderWrapper>

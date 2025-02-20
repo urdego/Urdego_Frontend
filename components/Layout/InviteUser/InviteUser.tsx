@@ -1,52 +1,101 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   BackgroundOverlay,
   BottomSheet,
   HeaderWrapper,
   HeaderHandler,
   ContentWrapper,
+  SearchBarWrapper,
   SearchBar,
   UserList,
-  UserItem,
-  UserAvatar,
-  UserInfo,
-  InviteButton,
   HeaderTitle,
-  Level,
-  SearchBarWrapper,
-  UserId,
-} from '@components/Layout/InviteUser/InviteUser.styles';
-import Image from 'next/image';
+} from './InviteUser.styles';
+import UserListItem from './UserListItem';
 import SearchIcon from '@styles/Icon/search-btn.svg';
+import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
+
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStore';
 
 interface InviteUserProps {
   setInviteVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  roomName: string; // ★ WaitingRoom에서 전달받은 방 이름
 }
 
-const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
+const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
   const [isExpand, setIsExpand] = useState(false);
+  const [searchWord, setSearchWord] = useState('');
+  const [users, setUsers] = useState<IUser[]>([]);
 
-  const [users, setUsers] = useState([
-    { id: '셉셉이', level: 5, status: '게임중', invited: false },
-    { id: '날라리', level: 5, status: '게임중', invited: false },
-    { id: '프론트맨', level: 5, status: '온라인', invited: false },
-    { id: '계란맨', level: 5, status: '온라인', invited: false },
-    { id: '누구신지', level: 5, status: '오프라인', invited: true },
-  ]);
+  // 웹소켓, 사용자, 방 정보를 가져옵니다.
+  const { sendMessage } = useWebSocketFunctions();
+  const { userId: senderId, nickname: senderNickname } = useUserStore();
+  const { roomId } = useGameStore();
 
-  // 클릭 이벤트가 백그라운드에만 적용되도록 수정
+  // 검색어가 변경될 때마다 API 호출하여 사용자 목록을 가져옵니다.
+  useEffect(() => {
+    if (!searchWord) {
+      setUsers([]);
+      return;
+    }
+
+    const fetchUsers = async () => {
+      try {
+        const url = `/api/userSearch?word=${encodeURIComponent(searchWord)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch user list');
+
+        const data: Omit<IUser, 'invited'>[] = await res.json();
+        const mappedUsers: IUser[] = data.map((user) => ({
+          ...user,
+          invited: false,
+        }));
+        setUsers(mappedUsers);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUsers();
+  }, [searchWord]);
+
+  // 초대 상태 토글 + 초대 시 소켓으로 알림 전송
+  const handleInvite = (targetId: number, targetNickname: string) => {
+    const targetUser = users.find((u) => u.userId === targetId);
+    if (!targetUser) return;
+
+    const newInvited = !targetUser.invited;
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.userId === targetId ? { ...user, invited: newInvited } : user
+      )
+    );
+
+    // invited 가 true로 바뀔 때만 소켓 전송
+    if (newInvited) {
+      sendMessage(
+        'INVITE_PLAYER',
+        {
+          roomId: String(roomId),
+          roomName: roomName,
+          senderId: Number(senderId),
+          senderNickname: senderNickname,
+          targetId: Number(targetId),
+          targetNickname: targetNickname,
+          action: 'INVITE', // ★ 명세서 예시에 따른 고정 값
+        },
+        'notification'
+      );
+    }
+  };
+
+  // 백그라운드 클릭 시 BottomSheet 닫기
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setInviteVisible(false);
     }
-  };
-
-  const handleInvite = (userId: string) => {
-    setUsers(
-      users.map((user) =>
-        user.id === userId ? { ...user, invited: !user.invited } : user
-      )
-    );
   };
 
   return (
@@ -77,24 +126,19 @@ const InviteUser = ({ setInviteVisible }: InviteUserProps) => {
         <ContentWrapper>
           <SearchBarWrapper>
             <Image src={SearchIcon} alt="search-icon" width={24} height={24} />
-            <SearchBar placeholder="검색" />
+            <SearchBar
+              placeholder="검색"
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+            />
           </SearchBarWrapper>
           <UserList>
             {users.map((user) => (
-              <UserItem key={user.id}>
-                <UserAvatar />
-                <UserInfo>
-                  <UserId>{user.id}</UserId>
-                  <Level>LV.{user.level}</Level>
-                  {/* <UserStatus $status={user.status}>{user.status}</UserStatus> */}
-                </UserInfo>
-                <InviteButton
-                  $invited={user.invited}
-                  onClick={() => handleInvite(user.id)}
-                >
-                  {user.invited ? '초대완료' : '초대하기'}
-                </InviteButton>
-              </UserItem>
+              <UserListItem
+                key={user.userId}
+                user={user}
+                onInvite={handleInvite}
+              />
             ))}
           </UserList>
         </ContentWrapper>
