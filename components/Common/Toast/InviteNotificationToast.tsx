@@ -7,6 +7,7 @@ import {
   InviteButtonWrapper,
   InviteButton,
 } from '@/components/Common/Toast/InviteNotificationToast.styles';
+import colors from '@/styles/color/palette';
 
 interface InviteNotificationToastProps {
   senderNickname: string;
@@ -16,9 +17,8 @@ interface InviteNotificationToastProps {
   onDecline: () => void;
 }
 
-export function showInviteNotificationToast({
+export function InviteNotificationToast({
   senderNickname,
-  targetNickname,
   roomName,
   onAccept,
   onDecline,
@@ -33,12 +33,12 @@ export function showInviteNotificationToast({
         }}
       >
         <InviteMessage>
-          <strong>{senderNickname}</strong> 님이{' '}
-          <strong>{targetNickname}</strong> 님에게 <strong>{roomName}</strong>{' '}
-          방에 초대하셨습니다.
+          <strong>{senderNickname}</strong> 님이 <strong>{roomName}</strong>{' '}
+          방으로 초대하셨습니다.
         </InviteMessage>
         <InviteButtonWrapper>
           <InviteButton
+            style={{ backgroundColor: colors.purple[50] }}
             onClick={() => {
               onAccept();
               toast.dismiss(t.id);
@@ -47,6 +47,7 @@ export function showInviteNotificationToast({
             수락
           </InviteButton>
           <InviteButton
+            style={{ backgroundColor: colors.gray[70] }}
             onClick={() => {
               onDecline();
               toast.dismiss(t.id);
@@ -59,9 +60,9 @@ export function showInviteNotificationToast({
     ),
     {
       duration: 5000,
-      position: 'bottom-center',
+      position: 'top-center',
     }
   );
 }
 
-export default showInviteNotificationToast;
+export default InviteNotificationToast;
