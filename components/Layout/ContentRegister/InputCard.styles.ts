@@ -5,7 +5,7 @@ export const PlaceInputWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid #aaabab;
   padding: 12px;
 `;

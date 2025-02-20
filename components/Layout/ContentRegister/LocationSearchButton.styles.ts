@@ -5,18 +5,18 @@ export const PlaceSearchButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid ${colors.gray[70]};
   padding: 12px;
   cursor: pointer;
 `;
 
-export const PlaceTexthButtonWrapper = styled.div`
+export const PlaceTextButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 4px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid ${colors.gray[70]};
   padding: 12px;
 `;
