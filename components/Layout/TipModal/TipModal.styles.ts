@@ -10,7 +10,7 @@ export const ModalWrapper = styled.div`
   align-items: flex-start;
   gap: 8px;
 
-  border-radius: 4px;
+  border-radius: 8px;
   background: ${colors.etc.white};
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
 
