@@ -18,11 +18,11 @@ import {
   CloseButton,
   LoadingWrapper,
 } from '@/components/Layout/AddContents/AddContents.styles';
+import useGetInfiniteLocationList from '@/hooks/contents/useGetInfiniteContents';
+import Image from 'next/image';
 import SearchBar from '@/components/Common/SearchBar/SearchBar';
 import AlertModal from '@/components/Common/AlertModal/AlertModal';
 import useGetInfiniteLocationList from '@/hooks/locationList/useGetInfiniteLocationList';
-
-// ★ 추가: store, WebSocket 훅 불러오기
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';

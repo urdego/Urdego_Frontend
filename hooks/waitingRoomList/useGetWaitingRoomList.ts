@@ -1,12 +1,19 @@
+import { Character } from '@/lib/types/character';
 import { useEffect, useState } from 'react';
 
 export interface WaitingRoomList {
   roomId: string;
   status: string;
   roomName: string;
-  maxPlayer: number;
+  maxPlayers: number;
   currentPlayersCount: number;
   totalRounds: number;
+  hostInfo: {
+    userId: number;
+    nickname: string;
+    activeCharacter: Character;
+    level: 0;
+  };
 }
 
 const useGetWaitingRoomList = () => {

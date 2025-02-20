@@ -8,6 +8,7 @@ import {
   Label,
   ExitButtonWrapper,
   IconWrapper,
+  EditButtonWrapper,
 } from './TopBar.styles';
 import { BackIcon, AlarmIcon, FriendIcon, ExitIcon } from './TopBarIcon';
 import ReportIcon from '@/styles/Icon/Game/Report';
@@ -18,7 +19,7 @@ import ReportIcon from '@/styles/Icon/Game/Report';
 // game : 음향조절(layout에서 처리) + 라벨 + 신고 아이콘
 // room : 라벨 + 나가기 아이콘(오른쪽)
 interface TopBarProps {
-  NavType?: 'default' | 'other' | 'main' | 'game' | 'room';
+  NavType?: 'default' | 'other' | 'main' | 'game' | 'room' | 'locationUpdate';
   label?: string;
   backIcon?: boolean;
   alarmIcon?: boolean;
@@ -62,6 +63,8 @@ const TopBar = ({
       router.back(); // 뒤로가기로 변경
     }
   };
+
+  const handleLocationUpdate = () => {};
 
   return (
     <Nav $NavType={NavType}>
@@ -117,6 +120,19 @@ const TopBar = ({
               <ExitIcon />
             </ExitButtonWrapper>
           )}
+        </>
+      )}
+      {NavType === 'locationUpdate' && (
+        <>
+          {backIcon && (
+            <BackIconWrapper onClick={handleBackClick}>
+              <BackIcon />
+            </BackIconWrapper>
+          )}
+          <Label>{label}</Label>
+          <EditButtonWrapper onClick={handleLocationUpdate}>
+            완료
+          </EditButtonWrapper>
         </>
       )}
     </Nav>

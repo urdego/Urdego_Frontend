@@ -16,6 +16,12 @@ export const HomePageWrapper = styled.div`
   /* background-color: ${colors.purple[90]}; */
 `;
 
+export const ContentPageWrapper = styled.div`
+  width: 100%;
+  min-height: calc(100vh - 40px);
+  padding: 12px 0px 24px 0px;
+`;
+
 export const WaitingRoomListPageWrapper = styled.div`
   width: 100%;
   height: 100%;

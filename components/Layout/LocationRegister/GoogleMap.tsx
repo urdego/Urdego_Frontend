@@ -1,5 +1,5 @@
-import useConvertLocationToAddress from '@/hooks/placeRegister/useConvertLocationToAddress';
-import usePlaceRegisterStore from '@/stores/placeRegisterStore';
+import useConvertLocationToAddress from '@/hooks/contentRegister/useConvertLocationToAddress';
+import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import { AdvancedMarker, Map, MapMouseEvent } from '@vis.gl/react-google-maps';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
