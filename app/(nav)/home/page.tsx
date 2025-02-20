@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import useWebSocketStore from '@/stores/useWebSocketStore';
-
+import { useRouter } from 'next/navigation';
 import { TopWrapper, BottomWrapper } from './Home.styles';
 import HomeBox from '@/components/Layout/Home/HomeBox/HomeBox';
 import { HomePageWrapper } from '@/app/commonPage.styles';
@@ -16,8 +16,10 @@ import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import useUserStore from '@/stores/useUserStore';
 import InviteNotificationToast from '@/components/Common/Toast/InviteNotificationToast';
 import { InviteWebSocketMessage } from '@/lib/types/notification';
+import useGameStore from '@/stores/useGameStore';
 
 const Home = () => {
+  const router = useRouter();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const {
     character: selectedCharacter,
@@ -27,7 +29,7 @@ const Home = () => {
 
   /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
-  /* notification 구독 */
+  /* notification, room 구독 */
   const { subscribeToNotification } = useWebSocketFunctions();
   /* 사용자 정보 가져오기 */
   const { userId } = useUserStore();
@@ -36,6 +38,8 @@ const Home = () => {
     useState<InviteWebSocketMessage | null>(null);
   /* 구독 여부 확인 */
   const hasSubscribed = useRef(false);
+  /* 대기방 정보 넣기 */
+  const { setRoomId } = useGameStore();
 
   // 소켓 연결 전용 useEffect
   useEffect(() => {
@@ -67,7 +71,14 @@ const Home = () => {
           roomName: inviteMessage.payload.roomName,
           onAccept: () => {
             console.log('Invitation accepted:', inviteMessage.payload);
-            // 서버 API 호출, 소켓 이벤트 등 처리
+            // 대기방 정보 전역 상태에 저장
+            setRoomId(inviteMessage.payload.roomId);
+            router.push(
+              `game/[roomId]/waitingRoom`.replace(
+                '[roomId]',
+                inviteMessage.payload.roomId
+              )
+            );
           },
           onDecline: () => {
             console.log('Invitation declined:', inviteMessage.payload);
