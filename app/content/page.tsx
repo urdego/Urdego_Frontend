@@ -46,13 +46,15 @@ const ContentsPage = () => {
       isInitialMount.current = false;
       return;
     }
-
     initLocationList();
     fetchLocationList();
   }, [sortType]);
-  const handleResetSortType = (sortType: 'oldest' | 'recent') => {
-    initLocationList();
-    setSortType(sortType);
+
+  const handleResetSortType = (newSortType: 'oldest' | 'recent') => {
+    if (sortType !== newSortType) {
+      initLocationList();
+      setSortType(newSortType);
+    }
   };
 
   // 모달 로직
