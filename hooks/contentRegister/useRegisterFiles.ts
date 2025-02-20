@@ -1,8 +1,8 @@
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import exifr from 'exifr';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
-import toast from 'react-hot-toast';
 import useLoadingStore from '@/stores/loadingStore';
+import AlertToast from '@/components/Common/Toast/AlertToast';
 
 interface useUploadFilesProps {
   index: number;
@@ -58,20 +58,18 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       return;
     }
     if (fileList.length > MAX_CONTENT_COUNT) {
-      toast('최대 3개의 사진만 업로드가 가능해요', {
-        icon: '😱',
-      });
+      AlertToast({ message: '최대 3개의 사진만 업로드가 가능해요' });
     }
 
     // 파일 등록: 최대 개수 제한 설정
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
-      toast.error('업로드 가능한 용량을 초과했어요');
+      AlertToast({ message: '업로드 가능한 용량을 초과했어요' });
       throw new Error('업로드 가능한 용량을 초과했어요');
     }
     if (!selectedFileList.every(isImageFile)) {
-      toast.error('이미지만 업로드가 가능해요');
+      AlertToast({ message: '이미지만 업로드가 가능해요' });
       throw new Error('이미지만 업로드가 가능해요');
     }
 
@@ -121,8 +119,8 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       });
       return;
     }
-    toast('위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!', {
-      icon: '👍',
+    AlertToast({
+      message: '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!',
     });
   };
 
