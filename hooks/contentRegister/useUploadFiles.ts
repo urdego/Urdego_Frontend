@@ -4,18 +4,37 @@ import usePlaceRegisterStore, { Place } from '@/stores/contentRegisterStore';
 import { useRouter } from 'next/navigation';
 
 const useUploadFiles = () => {
-  const { placeList, initEntirePlaceList } = usePlaceRegisterStore();
+  const { placeList, initEntirePlaceList, removePlaceList } =
+    usePlaceRegisterStore();
   const router = useRouter();
 
   const handleUploadFiles = async () => {
     LoadingToast(
-      Promise.all(placeList.map((place) => handleUploadPartFile(place)))
+      Promise.allSettled(
+        placeList.map((place) => handleUploadPartFile(place))
+      ).then((results) => {
+        const rejectedPromise: number[] = [];
+        results.forEach((value, index) => {
+          if (value.status === 'rejected') {
+            rejectedPromise.push(index);
+          }
+        });
+        if (rejectedPromise.length === 0) return [];
+        else throw new Error(`${rejectedPromise.join(',')}`);
+      })
     )
       .then(() => {
         initEntirePlaceList();
         router.push('/home');
       })
-      .catch(() => {});
+      .catch((error) => {
+        const rejectedPromiseIndex = error.message.split(',').map(Number);
+        placeList.forEach((place, index) => {
+          if (!rejectedPromiseIndex.includes(index)) {
+            removePlaceList(index);
+          }
+        });
+      });
   };
 
   const handleUploadPartFile = async (place: Place) => {

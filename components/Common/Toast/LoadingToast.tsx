@@ -6,7 +6,7 @@ const LoadingToast = (callback: Promise<void[]>) => {
     {
       loading: '장소를 등록하는 중입니다...',
       success: '장소 등록이 완료되었어요!',
-      error: '장소를 등록하지 못했어요',
+      error: '일부 장소를 등록하지 못했어요',
     },
     {
       style: {
