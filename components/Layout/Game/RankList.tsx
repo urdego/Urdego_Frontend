@@ -5,6 +5,10 @@ import Image from 'next/image';
 import GoldMedal from '@/styles/Icon/Game/Rank/Gold.svg';
 import SilverMedal from '@/styles/Icon/Game/Rank/Sliver.svg';
 import BronzeMedal from '@/styles/Icon/Game/Rank/Bronze.svg';
+import Rank4 from '@/styles/Icon/Game/Rank/Rank4.svg';
+import Rank5 from '@/styles/Icon/Game/Rank/Rank5.svg';
+import Rank6 from '@/styles/Icon/Game/Rank/Rank6.svg';
+
 import {
   Container,
   ButtonContainer,
@@ -28,7 +32,7 @@ interface RankListProps {
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
   initialActiveButton: 'thisRound' | 'totalRound';
   currentRound: number;
-  maxRounds: number;
+  isLast: boolean;
 }
 
 const RankList = ({
@@ -36,7 +40,7 @@ const RankList = ({
   handleToggle,
   initialActiveButton,
   currentRound,
-  maxRounds,
+  isLast,
 }: RankListProps) => {
   const [activeTab, setActiveTab] = useState<'thisRound' | 'totalRound'>(
     initialActiveButton
@@ -153,6 +157,12 @@ const RankList = ({
         return <Image src={SilverMedal} alt="2등" width={24} height={24} />;
       case 3:
         return <Image src={BronzeMedal} alt="3등" width={24} height={24} />;
+      case 4:
+        return <Image src={Rank4} alt="4등" width={24} height={24} />;
+      case 5:
+        return <Image src={Rank5} alt="5등" width={24} height={24} />;
+      case 6:
+        return <Image src={Rank6} alt="6등" width={24} height={24} />;
       default:
         return <Rank>{rank}</Rank>;
     }
@@ -161,7 +171,7 @@ const RankList = ({
   return (
     <Container>
       <ButtonContainer>
-        {currentRound >= maxRounds ? (
+        {isLast ? (
           <Button
             $active={true}
             isFinal={true}
