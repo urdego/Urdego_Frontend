@@ -11,7 +11,7 @@ export const PreviewImage = styled.div`
   width: 60px;
   height: 60px;
   img {
-    border-radius: 4px;
+    border-radius: 8px;
   }
 `;
 

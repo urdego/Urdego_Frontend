@@ -1,6 +1,6 @@
 import {
   PlaceSearchButtonWrapper,
-  PlaceTexthButtonWrapper,
+  PlaceTextButtonWrapper,
   PlaceResetButton,
   LocationRegisterText,
   LocationText,
@@ -22,14 +22,14 @@ const LocationSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
   return (
     <>
       {value ? (
-        <PlaceTexthButtonWrapper>
+        <PlaceTextButtonWrapper>
           <LocationText onClick={toggleBottomSheet}>{value}</LocationText>
           <PlaceResetButton
             onClick={() => setPlaceInput(index, 'address', null)}
           >
             <ClearIcon />
           </PlaceResetButton>
-        </PlaceTexthButtonWrapper>
+        </PlaceTextButtonWrapper>
       ) : (
         <PlaceSearchButtonWrapper onClick={toggleBottomSheet}>
           <SearchIcon />

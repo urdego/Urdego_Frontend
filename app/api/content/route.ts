@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
-  const params = request.nextUrl.searchParams;
-  const userId = params.get('userId');
+  const userId = request.headers.get('User-Id');
 
   try {
     const res = await axiosInstance.post(

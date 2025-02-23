@@ -5,7 +5,7 @@ export const ImageUploadWrapper = styled.div`
   position: relative;
   width: 60px;
   height: 60px;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid ${colors.etc.black};
   display: flex;
   flex-direction: column;
