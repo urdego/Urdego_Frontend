@@ -19,6 +19,7 @@ import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { RoomPayload } from '@/lib/types/roomJoin';
+import { useRouter } from 'next/navigation';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -26,7 +27,7 @@ const WaitingRoom = () => {
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
 
   const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
-  const { roomId } = useGameStore();
+  const { roomId, setGameId } = useGameStore();
   const { userId, nickname } = useUserStore();
 
   const [roomData, setRoomData] = useState<RoomPayload>({
@@ -39,16 +40,17 @@ const WaitingRoom = () => {
     roundNum: 0,
     contents: [],
     roomName: '',
+    gameId: '',
   });
 
   // 내 준비 상태 (일반 플레이어 전용)
   const [myIsReady, setMyIsReady] = useState(false);
   // 일반 플레이어가 준비를 누른 후 다시 누르지 못하도록 잠금
   const [readyLocked, setReadyLocked] = useState(false);
-
   const hasJoined = useRef(false);
+  const router = useRouter();
 
-  // 컴포넌트 마운트 시 한 번만 실행
+  // ✅ WebSocket 구독 및 메시지 처리
   useEffect(() => {
     if (roomId) {
       subscribeToRoom(String(roomId), (message) => {
@@ -56,8 +58,22 @@ const WaitingRoom = () => {
           `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
           message
         );
-        if (message.messageType === 'PLAYER_JOIN') {
+
+        if (
+          message.messageType === 'PLAYER_JOIN' ||
+          message.messageType === 'PLAYER_READY' ||
+          message.messageType === 'GAME_START'
+        ) {
           setRoomData(message.payload);
+        }
+
+        if (message.messageType === 'GAME_START') {
+          console.log('🚀 게임이 시작되었습니다!');
+
+          setGameId(message.payload.gameId, () => {
+            console.log(`✅ gameId 설정 완료: ${message.payload.gameId}`);
+            router.push(`/game/${message.payload.gameId}/1`);
+          });
         }
       });
 
@@ -76,7 +92,12 @@ const WaitingRoom = () => {
     }
   }, []);
 
-  // 'PLAYER_READY' sendMessage 호출용 함수
+  // ✅ 상태 업데이트 확인 (디버깅용)
+  useEffect(() => {
+    console.log('roomData 상태 변경:', roomData);
+  }, [roomData]);
+
+  // ✅ 일반 플레이어가 준비 상태 전송
   const sendPlayerReadyMessage = () => {
     sendMessage(
       'PLAYER_READY',
@@ -89,25 +110,37 @@ const WaitingRoom = () => {
     );
   };
 
-  const users = roomData.currentPlayers.map((player) => ({
+  // ✅ 호스트가 게임 시작 메시지 전송
+  const sendGameStartMessage = () => {
+    sendMessage(
+      'GAME_START',
+      {
+        roomId: String(roomId),
+      },
+      'game'
+    );
+  };
+
+  const users = (roomData.currentPlayers ?? []).map((player) => ({
     id: player.userId,
     name: player.nickname,
     level: player.level,
     activeCharacter: player.activeCharacter,
     isHost: player.nickname === roomData.host,
-    isReady: roomData.readyStatus[player.nickname] || false,
+    isReady: roomData.readyStatus?.[player.nickname] || false,
   }));
 
-  // 준비완료 버튼 클릭 시 동작
+  // ✅ 준비완료 버튼 클릭 시 동작
   const toggleReady = () => {
     const isHost = nickname === roomData.host;
 
     if (isHost) {
-      // 방장은 시작 시 무조건 버튼 disabled이고,
-      // 모든 플레이어가 준비완료했을 때(allReady true) 버튼이 활성화됨.
-      if (!roomData.allReady) return;
-      console.log('방장: 게임 시작 로직 실행');
-      sendPlayerReadyMessage();
+      if (!roomData.allReady) {
+        console.log('❌ 모든 플레이어가 준비되지 않음');
+        return;
+      }
+      console.log('🚀 방장: 게임 시작 메시지 전송!');
+      sendGameStartMessage();
       return;
     }
 
@@ -158,7 +191,7 @@ const WaitingRoom = () => {
               />
               <WButton
                 buttonType="default"
-                label="준비완료"
+                label={nickname === roomData.host ? '게임 시작' : '준비완료'}
                 onClick={toggleReady}
                 disabled={
                   nickname === roomData.host ? !roomData.allReady : readyLocked

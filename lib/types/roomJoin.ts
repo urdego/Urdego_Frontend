@@ -13,6 +13,7 @@ export interface RoomPayload {
   readyStatus: { [key: string]: boolean };
   allReady: boolean;
   roomName: string;
+  gameId: string;
   contents?: string[];
   hint?: string;
   userId?: number;
