@@ -41,6 +41,7 @@ export interface ScoreUpdatePayload {
   roomId: string;
   roundNum: number;
   isLast: boolean;
+  gameId: string;
   roundScore: {
     rank: number;
     userId: number;
