@@ -21,8 +21,3 @@ export interface RoomPayload {
   longitude?: number;
   roundNum?: number;
 }
-
-export interface WebSocketMessage {
-  messageType: string;
-  payload: RoomPayload;
-}

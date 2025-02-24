@@ -8,12 +8,14 @@ import MapBottomSheet from '@/components/Layout/Game/MapBottomSheet';
 import ReportBottomSheet from '@/components/Common/BottomSheet/ReportBottomSheet';
 import SwiperComponent from '@/components/Layout/Game/Swiper';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { PageWrapper, Footer, HintText, HintWrapper } from './game.styles';
-import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
-import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
+import { InGamePayload } from '@/lib/types/inGame';
 import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStore';
+import { WebSocketMessage } from '@/lib/types/websocket';
+
 interface GamePageProps {
   params: {
     roomId: string;
@@ -23,16 +25,15 @@ interface GamePageProps {
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const [hasSubmitted, setHasSubmitted] = useState(false); // 정답 제출 여부 상태
-  const [isReportOpen, setIsReportOpen] = useState(false); // 신고 바텀시트 열림 상태
-  const { subscribeToRoom, sendMessage } = useWebSocketFunctions(); // WebSocket 함수 가져오기
-  const [messages, setMessages] = useState<WebSocketMessage[]>([]); // 수신된 WebSocket 메시지 저장
-  const [hint, setHint] = useState<string>(''); // 힌트 상태
-  const [contents, setContents] = useState<string[]>([]); // 콘텐츠 상태
-
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const { subscribeToRoom, sendMessage } = useWebSocketFunctions();
+  const [hint, setHint] = useState<string>('');
+  const [contents, setContents] = useState<string[]>([]);
+  const { roomId } = useGameStore();
   const handleReportClick = useCallback(() => {
     console.log('Report clicked');
-    setIsReportOpen(true); // 신고 바텀시트 열기
+    setIsReportOpen(true);
   }, []);
 
   const {
@@ -42,33 +43,66 @@ const GamePage = ({ params }: GamePageProps) => {
     currentSelectedCoordinate,
     setCurrentSelectedCoordinate,
     handleBackClick,
-  } = useGameState(Number(params.round)); // 게임 상태 관리 훅 사용
+  } = useGameState(Number(params.round));
+
+  const hasSubscribed = useRef(false); // 구독 여부를 추적
 
   // WebSocket 구독 설정
   useEffect(() => {
-    subscribeToRoom(params.roomId, (message: WebSocketMessage) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // 메시지 수신 시 상태 업데이트
-    });
-  }, [params.roomId, subscribeToRoom]);
+    if (!hasSubscribed.current) {
+      subscribeToRoom(String(roomId), (message: WebSocketMessage) => {
+        if (message.messageType === 'QUESTION_GIVE') {
+          const questionMessage = message.payload as InGamePayload;
+          useGameStore.getState().setQuestionId(questionMessage.questionId);
+          setContents(questionMessage.contents);
+          setHint(questionMessage.hint || '');
+          console.log('Received contents:', questionMessage.contents);
+        }
+      });
 
-  // 메시지 수신 후 상태 업데이트
-  useEffect(() => {
-    const questionMessage = messages.find(
-      (msg) =>
-        msg.messageType === 'QUESTION_GIVE' &&
-        msg.payload.roundNum === currentRound
-    );
+      sendMessage(
+        'QUESTION_GIVE',
+        {
+          roomId: roomId,
+          roundNum: Number(params.round),
+        },
+        'game'
+      );
 
-    if (questionMessage) {
-      console.log('Received question:', questionMessage.payload);
-      const receivedContents = questionMessage.payload.contents;
-      const updatedContents =
-        receivedContents.length > 0 ? receivedContents : [SwiperTestImage.src]; // 콘텐츠 업데이트
-      console.log('Updated contents:', updatedContents);
-      setContents(updatedContents);
-      setHint(questionMessage.payload.hint); // 힌트 업데이트
+      hasSubscribed.current = true; // 구독 완료 표시
     }
-  }, [messages, currentRound]);
+  }, [roomId, params.round, subscribeToRoom, sendMessage]);
+
+  // 정답 제출 처리
+  const handleSubmitAnswer = async () => {
+    if (hasSubmitted || !currentSelectedCoordinate) {
+      console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
+      return;
+    }
+
+    setHasSubmitted(true);
+
+    try {
+      const questionId = useGameStore.getState().questionId;
+      const userId = useUserStore.getState().userId;
+      const { lat, lng } = currentSelectedCoordinate || { lat: 0, lng: 0 };
+      sendMessage(
+        'ANSWER_SUBMIT',
+        {
+          questionId,
+          userId,
+          latitude: lat,
+          longitude: lng,
+        } as InGamePayload,
+        'game'
+      );
+      setCurrentSelectedCoordinate(null);
+      console.log('제출 완료');
+    } catch (error) {
+      console.error('제출 중 에러 발생:', error);
+      setHasSubmitted(false);
+    }
+  };
 
   // 다음 라운드로 이동
   const handleNextRound = useCallback(() => {
@@ -82,37 +116,6 @@ const GamePage = ({ params }: GamePageProps) => {
   ) => {
     console.log('선택된 좌표:', coordinate);
     setCurrentSelectedCoordinate(coordinate); // 선택된 좌표 상태 업데이트
-  };
-
-  // 정답 제출 처리
-  const handleSubmitAnswer = async () => {
-    if (hasSubmitted || !currentSelectedCoordinate) {
-      console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
-      return;
-    }
-
-    setHasSubmitted(true); // 제출 상태 업데이트
-
-    try {
-      const questionId = `${params.roomId}:${currentRound}`; // TODO: 질문 아이디 관리 필요
-      const userId = useUserStore.getState().userId;
-      const { lat, lng } = currentSelectedCoordinate || { lat: 0, lng: 0 };
-      sendMessage(
-        'ANSWER_SUBMIT',
-        {
-          questionId,
-          userId,
-          latitude: lat,
-          longitude: lng,
-        },
-        'game' // 메시지 전송 경로 설정
-      );
-      setCurrentSelectedCoordinate(null); // 선택된 좌표 초기화
-      console.log('제출 완료');
-    } catch (error) {
-      console.error('제출 중 에러 발생:', error);
-      setHasSubmitted(false); // 에러 발생 시 제출 상태 초기화
-    }
   };
 
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false); // 바텀시트 열림 상태
@@ -132,7 +135,7 @@ const GamePage = ({ params }: GamePageProps) => {
           onBackClick={handleBackClick}
           onReportClick={handleReportClick}
         />
-        <Timer initialTime={20} onTimeEnd={handleNextRound} />
+        <Timer initialTime={1000000} onTimeEnd={handleNextRound} />
         {/* 기본 뷰 (스와이퍼와 힌트) */}
         {isMapView ? (
           <MapComponent
@@ -142,13 +145,12 @@ const GamePage = ({ params }: GamePageProps) => {
           />
         ) : (
           <>
-            <SwiperComponent
-              contents={contents} // WebSocket 응답에서 받은 contents 전달
-              key={currentRound}
-            />
-            <HintWrapper>
-              <HintText>{hint}</HintText> {/* 힌트 표시 */}
-            </HintWrapper>
+            <SwiperComponent contents={contents} key={currentRound} />
+            {hint && (
+              <HintWrapper>
+                <HintText>{hint}</HintText>
+              </HintWrapper>
+            )}
           </>
         )}
         <Footer>

@@ -12,13 +12,6 @@ import Image from 'next/image';
 import 'swiper/css';
 
 const SwiperComponent = ({ contents }: { contents: string[] }) => {
-  console.log('SwiperComponent contents:', contents);
-  // 이미지가 없을 경우 처리
-  if (!contents || contents.length === 0) {
-    console.log('이미지가 없습니다.');
-    return null;
-  }
-
   const applySlideStyles = (swiper: SwiperType) => {
     const slides = swiper.slides;
     slides.forEach((slide: HTMLElement, index: number) => {
@@ -34,9 +27,9 @@ const SwiperComponent = ({ contents }: { contents: string[] }) => {
       <Swiper
         grabCursor={true} // 마우스 커서 잡기 설정
         centeredSlides={true} // 슬라이드 중앙 정렬
-        slidesPerView={1.4} // 모바일 기본값 (작은 화면에서 1.4개씩 보이도록 설정)
-        spaceBetween={-50} // 슬라이드 간 간격 설정
-        loop={contents.length > 3} // 슬라이드가 2장 이상일 경우에만 무한 스크롤
+        slidesPerView={contents.length > 1 ? 1.4 : 1} // 이미지가 1개일 때는 1개만 보이도록 설정
+        spaceBetween={contents.length > 1 ? -50 : 0} // 이미지가 1개일 때는 간격 조정
+        loop={contents.length > 1} // 2장 이상일 때만 무한 루프 적용
         initialSlide={0} // 초기 슬라이드 설정(TODO: 라운드별로 다른 이미지 보여주기)
         onSwiper={applySlideStyles}
         onSlideChange={applySlideStyles}

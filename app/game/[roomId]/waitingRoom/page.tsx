@@ -64,7 +64,8 @@ const WaitingRoom = () => {
           message.messageType === 'PLAYER_READY' ||
           message.messageType === 'GAME_START'
         ) {
-          setRoomData(message.payload);
+          const roomPayload = message.payload as RoomPayload;
+          setRoomData(roomPayload);
         }
 
         if (message.messageType === 'GAME_START') {
