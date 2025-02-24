@@ -10,9 +10,9 @@ import useCharacterMarker from '@/hooks/character/useCharacterMarker';
 interface MapContainerProps {
   mode: 'game' | 'rank';
 }
-interface GoogleMapProps {
-  markers: Array<{ lat: number; lng: number; characterType: string }>;
-}
+// interface GoogleMapProps {
+//   markers: Array<{ lat: number; lng: number; characterType: string }>;
+// }
 
 interface MapComponentProps {
   center?: google.maps.LatLngLiteral;
@@ -20,11 +20,11 @@ interface MapComponentProps {
   mode: 'game' | 'rank';
   onCoordinateSelect?: (coordinate: google.maps.LatLngLiteral | null) => void;
   answerCoordinate: google.maps.LatLngLiteral | null;
-  userCoordinates?: {
+  submitCoordinates?: {
     nickname: string;
+    characterType: string;
     lat: number;
     lng: number;
-    score: number;
   }[];
 }
 
@@ -47,7 +47,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   mode,
   onCoordinateSelect,
   answerCoordinate,
-  userCoordinates,
+  submitCoordinates,
 }) => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const mapElementRef = useRef<HTMLDivElement>(null);
@@ -171,8 +171,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
     }
 
     // 유저 좌표 마커 배치
-    if (userCoordinates && answerCoordinate) {
-      userCoordinates.forEach((user) => {
+    if (submitCoordinates && answerCoordinate) {
+      submitCoordinates.forEach((user) => {
         const userMarker = new google.maps.Marker({
           position: { lat: user.lat, lng: user.lng },
           map: mapRef.current!,
@@ -211,7 +211,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
   useEffect(() => {
     placeMarkers();
-  }, [answerCoordinate, userCoordinates]);
+  }, [answerCoordinate, submitCoordinates]);
 
   // answerCoordinate가 변경될 때마다 실행되도록 useEffect 수정
   useEffect(() => {

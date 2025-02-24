@@ -20,4 +20,17 @@ export interface RoomPayload {
   latitude?: number;
   longitude?: number;
   roundNum?: number;
+  placeName?: string;
+  placeAddress?: string;
+  answerCoordinate?: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates?: {
+    nickname: string;
+    characterType: string;
+    lat: number;
+    lng: number;
+  }[];
+  questionId?: string;
 }

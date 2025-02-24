@@ -135,7 +135,7 @@ const GamePage = ({ params }: GamePageProps) => {
           onBackClick={handleBackClick}
           onReportClick={handleReportClick}
         />
-        <Timer initialTime={1000000} onTimeEnd={handleNextRound} />
+        <Timer initialTime={15} onTimeEnd={handleNextRound} />
         {/* 기본 뷰 (스와이퍼와 힌트) */}
         {isMapView ? (
           <MapComponent

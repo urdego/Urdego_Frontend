@@ -10,22 +10,6 @@ export interface SubmitCoordinates {
   lng: number;
 }
 
-export interface RoundScore {
-  rank: number;
-  userId: number;
-  nickname: string;
-  characterType: string;
-  score: number;
-}
-
-export interface ScoreUpdatePayload {
-  gameId: string;
-  roomId: string;
-  roundNum: number;
-  isLast: boolean;
-  roundScore: RoundScore[];
-}
-
 export interface GameEndPayload {
   gameId: string;
   roomId: string;
@@ -51,4 +35,41 @@ export interface InGamePayload {
   placeAddress: string;
   answerCoordinates: AnswerCoordinates;
   submitCoordinates: SubmitCoordinates;
+}
+
+export interface ScoreUpdatePayload {
+  roomId: string;
+  roundNum: number;
+  isLast: boolean;
+  roundScore: {
+    rank: number;
+    userId: number;
+    nickname: string;
+    characterType: string;
+    score: number;
+  }[];
+  totalScore: {
+    rank: number;
+    userId: number;
+    nickname: string;
+    characterType: string;
+    score: number;
+  }[];
+}
+
+export interface RoundResultPayload {
+  roomId: string;
+  roundNum: number;
+  placeName: string;
+  placeAddress: string;
+  answerCoordinate: {
+    lat: number;
+    lng: number;
+  };
+  submitCoordinates: {
+    nickname: string;
+    characterType: string;
+    lat: number;
+    lng: number;
+  }[];
 }
