@@ -1,5 +1,5 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { WebSocketMessage } from '@/lib/types/websocket';
 
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';

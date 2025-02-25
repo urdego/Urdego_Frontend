@@ -43,62 +43,45 @@ const RoundRank = ({
   const [currentRoundData, setCurrentRoundData] = useState<
     'thisRound' | 'totalRound'
   >(!isLast ? 'totalRound' : 'thisRound');
-  const hasSubscribed = useRef(false); // 구독 여부를 추적
+  const hasSubscribed = useRef(false);
+  const hasSentMessages = useRef(false);
 
   useEffect(() => {
     if (!hasSubscribed.current) {
       subscribeToRoom(String(roomId), (message: WebSocketMessage) => {
         switch (message.messageType) {
-          case 'ROUND_RESULT': {
-            const roundMessage = message.payload as RoundResultPayload;
-            setRoundResult(roundMessage);
+          case 'ROUND_RESULT':
+            setRoundResult(message.payload as RoundResultPayload);
             break;
-          }
-          case 'SCORE_UPDATE': {
-            const scoreUpdate = message.payload as ScoreUpdatePayload;
-            setScoreData(scoreUpdate);
+          case 'SCORE_UPDATE':
+            setScoreData(message.payload as ScoreUpdatePayload);
             break;
-          }
-          case 'GAME_END': {
-            const gameEnd = message.payload as GameEndPayload;
-            console.log('게임 종료:', gameEnd);
+          case 'GAME_END':
+            console.log('게임 종료:', message.payload as GameEndPayload);
             break;
-          }
           default:
             break;
         }
       });
+      hasSubscribed.current = true;
+    }
+  }, [roomId, subscribeToRoom]);
 
+  useEffect(() => {
+    if (!hasSentMessages.current) {
       sendMessage(
         'ROUND_RESULT',
-        {
-          roomId: roomId,
-          roundNum: Number(params.round),
-          questionId: questionId,
-        },
+        { roomId, roundNum: currentRound, questionId },
         'game'
       );
-
       sendMessage(
         'SCORE_UPDATE',
-        {
-          gameId: useGameStore.getState().gameId,
-          roundNum: Number(params.round),
-        },
+        { gameId: useGameStore.getState().gameId, roundNum: currentRound },
         'game'
       );
-
-      hasSubscribed.current = true; // 구독 완료 표시
+      hasSentMessages.current = true;
     }
-  }, [
-    roomId,
-    params.roomId,
-    params.round,
-    questionId,
-    subscribeToRoom,
-    sendMessage,
-    roundResult,
-  ]);
+  }, [roomId, currentRound, questionId, sendMessage]);
 
   const rankData =
     !scoreData?.roundScore && !scoreData?.totalScore
@@ -110,18 +93,13 @@ const RoundRank = ({
             nickname: coord.nickname,
             score:
               currentRoundData === 'thisRound'
-                ? coord.score // 'thisRound'일 경우 RoundScore의 score 사용
+                ? coord.score
                 : scoreData?.totalScore.find(
                     (item) => item.userId === coord.userId
-                  )?.score || 0, // 'totalRound'일 경우 TotalScore의 score 사용
+                  )?.score || 0,
             activeCharacter: coord.characterType,
           }))
-          .sort(
-            (a, b) =>
-              currentRoundData === 'thisRound'
-                ? b.score - a.score // thisRound의 경우 RoundScore의 score 사용
-                : b.score - a.score // totalRound의 경우 TotalScore의 score 사용
-          );
+          .sort((a, b) => b.score - a.score);
 
   const handleToggle = (round: 'thisRound' | 'totalRound') => {
     setCurrentRoundData(round);
@@ -131,9 +109,7 @@ const RoundRank = ({
     if (isLast) {
       sendMessage(
         'GAME_END',
-        {
-          gameId: useGameStore.getState().gameId,
-        },
+        { gameId: useGameStore.getState().gameId },
         'game'
       );
       router.push('/home');
@@ -145,7 +121,7 @@ const RoundRank = ({
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-      {!isLast && <Timer initialTime={10000000} onTimeEnd={handleNextRound} />}
+      <Timer initialTime={10} onTimeEnd={handleNextRound} />
       <MapComponent
         mode="rank"
         answerCoordinate={roundResult?.answerCoordinate || null}
