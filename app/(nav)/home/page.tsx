@@ -47,7 +47,7 @@ const Home = () => {
   // 소켓 연결 전용 useEffect
   useEffect(() => {
     if (!isConnected) connectWebSocket();
-  }, []);
+  }, [connectWebSocket, isConnected]);
 
   // 구독 등록용 useEffect
   useEffect(() => {
