@@ -47,7 +47,7 @@ const Home = () => {
   // 소켓 연결 전용 useEffect
   useEffect(() => {
     if (!isConnected) connectWebSocket();
-  }, [connectWebSocket, isConnected]);
+  }, []);
 
   // 구독 등록용 useEffect
   useEffect(() => {
@@ -64,7 +64,7 @@ const Home = () => {
       console.log('Error received:', message);
       // 에러 메시지 처리 로직 추가
     });
-  }, [isConnected, subscribeToError, subscribeToNotification, userId]);
+  }, [isConnected, subscribeToError, subscribeToNotification]);
 
   // 메시지 처리용 useEffect (notification 상태 변경 시 실행)
   useEffect(() => {
