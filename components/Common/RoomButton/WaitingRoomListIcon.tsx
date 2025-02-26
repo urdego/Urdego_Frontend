@@ -18,7 +18,7 @@ type RefreshIconProps = { onClick: () => void };
 const CHARACTER_LIST = {
   BASIC: BasicIcon,
   ANGULAR: AngularIcon,
-  BUMPY: BumpyIcon,
+  BUMPHY: BumpyIcon,
   DOT: DotIcon,
   PLANET: PlanetIcon,
   SHARP: SharpIcon,
