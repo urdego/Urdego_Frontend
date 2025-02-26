@@ -78,6 +78,7 @@ const RankList = ({
         {isLast ? (
           <Button
             $active={true}
+            isLast={isLast}
             onClick={() => handleButtonClick('totalRound')}
           >
             최종 점수 결과
