@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import Timer from '@/components/Layout/Game/Timer';
@@ -14,24 +14,15 @@ import {
 import RankList from '@/components/Layout/Game/RankList';
 import MapComponent from '@/components/Layout/Game/GoogleMap';
 import CountdownButton from '@/components/Layout/Game/CountdownButton';
-import InGameWebSocket from '@/lib/websocket/gameWebsocket';
-import useWebSocketStore from '@/stores/useWebSocketStore';
 
-interface Coordinate {
-  nickname: string;
-  lat: number;
-  lng: number;
-  score: number;
-  totalScore: number;
-}
-
-interface ScoreDataType {
-  answerCoordinate: {
-    lat: number;
-    lng: number;
-  };
-  submitCoordinates: Coordinate[];
-}
+import {
+  RoundResultPayload,
+  ScoreUpdatePayload,
+  GameEndPayload,
+} from '@/lib/types/inGame';
+import useGameStore from '@/stores/useGameStore';
+import { WebSocketMessage } from '@/lib/types/websocket';
+import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 
 const RoundRank = ({
   params,
@@ -39,84 +30,115 @@ const RoundRank = ({
   params: { round: string; roomId: string };
 }) => {
   const router = useRouter();
+  const roomId = useGameStore.getState().roomId;
+  const questionId = useGameStore.getState().questionId;
   const currentRound = Number(params.round) || 1;
-  const maxRounds = 2;
-  const messages = useWebSocketStore((state) => state.messages);
-  const [currentRoundData] = useState<'thisRound' | 'totalRound'>(
-    currentRound >= maxRounds ? 'totalRound' : 'thisRound'
-  );
 
-  const resultMessage = messages[messages.length - 1];
-  const scoreData = resultMessage?.data as ScoreDataType;
-  const rankData = !scoreData?.submitCoordinates
-    ? []
-    : scoreData.submitCoordinates
-        .sort((a, b) =>
-          currentRoundData === 'thisRound'
-            ? b.score - a.score
-            : b.totalScore - a.totalScore
-        )
-        .map((coord, index) => ({
-          rank: index + 1,
-          userId: index + 1,
-          nickname: coord.nickname,
-          score:
-            currentRoundData === 'thisRound' ? coord.score : coord.totalScore,
-          activeCharacter: 'basic',
-        }));
-
-  const currentRoundDataRef = useRef<'thisRound' | 'totalRound'>(
-    currentRound >= maxRounds ? 'totalRound' : 'thisRound'
+  const { subscribeToRoom, sendMessage } = useWebSocketFunctions();
+  const [scoreData, setScoreData] = useState<ScoreUpdatePayload | null>(null);
+  const isLast = scoreData?.isLast || false;
+  const [roundResult, setRoundResult] = useState<RoundResultPayload | null>(
+    null
   );
+  const [currentRoundData, setCurrentRoundData] = useState<
+    'thisRound' | 'totalRound'
+  >(!isLast ? 'totalRound' : 'thisRound');
+  const hasSubscribed = useRef(false);
+  const hasSentMessages = useRef(false);
+
+  useEffect(() => {
+    if (!hasSubscribed.current) {
+      subscribeToRoom(String(roomId), (message: WebSocketMessage) => {
+        switch (message.messageType) {
+          case 'ROUND_RESULT':
+            setRoundResult(message.payload as RoundResultPayload);
+            break;
+          case 'SCORE_UPDATE':
+            setScoreData(message.payload as ScoreUpdatePayload);
+            break;
+          case 'GAME_END':
+            console.log('게임 종료:', message.payload as GameEndPayload);
+            break;
+          default:
+            break;
+        }
+      });
+      hasSubscribed.current = true;
+    }
+  }, [roomId, subscribeToRoom]);
+
+  useEffect(() => {
+    if (!hasSentMessages.current) {
+      sendMessage(
+        'ROUND_RESULT',
+        { roomId, roundNum: currentRound, questionId },
+        'game'
+      );
+      sendMessage(
+        'SCORE_UPDATE',
+        { gameId: useGameStore.getState().gameId, roundNum: currentRound },
+        'game'
+      );
+      hasSentMessages.current = true;
+    }
+  }, [roomId, currentRound, questionId, sendMessage]);
+
+  const rankData =
+    !scoreData?.roundScore && !scoreData?.totalScore
+      ? []
+      : (scoreData?.roundScore || [])
+          .map((coord) => ({
+            rank: coord.rank,
+            userId: coord.userId,
+            nickname: coord.nickname,
+            score:
+              currentRoundData === 'thisRound'
+                ? coord.score
+                : scoreData?.totalScore.find(
+                    (item) => item.userId === coord.userId
+                  )?.score || 0,
+            activeCharacter: coord.characterType,
+          }))
+          .sort((a, b) => b.score - a.score);
+
   const handleToggle = (round: 'thisRound' | 'totalRound') => {
-    currentRoundDataRef.current = round;
+    setCurrentRoundData(round);
   };
 
   const handleNextRound = useCallback(() => {
-    if (currentRound >= maxRounds) {
-      const webSocket = InGameWebSocket.getInstance();
-      webSocket.disconnect();
+    if (isLast) {
+      sendMessage(
+        'GAME_END',
+        { gameId: useGameStore.getState().gameId },
+        'game'
+      );
       router.push('/home');
     } else {
-      router.push(`/game/${params.roomId}/${currentRound + 1}`);
+      router.push(`/game/${roomId}/${currentRound + 1}`);
     }
-  }, [router, params.roomId, currentRound, maxRounds]);
+  }, [router, roomId, currentRound, isLast, sendMessage]);
 
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-      {currentRound < maxRounds && (
-        <Timer initialTime={10} onTimeEnd={handleNextRound} />
-      )}
+      <Timer initialTime={10} onTimeEnd={handleNextRound} />
       <MapComponent
         mode="rank"
-        answerCoordinate={
-          scoreData?.answerCoordinate || {
-            lat: 36.304734757299734,
-            lng: 127.3647015379501,
-          }
-        }
-        userCoordinates={
-          scoreData?.submitCoordinates || [
-            { lat: 36.3040031187549, lng: 127.36495433614975 },
-            { lat: 36.303929850851425, lng: 127.36423287774953 },
-          ]
-        }
+        answerCoordinate={roundResult?.answerCoordinate || null}
+        submitCoordinates={roundResult?.submitCoordinates}
       />
       <AnswerAddress>
-        <PlaceName>국립현대미술관 서울</PlaceName>
-        <PlaceAddress>서울 종로구 삼청로 30</PlaceAddress>
+        <PlaceName>{roundResult?.placeName}</PlaceName>
+        <PlaceAddress>{roundResult?.placeAddress}</PlaceAddress>
       </AnswerAddress>
       <RankList
         rankData={rankData}
         handleToggle={handleToggle}
-        initialActiveButton={
-          currentRound >= maxRounds ? 'totalRound' : 'thisRound'
-        }
+        initialActiveButton={isLast ? 'totalRound' : 'thisRound'}
         currentRound={currentRound}
-        maxRounds={maxRounds}
+        isLast={isLast}
       />
-      {currentRound >= maxRounds && (
+      {isLast && (
         <Footer>
           <CountdownButton initialTime={10} onTimeEnd={handleNextRound} />
         </Footer>

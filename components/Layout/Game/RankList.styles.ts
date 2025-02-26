@@ -4,8 +4,9 @@ import colors from '@/styles/color/palette';
 export const Container = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 500px;
   padding: 8px 16px;
-  background-color: #f4effa;
+  background-color: ${colors.purple[95]};
 `;
 
 export const ButtonContainer = styled.div`
@@ -16,14 +17,15 @@ export const ButtonContainer = styled.div`
   overflow: hidden;
 `;
 
-export const Button = styled.button<{ $active: boolean; isFinal?: boolean }>`
+export const Button = styled.button<{ $active: boolean; isLast?: boolean }>`
   flex: 1;
   padding: 12px 20px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  background: ${({ isFinal }) => (isFinal ? colors.etc.white : 'transparent')};
+  background: ${({ $active, isLast }) =>
+    isLast ? colors.etc.white : $active ? colors.purple[50] : 'transparent'};
   border: none;
   position: relative;
   z-index: 1;
@@ -54,7 +56,7 @@ export const ListContainer = styled.div`
   gap: 12px;
   padding: 16px 0;
   overflow-y: auto;
-  min-height: 340px;
+  min-height: 360px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 

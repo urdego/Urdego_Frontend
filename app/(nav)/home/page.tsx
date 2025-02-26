@@ -15,7 +15,10 @@ import Link from 'next/link';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import useUserStore from '@/stores/useUserStore';
 import InviteNotificationToast from '@/components/Common/Toast/InviteNotificationToast';
-import { InviteWebSocketMessage } from '@/lib/types/notification';
+import {
+  InviteWebSocketMessage,
+  ErrorWebSocketMessage,
+} from '@/lib/types/notification';
 import useGameStore from '@/stores/useGameStore';
 
 const Home = () => {
@@ -29,8 +32,8 @@ const Home = () => {
 
   /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
-  /* notification, room 구독 */
-  const { subscribeToNotification } = useWebSocketFunctions();
+  /* notification, room, error 구독 */
+  const { subscribeToNotification, subscribeToError } = useWebSocketFunctions();
   /* 사용자 정보 가져오기 */
   const { userId } = useUserStore();
   /* notification 상태관리 */
@@ -44,7 +47,7 @@ const Home = () => {
   // 소켓 연결 전용 useEffect
   useEffect(() => {
     if (!isConnected) connectWebSocket();
-  }, []);
+  }, [connectWebSocket, isConnected]);
 
   // 구독 등록용 useEffect
   useEffect(() => {
@@ -55,7 +58,13 @@ const Home = () => {
       console.log('Notification received:', message);
       setNotification(message);
     });
-  }, [isConnected]);
+
+    // 에러 메시지 구독 추가
+    subscribeToError((message: ErrorWebSocketMessage) => {
+      console.log('Error received:', message);
+      // 에러 메시지 처리 로직 추가
+    });
+  }, [isConnected, subscribeToError, subscribeToNotification]);
 
   // 메시지 처리용 useEffect (notification 상태 변경 시 실행)
   useEffect(() => {
@@ -87,7 +96,7 @@ const Home = () => {
         });
       }
     }
-  }, [notification]);
+  }, [notification, router, setRoomId]);
 
   return (
     <>

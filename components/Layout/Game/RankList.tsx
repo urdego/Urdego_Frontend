@@ -5,6 +5,10 @@ import Image from 'next/image';
 import GoldMedal from '@/styles/Icon/Game/Rank/Gold.svg';
 import SilverMedal from '@/styles/Icon/Game/Rank/Sliver.svg';
 import BronzeMedal from '@/styles/Icon/Game/Rank/Bronze.svg';
+import Rank4 from '@/styles/Icon/Game/Rank/Rank4.svg';
+import Rank5 from '@/styles/Icon/Game/Rank/Rank5.svg';
+import Rank6 from '@/styles/Icon/Game/Rank/Rank6.svg';
+
 import {
   Container,
   ButtonContainer,
@@ -18,7 +22,7 @@ import {
 } from './RankList.styles';
 
 interface RankListProps {
-  rankData?: {
+  rankData: {
     rank: number;
     userId: number;
     nickname: string;
@@ -28,7 +32,7 @@ interface RankListProps {
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
   initialActiveButton: 'thisRound' | 'totalRound';
   currentRound: number;
-  maxRounds: number;
+  isLast: boolean;
 }
 
 const RankList = ({
@@ -36,7 +40,7 @@ const RankList = ({
   handleToggle,
   initialActiveButton,
   currentRound,
-  maxRounds,
+  isLast,
 }: RankListProps) => {
   const [activeTab, setActiveTab] = useState<'thisRound' | 'totalRound'>(
     initialActiveButton
@@ -47,103 +51,7 @@ const RankList = ({
     handleToggle(round);
   };
 
-  const mockData = {
-    roundScore: [
-      {
-        rank: 1,
-        userId: 1,
-        nickname: '가가가',
-        score: 150,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 2,
-        userId: 2,
-        nickname: '나나나',
-        score: 120,
-        activeCharacter: 'dot',
-      },
-      {
-        rank: 3,
-        userId: 3,
-        nickname: '다다다',
-        score: 100,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 4,
-        userId: 4,
-        nickname: '라라라',
-        score: 70,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 5,
-        userId: 5,
-        nickname: '마마마',
-        score: 50,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 6,
-        userId: 6,
-        nickname: '바바바',
-        score: 10,
-        activeCharacter: 'basic',
-      },
-    ],
-    totalScore: [
-      {
-        rank: 1,
-        userId: 1,
-        nickname: '가가가',
-        score: 420,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 2,
-        userId: 2,
-        nickname: '나나나',
-        score: 380,
-        activeCharacter: 'dot',
-      },
-      {
-        rank: 3,
-        userId: 3,
-        nickname: '다다다',
-        score: 340,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 4,
-        userId: 4,
-        nickname: '라라라',
-        score: 340,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 5,
-        userId: 5,
-        nickname: '마마마',
-        score: 340,
-        activeCharacter: 'basic',
-      },
-      {
-        rank: 6,
-        userId: 6,
-        nickname: '바바바',
-        score: 340,
-        activeCharacter: 'basic',
-      },
-    ],
-  };
-
-  const currentData: RankListProps['rankData'] =
-    (rankData ?? []).length > 0
-      ? (rankData ?? [])
-      : activeTab === 'thisRound'
-        ? mockData.roundScore
-        : mockData.totalScore;
+  const currentData = rankData;
 
   const getRankDisplay = (rank: number) => {
     switch (rank) {
@@ -153,6 +61,12 @@ const RankList = ({
         return <Image src={SilverMedal} alt="2등" width={24} height={24} />;
       case 3:
         return <Image src={BronzeMedal} alt="3등" width={24} height={24} />;
+      case 4:
+        return <Image src={Rank4} alt="4등" width={24} height={24} />;
+      case 5:
+        return <Image src={Rank5} alt="5등" width={24} height={24} />;
+      case 6:
+        return <Image src={Rank6} alt="6등" width={24} height={24} />;
       default:
         return <Rank>{rank}</Rank>;
     }
@@ -161,10 +75,10 @@ const RankList = ({
   return (
     <Container>
       <ButtonContainer>
-        {currentRound >= maxRounds ? (
+        {isLast ? (
           <Button
             $active={true}
-            isFinal={true}
+            isLast={isLast}
             onClick={() => handleButtonClick('totalRound')}
           >
             최종 점수 결과

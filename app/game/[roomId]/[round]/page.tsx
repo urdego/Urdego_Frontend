@@ -11,30 +11,28 @@ import MapComponent from '@/components/Layout/Game/GoogleMap';
 import { useCallback, useState, useEffect } from 'react';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { PageWrapper, Footer, HintText, HintWrapper } from './game.styles';
-import { WebSocketMessage } from '@/hooks/websocket/useWebsocket.types';
-import SwiperTestImage from '@/styles/Image/InGame/SwiperTestImage.png';
+import { InGamePayload } from '@/lib/types/inGame';
 import useUserStore from '@/stores/useUserStore';
+import useGameStore from '@/stores/useGameStore';
+import { WebSocketMessage } from '@/lib/types/websocket';
+
 interface GamePageProps {
   params: {
-    roomId: string;
     round: string;
   };
 }
 
 const GamePage = ({ params }: GamePageProps) => {
   const router = useRouter();
-  const [hasSubmitted, setHasSubmitted] = useState(false); // 정답 제출 여부 상태
-  const [isReportOpen, setIsReportOpen] = useState(false); // 신고 바텀시트 열림 상태
-  const { subscribeToRoom, sendMessage } = useWebSocketFunctions(); // WebSocket 함수 가져오기
-  const [messages, setMessages] = useState<WebSocketMessage[]>([]); // 수신된 WebSocket 메시지 저장
-  const [hint, setHint] = useState<string>(''); // 힌트 상태
-  const [contents, setContents] = useState<string[]>([]); // 콘텐츠 상태
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [hint, setHint] = useState<string>('');
+  const [contents, setContents] = useState<string[]>([]);
+  const { roomId, setQuestionId } = useGameStore();
+  const [hasSubscribed, setHasSubscribed] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  const handleReportClick = useCallback(() => {
-    console.log('Report clicked');
-    setIsReportOpen(true); // 신고 바텀시트 열기
-  }, []);
-
+  const { subscribeToRoom, sendMessage } = useWebSocketFunctions();
   const {
     currentRound,
     isMapView,
@@ -42,84 +40,95 @@ const GamePage = ({ params }: GamePageProps) => {
     currentSelectedCoordinate,
     setCurrentSelectedCoordinate,
     handleBackClick,
-  } = useGameState(Number(params.round)); // 게임 상태 관리 훅 사용
+  } = useGameState(Number(params.round));
 
-  // WebSocket 구독 설정
+  // 신고 기능 핸들러
+  const handleReportClick = useCallback(() => {
+    console.log('Report clicked');
+    setIsReportOpen(true);
+  }, []);
+
+  // WebSocket 구독 및 데이터 요청
   useEffect(() => {
-    subscribeToRoom(params.roomId, (message: WebSocketMessage) => {
-      setMessages((prevMessages) => [...prevMessages, message]); // 메시지 수신 시 상태 업데이트
+    if (!roomId || hasSubscribed) return;
+
+    setHasSubscribed(true);
+    subscribeToRoom(String(roomId), (message: WebSocketMessage) => {
+      if (message.messageType === 'QUESTION_GIVE') {
+        const questionMessage = message.payload as InGamePayload;
+        setQuestionId(questionMessage.questionId);
+        setContents(questionMessage.contents);
+        setHint(questionMessage.hint || '');
+        console.log('Received contents:', questionMessage.contents);
+      }
     });
-  }, [params.roomId, subscribeToRoom]);
 
-  // 메시지 수신 후 상태 업데이트
-  useEffect(() => {
-    const questionMessage = messages.find(
-      (msg) =>
-        msg.messageType === 'QUESTION_GIVE' &&
-        msg.payload.roundNum === currentRound
+    sendMessage(
+      'QUESTION_GIVE',
+      { roomId, roundNum: Number(params.round) },
+      'game'
     );
+  }, [
+    roomId,
+    params.round,
+    subscribeToRoom,
+    sendMessage,
+    setQuestionId,
+    hasSubscribed,
+  ]);
 
-    if (questionMessage) {
-      console.log('Received question:', questionMessage.payload);
-      const receivedContents = questionMessage.payload.contents;
-      const updatedContents =
-        receivedContents.length > 0 ? receivedContents : [SwiperTestImage.src]; // 콘텐츠 업데이트
-      console.log('Updated contents:', updatedContents);
-      setContents(updatedContents);
-      setHint(questionMessage.payload.hint); // 힌트 업데이트
-    }
-  }, [messages, currentRound]);
-
-  // 다음 라운드로 이동
-  const handleNextRound = useCallback(() => {
-    router.push(`/game/${params.roomId}/${currentRound}/roundRank`);
-    setCurrentSelectedCoordinate(null); // 선택된 좌표 초기화
-  }, [router, params.roomId, currentRound, setCurrentSelectedCoordinate]);
-
-  // 좌표 선택 처리
-  const handleCoordinateSelect = (
-    coordinate: google.maps.LatLngLiteral | null
-  ) => {
-    console.log('선택된 좌표:', coordinate);
-    setCurrentSelectedCoordinate(coordinate); // 선택된 좌표 상태 업데이트
-  };
-
-  // 정답 제출 처리
-  const handleSubmitAnswer = async () => {
+  // 정답 제출
+  const handleSubmitAnswer = useCallback(() => {
     if (hasSubmitted || !currentSelectedCoordinate) {
       console.log('제출 불가:', { hasSubmitted, currentSelectedCoordinate });
       return;
     }
 
-    setHasSubmitted(true); // 제출 상태 업데이트
+    setHasSubmitted(true);
 
     try {
-      const questionId = `${params.roomId}:${currentRound}`; // TODO: 질문 아이디 관리 필요
+      const questionId = useGameStore.getState().questionId;
       const userId = useUserStore.getState().userId;
       const { lat, lng } = currentSelectedCoordinate || { lat: 0, lng: 0 };
+
       sendMessage(
         'ANSWER_SUBMIT',
-        {
-          questionId,
-          userId,
-          latitude: lat,
-          longitude: lng,
-        },
-        'game' // 메시지 전송 경로 설정
+        { questionId, userId, latitude: lat, longitude: lng } as InGamePayload,
+        'game'
       );
-      setCurrentSelectedCoordinate(null); // 선택된 좌표 초기화
+
+      setCurrentSelectedCoordinate(null);
       console.log('제출 완료');
     } catch (error) {
       console.error('제출 중 에러 발생:', error);
-      setHasSubmitted(false); // 에러 발생 시 제출 상태 초기화
+      setHasSubmitted(false);
     }
-  };
+  }, [
+    hasSubmitted,
+    currentSelectedCoordinate,
+    sendMessage,
+    setCurrentSelectedCoordinate,
+  ]);
 
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false); // 바텀시트 열림 상태
+  // 다음 라운드 이동
+  const handleNextRound = useCallback(() => {
+    router.push(`/game/${roomId}/${currentRound}/roundRank`);
+    setCurrentSelectedCoordinate(null);
+  }, [router, roomId, currentRound, setCurrentSelectedCoordinate]);
 
-  const toggleBottomSheet = () => {
-    setIsBottomSheetOpen((prev) => !prev); // 바텀시트 열림 상태 토글
-  };
+  // 좌표 선택 핸들러
+  const handleCoordinateSelect = useCallback(
+    (coordinate: google.maps.LatLngLiteral | null) => {
+      console.log('선택된 좌표:', coordinate);
+      setCurrentSelectedCoordinate(coordinate);
+    },
+    [setCurrentSelectedCoordinate]
+  );
+
+  // 바텀시트 토글
+  const toggleBottomSheet = useCallback(() => {
+    setIsBottomSheetOpen((prev) => !prev);
+  }, []);
 
   return (
     <>
@@ -132,25 +141,25 @@ const GamePage = ({ params }: GamePageProps) => {
           onBackClick={handleBackClick}
           onReportClick={handleReportClick}
         />
-        <Timer initialTime={20} onTimeEnd={handleNextRound} />
-        {/* 기본 뷰 (스와이퍼와 힌트) */}
+        <Timer initialTime={15} onTimeEnd={handleNextRound} />
+
         {isMapView ? (
           <MapComponent
             mode="game"
             onCoordinateSelect={handleCoordinateSelect}
-            answerCoordinate={null} // 게임 모드에서는 정답 좌표를 숨기기 위해 null
+            answerCoordinate={null}
           />
         ) : (
           <>
-            <SwiperComponent
-              contents={contents} // WebSocket 응답에서 받은 contents 전달
-              key={currentRound}
-            />
-            <HintWrapper>
-              <HintText>{hint}</HintText> {/* 힌트 표시 */}
-            </HintWrapper>
+            <SwiperComponent contents={contents} key={currentRound} />
+            {hint && (
+              <HintWrapper>
+                <HintText>{hint}</HintText>
+              </HintWrapper>
+            )}
           </>
         )}
+
         <Footer>
           <Button
             label={isBottomSheetOpen ? '정답 선택' : '위치 선택'}
@@ -162,7 +171,8 @@ const GamePage = ({ params }: GamePageProps) => {
           />
         </Footer>
       </PageWrapper>
-      {/* 신고 기능 BottomSheet 호출 */}
+
+      {/* 신고 기능 BottomSheet */}
       <ReportBottomSheet
         isOpen={isReportOpen}
         onClose={() => setIsReportOpen(false)}
@@ -171,7 +181,8 @@ const GamePage = ({ params }: GamePageProps) => {
           setIsReportOpen(false);
         }}
       />
-      {/* MapBottomSheet 컴포넌트 호출 */}
+
+      {/* 지도 선택 BottomSheet */}
       <MapBottomSheet
         isOpen={isBottomSheetOpen}
         onClose={toggleBottomSheet}
