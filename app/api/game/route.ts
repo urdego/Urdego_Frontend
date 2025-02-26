@@ -1,9 +1,9 @@
 import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import axiosInstance from '@/lib/axios';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import useUserStore from '@/stores/useUserStore';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const userId = useUserStore.getState().userId;
 
   try {
