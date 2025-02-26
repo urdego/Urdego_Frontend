@@ -1,15 +1,16 @@
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { WebSocketMessage } from '@/lib/types/websocket';
 
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
 import { InviteWebSocketMessage } from '@/lib/types/notification';
 
-type DestinationType = 'room' | 'game' | 'notification';
+type DestinationType = 'room' | 'game' | 'notification' | 'error';
 
 export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
   const [subscribedRoom, setSubscribedRoom] = useState<string | null>(null);
+  const [subscribedError, setSubscribedError] = useState<string | null>(null);
 
   const subscribeToRoom = (
     roomId: string,
@@ -58,6 +59,29 @@ export const useWebSocketFunctions = () => {
     }
   };
 
+  const subscribeToError = (
+    onMessageReceived: (message: InviteWebSocketMessage) => void
+  ) => {
+    if (client && isConnected) {
+      if (subscribedError) {
+        console.log(`Already subscribed to errors`);
+        return;
+      }
+
+      const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ERROR();
+      console.log(`Subscribing to errors`);
+
+      client.subscribe(subscriptionPath, (message) => {
+        console.log(`Error received:`, message.body);
+        onMessageReceived(JSON.parse(message.body));
+      });
+
+      setSubscribedError('subscribed');
+    } else {
+      console.warn('WebSocket is not connected.');
+    }
+  };
+
   const sendMessage = (
     messageType: string,
     payload: object,
@@ -87,5 +111,10 @@ export const useWebSocketFunctions = () => {
     console.log('Message sent:', message);
   };
 
-  return { subscribeToRoom, subscribeToNotification, sendMessage };
+  return {
+    subscribeToRoom,
+    subscribeToNotification,
+    subscribeToError,
+    sendMessage,
+  };
 };
