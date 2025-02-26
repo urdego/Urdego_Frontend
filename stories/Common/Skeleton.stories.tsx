@@ -1,11 +1,9 @@
-import LocationListSkeleton from '@/components/Common/Skeleton/LocationListSkeleton';
 import Skeleton from '@/components/Common/Skeleton/Skeleton';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   title: 'Common/Skeleton/Basic',
   component: Skeleton,
-  subcomponents: { LocationListSkeleton },
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',

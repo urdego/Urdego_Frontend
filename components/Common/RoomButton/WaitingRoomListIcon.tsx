@@ -15,16 +15,16 @@ import { Character } from '@/lib/types/character';
 
 type RefreshIconProps = { onClick: () => void };
 
-const CHRACTER_LIST = {
-  basic: BasicIcon,
-  angular: AngularIcon,
-  bumpy: BumpyIcon,
-  dot: DotIcon,
-  planet: PlanetIcon,
-  sharp: SharpIcon,
-  square: SquareIcon,
-  star: StarIcon,
-  wool: WoolIcon,
+const CHARACTER_LIST = {
+  BASIC: BasicIcon,
+  ANGULAR: AngularIcon,
+  BUMPHY: BumpyIcon,
+  DOT: DotIcon,
+  PLANET: PlanetIcon,
+  SHARP: SharpIcon,
+  SQUARE: SquareIcon,
+  STAR: StarIcon,
+  WOOL: WoolIcon,
 };
 
 export const RefreshIcon = ({ onClick }: RefreshIconProps) => (
@@ -34,7 +34,7 @@ export const RefreshIcon = ({ onClick }: RefreshIconProps) => (
 );
 
 export const CharacterIcon = ({ hostType }: { hostType: Character }) => {
-  const imageSrc = CHRACTER_LIST[hostType] || BasicIcon;
+  const imageSrc = CHARACTER_LIST[hostType] || BasicIcon;
   return <Image src={imageSrc} width={40} height={40} alt="Basic Icon" />;
 };
 
