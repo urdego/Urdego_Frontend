@@ -1,47 +1,9 @@
 import { useState, useEffect } from 'react';
-import useWebSocketStore, {
-  GameState,
-  RoundData,
-  ResultData,
-} from '@/stores/useWebSocketStore';
+
 import InGameWebSocket from '@/lib/websocket/gameWebsocket';
 
 export const useGameState = (initialRound: number) => {
-  const [gameState, setGameState] = useState<GameState>({});
   const webSocket = InGameWebSocket.getInstance();
-
-  // 웹소켓 메시지 구독
-  useEffect(() => {
-    const unsubscribe = useWebSocketStore.subscribe((state) => {
-      const messages = state.messages;
-      if (messages.length > 0) {
-        const latestMessage = messages[messages.length - 1];
-
-        if ('data' in latestMessage) {
-          switch (latestMessage.eventType) {
-            case 'ROUND_START':
-              if ('roundId' in latestMessage.data) {
-                setGameState((prev) => ({
-                  ...prev,
-                  roundState: latestMessage.data as RoundData,
-                }));
-              }
-              break;
-            case 'RESULT':
-              if ('answerCoordinate' in latestMessage.data) {
-                setGameState((prev) => ({
-                  ...prev,
-                  scoreState: latestMessage.data as ResultData,
-                }));
-              }
-              break;
-          }
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   // 라운드 변경 시 웹소켓 업데이트
   useEffect(() => {
@@ -80,7 +42,6 @@ export const useGameState = (initialRound: number) => {
   };
 
   return {
-    gameState,
     currentRound,
     isMapView,
     showBackIcon,
