@@ -16,3 +16,10 @@ export interface InviteWebSocketMessage {
   messageType: 'INVITE_PLAYER';
   payload: InviteMessage;
 }
+
+export interface ErrorWebSocketMessage {
+  messageType: 'ERROR';
+  payload: {
+    errors: string;
+  };
+}

@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { WebSocketMessage } from '@/lib/types/websocket';
 
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
-import { InviteWebSocketMessage } from '@/lib/types/notification';
+import {
+  InviteWebSocketMessage,
+  ErrorWebSocketMessage,
+} from '@/lib/types/notification';
 
 type DestinationType = 'room' | 'game' | 'notification' | 'error';
 
@@ -60,7 +63,7 @@ export const useWebSocketFunctions = () => {
   };
 
   const subscribeToError = (
-    onMessageReceived: (message: InviteWebSocketMessage) => void
+    onMessageReceived: (message: ErrorWebSocketMessage) => void
   ) => {
     if (client && isConnected) {
       if (subscribedError) {

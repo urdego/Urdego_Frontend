@@ -15,7 +15,10 @@ import Link from 'next/link';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import useUserStore from '@/stores/useUserStore';
 import InviteNotificationToast from '@/components/Common/Toast/InviteNotificationToast';
-import { InviteWebSocketMessage } from '@/lib/types/notification';
+import {
+  InviteWebSocketMessage,
+  ErrorWebSocketMessage,
+} from '@/lib/types/notification';
 import useGameStore from '@/stores/useGameStore';
 
 const Home = () => {
@@ -57,7 +60,7 @@ const Home = () => {
     });
 
     // 에러 메시지 구독 추가
-    subscribeToError((message: InviteWebSocketMessage) => {
+    subscribeToError((message: ErrorWebSocketMessage) => {
       console.log('Error received:', message);
       // 에러 메시지 처리 로직 추가
     });
