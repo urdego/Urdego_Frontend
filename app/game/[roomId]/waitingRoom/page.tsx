@@ -10,11 +10,11 @@ import {
 } from './waitingRoom.styles';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PositionCard from '@/components/Layout/WaitingRoom/PositionCard';
-import ContentsBox from '@/styles/Icon/ContentsBox.png';
+import ContentsBox from '@/styles/Icon/contentsBox.png';
 import WButton from '@/components/Layout/WaitingRoom/WButton';
 import AddContents from '@/components/Layout/AddContents/AddContents';
 import InviteUser from '@/components/Layout/InviteUser/InviteUser';
-import WRoomAssistance from '@/styles/Image/WaitingRoom/wRoomAssistance.png';
+import WRoomAssistance from '@/styles/Image/WaitingRoom/WRoomAssistance.png';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
