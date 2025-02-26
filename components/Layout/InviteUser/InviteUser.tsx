@@ -133,13 +133,17 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
             />
           </SearchBarWrapper>
           <UserList>
-            {users.map((user) => (
-              <UserListItem
-                key={user.userId}
-                user={user}
-                onInvite={handleInvite}
-              />
-            ))}
+            {users
+              .filter(
+                (user) => user.userId !== senderId && user.platformId !== null
+              )
+              .map((user) => (
+                <UserListItem
+                  key={user.userId}
+                  user={user}
+                  onInvite={handleInvite}
+                />
+              ))}
           </UserList>
         </ContentWrapper>
       </BottomSheet>
