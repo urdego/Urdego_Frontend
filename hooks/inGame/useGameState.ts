@@ -1,15 +1,6 @@
-import { useState, useEffect } from 'react';
-
-import InGameWebSocket from '@/lib/websocket/gameWebsocket';
+import { useState } from 'react';
 
 export const useGameState = (initialRound: number) => {
-  const webSocket = InGameWebSocket.getInstance();
-
-  // 라운드 변경 시 웹소켓 업데이트
-  useEffect(() => {
-    webSocket.updateRound(initialRound);
-  }, [initialRound]);
-
   // 게임 진행 상태 관리
   const [currentRound] = useState(initialRound);
 
