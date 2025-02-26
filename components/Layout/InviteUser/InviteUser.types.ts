@@ -5,4 +5,5 @@ export interface IUser {
   activeCharacter: string;
   ownedCharacters: string[];
   invited: boolean;
+  platformId: string;
 }
