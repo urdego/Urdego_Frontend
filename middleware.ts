@@ -3,6 +3,13 @@ import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
 
 export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
+    const pathname = request.nextUrl.pathname;
+
+    // manifest.json 요청은 예외 처리
+    if (pathname === '/manifest.json') {
+      return NextResponse.next();
+    }
+
     console.log('middleware 실행', {
       path: request.nextUrl.pathname,
       token: request.nextauth.token,
@@ -65,7 +72,7 @@ export const config = {
   matcher: [
     // API 경로에 대해서만 적용
     '/api/:path*',
-    // auth 관련 경로는 제외
-    '/((?!api/auth|_next/static|_next/image|favicon.ico|login|$).*)',
+    // auth 관련 경로 및 정적 파일 제외
+    '/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.json|login|$).*)',
   ],
 };
