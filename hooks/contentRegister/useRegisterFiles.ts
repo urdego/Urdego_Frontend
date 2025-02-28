@@ -1,5 +1,6 @@
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import exifr from 'exifr';
+import ExifReader from 'exifreader';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import useLoadingStore from '@/stores/loadingStore';
 import AlertToast from '@/components/Common/Toast/AlertToast';
@@ -27,8 +28,8 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       });
       setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
 
-      await exportMetadata(fileList);
       const compressedFileList = await compressFile(fileList);
+      await exportMetadata(compressedFileList);
       const previewURLs = await Promise.all(
         compressedFileList.map(readFileAsDataURL)
       );
@@ -95,27 +96,32 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const isImageFile = (file: File) => {
     const filePath = file.name.split('.');
     const fileExtension = filePath[filePath.length - 1].toLocaleLowerCase();
-    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp', 'heic'];
     return validExtensions.includes(fileExtension);
   };
 
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
     const gpsList = (
-      await Promise.all(fileList.map((item) => exifr.gps(item)))
+      await Promise.all(
+        fileList.map(async (item) => {
+          const tags = await ExifReader.load(item, { expanded: true });
+          return tags.gps;
+        })
+      )
     ).filter((item) => item !== undefined);
     const gps = gpsList[0];
 
     if (gps) {
       // 위경도 저장
-      setPlaceInput(index, 'lat', gps.latitude);
-      setPlaceInput(index, 'lng', gps.longitude);
+      setPlaceInput(index, 'lat', gps.Latitude as number);
+      setPlaceInput(index, 'lng', gps.Longitude as number);
 
       // 도로명 주소 저장
       // 역지오코딩으로 도로명 주소 반환
       handleReverseGeocoding({
         index,
-        latLng: { lat: gps.latitude, lng: gps.longitude },
+        latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
       });
       return;
     }
