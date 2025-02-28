@@ -1,5 +1,4 @@
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
-import exifr from 'exifr';
 import ExifReader from 'exifreader';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import useLoadingStore from '@/stores/loadingStore';
