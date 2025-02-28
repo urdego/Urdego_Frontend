@@ -1,14 +1,9 @@
 import StyledComponentsRegistry from '@/lib/registry';
 import { ReactNode } from 'react';
-import { metadata } from '@/app/metadata';
-import type { Viewport } from 'next';
+import { metadata, viewport } from '@/app/metadata';
 import ClientLayout from './clientLayout';
 
-export { metadata };
-
-export const viewport: Viewport = {
-  themeColor: '#FFFFFF',
-};
+export { metadata, viewport };
 
 export default function RootLayout({
   children,
