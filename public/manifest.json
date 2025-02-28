@@ -1,0 +1,68 @@
+{
+  "name": "어데고?!",
+  "short_name": "어데고?!",
+  "description": "🗺️ 추천하고 싶은 장소나 추억을 떠올릴 수 있는 소중한 장소를 게임을 통해 공유할 수 있는 서비스 🗺️",
+  "icons": [
+    {
+      "purpose": "any",
+      "sizes": "144x144",
+      "src": "/icon.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "128x128",
+      "src": "/icon_128.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "192x192",
+      "src": "/icon_192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "384x384",
+      "src": "/icon_384.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/icon_512.png",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#F4EEFF",
+  "display": "standalone",
+  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "/screenshots/01.svg",
+      "sizes": "1600x900",
+      "type": "image/svg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/02.svg",
+      "sizes": "1600x900",
+      "type": "image/svg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/03.svg",
+      "sizes": "1600x900",
+      "type": "image/svg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/04.svg",
+      "sizes": "1600x900",
+      "type": "image/svg",
+      "form_factor": "wide"
+    }
+  ]
+}
