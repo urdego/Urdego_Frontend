@@ -26,8 +26,11 @@ const MyPage = () => {
   });
 
   const userId = useUserStore((state) => state.userId);
+  const email = useUserStore((state) => state.email);
+  const characterType = useUserStore((state) => state.characterType);
 
-  console.log('userInfo 마이페이지에서 확인:', userInfo);
+  console.log('email 마이페이지에서 확인:', email);
+  console.log('characterType 마이페이지에서 확인:', characterType);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -65,9 +68,9 @@ const MyPage = () => {
       <MyPageWrapper>
         <ProfileWrapper>
           <ProfileInfo
-            email={userInfo.email}
+            email={userInfo.email || email}
             nickname={userInfo.nickname}
-            activeCharacter={userInfo.activeCharacter}
+            activeCharacter={userInfo.activeCharacter || characterType}
           />
 
           <SmallButtonWrapper>
