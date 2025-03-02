@@ -3,8 +3,7 @@ import { ReactNode } from 'react';
 import { metadata, viewport } from '@/app/metadata';
 import ClientLayout from './clientLayout';
 
-export { metadata };
-export { viewport };
+export { metadata, viewport };
 
 export default function RootLayout({
   children,
@@ -13,6 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body suppressHydrationWarning>
         <StyledComponentsRegistry>
           <ClientLayout>{children}</ClientLayout>
