@@ -5,8 +5,14 @@ export default withAuth(
   async function middleware(request: NextRequestWithAuth) {
     const pathname = request.nextUrl.pathname;
 
-    // manifest.json 요청은 예외 처리
-    if (pathname === '/manifest.json') {
+    // manifest.json, 아이콘 이미지 및 public 폴더 내 파일 예외 처리
+    if (
+      pathname === '/manifest.json' ||
+      pathname.startsWith('/Icon/') ||
+      pathname.startsWith('/Screenshots/') || // 스크린샷 폴더도 예외 처리
+      pathname.startsWith('/Splash/') || // 스플래시 폴더도 예외 처리
+      pathname === '/favicon.ico' // 파비콘 예외 처리
+    ) {
       return NextResponse.next();
     }
 
@@ -73,6 +79,6 @@ export const config = {
     // API 경로에 대해서만 적용
     '/api/:path*',
     // auth 관련 경로 및 정적 파일 제외
-    '/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.json|login|$).*)',
+    '/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.json|Icon/|Screenshots/|login|$).*)',
   ],
 };

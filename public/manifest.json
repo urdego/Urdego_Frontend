@@ -4,23 +4,46 @@
   "description": "🗺️ 추천하고 싶은 장소나 추억을 떠올릴 수 있는 소중한 장소를 게임을 통해 공유할 수 있는 서비스 🗺️",
   "icons": [
     {
-      "purpose": "any",
       "sizes": "152x152",
       "src": "/Icon/icon_152.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "purpose": "maskable",
+      "sizes": "128x128",
+      "src": "/Icon/maskable_icon_128.png",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "sizes": "180x180",
       "src": "/Icon/icon_180.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
-
     {
-      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/Icon/icon_512.png",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "sizes": "512x512",
+      "src": "/Icon/maskable_icon_512.png",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "sizes": "1024x1024",
       "src": "/Icon/icon.png",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "sizes": "1024x1024",
+      "src": "/Icon/maskable_icon.png",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
@@ -31,19 +54,19 @@
   "screenshots": [
     {
       "src": "/Screenshots/preview-01.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "/Screenshots/preview-02.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "/Screenshots/preview-03.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     }
