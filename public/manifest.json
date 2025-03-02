@@ -54,19 +54,19 @@
   "screenshots": [
     {
       "src": "/Screenshots/preview-01.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "/Screenshots/preview-02.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "/Screenshots/preview-03.png",
-      "sizes": "1600x900",
+      "sizes": "1284x2778",
       "type": "image/png",
       "form_factor": "wide"
     }
