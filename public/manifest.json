@@ -5,32 +5,21 @@
   "icons": [
     {
       "purpose": "any",
-      "sizes": "144x144",
-      "src": "/icon.png",
+      "sizes": "152x152",
+      "src": "/Icon/icon_152.png",
       "type": "image/png"
     },
     {
       "purpose": "maskable",
-      "sizes": "128x128",
-      "src": "/icon_128.png",
+      "sizes": "180x180",
+      "src": "/Icon/icon_180.png",
       "type": "image/png"
     },
+
     {
       "purpose": "maskable",
-      "sizes": "192x192",
-      "src": "/icon_192.png",
-      "type": "image/png"
-    },
-    {
-      "purpose": "maskable",
-      "sizes": "384x384",
-      "src": "/icon_384.png",
-      "type": "image/png"
-    },
-    {
-      "purpose": "maskable",
-      "sizes": "512x512",
-      "src": "/icon_512.png",
+      "sizes": "1024x1024",
+      "src": "/Icon/icon.png",
       "type": "image/png"
     }
   ],
@@ -41,28 +30,23 @@
   "orientation": "portrait",
   "screenshots": [
     {
-      "src": "/screenshots/01.svg",
+      "src": "/Screenshots/preview-01.png",
       "sizes": "1600x900",
-      "type": "image/svg",
+      "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/02.svg",
+      "src": "/Screenshots/preview-02.png",
       "sizes": "1600x900",
-      "type": "image/svg",
+      "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/03.svg",
+      "src": "/Screenshots/preview-03.png",
       "sizes": "1600x900",
-      "type": "image/svg",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshots/04.svg",
-      "sizes": "1600x900",
-      "type": "image/svg",
+      "type": "image/png",
       "form_factor": "wide"
     }
-  ]
+  ],
+  "categories": ["entertainment", "games", "photo", "social"]
 }
