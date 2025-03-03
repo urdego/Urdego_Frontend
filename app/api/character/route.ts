@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
     );
 
     return NextResponse.json({
+      nickname: response.data.nickname,
       activeCharacter: response.data.activeCharacter,
       exp: response.data.exp,
       ownedCharacters: response.data.ownedCharacters,
