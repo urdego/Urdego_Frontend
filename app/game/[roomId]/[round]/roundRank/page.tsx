@@ -114,7 +114,9 @@ const RoundRank = ({
       );
       router.push('/home');
     } else {
-      router.push(`/game/${roomId}/${currentRound + 1}`);
+      setTimeout(() => {
+        router.push(`/game/${roomId}/${currentRound + 1}`);
+      }, 2000);
     }
   }, [router, roomId, currentRound, isLast, sendMessage]);
 
@@ -140,7 +142,7 @@ const RoundRank = ({
       />
       {isLast && (
         <Footer>
-          <CountdownButton initialTime={10} onTimeEnd={handleNextRound} />
+          <CountdownButton initialTime={60} onTimeEnd={handleNextRound} />
         </Footer>
       )}
     </PageWrapper>
