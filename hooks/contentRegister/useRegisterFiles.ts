@@ -3,6 +3,7 @@ import ExifReader from 'exifreader';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import useLoadingStore from '@/stores/loadingStore';
 import AlertToast from '@/components/Common/Toast/AlertToast';
+import { Capacitor } from '@capacitor/core';
 
 interface useUploadFilesProps {
   index: number;
@@ -101,15 +102,37 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
-    const gpsList = (
-      await Promise.all(
-        fileList.map(async (item) => {
-          const tags = await ExifReader.load(item, { expanded: true });
-          return tags.gps;
-        })
-      )
-    ).filter((item) => item !== undefined);
-    const gps = gpsList[0];
+    let gps = null;
+    if (Capacitor.isNativePlatform()) {
+      console.log('ok');
+      const { Camera, CameraResultType, CameraSource } = await import(
+        '@capacitor/camera'
+      );
+      const image = await Camera.getPhoto({
+        quality: 90,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos,
+      });
+      if (!image.base64String) {
+        AlertToast({
+          message: '이미지 업로드에 실패했어요',
+        });
+        return;
+      }
+      const imageBuffer = base64ToArrayBuffer(image.base64String);
+      const tags = await ExifReader.load(imageBuffer, { expanded: true });
+      gps = tags.gps;
+    } else {
+      const gpsList = (
+        await Promise.all(
+          fileList.map(async (item) => {
+            const tags = await ExifReader.load(item, { expanded: true });
+            return tags.gps;
+          })
+        )
+      ).filter((item) => item !== undefined);
+      gps = gpsList[0];
+    }
 
     if (gps) {
       // 위경도 저장
@@ -127,6 +150,17 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     AlertToast({
       message: '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!',
     });
+  };
+
+  // 이미지 형식을 base64 > arrayBuffer로 변경
+  const base64ToArrayBuffer = (base64: string) => {
+    const binaryString = window.atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    console.log(bytes);
+    return bytes.buffer;
   };
 
   // 이미지 압축 로직

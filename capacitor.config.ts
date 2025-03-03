@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
     url:
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:3000'
-        : undefined, // 프로덕션에서는 번들된 앱 사용
+        : 'https://urdego.vercel.app', // 프로덕션에서는 번들된 앱 사용
     cleartext: true,
   },
 };
