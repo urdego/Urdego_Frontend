@@ -3,16 +3,13 @@
 import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import colors from '@/styles/color/palette';
-import UserMarker from '@/styles/Icon/Game/Marker/pin-mine-basic.png';
 import AnswerMarker from '@/styles/Icon/Game/AnswerMarker.svg';
+import useUserStore from '@/stores/useUserStore';
 import useCharacterMarker from '@/hooks/character/useCharacterMarker';
 
 interface MapContainerProps {
   mode: 'game' | 'rank';
 }
-// interface GoogleMapProps {
-//   markers: Array<{ lat: number; lng: number; characterType: string }>;
-// }
 
 interface MapComponentProps {
   center?: google.maps.LatLngLiteral;
@@ -53,7 +50,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const mapElementRef = useRef<HTMLDivElement>(null);
   const markerRefs = useRef<google.maps.Marker[]>([]);
   const polylineRefs = useRef<google.maps.Polyline[]>([]);
-  const markerIcon = useCharacterMarker();
+  const { getMarkerIcon } = useCharacterMarker();
+  const myNickname = useUserStore((state) => state.nickname);
 
   // 지도 초기화 함수
   const initializeMap = () => {
@@ -99,12 +97,12 @@ const MapComponent: React.FC<MapComponentProps> = ({
     markerRefs.current.forEach((marker) => marker.setMap(null));
     markerRefs.current = [];
 
-    // 새 마커 생성
+    // 새 마커 생성 (내 마커)
     const marker = new google.maps.Marker({
       position,
       map: mapRef.current!,
       icon: {
-        url: markerIcon,
+        url: getMarkerIcon(myNickname),
         scaledSize: new google.maps.Size(52, 52),
       },
       animation: google.maps.Animation.DROP,
@@ -177,8 +175,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
           position: { lat: user.lat, lng: user.lng },
           map: mapRef.current!,
           icon: {
-            url: UserMarker.src,
-            scaledSize: new google.maps.Size(50, 53), // TODO: 사이즈 조절
+            url: getMarkerIcon(user.nickname),
+            scaledSize: new google.maps.Size(50, 53),
           },
           animation: google.maps.Animation.DROP,
         });
