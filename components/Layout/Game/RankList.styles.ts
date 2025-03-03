@@ -25,7 +25,7 @@ export const Button = styled.button<{ $active: boolean; isLast?: boolean }>`
   cursor: pointer;
   text-align: center;
   background: ${({ $active, isLast }) =>
-    isLast ? colors.etc.white : $active ? colors.purple[50] : 'transparent'};
+    isLast ? colors.etc.white : $active ? colors.etc.white : colors.gray[90]};
   border: none;
   position: relative;
   z-index: 1;
