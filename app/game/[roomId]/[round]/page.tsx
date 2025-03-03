@@ -141,7 +141,7 @@ const GamePage = ({ params }: GamePageProps) => {
           onBackClick={handleBackClick}
           onReportClick={handleReportClick}
         />
-        <Timer initialTime={20} onTimeEnd={handleNextRound} />
+        <Timer initialTime={60} onTimeEnd={handleNextRound} />
 
         {isMapView ? (
           <MapComponent

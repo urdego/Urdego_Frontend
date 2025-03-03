@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import colors from '@/styles/color/palette';
 import AnswerMarker from '@/styles/Icon/Game/AnswerMarker.svg';
 import useUserStore from '@/stores/useUserStore';
-import useCharacterGame from '@/hooks/character/useCharacterGame';
+import useCharacterMarker from '@/hooks/character/useCharacterMarker';
 
 interface MapContainerProps {
   mode: 'game' | 'rank';
@@ -50,7 +50,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const mapElementRef = useRef<HTMLDivElement>(null);
   const markerRefs = useRef<google.maps.Marker[]>([]);
   const polylineRefs = useRef<google.maps.Polyline[]>([]);
-  const { getMarkerIcon } = useCharacterGame();
+  const { getMarkerIcon } = useCharacterMarker();
   const myNickname = useUserStore((state) => state.nickname);
 
   // 지도 초기화 함수

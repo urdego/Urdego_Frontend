@@ -123,7 +123,7 @@ const RoundRank = ({
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-      <Timer initialTime={60} onTimeEnd={handleNextRound} />
+      <Timer initialTime={15} onTimeEnd={handleNextRound} />
       <MapComponent
         mode="rank"
         answerCoordinate={roundResult?.answerCoordinate || null}
@@ -138,11 +138,11 @@ const RoundRank = ({
         handleToggle={handleToggle}
         initialActiveButton={isLast ? 'totalRound' : 'thisRound'}
         currentRound={currentRound}
-        isLast={isLast}
+        $isLast={isLast}
       />
       {isLast && (
         <Footer>
-          <CountdownButton initialTime={60} onTimeEnd={handleNextRound} />
+          <CountdownButton initialTime={15} onTimeEnd={handleNextRound} />
         </Footer>
       )}
     </PageWrapper>

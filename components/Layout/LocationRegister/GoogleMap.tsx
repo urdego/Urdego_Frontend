@@ -27,8 +27,8 @@ const GoogleMap = ({
   });
   const { setPlaceInput } = usePlaceRegisterStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
-  const markerIcon = useCharacterMarker();
-  console.log('markerIcon', markerIcon);
+  const { getMyMarkerIcon } = useCharacterMarker();
+  console.log('markerIcon', getMyMarkerIcon);
 
   useEffect(() => {
     // 마커의 위치와 도로명 주소 초기화
@@ -66,7 +66,7 @@ const GoogleMap = ({
       {markerPosition.lat !== 0 && markerPosition.lng !== 0 && (
         <AdvancedMarker position={markerPosition} clickable={true}>
           <Image
-            src={markerIcon}
+            src={getMyMarkerIcon()}
             width={50}
             height={53}
             alt="UserMarker Icon"
