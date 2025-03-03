@@ -123,7 +123,7 @@ const RoundRank = ({
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-      <Timer initialTime={10} onTimeEnd={handleNextRound} />
+      <Timer initialTime={60} onTimeEnd={handleNextRound} />
       <MapComponent
         mode="rank"
         answerCoordinate={roundResult?.answerCoordinate || null}
