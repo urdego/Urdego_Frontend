@@ -4,34 +4,46 @@
   "description": "🗺️ 추천하고 싶은 장소나 추억을 떠올릴 수 있는 소중한 장소를 게임을 통해 공유할 수 있는 서비스 🗺️",
   "icons": [
     {
-      "purpose": "any",
-      "sizes": "144x144",
-      "src": "/icon.png",
-      "type": "image/png"
+      "sizes": "152x152",
+      "src": "/Icon/icon_152.png",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "purpose": "maskable",
       "sizes": "128x128",
-      "src": "/icon_128.png",
-      "type": "image/png"
+      "src": "/Icon/maskable_icon_128.png",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
-      "purpose": "maskable",
-      "sizes": "192x192",
-      "src": "/icon_192.png",
-      "type": "image/png"
+      "sizes": "180x180",
+      "src": "/Icon/icon_180.png",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "purpose": "maskable",
-      "sizes": "384x384",
-      "src": "/icon_384.png",
-      "type": "image/png"
-    },
-    {
-      "purpose": "maskable",
       "sizes": "512x512",
-      "src": "/icon_512.png",
-      "type": "image/png"
+      "src": "/Icon/icon_512.png",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "sizes": "512x512",
+      "src": "/Icon/maskable_icon_512.png",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "sizes": "1024x1024",
+      "src": "/Icon/icon.png",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "sizes": "1024x1024",
+      "src": "/Icon/maskable_icon.png",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
@@ -41,28 +53,23 @@
   "orientation": "portrait",
   "screenshots": [
     {
-      "src": "/screenshots/01.svg",
-      "sizes": "1600x900",
-      "type": "image/svg",
+      "src": "/Screenshots/preview-01.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/02.svg",
-      "sizes": "1600x900",
-      "type": "image/svg",
+      "src": "/Screenshots/preview-02.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/03.svg",
-      "sizes": "1600x900",
-      "type": "image/svg",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshots/04.svg",
-      "sizes": "1600x900",
-      "type": "image/svg",
+      "src": "/Screenshots/preview-03.png",
+      "sizes": "1284x2778",
+      "type": "image/png",
       "form_factor": "wide"
     }
-  ]
+  ],
+  "categories": ["entertainment", "games", "photo", "social"]
 }

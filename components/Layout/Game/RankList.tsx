@@ -32,7 +32,7 @@ interface RankListProps {
   handleToggle: (round: 'thisRound' | 'totalRound') => void;
   initialActiveButton: 'thisRound' | 'totalRound';
   currentRound: number;
-  isLast: boolean;
+  $isLast: boolean;
 }
 
 const RankList = ({
@@ -40,7 +40,7 @@ const RankList = ({
   handleToggle,
   initialActiveButton,
   currentRound,
-  isLast,
+  $isLast,
 }: RankListProps) => {
   const [activeTab, setActiveTab] = useState<'thisRound' | 'totalRound'>(
     initialActiveButton
@@ -75,10 +75,10 @@ const RankList = ({
   return (
     <Container>
       <ButtonContainer>
-        {isLast ? (
+        {$isLast ? (
           <Button
             $active={true}
-            isLast={isLast}
+            $isLast={$isLast}
             onClick={() => handleButtonClick('totalRound')}
           >
             최종 점수 결과

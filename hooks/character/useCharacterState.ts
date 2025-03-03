@@ -1,5 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import axiosInstance from '@/lib/axios';
+import useUserStore from '@/stores/useUserStore';
 
 interface UseCharacterStateReturn {
   character: string | null;
@@ -23,6 +24,8 @@ export const useCharacterState = ({
   const [exp, setExp] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { setCharacterType } = useUserStore();
+
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
@@ -31,11 +34,12 @@ export const useCharacterState = ({
         const ownCharacters = response.data.ownedCharacters;
         const userLevel = response.data.level;
         const userExp = response.data.exp;
-
         setCharacter(activeCharacter);
         setOwnCharacters(ownCharacters);
         setLevel(userLevel);
         setExp(userExp);
+        setCharacterType(activeCharacter);
+
         onCharacterLoad?.(activeCharacter);
       } catch (error) {
         console.error('캐릭터 정보 조회 에러:', error);
@@ -48,7 +52,7 @@ export const useCharacterState = ({
     };
 
     fetchCharacter();
-  }, [onCharacterLoad]);
+  }, [onCharacterLoad, setCharacterType]);
 
   return {
     character,

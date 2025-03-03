@@ -141,7 +141,7 @@ const GamePage = ({ params }: GamePageProps) => {
           onBackClick={handleBackClick}
           onReportClick={handleReportClick}
         />
-        <Timer initialTime={15} onTimeEnd={handleNextRound} />
+        <Timer initialTime={60} onTimeEnd={handleNextRound} />
 
         {isMapView ? (
           <MapComponent
@@ -161,14 +161,27 @@ const GamePage = ({ params }: GamePageProps) => {
         )}
 
         <Footer>
-          <Button
-            label={isBottomSheetOpen ? '정답 선택' : '위치 선택'}
-            buttonType={hasSubmitted ? 'gray' : 'purple'}
-            buttonSize="large"
-            onClick={toggleBottomSheet}
-            styleType="coloredBackground"
-            disabled={(isMapView && !currentSelectedCoordinate) || hasSubmitted}
-          />
+          {!isBottomSheetOpen ? (
+            <Button
+              label="위치 선택"
+              buttonType={hasSubmitted ? 'gray' : 'purple'}
+              buttonSize="large"
+              onClick={toggleBottomSheet}
+              styleType="coloredBackground"
+              disabled={
+                (isMapView && !currentSelectedCoordinate) || hasSubmitted
+              }
+            />
+          ) : (
+            <Button
+              label="정답 제출"
+              buttonType={hasSubmitted ? 'gray' : 'purple'}
+              buttonSize="large"
+              onClick={handleSubmitAnswer}
+              styleType="coloredBackground"
+              disabled={!currentSelectedCoordinate || hasSubmitted}
+            />
+          )}
         </Footer>
       </PageWrapper>
 

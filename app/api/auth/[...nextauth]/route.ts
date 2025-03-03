@@ -172,6 +172,7 @@ const authOptions: NextAuthOptions = {
       if (user) {
         token.userId = user.userId;
         token.nickname = user.nickname;
+        token.email = user.email;
       }
 
       // 토큰이 만료되지 않았으면 현재 토큰 반환
@@ -196,6 +197,7 @@ const authOptions: NextAuthOptions = {
           accessToken: token.accessToken,
           userId: token.userId,
           nickname: token.nickname,
+          email: token.email,
         },
       };
     },
