@@ -6,11 +6,13 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
 import Button from '@common/Button/Button';
 import { NicknameChangeWapper } from '@/app/(nav)/myPage/nicknameChange/nicknameChange.styles';
+import { useRouter } from 'next/navigation';
 
 const NicknameChangePage = () => {
   const { userId } = useUserStore(); // Zustand에서 userId 가져오기
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -40,6 +42,8 @@ const NicknameChangePage = () => {
       const data = await response.json();
       console.log('Nickname change response:', data);
       alert('닉네임이 성공적으로 변경되었습니다!');
+      // 마이페이지로 이동
+      router.push('/myPage');
     } catch (error) {
       console.error('Error changing nickname:', error);
       alert('닉네임 변경에 실패했습니다.');
