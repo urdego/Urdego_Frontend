@@ -155,6 +155,9 @@ const WaitingRoom = () => {
   };
 
   const handleExit = useCallback(() => {
+    // TODO: 방 나가기 Message 추가하기 (PLAYER_REMOVE)
+
+    // 구독 해제 후 홈으로 이동하는 로직
     unsubscribeFromRoom(String(roomId));
     router.push('/home');
   }, [roomId, unsubscribeFromRoom, router]);
