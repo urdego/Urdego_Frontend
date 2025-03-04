@@ -114,9 +114,7 @@ const RoundRank = ({
       );
       router.push('/home');
     } else {
-      setTimeout(() => {
-        router.push(`/game/${roomId}/${currentRound + 1}`);
-      }, 2000);
+      router.push(`/game/${roomId}/${currentRound + 1}`);
     }
   }, [router, roomId, currentRound, isLast, sendMessage]);
 
