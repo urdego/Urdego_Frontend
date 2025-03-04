@@ -40,7 +40,7 @@ export const SlideContainer = styled.div`
     align-items: center; // 중앙 정렬
     justify-content: center; // 중앙 정렬
     height: 100%;
-    padding-top: 124px;
+    padding-top: 80px;
 
     > div {
       width: 100%;
@@ -49,7 +49,7 @@ export const SlideContainer = styled.div`
   }
   .slick-dots {
     position: absolute;
-    top: 100px; // 슬라이드의 title 위로 이동
+    top: 60px; // 슬라이드의 title 위로 이동
     left: 50%;
     transform: translateX(-50%);
     z-index: 1; // 다른 요소 위에 표시되도록 설정
