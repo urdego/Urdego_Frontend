@@ -55,10 +55,6 @@ const MyPage = () => {
         </ProfileWrapper>
         <Separator />
         <SettingButton
-          label="사운드 설정"
-          onClick={() => router.push('/myPage/soundSetting')}
-        />
-        <SettingButton
           label="로그아웃"
           onClick={() => setIsLogoutModalOpen(true)}
         />
