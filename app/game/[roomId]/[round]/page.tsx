@@ -163,7 +163,7 @@ const GamePage = ({ params }: GamePageProps) => {
         <Footer>
           {!isBottomSheetOpen ? (
             <Button
-              label="위치 선택"
+              label="선택 완료"
               buttonType={hasSubmitted ? 'gray' : 'purple'}
               buttonSize="large"
               onClick={toggleBottomSheet}
