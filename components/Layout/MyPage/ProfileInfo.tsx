@@ -1,6 +1,7 @@
 import {
   ProfileInfoWrapper,
   ImageWrapper,
+  InfoRow,
   ProfileName,
   ProfileEmail,
   Level,
@@ -20,7 +21,6 @@ const ProfileInfo = ({
   nickname,
   activeCharacter,
 }: ProfileInfoProps) => {
-  // activeCharacter를 배열로 전달하여 해당 캐릭터에 맞는 데이터를 받아옴
   const characters = useCharacterData({ ownCharacters: [activeCharacter] });
   const activeCharacterData = characters.find(
     (character) => character.key === activeCharacter
@@ -41,8 +41,10 @@ const ProfileInfo = ({
           'no character'
         )}
       </ImageWrapper>
-      <Level>Lv.{level}</Level>
-      <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+      <InfoRow>
+        <Level>Lv.{level}</Level>
+        <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+      </InfoRow>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
     </ProfileInfoWrapper>
   );
