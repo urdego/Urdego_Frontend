@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
@@ -9,10 +9,17 @@ import { NicknameChangeWapper } from '@/app/(nav)/myPage/nicknameChange/nickname
 import { useRouter } from 'next/navigation';
 
 const NicknameChangePage = () => {
-  const { userId } = useUserStore(); // Zustand에서 userId 가져오기
+  const { userId } = useUserStore();
+  const setNicknameStore = useUserStore((state) => state.setNickname);
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 컴포넌트 마운트 시 RoomTitleInput에 포커스 지정
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -30,9 +37,9 @@ const NicknameChangePage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
+          'User-Id': userId.toString(), // userId를 헤더에 포함
         },
-        body: JSON.stringify({ newNickname: nickname }), // ✅ userId는 헤더로 보내므로 body에서 제거
+        body: JSON.stringify({ newNickname: nickname }), // userId는 헤더로 보내므로 body에서는 닉네임만 전달
       });
 
       if (!response.ok) {
@@ -41,6 +48,8 @@ const NicknameChangePage = () => {
 
       const data = await response.json();
       console.log('Nickname change response:', data);
+      // Zustand 스토어의 nickname 업데이트
+      setNicknameStore(nickname);
       alert('닉네임이 성공적으로 변경되었습니다!');
       // 마이페이지로 이동
       router.push('/myPage');
@@ -62,6 +71,7 @@ const NicknameChangePage = () => {
           label="새 닉네임"
           placeholder="닉네임을 입력해주세요"
           onChange={handleInputChange}
+          ref={inputRef}
         />
         <Button
           buttonType={isButtonEnabled ? 'purple' : 'gray'}
