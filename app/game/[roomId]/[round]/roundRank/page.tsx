@@ -34,7 +34,8 @@ const RoundRank = ({
   const questionId = useGameStore.getState().questionId;
   const currentRound = Number(params.round) || 1;
 
-  const { subscribeToRoom, sendMessage } = useWebSocketFunctions();
+  const { subscribeToRoom, sendMessage, unsubscribeFromRoom } =
+    useWebSocketFunctions();
   const [scoreData, setScoreData] = useState<ScoreUpdatePayload | null>(null);
   const isLast = scoreData?.isLast || false;
   const [roundResult, setRoundResult] = useState<RoundResultPayload | null>(
@@ -112,11 +113,15 @@ const RoundRank = ({
         { gameId: useGameStore.getState().gameId },
         'game'
       );
-      router.push('/home');
+      // 마지막 라운드 시 구독 해제 및 라우팅
+      setTimeout(() => {
+        unsubscribeFromRoom(String(roomId));
+        router.push('/home');
+      }, 300);
     } else {
       router.push(`/game/${roomId}/${currentRound + 1}`);
     }
-  }, [router, roomId, currentRound, isLast, sendMessage]);
+  }, [router, roomId, currentRound, isLast, sendMessage, unsubscribeFromRoom]);
 
   return (
     <PageWrapper>
