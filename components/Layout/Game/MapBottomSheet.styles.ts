@@ -6,7 +6,8 @@ export const StyledMotion = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80vh;
+  height: fit-content;
+  max-height: 80vh;
   z-index: 6;
   touch-action: none;
   margin: 0 auto;
