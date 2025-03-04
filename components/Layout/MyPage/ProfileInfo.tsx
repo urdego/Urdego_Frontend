@@ -4,9 +4,8 @@ import {
   ProfileName,
   ProfileEmail,
 } from '@/components/Layout/MyPage/ProfileInfo.styles';
-
-import ProfileImg from '@/styles/Icon/Profile_Snowman1.svg';
 import Image from 'next/image';
+import useCharacterData from '@/hooks/character/useCharacterData';
 
 interface ProfileInfoProps {
   email: string;
@@ -19,14 +18,28 @@ const ProfileInfo = ({
   nickname,
   activeCharacter,
 }: ProfileInfoProps) => {
+  // activeCharacter를 배열로 전달하여 해당 캐릭터에 맞는 데이터를 받아옴
+  const characters = useCharacterData({ ownCharacters: [activeCharacter] });
+  const activeCharacterData = characters.find(
+    (character) => character.key === activeCharacter
+  );
+
   return (
     <ProfileInfoWrapper>
       <ImageWrapper>
-        <Image src={ProfileImg} width={56} height={56} alt="Profile Image" />
+        {activeCharacterData ? (
+          <Image
+            src={activeCharacterData.displayImage.src}
+            width={activeCharacterData.displayImage.width}
+            height={activeCharacterData.displayImage.height}
+            alt={`${activeCharacter} 이미지`}
+          />
+        ) : (
+          'no character'
+        )}
       </ImageWrapper>
       <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
-      <div>{activeCharacter || '캐릭터 타입 없음'}</div>
     </ProfileInfoWrapper>
   );
 };

@@ -11,8 +11,6 @@ export const ProfileInfoWrapper = styled.div`
 
 export const ImageWrapper = styled.div`
   margin-bottom: 12px; /* 이미지와 이름/이메일 간 간격 */
-  background-color: ${colors.gray[80]};
-  border-radius: 50%;
   width: 56px;
   height: 56px;
   display: flex;
