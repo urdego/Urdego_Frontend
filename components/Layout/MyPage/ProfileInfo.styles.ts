@@ -30,3 +30,18 @@ export const ProfileEmail = styled.div`
   color: ${colors.gray[60]};
   text-align: center;
 `;
+
+export const Level = styled.div`
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  color: ${colors.purple[50]};
+  border-radius: 4px;
+  background: ${colors.purple[95]};
+  height: 20px;
+  padding: 0 10px;
+  text-align: center;
+  line-height: 20px;
+  margin: 0 auto;
+  margin-bottom: 3px;
+`;

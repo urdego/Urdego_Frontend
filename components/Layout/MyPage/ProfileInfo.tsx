@@ -38,6 +38,7 @@ const ProfileInfo = ({
           'no character'
         )}
       </ImageWrapper>
+      {/* <Level>Lv.{level}</Level> */}
       <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
     </ProfileInfoWrapper>
