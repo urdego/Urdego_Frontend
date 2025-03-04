@@ -3,9 +3,11 @@ import {
   ImageWrapper,
   ProfileName,
   ProfileEmail,
+  Level,
 } from '@/components/Layout/MyPage/ProfileInfo.styles';
 import Image from 'next/image';
 import useCharacterData from '@/hooks/character/useCharacterData';
+import { useCharacterState } from '@/hooks/character/useCharacterState';
 
 interface ProfileInfoProps {
   email: string;
@@ -23,6 +25,7 @@ const ProfileInfo = ({
   const activeCharacterData = characters.find(
     (character) => character.key === activeCharacter
   );
+  const { level } = useCharacterState();
 
   return (
     <ProfileInfoWrapper>
@@ -38,7 +41,7 @@ const ProfileInfo = ({
           'no character'
         )}
       </ImageWrapper>
-      {/* <Level>Lv.{level}</Level> */}
+      <Level>Lv.{level}</Level>
       <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
     </ProfileInfoWrapper>
