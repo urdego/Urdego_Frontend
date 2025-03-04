@@ -49,7 +49,7 @@ const InGameLayout = ({ children }: { children: React.ReactNode }) => {
         audioRef.current = null;
       }
     };
-  }, [isPlaying, setIsPlaying]);
+  }, []);
 
   // 오디오 상태가 변경될 때마다 실행
   useEffect(() => {
