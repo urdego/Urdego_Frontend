@@ -90,7 +90,7 @@ const NicknameChangePage = () => {
           // 마이페이지로 이동
           router.push('/myPage');
         }}
-        title="회원 탈퇴 처리가 완료되었습니다."
+        title="닉네임 변경 처리가 완료되었습니다."
         confirmOnly
       />
     </>
