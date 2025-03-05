@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import useUserStore from '@/stores/useUserStore';
+import { useSession } from 'next-auth/react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
 import Button from '@common/Button/Button';
@@ -10,14 +10,14 @@ import { useRouter } from 'next/navigation';
 import AlertToast from '@/components/Common/Toast/AlertToast';
 
 const NicknameChangePage = () => {
-  const { userId } = useUserStore();
-  const setNicknameStore = useUserStore((state) => state.setNickname);
+  const { data: session } = useSession();
+  const userId = session?.user?.userId;
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 컴포넌트 마운트 시 RoomTitleInput에 포커스 지정
+  // 컴포넌트 마운트 시 인풋에 포커스 지정
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -49,13 +49,13 @@ const NicknameChangePage = () => {
 
       const data = await response.json();
       console.log('Nickname change response:', data);
-      setNicknameStore(nickname);
-      // 성공 시 MyPage로 이동 후 토스트 메시지 표시
-      router.push('/myPage');
+      // zustand 스토어 업데이트 대신 세션이 업데이트되도록 처리 (API가 데이터베이스와 세션을 함께 업데이트한다고 가정)
+      await router.push('/myPage');
+      // 페이지 이동 후 최신 세션 정보를 반영하기 위해 router.refresh() 호출
+      router.refresh();
       AlertToast({ message: '닉네임 변경 처리가 완료되었습니다.' });
     } catch (error) {
       console.error('Error changing nickname:', error);
-      // 실패 시 페이지 이동 없이 토스트 메시지 표시
       AlertToast({ message: '사용할 수 없거나 중복된 닉네임입니다.' });
     } finally {
       setIsLoading(false);
