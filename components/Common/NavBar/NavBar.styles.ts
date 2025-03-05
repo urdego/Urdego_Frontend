@@ -14,7 +14,7 @@ export const Nav = styled.nav`
   justify-content: space-evenly;
   align-items: flex-start;
   background-color: ${colors.etc.white};
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px -4px 24px 0px rgba(0, 0, 0, 0.1);
   z-index: 100;
 `;
 
@@ -29,10 +29,14 @@ export const IconPlaceholder = styled.div`
   transition: background-color 0.3s ease;
 `;
 
-export const NavBarText = styled.div`
-  text-align: center;
+export const NavBarText = styled.div<{ isActive: boolean }>`
   font-size: 12px;
-  color: #4d4d4d;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 18px */
+  letter-spacing: -0.12px;
+  text-align: center;
+  color: ${({ isActive }) => (isActive ? colors.purple[50] : colors.gray[70])};
 `;
 
 export const NavItem = styled.div`

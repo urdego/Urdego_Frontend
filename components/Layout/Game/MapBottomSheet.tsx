@@ -93,7 +93,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
 
         <BottomSheetFooter>
           <Button
-            label="정답 제출"
+            label="위치 선택"
             buttonType={hasSubmitted ? 'gray' : 'purple'}
             buttonSize="large"
             onClick={handleSubmitAnswer}
