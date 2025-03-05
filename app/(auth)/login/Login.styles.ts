@@ -60,10 +60,6 @@ export const SocialButton = styled.button`
   transition: transform 0.2s;
   padding-bottom: 12px;
 
-  &:hover {
-    transform: scale(1.05);
-  }
-
   img {
     width: 100%;
     height: 100%;

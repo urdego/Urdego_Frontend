@@ -110,6 +110,17 @@ const GamePage = ({ params }: GamePageProps) => {
     setCurrentSelectedCoordinate,
   ]);
 
+  // 정답 제출 후 바텀시트 닫기 (이슈 해결)
+  const handleFinalSubmit = useCallback(() => {
+    if (!currentSelectedCoordinate || hasSubmitted) return;
+
+    handleSubmitAnswer(); // 정답 제출 실행
+
+    setTimeout(() => {
+      setIsBottomSheetOpen(false); // 정답 제출 후 바텀시트 닫기
+    }, 100);
+  }, [handleSubmitAnswer, currentSelectedCoordinate, hasSubmitted]);
+
   // 다음 라운드 이동
   const handleNextRound = useCallback(() => {
     router.push(`/game/${roomId}/${currentRound}/roundRank`);
@@ -163,7 +174,7 @@ const GamePage = ({ params }: GamePageProps) => {
         <Footer>
           {!isBottomSheetOpen ? (
             <Button
-              label="위치 선택"
+              label="정답 선택"
               buttonType={hasSubmitted ? 'gray' : 'purple'}
               buttonSize="large"
               onClick={toggleBottomSheet}
@@ -174,10 +185,10 @@ const GamePage = ({ params }: GamePageProps) => {
             />
           ) : (
             <Button
-              label="정답 제출"
+              label="위치 선택"
               buttonType={hasSubmitted ? 'gray' : 'purple'}
               buttonSize="large"
-              onClick={handleSubmitAnswer}
+              onClick={handleFinalSubmit}
               styleType="coloredBackground"
               disabled={!currentSelectedCoordinate || hasSubmitted}
             />
@@ -202,7 +213,7 @@ const GamePage = ({ params }: GamePageProps) => {
         onCoordinateSelect={handleCoordinateSelect}
         currentSelectedCoordinate={currentSelectedCoordinate}
         hasSubmitted={hasSubmitted}
-        handleSubmitAnswer={handleSubmitAnswer}
+        handleSubmitAnswer={handleFinalSubmit}
       />
     </>
   );

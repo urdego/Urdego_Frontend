@@ -41,7 +41,7 @@ export const ProgressRow = styled.div`
 export const ProgressBarContainer = styled.div`
   width: 100%;
   background-color: ${colors.gray[95]};
-  border-radius: 5px;
+  border-radius: 999px;
   overflow: hidden;
 `;
 

@@ -12,7 +12,10 @@ export const ProgressBarContainer = styled.div`
 export const ProgressBarFill = styled.div<{ width: number }>`
   height: 100%;
   border-radius: 4px;
-  background-color: ${({ width }) =>
-    width < 50 ? colors.alert[50] : colors.etc.green};
+  background-color: ${({ width }) => {
+    if (width > 50) return colors.etc.green; // 31~60초 (51~100%)
+    if (width > 25) return colors.etc.yellow; // 16~30초 (26~50%)
+    return colors.alert[50]; // 0~15초 (0~25%)
+  }};
   width: ${({ width }) => width}%;
 `;

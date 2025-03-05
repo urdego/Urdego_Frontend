@@ -10,8 +10,6 @@ import {
   HomeColorIcon,
   MapIcon,
   MapColorIcon,
-  StarIcon,
-  StarColorIcon,
   MypageIcon,
   MypageColorIcon,
 } from '@/components/Common/NavBar/NavIcon';
@@ -29,25 +27,25 @@ const NavBar = () => {
           ) : (
             <HomeIcon />
           )}
-          <NavBarText>홈</NavBarText>
+          <NavBarText
+            isActive={pathname === '/home' || pathname === '/waitingRoomList'}
+          >
+            홈
+          </NavBarText>
         </NavItem>
       </Link>
       <Link href="/content/register" passHref>
         <NavItem>
           {pathname === '/content/register' ? <MapColorIcon /> : <MapIcon />}
-          <NavBarText>장소등록</NavBarText>
-        </NavItem>
-      </Link>
-      <Link href="/rank" passHref>
-        <NavItem>
-          {pathname === '/rank' ? <StarColorIcon /> : <StarIcon />}
-          <NavBarText>랭킹</NavBarText>
+          <NavBarText isActive={pathname === '/content/register'}>
+            장소등록
+          </NavBarText>
         </NavItem>
       </Link>
       <Link href="/myPage" passHref>
         <NavItem>
           {pathname === '/myPage' ? <MypageColorIcon /> : <MypageIcon />}
-          <NavBarText>마이페이지</NavBarText>
+          <NavBarText isActive={pathname === '/myPage'}>마이페이지</NavBarText>
         </NavItem>
       </Link>
     </Nav>

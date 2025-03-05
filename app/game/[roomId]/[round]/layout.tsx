@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import SoundOn from '@/styles/Icon/SoundOn.svg';
 import SoundOff from '@/styles/Icon/SoundOff.svg';
+import { useAudioStore } from '@/stores/useAudioStore';
 
 const InGameLayout = ({ children }: { children: React.ReactNode }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const { isPlaying, setIsPlaying } = useAudioStore();
 
   useEffect(() => {
     audioRef.current = new Audio('/music/InGameMusic.mp3');
@@ -50,9 +51,21 @@ const InGameLayout = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
+  // 오디오 상태가 변경될 때마다 실행
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current
+        .play()
+        .catch((err) => console.error('Audio Play Error:', err));
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
+
   const toggleMusic = () => {
     if (audioRef.current) {
-      console.log('Audio Paused Before:', audioRef.current.paused);
       if (audioRef.current.paused) {
         audioRef.current
           .play()
