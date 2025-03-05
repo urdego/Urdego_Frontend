@@ -13,7 +13,6 @@ import { useCharacterState } from '@/hooks/character/useCharacterState';
 import LoadingSpinner from '@/components/Common/LoadingSpinner/LoadingSpinner';
 import Link from 'next/link';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
-import useUserStore from '@/stores/useUserStore';
 import InviteNotificationToast from '@/components/Common/Toast/InviteNotificationToast';
 import {
   InviteWebSocketMessage,
