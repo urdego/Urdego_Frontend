@@ -114,14 +114,16 @@ const RoundRank = ({
       );
       router.push('/home');
     } else {
-      router.push(`/game/${roomId}/${currentRound + 1}`);
+      setTimeout(() => {
+        router.push(`/game/${roomId}/${currentRound + 1}`);
+      }, 2000);
     }
   }, [router, roomId, currentRound, isLast, sendMessage]);
 
   return (
     <PageWrapper>
       <TopBar NavType="game" label={`${currentRound} 라운드`} />
-      <Timer initialTime={10} onTimeEnd={handleNextRound} />
+      <Timer initialTime={15} onTimeEnd={handleNextRound} />
       <MapComponent
         mode="rank"
         answerCoordinate={roundResult?.answerCoordinate || null}
@@ -136,11 +138,11 @@ const RoundRank = ({
         handleToggle={handleToggle}
         initialActiveButton={isLast ? 'totalRound' : 'thisRound'}
         currentRound={currentRound}
-        isLast={isLast}
+        $isLast={isLast}
       />
       {isLast && (
         <Footer>
-          <CountdownButton initialTime={10} onTimeEnd={handleNextRound} />
+          <CountdownButton initialTime={15} onTimeEnd={handleNextRound} />
         </Footer>
       )}
     </PageWrapper>
