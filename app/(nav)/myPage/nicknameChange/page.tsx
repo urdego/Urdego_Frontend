@@ -16,7 +16,12 @@ const NicknameChangePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // AlertModal 관련 상태 추가
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  // 성공 여부에 따라 모달의 확인 동작을 다르게 처리하기 위한 상태
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
 
   // 컴포넌트 마운트 시 RoomTitleInput에 포커스 지정
   useEffect(() => {
@@ -29,7 +34,9 @@ const NicknameChangePage = () => {
 
   const handleChangeNickname = async () => {
     if (!userId) {
-      alert('사용자 정보가 없습니다.');
+      setModalTitle('사용자 정보가 없습니다.');
+      setIsSuccessModal(false);
+      setIsAlertModalOpen(true);
       return;
     }
 
@@ -50,11 +57,18 @@ const NicknameChangePage = () => {
 
       const data = await response.json();
       console.log('Nickname change response:', data);
+      // 스토어 업데이트
       setNicknameStore(nickname);
+      // 성공 시 모달에 성공 메시지 지정 후 모달 오픈
+      setModalTitle('닉네임 변경 처리가 완료되었습니다.');
+      setIsSuccessModal(true);
       setIsAlertModalOpen(true);
     } catch (error) {
       console.error('Error changing nickname:', error);
-      alert('닉네임 변경에 실패했습니다.');
+      // 실패 시 모달에 실패 메시지 지정 후 모달 오픈
+      setModalTitle('사용할 수 없거나 중복된 닉네임입니다.');
+      setIsSuccessModal(false);
+      setIsAlertModalOpen(true);
     } finally {
       setIsLoading(false);
     }
@@ -87,10 +101,12 @@ const NicknameChangePage = () => {
         onClose={() => setIsAlertModalOpen(false)}
         onConfirm={() => {
           setIsAlertModalOpen(false);
-          // 마이페이지로 이동
-          router.push('/myPage');
+          if (isSuccessModal) {
+            // 성공 시 마이페이지로 이동
+            router.push('/myPage');
+          }
         }}
-        title="닉네임 변경 처리가 완료되었습니다."
+        title={modalTitle}
         confirmOnly
       />
     </>
