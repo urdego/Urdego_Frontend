@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import useUserStore from '@/stores/useUserStore';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import {
@@ -19,13 +19,11 @@ import AlertModal from '@/components/Common/AlertModal/AlertModal';
 const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-
-  // 전역 상태에서 직접 데이터 가져오기
-  const email = useUserStore((state) => state.email);
-  const nickname = useUserStore((state) => state.nickname);
+  const { data: session } = useSession();
+  const email = session?.user?.email || '';
+  const nickname = session?.user?.nickname || '';
   const characterType = useUserStore((state) => state.characterType);
 
-  console.log(email, nickname, characterType);
   console.log('이메일: ', email);
   console.log('닉네임: ', nickname);
   console.log('캐릭터 타입: ', characterType);
