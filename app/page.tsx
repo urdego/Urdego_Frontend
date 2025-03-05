@@ -31,7 +31,7 @@ const OnBoarding = () => {
     swipeToSlide: true,
     beforeChange: (current: number, next: number) => {
       // 마지막 슬라이드에서 다음으로 넘기려 할 때
-      if (current === slides.length - 1) {
+      if (current === slides.length - 2) {
         router.push('/login');
       } else {
         setCurrentSlide(next);
@@ -63,6 +63,10 @@ const OnBoarding = () => {
       title: '장소를 상기하며 위치 추리',
       description: `추억을 나눈 사람 혹은 다른 사람들과
       즐겁게 추억을 되새겨보세요.`,
+    },
+    {
+      title: '',
+      description: '',
     },
   ];
 
