@@ -38,7 +38,7 @@ const getAppleToken = async (req?: AppleRequest) => {
 // Apple 토큰을 미리 생성
 const appleClientSecret = await getAppleToken();
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   debug: true, // 디버그 모드 활성화
   logger: {
     error: (code, metadata) => {
