@@ -12,29 +12,27 @@ import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const { data: session } = useSession();
-  const userId = useUserStore((state) => state.userId);
-  const nickname = useUserStore((state) => state.nickname);
-  const email = useUserStore((state) => state.email);
-  const { setEmail } = useUserStore();
+  const setNickname = useUserStore((state) => state.setNickname);
   const router = useRouter();
 
-  // store 값 변화 감지
   useEffect(() => {
-    console.log('로그인 페이지 - 유저 스토어 정보:', {
-      userId,
-      nickname,
-      email,
-    });
+    if (session?.user) {
+      // 세션에서 userId와 email을 사용
+      const userId = session.user.userId;
+      const email = session.user.email;
 
-    // 이메일 저장
-    if (session?.user?.email) {
-      setEmail(session.user.email);
-    }
-    // 로그인된 경우 /home으로 리다이렉션
-    if (session) {
+      // 스토어에 nickname 저장
+      if (session.user.nickname) {
+        setNickname(session.user.nickname);
+      }
+
+      console.log('로그인 시 세션 정보:', { userId, email });
+      console.log('로그인 시 스토어 닉네임:', session.user.nickname);
+
+      // 로그인된 경우 /home으로 리다이렉션
       router.push('/home');
     }
-  }, [userId, nickname, session, router, email, setEmail]);
+  }, [session, setNickname, router]);
 
   return (
     <LoginWrapper>

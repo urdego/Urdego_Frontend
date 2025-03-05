@@ -27,14 +27,15 @@ export const UserInfoWrapper = styled.div`
 
 export const BottomWrapper = styled.div`
   display: flex;
-  gap: 16px;
   padding-top: 12px;
+  width: 100%;
 `;
 
 export const PlaceRegister = styled.button`
   display: flex;
   height: 64px;
-  width: 100%;
+  width: calc(50% - 8px);
+  margin-right: 16px;
   padding: 8px 0;
   flex-direction: column;
   justify-content: center;
@@ -53,15 +54,14 @@ export const PlaceRegister = styled.button`
 
 export const CharacterSelect = styled.button`
   display: flex;
-  width: 100%;
   height: 64px;
+  width: calc(50% - 8px);
   padding: 8px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: none;
   border-radius: 8px;
-  border: none;
   background-color: ${colors.gray[95]};
   cursor: pointer;
   font-size: 16px;
@@ -71,6 +71,7 @@ export const CharacterSelect = styled.button`
   letter-spacing: -0.16px;
   color: ${colors.purple[50]};
 `;
+
 export const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);

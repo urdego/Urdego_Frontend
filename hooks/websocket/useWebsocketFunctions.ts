@@ -7,6 +7,7 @@ import {
   InviteWebSocketMessage,
   ErrorWebSocketMessage,
 } from '@/lib/types/notification';
+import { StompSubscription } from '@stomp/stompjs';
 
 type DestinationType = 'room' | 'game' | 'notification' | 'error';
 
@@ -14,6 +15,42 @@ export const useWebSocketFunctions = () => {
   const { client, isConnected } = useWebSocketStore();
   const [subscribedRoom, setSubscribedRoom] = useState<string | null>(null);
   const [subscribedError, setSubscribedError] = useState<string | null>(null);
+  const [subscriptions, setSubscriptions] = useState<{
+    [key: string]: StompSubscription;
+  }>({});
+
+  const unsubscribeFromRoom = (roomId: string) => {
+    console.log('구독 해제 시도:', roomId);
+    console.log('현재 구독 정보:', subscriptions);
+
+    if (!client || !isConnected) {
+      console.warn('WebSocket이 연결되지 않아 구독 해제 불가');
+      return;
+    }
+
+    if (!subscriptions[roomId]) {
+      console.log(`이미 구독 해제된 방입니다: ${roomId}`);
+      return;
+    }
+
+    try {
+      subscriptions[roomId].unsubscribe();
+
+      // 구독 정보 제거
+      const newSubscriptions = { ...subscriptions };
+      delete newSubscriptions[roomId];
+      setSubscriptions(newSubscriptions);
+
+      if (subscribedRoom === roomId) {
+        setSubscribedRoom(null);
+      }
+
+      console.log(`구독 해제 완료: ${roomId}`);
+      console.log('구독 해제 후 남은 구독 정보:', newSubscriptions);
+    } catch (error) {
+      console.error(`구독 해제 중 오류 발생: ${roomId}`, error);
+    }
+  };
 
   const subscribeToRoom = (
     roomId: string,
@@ -28,10 +65,16 @@ export const useWebSocketFunctions = () => {
       const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ROOM(roomId);
       console.log(`Subscribing to room: ${subscriptionPath}`);
 
-      client.subscribe(subscriptionPath, (message) => {
+      const subscription = client.subscribe(subscriptionPath, (message) => {
         console.log(`Message received in room ${roomId}:`, message.body);
         onMessageReceived(JSON.parse(message.body));
       });
+
+      // 구독 정보 저장
+      setSubscriptions((prev) => ({
+        ...prev,
+        [roomId]: subscription,
+      }));
 
       setSubscribedRoom(roomId);
     } else {
@@ -116,6 +159,7 @@ export const useWebSocketFunctions = () => {
 
   return {
     subscribeToRoom,
+    unsubscribeFromRoom,
     subscribeToNotification,
     subscribeToError,
     sendMessage,
