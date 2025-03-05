@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   WaitingWrapper,
   UserList,
@@ -26,7 +26,8 @@ const WaitingRoom = () => {
   const [isInviteVisible, setIsInviteVisible] = useState(false);
   const [showWaitingRoom, setShowWaitingRoom] = useState(false);
 
-  const { sendMessage, subscribeToRoom } = useWebSocketFunctions();
+  const { sendMessage, subscribeToRoom, unsubscribeFromRoom } =
+    useWebSocketFunctions();
   const { roomId, setGameId } = useGameStore();
   const { userId, nickname } = useUserStore();
 
@@ -153,6 +154,14 @@ const WaitingRoom = () => {
     }
   };
 
+  const handleExit = useCallback(() => {
+    // TODO: 방 나가기 Message 추가하기 (PLAYER_REMOVE)
+
+    // 구독 해제 후 홈으로 이동하는 로직
+    unsubscribeFromRoom(String(roomId));
+    router.push('/home');
+  }, [roomId, unsubscribeFromRoom, router]);
+
   return (
     <>
       {!showWaitingRoom ? (
@@ -161,7 +170,12 @@ const WaitingRoom = () => {
         </FullScreenImageWrapper>
       ) : (
         <>
-          <TopBar label={roomData.roomName} NavType="room" exitIcon />
+          <TopBar
+            label={roomData.roomName}
+            NavType="room"
+            exitIcon={true}
+            onExitClick={handleExit}
+          />
           <WaitingWrapper>
             <UserList>
               {users.map((user) => (

@@ -28,7 +28,6 @@ export const BottomSheetWrapper = styled.div`
 
 export const BottomSheetHeader = styled.div`
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
   background-color: white;
   flex-shrink: 0;
 `;

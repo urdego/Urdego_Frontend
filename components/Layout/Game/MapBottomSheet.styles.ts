@@ -6,7 +6,8 @@ export const StyledMotion = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 73vh;
+  height: fit-content;
+  max-height: 80vh;
   z-index: 6;
   touch-action: none;
   margin: 0 auto;
@@ -28,7 +29,6 @@ export const BottomSheetWrapper = styled.div`
 
 export const BottomSheetHeader = styled.div`
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
   background-color: white;
 `;
 
