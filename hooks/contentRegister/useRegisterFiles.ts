@@ -133,6 +133,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         );
       }
     } catch (error) {
+      console.error('Export Metadata Error:', error);
       if (error instanceof Error) {
         AlertToast({
           message: error.message,
