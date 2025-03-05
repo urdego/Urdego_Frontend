@@ -10,6 +10,7 @@ export const PButton = styled.button`
   border-radius: 8px;
   border: 1px solid ${colors.gray[80]};
   background-color: white;
+  color: ${colors.etc.black};
   cursor: pointer;
 
   &:disabled {
