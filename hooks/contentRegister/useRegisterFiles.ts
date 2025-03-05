@@ -123,7 +123,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
         // 도로명 주소 저장
         // 역지오코딩으로 도로명 주소 반환
-        handleReverseGeocoding({
+        await handleReverseGeocoding({
           index,
           latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
         });
