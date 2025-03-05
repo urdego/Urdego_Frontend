@@ -3,14 +3,13 @@ import ExifReader from 'exifreader';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import useLoadingStore from '@/stores/loadingStore';
 import AlertToast from '@/components/Common/Toast/AlertToast';
-import { Capacitor } from '@capacitor/core';
 
 interface useUploadFilesProps {
   index: number;
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput } = usePlaceRegisterStore();
+  const { setPlaceInput, initPlaceList } = usePlaceRegisterStore();
   const { setPreviewLoading } = useLoadingStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
@@ -22,18 +21,21 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       const fileList = validateUserUploadFile(e.target.files);
       if (!fileList) return;
 
+      // file, preview file, preview loading 초기화
+      setPlaceInput(index, 'file', new Array(fileList.length).fill([]));
+      setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: new Array(fileList.length).fill(true),
       });
-      setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
 
+      await exportMetadata(fileList);
       const compressedFileList = await compressFile(fileList);
-      await exportMetadata(compressedFileList);
       const previewURLs = await Promise.all(
         compressedFileList.map(readFileAsDataURL)
       );
 
+      // file, preview file, preview loading 설정 완료
       setPlaceInput(index, 'file', compressedFileList);
       setPlaceInput(index, 'previewFile', previewURLs);
       setPreviewLoading({
@@ -43,7 +45,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      setPlaceInput(index, 'previewFile', []);
+      if (error instanceof Error) {
+        AlertToast({ message: error.message });
+      }
+      initPlaceList(index);
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: [],
@@ -66,11 +71,9 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
-      AlertToast({ message: '업로드 가능한 용량을 초과했어요' });
       throw new Error('업로드 가능한 용량을 초과했어요');
     }
     if (!selectedFileList.every(isImageFile)) {
-      AlertToast({ message: '이미지만 업로드가 가능해요' });
       throw new Error('이미지만 업로드가 가능해요');
     }
 
@@ -96,71 +99,46 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   const isImageFile = (file: File) => {
     const filePath = file.name.split('.');
     const fileExtension = filePath[filePath.length - 1].toLocaleLowerCase();
-    const validExtensions = ['jpg', 'jpeg', 'png', 'webp', 'heic'];
+    const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
     return validExtensions.includes(fileExtension);
   };
 
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
-    let gps = null;
-    if (Capacitor.isNativePlatform()) {
-      console.log('ok');
-      const { Camera, CameraResultType, CameraSource } = await import(
-        '@capacitor/camera'
-      );
-      const image = await Camera.getPhoto({
-        quality: 90,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Photos,
-      });
-      if (!image.base64String) {
-        AlertToast({
-          message: '이미지 업로드에 실패했어요',
+    const gpsList = (
+      await Promise.all(
+        fileList.map(async (item) => {
+          const tags = await ExifReader.load(item, { expanded: true });
+          return tags.gps;
+        })
+      )
+    ).filter((item) => item !== undefined);
+    const gps = gpsList[0];
+
+    try {
+      if (gps) {
+        // 위경도 저장
+        setPlaceInput(index, 'lat', gps.Latitude as number);
+        setPlaceInput(index, 'lng', gps.Longitude as number);
+
+        // 도로명 주소 저장
+        // 역지오코딩으로 도로명 주소 반환
+        handleReverseGeocoding({
+          index,
+          latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
         });
-        return;
+      } else {
+        throw new Error(
+          '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!'
+        );
       }
-      const imageBuffer = base64ToArrayBuffer(image.base64String);
-      const tags = await ExifReader.load(imageBuffer, { expanded: true });
-      gps = tags.gps;
-    } else {
-      const gpsList = (
-        await Promise.all(
-          fileList.map(async (item) => {
-            const tags = await ExifReader.load(item, { expanded: true });
-            return tags.gps;
-          })
-        )
-      ).filter((item) => item !== undefined);
-      gps = gpsList[0];
+    } catch (error) {
+      if (error instanceof Error) {
+        AlertToast({
+          message: error.message,
+        });
+      }
     }
-
-    if (gps) {
-      // 위경도 저장
-      setPlaceInput(index, 'lat', gps.Latitude as number);
-      setPlaceInput(index, 'lng', gps.Longitude as number);
-
-      // 도로명 주소 저장
-      // 역지오코딩으로 도로명 주소 반환
-      handleReverseGeocoding({
-        index,
-        latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
-      });
-      return;
-    }
-    AlertToast({
-      message: '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!',
-    });
-  };
-
-  // 이미지 형식을 base64 > arrayBuffer로 변경
-  const base64ToArrayBuffer = (base64: string) => {
-    const binaryString = window.atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
-    }
-    console.log(bytes);
-    return bytes.buffer;
   };
 
   // 이미지 압축 로직
@@ -177,7 +155,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       });
 
       if (!response.ok) {
-        throw new Error('파일 압축 실패');
+        throw new Error('사진을 압축하는 것에 실패했어요');
       }
 
       const compressedBlob = await response.blob();
