@@ -7,22 +7,32 @@ import Image from 'next/image';
 import { LogoContainer, SocialButton } from './Login.styles';
 import KakaoLogin from '@/styles/Icon/Login/KakaoLogin.svg';
 import AppleLogin from '@/styles/Icon/Login/AppleLogin.svg';
+import useUserStore from '@/stores/useUserStore';
 import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const { data: session } = useSession();
-  const userId = session?.user?.userId;
-  const nickname = session?.user?.nickname;
-  const email = session?.user?.email;
+  const setNickname = useUserStore((state) => state.setNickname);
   const router = useRouter();
 
-  // store 값 변화 감지
   useEffect(() => {
-    // 로그인된 경우 /home으로 리다이렉션
-    if (session) {
+    if (session?.user) {
+      // 세션에서 userId와 email을 사용
+      const userId = session.user.userId;
+      const email = session.user.email;
+
+      // 스토어에 nickname 저장
+      if (session.user.nickname) {
+        setNickname(session.user.nickname);
+      }
+
+      console.log('로그인 시 세션 정보:', { userId, email });
+      console.log('로그인 시 스토어 닉네임:', session.user.nickname);
+
+      // 로그인된 경우 /home으로 리다이렉션
       router.push('/home');
     }
-  }, [userId, nickname, email, session, router]);
+  }, [session, setNickname, router]);
 
   return (
     <LoginWrapper>
