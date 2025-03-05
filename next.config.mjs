@@ -43,6 +43,12 @@ const nextConfig = {
     '@capacitor/camera',
     '@capacitor/filesystem',
   ],
+
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb', //bodySize 제한 설정
+    },
+  },
 };
 
 export default withPWA(nextConfig);
