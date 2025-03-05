@@ -7,6 +7,7 @@ import RoomTitleInput from '@layout/MakeRoom/RoomTitleInput';
 import Button from '@common/Button/Button';
 import { NicknameChangeWapper } from '@/app/(nav)/myPage/nicknameChange/nicknameChange.styles';
 import { useRouter } from 'next/navigation';
+import AlertModal from '@components/Common/AlertModal/AlertModal';
 
 const NicknameChangePage = () => {
   const { userId } = useUserStore();
@@ -15,6 +16,7 @@ const NicknameChangePage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
 
   // 컴포넌트 마운트 시 RoomTitleInput에 포커스 지정
   useEffect(() => {
@@ -37,9 +39,9 @@ const NicknameChangePage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'User-Id': userId.toString(), // userId를 헤더에 포함
+          'User-Id': userId.toString(),
         },
-        body: JSON.stringify({ newNickname: nickname }), // userId는 헤더로 보내므로 body에서는 닉네임만 전달
+        body: JSON.stringify({ newNickname: nickname }),
       });
 
       if (!response.ok) {
@@ -48,11 +50,8 @@ const NicknameChangePage = () => {
 
       const data = await response.json();
       console.log('Nickname change response:', data);
-      // Zustand 스토어의 nickname 업데이트
       setNicknameStore(nickname);
-      alert('닉네임이 성공적으로 변경되었습니다!');
-      // 마이페이지로 이동
-      router.push('/myPage');
+      setIsAlertModalOpen(true);
     } catch (error) {
       console.error('Error changing nickname:', error);
       alert('닉네임 변경에 실패했습니다.');
@@ -83,6 +82,17 @@ const NicknameChangePage = () => {
           onClick={handleChangeNickname}
         />
       </NicknameChangeWapper>
+      <AlertModal
+        isOpen={isAlertModalOpen}
+        onClose={() => setIsAlertModalOpen(false)}
+        onConfirm={() => {
+          setIsAlertModalOpen(false);
+          // 마이페이지로 이동
+          router.push('/myPage');
+        }}
+        title="회원 탈퇴 처리가 완료되었습니다."
+        confirmOnly
+      />
     </>
   );
 };
