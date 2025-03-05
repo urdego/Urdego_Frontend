@@ -19,6 +19,7 @@ import {
   InviteWebSocketMessage,
   ErrorWebSocketMessage,
 } from '@/lib/types/notification';
+import { useSession } from 'next-auth/react';
 import useGameStore from '@/stores/useGameStore';
 
 const Home = () => {
@@ -35,7 +36,8 @@ const Home = () => {
   /* notification, room, error 구독 */
   const { subscribeToNotification, subscribeToError } = useWebSocketFunctions();
   /* 사용자 정보 가져오기 */
-  const { userId } = useUserStore();
+  const { data: session } = useSession();
+  const userId = session?.user?.userId;
   /* notification 상태관리 */
   const [notification, setNotification] =
     useState<InviteWebSocketMessage | null>(null);
@@ -51,7 +53,7 @@ const Home = () => {
 
   // 구독 등록용 useEffect
   useEffect(() => {
-    if (!isConnected || hasSubscribed.current) return;
+    if (!isConnected || hasSubscribed.current || !userId) return;
 
     hasSubscribed.current = true;
     subscribeToNotification(userId, (message: InviteWebSocketMessage) => {
