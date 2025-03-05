@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import useUserStore from '@/stores/useUserStore';
@@ -19,47 +19,20 @@ import AlertModal from '@/components/Common/AlertModal/AlertModal';
 const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    email: '',
-    nickname: '',
-    activeCharacter: '',
-  });
 
-  const userId = useUserStore((state) => state.userId);
+  // 전역 상태에서 직접 데이터 가져오기
   const email = useUserStore((state) => state.email);
+  const nickname = useUserStore((state) => state.nickname);
   const characterType = useUserStore((state) => state.characterType);
 
-  console.log('email 마이페이지에서 확인:', email);
-  console.log('characterType 마이페이지에서 확인:', characterType);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (!userId) return;
-
-      try {
-        const response = await fetch(`/api/userInfo`, {
-          headers: {
-            'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUserInfo(data); // 유저 데이터 설정
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      }
-    };
-
-    fetchUserInfo();
-  }, [userId]);
+  console.log(email, nickname, characterType);
+  console.log('이메일: ', email);
+  console.log('닉네임: ', nickname);
+  console.log('캐릭터 타입: ', characterType);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(false);
-    await signOut({ callbackUrl: '/' }); // 로그아웃 후 홈으로 리디렉션
+    await signOut({ callbackUrl: '/' });
   };
 
   return (
@@ -68,11 +41,10 @@ const MyPage = () => {
       <MyPageWrapper>
         <ProfileWrapper>
           <ProfileInfo
-            email={userInfo.email || email}
-            nickname={userInfo.nickname}
-            activeCharacter={userInfo.activeCharacter || characterType}
+            email={email}
+            nickname={nickname}
+            activeCharacter={characterType}
           />
-
           <SmallButtonWrapper>
             <ProfileButton
               onClick={() => router.push('/myPage/nicknameChange')}
@@ -82,10 +54,6 @@ const MyPage = () => {
           </SmallButtonWrapper>
         </ProfileWrapper>
         <Separator />
-        <SettingButton
-          label="사운드 설정"
-          onClick={() => router.push('/myPage/soundSetting')}
-        />
         <SettingButton
           label="로그아웃"
           onClick={() => setIsLogoutModalOpen(true)}

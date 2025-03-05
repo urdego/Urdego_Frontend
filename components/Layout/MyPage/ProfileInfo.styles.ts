@@ -6,13 +6,11 @@ export const ProfileInfoWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px; /* 프로필과 버튼 간 간격 */
+  margin-bottom: 20px;
 `;
 
 export const ImageWrapper = styled.div`
-  margin-bottom: 12px; /* 이미지와 이름/이메일 간 간격 */
-  background-color: ${colors.gray[80]};
-  border-radius: 50%;
+  margin-bottom: 12px;
   width: 56px;
   height: 56px;
   display: flex;
@@ -20,9 +18,15 @@ export const ImageWrapper = styled.div`
   justify-content: center;
 `;
 
+export const InfoRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+`;
+
 export const ProfileName = styled.div`
   font-size: 14px;
-  margin-bottom: 4px; /* 이름과 이메일 간 간격 */
   font-weight: bold;
   text-align: center;
 `;
@@ -31,4 +35,16 @@ export const ProfileEmail = styled.div`
   font-size: 12px;
   color: ${colors.gray[60]};
   text-align: center;
+`;
+
+export const Level = styled.div`
+  font-size: 12px;
+  font-weight: 400;
+  color: ${colors.purple[50]};
+  border-radius: 4px;
+  background: ${colors.purple[95]};
+  height: 20px;
+  padding: 0 10px;
+  text-align: center;
+  line-height: 20px;
 `;

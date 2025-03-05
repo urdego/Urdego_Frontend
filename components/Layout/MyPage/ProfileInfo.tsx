@@ -1,12 +1,14 @@
 import {
   ProfileInfoWrapper,
   ImageWrapper,
+  InfoRow,
   ProfileName,
   ProfileEmail,
+  Level,
 } from '@/components/Layout/MyPage/ProfileInfo.styles';
-
-import ProfileImg from '@/styles/Icon/Profile_Snowman1.svg';
 import Image from 'next/image';
+import useCharacterData from '@/hooks/character/useCharacterData';
+import { useCharacterState } from '@/hooks/character/useCharacterState';
 
 interface ProfileInfoProps {
   email: string;
@@ -19,14 +21,31 @@ const ProfileInfo = ({
   nickname,
   activeCharacter,
 }: ProfileInfoProps) => {
+  const characters = useCharacterData({ ownCharacters: [activeCharacter] });
+  const activeCharacterData = characters.find(
+    (character) => character.key === activeCharacter
+  );
+  const { level } = useCharacterState();
+
   return (
     <ProfileInfoWrapper>
       <ImageWrapper>
-        <Image src={ProfileImg} width={56} height={56} alt="Profile Image" />
+        {activeCharacterData ? (
+          <Image
+            src={activeCharacterData.displayImage.src}
+            width={activeCharacterData.displayImage.width}
+            height={activeCharacterData.displayImage.height}
+            alt={`${activeCharacter} 이미지`}
+          />
+        ) : (
+          'no character'
+        )}
       </ImageWrapper>
-      <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+      <InfoRow>
+        <Level>Lv.{level}</Level>
+        <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
+      </InfoRow>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
-      <div>{activeCharacter || '캐릭터 타입 없음'}</div>
     </ProfileInfoWrapper>
   );
 };

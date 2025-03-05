@@ -7,7 +7,7 @@ export const PButton = styled.button`
   font-size: 12px;
   font-weight: 700;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 8px;
   border: 1px solid ${colors.gray[80]};
   background-color: white;
   cursor: pointer;
