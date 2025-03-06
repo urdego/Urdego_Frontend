@@ -6,12 +6,12 @@ export const StyledMotion = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: fit-content;
-  max-height: 80vh;
-  z-index: 6;
+  height: 80vh;
+  z-index: 500;
   touch-action: none;
   margin: 0 auto;
   max-width: 430px;
+  pointer-events: auto;
 
   & > div {
     height: 100%;
@@ -47,11 +47,14 @@ export const BottomSheetFooter = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 16px;
-  font-weight: 700;
   text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.16px;
 `;
 
 export const MapContainer = styled.div`
-  padding: 16px;
+  padding: 0 16px 16px 16px;
 `;
