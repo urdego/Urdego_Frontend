@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import useUserStore from '@/stores/useUserStore';
+import { signOut, useSession } from 'next-auth/react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import {
   MyPageWrapper,
@@ -20,15 +19,51 @@ const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  // 전역 상태에서 직접 데이터 가져오기
-  const email = useUserStore((state) => state.email);
-  const nickname = useUserStore((state) => state.nickname);
-  const characterType = useUserStore((state) => state.characterType);
+  // NextAuth 세션 훅
+  const { data: session } = useSession();
+  // 세션에서 userId 추출
+  const userId = session?.user?.userId;
 
-  console.log(email, nickname, characterType);
-  console.log('이메일: ', email);
-  console.log('닉네임: ', nickname);
-  console.log('캐릭터 타입: ', characterType);
+  const [userData, setUserData] = useState({
+    email: '',
+    nickname: '',
+    activeCharacter: '',
+    level: 0,
+    exp: 0,
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userId) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/userInfo`, {
+          headers: {
+            'User-Id': String(userId), // 문자열 변환
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('유저 데이터를 불러오는데 실패했습니다.');
+        }
+
+        const data = await response.json();
+        setUserData({
+          email: data.email,
+          nickname: data.nickname,
+          activeCharacter: data.activeCharacter,
+          level: data.level,
+          exp: data.exp,
+        });
+      } catch (error) {
+        console.error('유저 데이터 fetch 에러:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(false);
@@ -41,9 +76,9 @@ const MyPage = () => {
       <MyPageWrapper>
         <ProfileWrapper>
           <ProfileInfo
-            email={email}
-            nickname={nickname}
-            activeCharacter={characterType}
+            email={userData.email}
+            nickname={userData.nickname}
+            activeCharacter={userData.activeCharacter}
           />
           <SmallButtonWrapper>
             <ProfileButton

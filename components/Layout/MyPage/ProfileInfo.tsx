@@ -42,7 +42,7 @@ const ProfileInfo = ({
         )}
       </ImageWrapper>
       <InfoRow>
-        <Level>Lv.{level}</Level>
+        <Level>Lvl.{level}</Level>
         <ProfileName>{nickname || '닉네임 없음'}</ProfileName>
       </InfoRow>
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
