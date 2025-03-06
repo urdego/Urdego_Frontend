@@ -36,6 +36,7 @@ export const NavBarText = styled.div<{ isActive: boolean }>`
   line-height: 150%; /* 18px */
   letter-spacing: -0.12px;
   text-align: center;
+  width: 60px;
   color: ${({ isActive }) => (isActive ? colors.purple[50] : colors.gray[70])};
 `;
 
@@ -46,6 +47,7 @@ export const NavItem = styled.div`
   padding: 12px 0px 14px 0px;
   gap: 4px;
   flex: 1;
+  text-align: center;
 
   &:hover ${IconPlaceholder} {
     background-color: #e0e0e0;
