@@ -43,9 +43,18 @@ const RoundRank = ({
   );
   const [currentRoundData, setCurrentRoundData] = useState<
     'thisRound' | 'totalRound'
-  >(!isLast ? 'totalRound' : 'thisRound');
+  >(isLast ? 'totalRound' : 'thisRound');
   const hasSubscribed = useRef(false);
   const hasSentMessages = useRef(false);
+  const [rankData, setRankData] = useState<
+    {
+      rank: number;
+      userId: number;
+      nickname: string;
+      score: number;
+      activeCharacter: string;
+    }[]
+  >([]);
 
   useEffect(() => {
     if (!hasSubscribed.current) {
@@ -84,23 +93,33 @@ const RoundRank = ({
     }
   }, [roomId, currentRound, questionId, sendMessage]);
 
-  const rankData =
-    !scoreData?.roundScore && !scoreData?.totalScore
-      ? []
-      : (scoreData?.roundScore || [])
-          .map((coord) => ({
-            rank: coord.rank,
-            userId: coord.userId,
-            nickname: coord.nickname,
-            score:
-              currentRoundData === 'thisRound'
-                ? coord.score
-                : scoreData?.totalScore.find(
-                    (item) => item.userId === coord.userId
-                  )?.score || 0,
-            activeCharacter: coord.characterType,
-          }))
-          .sort((a, b) => b.score - a.score);
+  useEffect(() => {
+    if (isLast) {
+      setCurrentRoundData('totalRound');
+    }
+  }, [isLast]);
+
+  useEffect(() => {
+    const updatedRankData =
+      !scoreData?.roundScore && !scoreData?.totalScore
+        ? []
+        : (scoreData?.roundScore || [])
+            .map((coord) => ({
+              rank: coord.rank,
+              userId: coord.userId,
+              nickname: coord.nickname,
+              score:
+                currentRoundData === 'thisRound'
+                  ? coord.score
+                  : scoreData?.totalScore.find(
+                      (item) => item.userId === coord.userId
+                    )?.score || 0,
+              activeCharacter: coord.characterType,
+            }))
+            .sort((a, b) => b.score - a.score);
+
+    setRankData(updatedRankData);
+  }, [scoreData, currentRoundData]);
 
   const handleToggle = (round: 'thisRound' | 'totalRound') => {
     setCurrentRoundData(round);
