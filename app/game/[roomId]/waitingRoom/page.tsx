@@ -49,11 +49,13 @@ const WaitingRoom = () => {
   // 일반 플레이어가 준비를 누른 후 다시 누르지 못하도록 잠금
   const [readyLocked, setReadyLocked] = useState(false);
   const hasJoined = useRef(false);
+  // 구독 해제 후 재구독을 막기 위한 flag
+  const isLeaving = useRef(false);
   const router = useRouter();
 
   // ✅ WebSocket 구독 및 메시지 처리
   useEffect(() => {
-    if (roomId) {
+    if (roomId && !isLeaving.current) {
       subscribeToRoom(String(roomId), (message) => {
         console.log(
           `📩 WaitingRoom에서 WebSocket 메시지 수신 (Room: ${roomId}):`,
@@ -94,7 +96,7 @@ const WaitingRoom = () => {
     }
   }, [roomId, subscribeToRoom, sendMessage, userId, setGameId, router]);
 
-  // ✅ 상태 업데이트 확인 (디버깅용)
+  // 상태 업데이트 확인 (디버깅용)
   useEffect(() => {
     console.log('roomData 상태 변경:', roomData);
   }, [roomData]);
@@ -146,7 +148,6 @@ const WaitingRoom = () => {
       return;
     }
 
-    // 일반 플레이어의 경우
     if (!myIsReady) {
       setMyIsReady(true);
       setReadyLocked(true);
@@ -156,11 +157,12 @@ const WaitingRoom = () => {
 
   // 방 나가기 시 구독 해제 후 홈으로 이동
   const handleExit = useCallback(() => {
+    isLeaving.current = true;
     unsubscribeFromRoom(String(roomId));
     router.push('/home');
   }, [roomId, unsubscribeFromRoom, router]);
 
-  // 추가: 빈 카드가 disabled 되어야 하는 조건 (방장을 제외한 모든 플레이어가 준비완료 & 초대 모달이 닫힌 경우)
+  // 빈 카드가 disabled 되어야 하는 조건 (방장을 제외한 모든 플레이어가 준비완료 & 초대 모달이 닫힌 경우)
   const shouldDisableEmptyCard =
     roomData.allReady &&
     !isInviteVisible &&
