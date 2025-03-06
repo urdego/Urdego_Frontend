@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import {
   BackgroundOverlay,
@@ -28,11 +28,19 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
   const [isExpand, setIsExpand] = useState(false);
   const [searchWord, setSearchWord] = useState('');
   const [users, setUsers] = useState<IUser[]>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // 웹소켓, 사용자, 방 정보를 가져옵니다.
   const { sendMessage } = useWebSocketFunctions();
   const { userId: senderId, nickname: senderNickname } = useUserStore();
   const { roomId } = useGameStore();
+
+  // InviteUser가 열릴 때 SearchBar에 포커스
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   // 검색어가 변경될 때마다 API 호출하여 사용자 목록을 가져옵니다.
   useEffect(() => {
@@ -61,7 +69,6 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
     fetchUsers();
   }, [searchWord]);
 
-  // 초대 상태 토글 + 초대 시 소켓으로 알림 전송
   const handleInvite = (targetId: number, targetNickname: string) => {
     const targetUser = users.find((u) => u.userId === targetId);
     if (!targetUser) return;
@@ -73,7 +80,6 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
       )
     );
 
-    // invited 가 true로 바뀔 때만 소켓 전송
     if (newInvited) {
       sendMessage(
         'INVITE_PLAYER',
@@ -84,14 +90,13 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
           senderNickname: senderNickname,
           targetId: Number(targetId),
           targetNickname: targetNickname,
-          action: 'INVITE', // ★ 명세서 예시에 따른 고정 값
+          action: 'INVITE',
         },
         'notification'
       );
     }
   };
 
-  // 백그라운드 클릭 시 BottomSheet 닫기
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       setInviteVisible(false);
@@ -127,6 +132,7 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
           <SearchBarWrapper>
             <Image src={SearchIcon} alt="search-icon" width={24} height={24} />
             <SearchBar
+              ref={searchInputRef}
               placeholder="검색"
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
