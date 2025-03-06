@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import useUserStore from '@/stores/useUserStore';
+import { signOut, useSession } from 'next-auth/react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import {
   MyPageWrapper,
@@ -19,47 +18,56 @@ import AlertModal from '@/components/Common/AlertModal/AlertModal';
 const MyPage = () => {
   const router = useRouter();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({
+
+  // NextAuth 세션 훅
+  const { data: session } = useSession();
+  // 세션에서 userId 추출
+  const userId = session?.user?.userId;
+
+  const [userData, setUserData] = useState({
     email: '',
     nickname: '',
     activeCharacter: '',
+    level: 0,
+    exp: 0,
   });
 
-  const userId = useUserStore((state) => state.userId);
-  const email = useUserStore((state) => state.email);
-  const characterType = useUserStore((state) => state.characterType);
-
-  console.log('email 마이페이지에서 확인:', email);
-  console.log('characterType 마이페이지에서 확인:', characterType);
-
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (!userId) return;
+    const fetchUserData = async () => {
+      if (!userId) {
+        return;
+      }
 
       try {
         const response = await fetch(`/api/userInfo`, {
           headers: {
-            'User-Id': userId.toString(), // ✅ 변경: userId를 헤더에 포함
+            'User-Id': String(userId), // 문자열 변환
           },
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user data');
+          throw new Error('유저 데이터를 불러오는데 실패했습니다.');
         }
 
         const data = await response.json();
-        setUserInfo(data); // 유저 데이터 설정
+        setUserData({
+          email: data.email,
+          nickname: data.nickname,
+          activeCharacter: data.activeCharacter,
+          level: data.level,
+          exp: data.exp,
+        });
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error('유저 데이터 fetch 에러:', error);
       }
     };
 
-    fetchUserInfo();
+    fetchUserData();
   }, [userId]);
 
   const handleLogout = async () => {
     setIsLogoutModalOpen(false);
-    await signOut({ callbackUrl: '/' }); // 로그아웃 후 홈으로 리디렉션
+    await signOut({ callbackUrl: '/' });
   };
 
   return (
@@ -68,11 +76,10 @@ const MyPage = () => {
       <MyPageWrapper>
         <ProfileWrapper>
           <ProfileInfo
-            email={userInfo.email || email}
-            nickname={userInfo.nickname}
-            activeCharacter={userInfo.activeCharacter || characterType}
+            email={userData.email}
+            nickname={userData.nickname}
+            activeCharacter={userData.activeCharacter}
           />
-
           <SmallButtonWrapper>
             <ProfileButton
               onClick={() => router.push('/myPage/nicknameChange')}
@@ -82,10 +89,6 @@ const MyPage = () => {
           </SmallButtonWrapper>
         </ProfileWrapper>
         <Separator />
-        <SettingButton
-          label="사운드 설정"
-          onClick={() => router.push('/myPage/soundSetting')}
-        />
         <SettingButton
           label="로그아웃"
           onClick={() => setIsLogoutModalOpen(true)}

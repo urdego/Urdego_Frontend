@@ -106,7 +106,7 @@ const RankList = ({
           <UserRow key={user.userId}>
             {getRankDisplay(user.rank)}
             <Image
-              src={`/Character/${user.activeCharacter}.png`}
+              src={`/Character/${user.activeCharacter.toLowerCase()}.png`}
               alt={`${user.nickname}의 프로필 이미지`}
               width={32}
               height={32}
