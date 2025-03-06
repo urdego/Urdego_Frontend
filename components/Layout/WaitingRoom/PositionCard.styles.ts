@@ -33,7 +33,7 @@ export const Card = styled.div<{ $isEmpty?: boolean }>`
 `;
 
 export const Level = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   color: ${colors.purple[50]};

@@ -40,7 +40,7 @@ const PositionCard = ({
     <Card $isEmpty={isEmpty} onClick={isEmpty ? onClick : undefined}>
       {!isEmpty ? (
         <>
-          <Level>Lv.{level}</Level>
+          <Level>Lvl.{level}</Level>
           <Username>{username}</Username>
           <Character>
             {selectedCharacter ? (
