@@ -28,7 +28,7 @@ const NavBar = () => {
             <HomeIcon />
           )}
           <NavBarText
-            isActive={pathname === '/home' || pathname === '/waitingRoomList'}
+            $isActive={pathname === '/home' || pathname === '/waitingRoomList'}
           >
             홈
           </NavBarText>
@@ -37,7 +37,7 @@ const NavBar = () => {
       <Link href="/content/register" passHref>
         <NavItem>
           {pathname === '/content/register' ? <MapColorIcon /> : <MapIcon />}
-          <NavBarText isActive={pathname === '/content/register'}>
+          <NavBarText $isActive={pathname === '/content/register'}>
             장소등록
           </NavBarText>
         </NavItem>
@@ -45,7 +45,7 @@ const NavBar = () => {
       <Link href="/myPage" passHref>
         <NavItem>
           {pathname === '/myPage' ? <MypageColorIcon /> : <MypageIcon />}
-          <NavBarText isActive={pathname === '/myPage'}>마이페이지</NavBarText>
+          <NavBarText $isActive={pathname === '/myPage'}>마이페이지</NavBarText>
         </NavItem>
       </Link>
     </Nav>
