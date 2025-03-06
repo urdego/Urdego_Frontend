@@ -92,7 +92,7 @@ const WaitingRoom = () => {
         hasJoined.current = true;
       }
     }
-  }, []);
+  }, [roomId, subscribeToRoom, sendMessage, userId, setGameId, router]);
 
   // ✅ 상태 업데이트 확인 (디버깅용)
   useEffect(() => {
@@ -154,10 +154,8 @@ const WaitingRoom = () => {
     }
   };
 
+  // 방 나가기 시 구독 해제 후 홈으로 이동
   const handleExit = useCallback(() => {
-    // TODO: 방 나가기 Message 추가하기 (PLAYER_REMOVE)
-
-    // 구독 해제 후 홈으로 이동하는 로직
     unsubscribeFromRoom(String(roomId));
     router.push('/home');
   }, [roomId, unsubscribeFromRoom, router]);
