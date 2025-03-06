@@ -63,6 +63,6 @@ export const Participant = styled.div`
   background: rgba(118, 119, 119, 0.5);
   backdrop-filter: blur(2px);
 
-  padding-left: 7.5px;
+  padding-left: 6px;
   padding-right: 6px;
 `;
