@@ -18,6 +18,7 @@ interface PositionCardProps {
   isReady?: boolean;
   isEmpty?: boolean;
   onClick?: () => void;
+  isDisabled?: boolean;
 }
 
 const PositionCard = ({
@@ -28,16 +29,19 @@ const PositionCard = ({
   isReady = false,
   isEmpty = false,
   onClick,
+  isDisabled = false,
 }: PositionCardProps) => {
-  // useCharacterData 훅을 사용하여 해당 캐릭터의 이미지 정보를 가져옴
-  // activeCharacter를 보유 캐릭터 리스트에 전달하여 true인 경우 실제 캐릭터 이미지를, 그렇지 않으면 LockIcon 이미지를 반환
   const characterData = useCharacterData({ ownCharacters: [activeCharacter] });
   const selectedCharacter = characterData.find(
     (character) => character.key === activeCharacter
   );
 
   return (
-    <Card $isEmpty={isEmpty} onClick={isEmpty ? onClick : undefined}>
+    <Card
+      $isEmpty={isEmpty}
+      $isDisabled={isDisabled}
+      onClick={isEmpty && !isDisabled ? onClick : undefined}
+    >
       {!isEmpty ? (
         <>
           <Level>Lvl.{level}</Level>
@@ -61,7 +65,7 @@ const PositionCard = ({
           )}
         </>
       ) : (
-        <EmptyCardIcon />
+        !isDisabled && <EmptyCardIcon />
       )}
     </Card>
   );

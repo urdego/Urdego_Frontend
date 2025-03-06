@@ -162,6 +162,12 @@ const WaitingRoom = () => {
     router.push('/home');
   }, [roomId, unsubscribeFromRoom, router]);
 
+  // 추가: 빈 카드가 disabled 되어야 하는 조건 (방장을 제외한 모든 플레이어가 준비완료 & 초대 모달이 닫힌 경우)
+  const shouldDisableEmptyCard =
+    roomData.allReady &&
+    !isInviteVisible &&
+    (roomData.currentPlayers?.length ?? 0) >= 2;
+
   return (
     <>
       {!showWaitingRoom ? (
@@ -193,7 +199,12 @@ const WaitingRoom = () => {
                   <PositionCard
                     key={`empty-${index}`}
                     isEmpty={true}
-                    onClick={() => setIsInviteVisible(true)}
+                    isDisabled={shouldDisableEmptyCard}
+                    onClick={
+                      shouldDisableEmptyCard
+                        ? undefined
+                        : () => setIsInviteVisible(true)
+                    }
                   />
                 )
               )}
