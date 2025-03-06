@@ -43,11 +43,11 @@ const nextConfig = {
     '@capacitor/camera',
     '@capacitor/filesystem',
   ],
-
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb', //bodySize 제한 설정
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
     },
+    responseLimit: '10mb',
   },
 };
 
