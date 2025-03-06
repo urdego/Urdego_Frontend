@@ -11,6 +11,7 @@ export const PlaceInputWrapper = styled.div`
 `;
 
 export const ContentInput = styled.input`
+  height: 24px;
   border: none;
   outline: none;
   font-size: 16px;

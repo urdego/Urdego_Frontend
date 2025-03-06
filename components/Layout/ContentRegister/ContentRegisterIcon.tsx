@@ -24,4 +24,6 @@ export const GalleryIcon = () => (
   <Image src={GalleryIconSrc} alt="Gallery Icon" />
 );
 
-export const SearchIcon = () => <Image src={SearchIconSrc} alt="Search Icon" />;
+export const SearchIcon = () => (
+  <Image src={SearchIconSrc} alt="Search Icon" width={24} height={24} />
+);
