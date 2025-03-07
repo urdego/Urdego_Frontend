@@ -30,7 +30,7 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
   handleSubmitAnswer,
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [isDraggable, setIsDraggable] = useState(false); // 기본적으로 드래그 비활성화
+  const [isDraggable, setIsDraggable] = useState(false);
 
   const handleDragEnd = (event: TouchEvent | MouseEvent, info: PanInfo) => {
     const shouldClose =
@@ -40,22 +40,21 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
     }
   };
 
-  // 바텀시트 외부 클릭 시 닫히도록 처리
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (mapRef.current && !mapRef.current.contains(event.target as Node)) {
-        onClose(); // 바텀시트 외부를 클릭하면 닫기
+        onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside); // 마운트 시 이벤트 리스너 추가
+      document.addEventListener('mousedown', handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside); // 언마운트 시 이벤트 리스너 제거
+      document.removeEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside); // cleanup
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose]);
 
@@ -68,21 +67,23 @@ const MapBottomSheet: React.FC<MapBottomSheetProps> = ({
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.2}
       dragMomentum={false}
-      dragListener={isDraggable} // 지도 드래그 중에는 바텀시트 드래그 비활성화
+      dragListener={isDraggable}
       onDragEnd={handleDragEnd}
     >
       <BottomSheetWrapper>
-        <BottomSheetHeader>
+        <BottomSheetHeader
+          onTouchStart={() => setIsDraggable(true)}
+          onTouchEnd={() => setIsDraggable(false)}
+        >
           <DragHandle />
           <Title>위치를 선택해주세요</Title>
         </BottomSheetHeader>
 
-        {/* 지도 내부 드래그 중에는 바텀시트가 움직이지 않도록 이벤트 차단 */}
         <MapContainer
           ref={mapRef}
-          onTouchStart={() => setIsDraggable(false)} // 지도 터치 시 드래그 비활성화
-          onTouchEnd={() => setIsDraggable(true)} // 지도에서 손을 떼면 다시 드래그 활성화
-          onTouchMove={(e) => e.stopPropagation()} // 이벤트 전파 차단
+          onTouchStart={() => setIsDraggable(false)}
+          onTouchEnd={() => setIsDraggable(false)}
+          onTouchMove={(e) => e.stopPropagation()}
         >
           <MapComponent
             mode="game"

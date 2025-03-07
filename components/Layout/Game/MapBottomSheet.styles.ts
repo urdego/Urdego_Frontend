@@ -6,12 +6,12 @@ export const StyledMotion = styled(motion.div)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: fit-content;
-  max-height: 80vh;
-  z-index: 6;
+  height: 80vh;
+  z-index: 500;
   touch-action: none;
   margin: 0 auto;
   max-width: 430px;
+  pointer-events: auto;
 
   & > div {
     height: 100%;
@@ -25,11 +25,28 @@ export const BottomSheetWrapper = styled.div`
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const BottomSheetHeader = styled.div`
   padding: 12px 16px;
   background-color: white;
+  flex-shrink: 0;
+`;
+
+export const MapContainer = styled.div`
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  padding: 0 16px 16px 16px;
+`;
+
+export const BottomSheetFooter = styled.div`
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
 `;
 
 export const DragHandle = styled.div`
@@ -40,18 +57,11 @@ export const DragHandle = styled.div`
   margin: 0 auto 12px;
 `;
 
-export const BottomSheetFooter = styled.div`
-  padding: 16px;
-  background-color: white;
-  border-top: 1px solid #eee;
-`;
-
 export const Title = styled.div`
-  font-size: 16px;
-  font-weight: 700;
   text-align: center;
-`;
-
-export const MapContainer = styled.div`
-  padding: 16px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.16px;
 `;
