@@ -27,6 +27,7 @@ const ContentRegisterBottomSheet = ({
       lat: 0,
       lng: 0,
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [registeredMarkerPosition, setRegisterdMarkerPosition] =
     useState<google.maps.LatLngLiteral>({
       lat: 0,
