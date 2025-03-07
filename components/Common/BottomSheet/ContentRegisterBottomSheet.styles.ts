@@ -16,7 +16,7 @@ export const ContentHeader = styled.div`
 `;
 
 export const ButtonLayout = styled.div`
-  position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;

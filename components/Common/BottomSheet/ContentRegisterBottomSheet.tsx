@@ -27,12 +27,18 @@ const ContentRegisterBottomSheet = ({
       lat: 0,
       lng: 0,
     });
+  const [registeredMarkerPosition, setRegisterdMarkerPosition] =
+    useState<google.maps.LatLngLiteral>({
+      lat: 0,
+      lng: 0,
+    }); //TODO: 기존 위치 유지하는 로직 구현
   const { handleReverseGeocoding } = useConvertLocationToAddress();
   const { setPlaceInput } = usePlaceRegisterStore();
 
   const handleCancellation = () => {
     setMarkerPosition({ lat: 0, lng: 0 });
     setIsOpen(false);
+    setIsLocationSelected(false);
   };
 
   const handleSelection = () => {
@@ -49,16 +55,6 @@ const ContentRegisterBottomSheet = ({
       setIsLocationSelected(true);
     }
   }, [markerPosition]);
-
-  useEffect(() => {
-    if (
-      isOpen === false &&
-      markerPosition.lat == 0 &&
-      markerPosition.lng == 0
-    ) {
-      setIsLocationSelected(false);
-    }
-  }, [isOpen]);
 
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} initHeight="long">
