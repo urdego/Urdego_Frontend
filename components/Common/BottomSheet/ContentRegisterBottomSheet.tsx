@@ -19,7 +19,10 @@ const ContentRegisterBottomSheet = ({
   setIsOpen,
 }: LocationRegisterBottomSheetProps) => {
   const [isLocationSelected, setIsLocationSelected] = useState(false);
-
+  const handleCancellation = () => {
+    setIsLocationSelected(false);
+    setIsOpen(false);
+  };
   return (
     <BottomSheet isOpen={isOpen} setIsOpen={setIsOpen} initHeight="long">
       <LocationRegisterWrapper>
@@ -34,7 +37,7 @@ const ContentRegisterBottomSheet = ({
             buttonType={isLocationSelected ? 'purple' : 'gray'}
             styleType="whiteBackground"
             label="취소"
-            onClick={() => setIsLocationSelected(false)}
+            onClick={handleCancellation}
           />
           <Button
             buttonType={isLocationSelected ? 'purple' : 'gray'}
