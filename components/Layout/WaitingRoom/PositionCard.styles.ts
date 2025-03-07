@@ -1,26 +1,33 @@
 import colors from '@styles/color/palette';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import AddIcon from '@/styles/Icon/Game/Add';
-import { css } from 'styled-components';
 
-export const Card = styled.div<{ $isEmpty?: boolean }>`
+export const Card = styled.div<{ $isEmpty?: boolean; $isDisabled?: boolean }>`
   width: 104px;
   min-height: 172px;
-  background-color: ${({ $isEmpty }) =>
-    $isEmpty ? colors.etc.emptyCard : colors.etc.card};
+  background-color: ${({ $isEmpty, $isDisabled }) =>
+    $isEmpty && $isDisabled
+      ? colors.etc.card
+      : $isEmpty
+        ? colors.etc.emptyCard
+        : colors.etc.white};
   border: ${({ $isEmpty }) =>
     $isEmpty ? `2px solid ${colors.etc.white}` : 'none'};
   border-radius: 12px;
-  box-shadow: ${({ $isEmpty }) =>
-    $isEmpty
-      ? '0px 0px 8px 0px rgba(0, 0, 0, 0.1)'
-      : '0px 0px 8px 0px rgba(0, 0, 0, 0.1)'};
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
   padding: 12px 16px 0 16px;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+
+  ${({ $isEmpty, $isDisabled }) =>
+    $isEmpty &&
+    $isDisabled &&
+    css`
+      pointer-events: none;
+    `}
 
   ${({ $isEmpty }) =>
     $isEmpty &&
@@ -33,7 +40,7 @@ export const Card = styled.div<{ $isEmpty?: boolean }>`
 `;
 
 export const Level = styled.div`
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   color: ${colors.purple[50]};
