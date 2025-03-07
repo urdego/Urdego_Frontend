@@ -43,12 +43,6 @@ const nextConfig = {
     '@capacitor/camera',
     '@capacitor/filesystem',
   ],
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-    responseLimit: '10mb',
-  },
 };
 
 export default withPWA(nextConfig);
