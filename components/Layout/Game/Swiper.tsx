@@ -1,6 +1,5 @@
 'use client';
-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
   SwiperContainer,
@@ -12,6 +11,8 @@ import Image from 'next/image';
 import 'swiper/css';
 
 const SwiperComponent = ({ contents }: { contents: string[] }) => {
+  const swiperRef = useRef<SwiperType | null>(null);
+
   const applySlideStyles = (swiper: SwiperType) => {
     const slides = swiper.slides;
     slides.forEach((slide: HTMLElement, index: number) => {
@@ -22,17 +23,48 @@ const SwiperComponent = ({ contents }: { contents: string[] }) => {
     });
   };
 
+  // 슬라이드 초기 설정을 위한 useEffect 추가
+  useEffect(() => {
+    if (swiperRef.current && contents.length > 1) {
+      // loop 모드: 실제 인덱스가 복제된 슬라이드를 고려하여 조정
+      // 첫 번째 이미지가 중앙에 오도록 설정
+      swiperRef.current.slideTo(0, 0, false);
+      applySlideStyles(swiperRef.current);
+    }
+  }, [contents.length]);
+
   return (
     <SwiperContainer>
       <Swiper
-        grabCursor={true} // 마우스 커서 잡기 설정
-        centeredSlides={true} // 슬라이드 중앙 정렬
-        slidesPerView={contents.length > 1 ? 1.4 : 1} // 이미지가 1개일 때는 1개만 보이도록 설정
-        spaceBetween={contents.length > 1 ? -50 : 0} // 이미지가 1개일 때는 간격 조정
-        loop={contents.length > 1} // 2장 이상일 때만 무한 루프 적용
-        initialSlide={0} // 초기 슬라이드 설정(TODO: 라운드별로 다른 이미지 보여주기)
-        onSwiper={applySlideStyles}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={contents.length > 1 ? 1.4 : 1}
+        spaceBetween={contents.length > 1 ? -50 : 0}
+        loop={contents.length > 1}
+        initialSlide={0}
+        loopAdditionalSlides={contents.length} // 충분한 수의 슬라이드 복제
+        onInit={(swiper) => {
+          // 초기화 직후 실행
+          if (contents.length > 1) {
+            swiper.slideTo(0, 0, false);
+            applySlideStyles(swiper);
+          }
+        }}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+          applySlideStyles(swiper);
+
+          // 이미지가 여러 장일 때 초기 위치 조정
+          if (contents.length > 1) {
+            // 비동기로 처리하여 DOM이 완전히 로드된 후 실행
+            setTimeout(() => {
+              swiper.slideTo(0, 0, false);
+              applySlideStyles(swiper);
+            }, 10);
+          }
+        }}
         onSlideChange={applySlideStyles}
+        onAfterInit={applySlideStyles}
       >
         {contents.map((content, index) => (
           <SwiperSlide key={index}>

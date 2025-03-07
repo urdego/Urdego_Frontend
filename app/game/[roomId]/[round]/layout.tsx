@@ -117,10 +117,9 @@ const SwitchContainer = styled.div`
   position: absolute;
   top: 0.5rem;
   left: 1rem;
-  z-index: 50;
   cursor: pointer;
   margin: 0 auto;
-  z-index: 2000;
+  z-index: 300;
 
   &:active {
     outline: 2px solid red; /* 클릭 테스트 */
