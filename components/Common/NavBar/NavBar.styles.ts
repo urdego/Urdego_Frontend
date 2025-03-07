@@ -29,15 +29,16 @@ export const IconPlaceholder = styled.div`
   transition: background-color 0.3s ease;
 `;
 
-export const NavBarText = styled.div<{ isActive: boolean }>`
+export const NavBarText = styled.div<{ $isActive: boolean }>`
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 18px */
   letter-spacing: -0.12px;
   text-align: center;
+  color: ${({ $isActive }) =>
+    $isActive ? colors.purple[50] : colors.gray[70]};
   width: 60px;
-  color: ${({ isActive }) => (isActive ? colors.purple[50] : colors.gray[70])};
 `;
 
 export const NavItem = styled.div`

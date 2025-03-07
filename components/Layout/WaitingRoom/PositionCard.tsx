@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import useCharacterData from '@/hooks/character/useCharacterData'; // useCharacterData 훅 import
+import useCharacterData from '@/hooks/character/useCharacterData';
 import {
   Card,
   Level,
@@ -13,34 +13,38 @@ import {
 interface PositionCardProps {
   level?: number;
   username?: string;
-  activeCharacter?: string; // activeCharacter prop 추가
+  activeCharacter?: string;
   isHost?: boolean;
   isReady?: boolean;
   isEmpty?: boolean;
-  onClick?: () => void; // onClick 추가
+  onClick?: () => void;
+  isDisabled?: boolean;
 }
 
 const PositionCard = ({
   level = 1,
   username = '어데고',
-  activeCharacter = 'BASIC', // 기본값 설정
+  activeCharacter = 'BASIC',
   isHost = false,
   isReady = false,
   isEmpty = false,
-  onClick, // onClick 추가
+  onClick,
+  isDisabled = false,
 }: PositionCardProps) => {
-  // useCharacterData 훅을 사용하여 해당 캐릭터의 이미지 정보를 가져옴
-  // activeCharacter를 보유 캐릭터 리스트에 전달하여 true인 경우 실제 캐릭터 이미지를, 그렇지 않으면 LockIcon 이미지를 반환
   const characterData = useCharacterData({ ownCharacters: [activeCharacter] });
   const selectedCharacter = characterData.find(
     (character) => character.key === activeCharacter
   );
 
   return (
-    <Card $isEmpty={isEmpty} onClick={isEmpty ? onClick : undefined}>
+    <Card
+      $isEmpty={isEmpty}
+      $isDisabled={isDisabled}
+      onClick={isEmpty && !isDisabled ? onClick : undefined}
+    >
       {!isEmpty ? (
         <>
-          <Level>Lv.{level}</Level>
+          <Level>Lvl.{level}</Level>
           <Username>{username}</Username>
           <Character>
             {selectedCharacter ? (
@@ -61,7 +65,7 @@ const PositionCard = ({
           )}
         </>
       ) : (
-        <EmptyCardIcon />
+        !isDisabled && <EmptyCardIcon />
       )}
     </Card>
   );
