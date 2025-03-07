@@ -2,10 +2,7 @@ import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 
 interface ReverseGeocodingProps {
   index: number;
-  latLng: {
-    lat: number;
-    lng: number;
-  };
+  latLng: google.maps.LatLngLiteral;
 }
 
 const useConvertLocationToAddress = () => {
