@@ -123,9 +123,35 @@ const GamePage = ({ params }: GamePageProps) => {
 
   // 다음 라운드 이동
   const handleNextRound = useCallback(() => {
-    router.push(`/game/${roomId}/${currentRound}/roundRank`);
-    setCurrentSelectedCoordinate(null);
-  }, [router, roomId, currentRound, setCurrentSelectedCoordinate]);
+    const questionId = useGameStore.getState().questionId;
+    const userId = useUserStore.getState().userId;
+    const { lat, lng } = hasSubmitted
+      ? currentSelectedCoordinate || { lat: 0, lng: 0 }
+      : { lat: 0, lng: 0 };
+
+    // ANSWER_SUBMIT 메시지 전송
+    sendMessage(
+      'ANSWER_SUBMIT',
+      { questionId, userId, latitude: lat, longitude: lng } as InGamePayload,
+      'game'
+    );
+
+    console.log('제출 완료 또는 타임아웃으로 인한 제출 완료');
+
+    // 1초 지연 후 다음 라운드로 이동
+    setTimeout(() => {
+      router.push(`/game/${roomId}/${currentRound}/roundRank`);
+      setCurrentSelectedCoordinate(null);
+    }, 1000);
+  }, [
+    router,
+    roomId,
+    currentRound,
+    sendMessage,
+    setCurrentSelectedCoordinate,
+    hasSubmitted,
+    currentSelectedCoordinate,
+  ]);
 
   // 좌표 선택 핸들러
   const handleCoordinateSelect = useCallback(

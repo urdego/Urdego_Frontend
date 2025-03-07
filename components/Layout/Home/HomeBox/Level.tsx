@@ -8,7 +8,8 @@ import {
   ProgressBar,
   ProgressNum,
 } from './Level.styles';
-import useUserStore from '@/stores/useUserStore';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 interface LevelProps {
   level: number;
@@ -16,7 +17,8 @@ interface LevelProps {
 }
 
 export const Level: React.FC<LevelProps> = ({ level, exp }) => {
-  const nickname = useUserStore((state) => state.nickname);
+  const { data: session } = useSession();
+  const [nickname, setNickname] = useState('');
   const [progress, setProgress] = useState(0);
 
   const levelStandards = [
@@ -50,6 +52,25 @@ export const Level: React.FC<LevelProps> = ({ level, exp }) => {
   useEffect(() => {
     setProgress(calculatedProgress);
   }, [calculatedProgress]);
+
+  useEffect(() => {
+    const fetchNickname = async () => {
+      if (!session) return;
+
+      try {
+        const response = await axios.get('/api/character', {
+          headers: {
+            'User-Id': session.user.userId,
+          },
+        });
+        setNickname(response.data.nickname);
+      } catch (error) {
+        console.error('닉네임 가져오기 에러:', error);
+      }
+    };
+
+    fetchNickname();
+  }, [session]);
 
   return (
     <>
