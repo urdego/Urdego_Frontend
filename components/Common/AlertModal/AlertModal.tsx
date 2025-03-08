@@ -29,10 +29,10 @@ const AlertModal = ({
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <AlertTitle>{title}</AlertTitle>
         <ButtonContainer>
+          {!confirmOnly && <Button onClick={onClose}>취소</Button>}
           <Button $confirm onClick={onConfirm}>
             확인
           </Button>
-          {!confirmOnly && <Button onClick={onClose}>취소</Button>}
         </ButtonContainer>
       </ModalContainer>
     </ModalOverlay>
