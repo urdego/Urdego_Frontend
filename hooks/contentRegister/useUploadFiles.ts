@@ -64,7 +64,7 @@ const useUploadFiles = () => {
       }
     );
     if (!response.ok) {
-      throw new Error('전송에 실패했습니다!');
+      throw new Error('장소 등록에 실패했습니다');
     }
   };
 
