@@ -14,6 +14,7 @@ interface RoomButtonProps {
   round: number;
   currMemberCount: number;
   maxMemberCount: number;
+  onClick: () => void;
 }
 
 const RoomButton = ({
@@ -22,9 +23,10 @@ const RoomButton = ({
   round,
   currMemberCount,
   maxMemberCount,
+  onClick,
 }: RoomButtonProps) => {
   return (
-    <RoomButtonWrapper>
+    <RoomButtonWrapper onClick={onClick} style={{ cursor: 'pointer' }}>
       <RoomButtonHeader>
         <CharacterIcon hostType={hostType} />
         <p>{title}</p>

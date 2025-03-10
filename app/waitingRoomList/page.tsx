@@ -133,7 +133,7 @@ const WaitingRoomList = () => {
           buttonSize="large"
           buttonHeight="default"
           styleType="coloredBackground"
-          onClick={handleButtonClick} // 바텀시트 열기 또는 방 생성
+          onClick={handleButtonClick}
         />
       </Footer>
 
