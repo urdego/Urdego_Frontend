@@ -16,7 +16,7 @@ export const ContentHeader = styled.div`
 `;
 
 export const ButtonLayout = styled.div`
-  position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,5 +35,5 @@ export const ButtonLayout = styled.div`
   box-shadow: 0px -4px 24px 0px rgba(0, 0, 0, 0.1);
   background: ${colors.etc.white};
 
-  z-index: 10;
+  z-index: 999;
 `;

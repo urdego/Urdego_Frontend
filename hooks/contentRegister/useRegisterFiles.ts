@@ -1,5 +1,5 @@
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
-import exifr from 'exifr';
+import ExifReader from 'exifreader';
 import useConvertLocationToAddress from './useConvertLocationToAddress';
 import useLoadingStore from '@/stores/loadingStore';
 import AlertToast from '@/components/Common/Toast/AlertToast';
@@ -9,23 +9,26 @@ interface useUploadFilesProps {
 }
 
 const useRegisterFiles = ({ index }: useUploadFilesProps) => {
-  const { setPlaceInput } = usePlaceRegisterStore();
+  const { setPlaceInput, initPlaceList } = usePlaceRegisterStore();
   const { setPreviewLoading } = useLoadingStore();
   const { handleReverseGeocoding } = useConvertLocationToAddress();
 
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
+  const BODY_MAX_MEMORY = 4 * 1024 * 1024; //4MB
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const fileList = validateUserUploadFile(e.target.files);
       if (!fileList) return;
 
+      // file, preview file, preview loading 초기화
+      setPlaceInput(index, 'file', new Array(fileList.length).fill([]));
+      setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: new Array(fileList.length).fill(true),
       });
-      setPlaceInput(index, 'previewFile', new Array(fileList.length).fill([]));
 
       await exportMetadata(fileList);
       const compressedFileList = await compressFile(fileList);
@@ -33,6 +36,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
         compressedFileList.map(readFileAsDataURL)
       );
 
+      // file, preview file, preview loading 설정 완료
       setPlaceInput(index, 'file', compressedFileList);
       setPlaceInput(index, 'previewFile', previewURLs);
       setPreviewLoading({
@@ -42,7 +46,10 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      setPlaceInput(index, 'previewFile', []);
+      if (error instanceof Error) {
+        AlertToast({ message: error.message });
+      }
+      initPlaceList(index);
       setPreviewLoading({
         locationIndex: index,
         newPreviewLoading: [],
@@ -65,11 +72,9 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const selectedFileList = Array.from(fileList).slice(0, MAX_CONTENT_COUNT);
 
     if (isOverMemory(selectedFileList)) {
-      AlertToast({ message: '업로드 가능한 용량을 초과했어요' });
       throw new Error('업로드 가능한 용량을 초과했어요');
     }
     if (!selectedFileList.every(isImageFile)) {
-      AlertToast({ message: '이미지만 업로드가 가능해요' });
       throw new Error('이미지만 업로드가 가능해요');
     }
 
@@ -83,12 +88,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       0
     );
 
-    if (totalMemory >= MAX_MEMORY) {
-      setPlaceInput(index, 'file', []);
-      setPlaceInput(index, 'previewFile', []);
-      return true;
-    }
-    return false;
+    return totalMemory >= MAX_MEMORY;
   };
 
   // 확장자 제한 로직
@@ -102,26 +102,40 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
   // meta data로부터 위경도 추출 및 도로명 주소 추출 로직
   const exportMetadata = async (fileList: File[]) => {
     const gpsList = (
-      await Promise.all(fileList.map((item) => exifr.gps(item)))
+      await Promise.all(
+        fileList.map(async (item) => {
+          const tags = await ExifReader.load(item, { expanded: true });
+          return tags.gps;
+        })
+      )
     ).filter((item) => item !== undefined);
     const gps = gpsList[0];
 
-    if (gps) {
-      // 위경도 저장
-      setPlaceInput(index, 'lat', gps.latitude);
-      setPlaceInput(index, 'lng', gps.longitude);
+    try {
+      if (gps) {
+        // 위경도 저장
+        setPlaceInput(index, 'lat', gps.Latitude as number);
+        setPlaceInput(index, 'lng', gps.Longitude as number);
 
-      // 도로명 주소 저장
-      // 역지오코딩으로 도로명 주소 반환
-      handleReverseGeocoding({
-        index,
-        latLng: { lat: gps.latitude, lng: gps.longitude },
-      });
-      return;
+        // 도로명 주소 저장
+        // 역지오코딩으로 도로명 주소 반환
+        await handleReverseGeocoding({
+          index,
+          latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
+        });
+      } else {
+        throw new Error(
+          '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!'
+        );
+      }
+    } catch (error) {
+      console.error('Export Metadata Error:', error);
+      if (error instanceof Error) {
+        AlertToast({
+          message: error.message,
+        });
+      }
     }
-    AlertToast({
-      message: '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!',
-    });
   };
 
   // 이미지 압축 로직
@@ -129,24 +143,28 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const compressedFileList: File[] = [];
 
     for (const file of fileList) {
-      const formData = new FormData();
-      formData.append('file', file);
+      if (file.size >= BODY_MAX_MEMORY) {
+        compressedFileList.push(file);
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
 
-      const response = await fetch('/api/content/compress', {
-        method: 'POST',
-        body: formData,
-      });
+        const response = await fetch('/api/content/compress', {
+          method: 'POST',
+          body: formData,
+        });
 
-      if (!response.ok) {
-        throw new Error('파일 압축 실패');
+        if (!response.ok) {
+          throw new Error('사진을 압축하는 것에 실패했어요');
+        }
+
+        const compressedBlob = await response.blob();
+        const fileNameToWebp = file.name.split('.')[0] + '.webp';
+        const compressedFile = new File([compressedBlob], fileNameToWebp, {
+          type: 'image/webp',
+        });
+        compressedFileList.push(compressedFile);
       }
-
-      const compressedBlob = await response.blob();
-      const fileNameToWebp = file.name.split('.')[0] + '.webp';
-      const compressedFile = new File([compressedBlob], fileNameToWebp, {
-        type: 'image/webp',
-      });
-      compressedFileList.push(compressedFile);
     }
 
     return compressedFileList;

@@ -35,7 +35,14 @@ const nextConfig = {
 
   images: {
     domains: ['urdego.site'], // ✅ 외부 이미지 사용을 위해 허용할 도메인 추가
+    unoptimized: true,
   },
+
+  transpilePackages: [
+    '@capacitor/core',
+    '@capacitor/camera',
+    '@capacitor/filesystem',
+  ],
 };
 
 export default withPWA(nextConfig);
