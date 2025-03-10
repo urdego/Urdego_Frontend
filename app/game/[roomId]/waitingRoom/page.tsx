@@ -20,6 +20,7 @@ import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { RoomPayload } from '@/lib/types/roomJoin';
 import { useRouter } from 'next/navigation';
+import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -157,6 +158,11 @@ const WaitingRoom = () => {
 
   // 방 나가기 시 구독 해제 후 홈으로 이동
   const handleExit = useCallback(() => {
+    sendMessage(
+      'PLAYER_REMOVE',
+      { roomId: String(roomId), userId: Number(userId) },
+      'room'
+    );
     isLeaving.current = true;
     unsubscribeFromRoom(String(roomId));
     router.push('/home');
