@@ -62,9 +62,11 @@ const WaitingRoom = () => {
           message
         );
 
+        // PLAYER_REMOVE도 처리 대상에 포함
         if (
           message.messageType === 'PLAYER_JOIN' ||
           message.messageType === 'PLAYER_READY' ||
+          message.messageType === 'PLAYER_REMOVE' ||
           message.messageType === 'GAME_START'
         ) {
           const roomPayload = message.payload as RoomPayload;
@@ -73,7 +75,6 @@ const WaitingRoom = () => {
 
         if (message.messageType === 'GAME_START') {
           console.log('🚀 게임이 시작되었습니다!');
-
           setGameId(message.payload.gameId, () => {
             console.log(`✅ gameId 설정 완료: ${message.payload.gameId}`);
             router.push(`/game/${message.payload.gameId}/1`);
