@@ -1,12 +1,16 @@
 import LoadingToast from '@/components/Common/Toast/LoadingToast';
-import axiosInstance from '@/lib/axios';
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import usePlaceRegisterStore, { Place } from '@/stores/contentRegisterStore';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const useUploadFiles = () => {
   const { placeList, initEntirePlaceList, removePlaceList } =
     usePlaceRegisterStore();
   const router = useRouter();
+
+  const { data: session } = useSession();
+  const userId = session?.user.userId;
 
   const handleUploadFiles = async () => {
     LoadingToast(
@@ -52,14 +56,16 @@ const useUploadFiles = () => {
     formData.append('latitude', String(place.lat));
     formData.append('longitude', String(place.lng));
 
-    // 서버에게 정보 전송
-    await axiosInstance
-      .post('/api/content', formData, {
+    await fetch(
+      `${process.env.API_URL}${API_URL_CONFIG.CONTENT.DEFAULT}/${userId}/multiple`,
+      {
         method: 'POST',
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      }
+    );
   };
 
   return {
