@@ -15,6 +15,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
   const MAX_CONTENT_COUNT = 3;
   const MAX_MEMORY = 30 * 1024 * 1024; // 30MB
+  const BODY_MAX_MEMORY = 4 * 1024 * 1024; //4MB
 
   const handleFilesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -87,12 +88,7 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
       0
     );
 
-    if (totalMemory >= MAX_MEMORY) {
-      setPlaceInput(index, 'file', []);
-      setPlaceInput(index, 'previewFile', []);
-      return true;
-    }
-    return false;
+    return totalMemory >= MAX_MEMORY;
   };
 
   // 확장자 제한 로직
@@ -147,24 +143,28 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
     const compressedFileList: File[] = [];
 
     for (const file of fileList) {
-      const formData = new FormData();
-      formData.append('file', file);
+      if (file.size >= BODY_MAX_MEMORY) {
+        compressedFileList.push(file);
+      } else {
+        const formData = new FormData();
+        formData.append('file', file);
 
-      const response = await fetch('/api/content/compress', {
-        method: 'POST',
-        body: formData,
-      });
+        const response = await fetch('/api/content/compress', {
+          method: 'POST',
+          body: formData,
+        });
 
-      if (!response.ok) {
-        throw new Error('사진을 압축하는 것에 실패했어요');
+        if (!response.ok) {
+          throw new Error('사진을 압축하는 것에 실패했어요');
+        }
+
+        const compressedBlob = await response.blob();
+        const fileNameToWebp = file.name.split('.')[0] + '.webp';
+        const compressedFile = new File([compressedBlob], fileNameToWebp, {
+          type: 'image/webp',
+        });
+        compressedFileList.push(compressedFile);
       }
-
-      const compressedBlob = await response.blob();
-      const fileNameToWebp = file.name.split('.')[0] + '.webp';
-      const compressedFile = new File([compressedBlob], fileNameToWebp, {
-        type: 'image/webp',
-      });
-      compressedFileList.push(compressedFile);
     }
 
     return compressedFileList;
