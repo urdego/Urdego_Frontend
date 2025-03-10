@@ -20,7 +20,6 @@ import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { RoomPayload } from '@/lib/types/roomJoin';
 import { useRouter } from 'next/navigation';
-import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
