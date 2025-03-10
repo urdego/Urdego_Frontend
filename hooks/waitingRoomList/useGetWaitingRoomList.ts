@@ -1,3 +1,4 @@
+import { API_URL_CONFIG } from '@/config/apiEndPointConfig';
 import { Character } from '@/lib/types/character';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +25,12 @@ const useGetWaitingRoomList = () => {
 
   const fetchWaitingRoomList = async () => {
     setIsLoading(true);
-    const response = await fetch('/api/waitingRoomList');
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_URL_CONFIG.GAME.WAITING_ROOM_LIST}`,
+      {
+        method: 'GET',
+      }
+    );
     if (!response.ok) {
       return;
     }

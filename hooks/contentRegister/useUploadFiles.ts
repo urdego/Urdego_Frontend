@@ -56,16 +56,16 @@ const useUploadFiles = () => {
     formData.append('latitude', String(place.lat));
     formData.append('longitude', String(place.lng));
 
-    await fetch(
-      `${process.env.API_URL}${API_URL_CONFIG.CONTENT.DEFAULT}/${userId}/multiple`,
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}${API_URL_CONFIG.CONTENT.DEFAULT}/${userId}/multiple`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         body: formData,
       }
     );
+    if (!response.ok) {
+      throw new Error('전송에 실패했습니다!');
+    }
   };
 
   return {
