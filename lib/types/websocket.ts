@@ -16,6 +16,7 @@ export interface WebSocketMessage {
     | 'GAME_END'
     | 'PLAYER_JOIN'
     | 'PLAYER_READY'
-    | 'GAME_START';
+    | 'GAME_START'
+    | 'PLAYER_REMOVE';
   payload: WebSocketPayload;
 }
