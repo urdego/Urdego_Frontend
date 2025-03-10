@@ -79,7 +79,7 @@ const NicknameChangePage = () => {
           buttonSize="large"
           buttonHeight="default"
           styleType="coloredBackground"
-          label={isLoading ? '변경 중...' : '변경하기'}
+          label={isLoading ? '변경 중...' : '변경'}
           disabled={!isButtonEnabled}
           onClick={handleChangeNickname}
         />

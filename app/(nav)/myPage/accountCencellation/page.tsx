@@ -11,10 +11,7 @@ import {
   DetailText,
   Footer,
   BigCheckboxWrapper,
-  TextareaWrapper,
-  StyledTextarea,
   Separator,
-  CharCount,
 } from '@/app/(nav)/myPage/accountCencellation/accountCencellation.styles';
 import { signOut } from 'next-auth/react';
 
@@ -45,7 +42,6 @@ const AccountCancellation = () => {
       label: '이용이 불편하고 장애가 많아요.',
     },
     { id: 'social' as ReasonType, label: '소셜 기능이 부족해요' },
-    { id: 'other' as ReasonType, label: '기타' },
   ];
 
   const [reasons, setReasons] = useState({
@@ -57,7 +53,6 @@ const AccountCancellation = () => {
   });
   const [otherReason, setOtherReason] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
-  const [isActive, setIsActive] = useState(false);
 
   const handleReasonChange = useCallback(
     (reason: keyof typeof reasons) => (checked: boolean) => {
@@ -74,7 +69,6 @@ const AccountCancellation = () => {
     []
   );
 
-  const hasText = otherReason.trim().length > 0;
   const charCount = otherReason.length;
   const isValid = charCount >= 10; // 10자 이상 입력해야 유효
 
@@ -156,21 +150,6 @@ const AccountCancellation = () => {
             onChange={(checked) => handleReasonChange(id)(checked)}
           />
         ))}
-        {reasons.other && (
-          <>
-            <TextareaWrapper $hasText={hasText} $isActive={isActive}>
-              <StyledTextarea
-                placeholder="탈퇴사유를 알려주시면 고객님의 소중한 피드백을 반영해 더 나은 게임 환경을 제공하도록 하겠습니다."
-                value={otherReason}
-                onChange={(e) => setOtherReason(e.target.value)}
-                onFocus={() => setIsActive(true)}
-                onBlur={() => setIsActive(false)}
-              />
-            </TextareaWrapper>
-            {/* 🔥 "0/10자 이상" 글자 수 카운트 UI */}
-            <CharCount $isValid={isValid}>{charCount}/10자 이상</CharCount>
-          </>
-        )}
       </SessionWrapper>
 
       <BigCheckboxWrapper>
