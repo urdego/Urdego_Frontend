@@ -1,11 +1,18 @@
 import { create } from 'zustand';
 import { Client } from '@stomp/stompjs';
+import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
+import { PendingSubscription } from '@/lib/types/pendingSubscription'; // 위에서 만든 타입 임포트
 
 const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
 
 interface WebSocketState {
   client: Client | null;
   isConnected: boolean;
+  pendingSubscriptions: PendingSubscription[];
+
+  addPendingSubscription: (subscription: PendingSubscription) => void;
+  clearPendingSubscriptions: () => void;
+  resubscribeAll: () => void;
   connectWebSocket: () => void;
   disconnectWebSocket: () => void;
 }
@@ -13,21 +20,83 @@ interface WebSocketState {
 export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   client: null,
   isConnected: false,
+  pendingSubscriptions: [],
+
+  addPendingSubscription: (subscription) => {
+    set((state) => ({
+      pendingSubscriptions: [...state.pendingSubscriptions, subscription],
+    }));
+  },
+
+  clearPendingSubscriptions: () => {
+    set({ pendingSubscriptions: [] });
+  },
+
+  resubscribeAll: () => {
+    const { client, isConnected, pendingSubscriptions } = get();
+    if (!client || !isConnected) {
+      console.warn('WebSocket not connected. Skipping resubscription.');
+      return;
+    }
+
+    // 차별화된 유니온을 switch로 분기
+    pendingSubscriptions.forEach((sub) => {
+      switch (sub.type) {
+        case 'room': {
+          const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ROOM(
+            sub.identifier
+          );
+          console.log(
+            `Resubscribing to room ${sub.identifier}: ${subscriptionPath}`
+          );
+          client.subscribe(subscriptionPath, (message) => {
+            console.log(`Room message received:`, message.body);
+            sub.callback(JSON.parse(message.body));
+          });
+          break;
+        }
+        case 'notification': {
+          const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_NOTIFICATION(
+            sub.identifier
+          );
+          console.log(
+            `Resubscribing to notification ${sub.identifier}: ${subscriptionPath}`
+          );
+          client.subscribe(subscriptionPath, (message) => {
+            console.log(`Notification received:`, message.body);
+            sub.callback(JSON.parse(message.body));
+          });
+          break;
+        }
+        case 'error': {
+          const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ERROR();
+          console.log(`Resubscribing to error: ${subscriptionPath}`);
+          client.subscribe(subscriptionPath, (message) => {
+            console.log(`Error received:`, message.body);
+            sub.callback(JSON.parse(message.body));
+          });
+          break;
+        }
+      }
+    });
+  },
 
   connectWebSocket: () => {
-    if (get().client) {
+    const { client: existingClient } = get();
+    if (existingClient) {
       console.log('WebSocket is already connected.');
       return;
     }
 
     console.log('Attempting WebSocket connection...');
-
     const client = new Client({
       brokerURL: WEBSOCKET_URL,
       reconnectDelay: 10000,
       onConnect: () => {
         console.log('WebSocket connected successfully.');
         set({ isConnected: true });
+        // 연결 복구 시, 저장된 구독 정보를 모두 다시 구독
+        get().resubscribeAll();
       },
       onStompError: (frame) => {
         console.error('STOMP error:', frame);
