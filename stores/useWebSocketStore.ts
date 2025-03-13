@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Client } from '@stomp/stompjs';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
-import { PendingSubscription } from '@/lib/types/pendingSubscription'; // 위에서 만든 타입 임포트
+import { PendingSubscription } from '@/lib/types/pendingSubscription';
 
 const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
 
@@ -22,10 +22,25 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   isConnected: false,
   pendingSubscriptions: [],
 
-  addPendingSubscription: (subscription) => {
-    set((state) => ({
-      pendingSubscriptions: [...state.pendingSubscriptions, subscription],
-    }));
+  addPendingSubscription: (subscription: PendingSubscription) => {
+    set((state) => {
+      // 이미 같은 type, identifier를 가진 구독이 있는지 확인
+      const isDuplicate = state.pendingSubscriptions.some(
+        (existing) =>
+          existing.type === subscription.type &&
+          existing.identifier === subscription.identifier
+      );
+
+      // 중복이 아니라면 추가
+      if (!isDuplicate) {
+        return {
+          pendingSubscriptions: [...state.pendingSubscriptions, subscription],
+        };
+      }
+
+      // 중복이면 아무것도 안 함
+      return state;
+    });
   },
 
   clearPendingSubscriptions: () => {
