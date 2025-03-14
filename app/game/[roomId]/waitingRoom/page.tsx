@@ -95,7 +95,7 @@ const WaitingRoom = () => {
         hasJoined.current = true;
       }
     }
-  }, [roomId, subscribeToRoom, sendMessage, userId, setGameId, router]);
+  }, [setRoomData]);
 
   // 상태 업데이트 확인 (디버깅용)
   useEffect(() => {
