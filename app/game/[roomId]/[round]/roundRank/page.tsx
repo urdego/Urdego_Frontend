@@ -135,7 +135,7 @@ const RoundRank = ({
       // 마지막 라운드 시 구독 해제 및 라우팅
       setTimeout(() => {
         unsubscribeFromRoom(String(roomId));
-        router.push('/home');
+        window.location.href = '/home';
       }, 300);
     } else {
       router.push(`/game/${roomId}/${currentRound + 1}`);
