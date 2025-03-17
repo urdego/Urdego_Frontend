@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const ScrollWapper = styled.div`
   position: relative;
-  width: calc(100% + 16px);
+  width: calc(100%);
   padding: 0 16px;
   display: flex;
   flex-direction: row;
