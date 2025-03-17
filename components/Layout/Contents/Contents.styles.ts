@@ -68,7 +68,11 @@ export const LocationDetail = styled.div`
 `;
 
 export const IconContainer = styled.div`
-  position: relative;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
   display: flex;
   align-items: center;
   justify-content: center;
