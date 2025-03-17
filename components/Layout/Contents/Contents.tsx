@@ -64,8 +64,8 @@ const Contents = ({ location, setLocationList }: LocationListProps) => {
         </LocationImageContainer>
         {isLoading ? (
           <SkeletonLocationContainer>
-            <Skeleton width={330} height={20} />
-            <Skeleton width={330} height={20} />
+            <Skeleton width="100%" height={20} />
+            <Skeleton width="100%" height={20} />
           </SkeletonLocationContainer>
         ) : (
           <LocationContainer>

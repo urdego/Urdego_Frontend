@@ -1,7 +1,7 @@
 import { SkeletonWrapper, Shimmer } from './Skeleton.styles';
 
 interface ImageSkeletonProps {
-  width: number;
+  width: number | string;
   height: number;
 }
 

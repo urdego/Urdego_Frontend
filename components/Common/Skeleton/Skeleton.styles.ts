@@ -11,8 +11,12 @@ const loading = keyframes`
   }
 `;
 
-export const SkeletonWrapper = styled.div<{ width: number; height: number }>`
-  width: ${({ width }) => width}px;
+export const SkeletonWrapper = styled.div<{
+  width: number | string;
+  height: number;
+}>`
+  width: ${({ width }) =>
+    width.toString().includes('%') ? `${width}%` : `${width}px`};
   height: ${({ height }) => height}px;
   border-radius: 8px;
   background: rgba(235, 235, 235, 1);
