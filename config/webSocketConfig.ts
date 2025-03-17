@@ -1,4 +1,5 @@
 export const WEBSOCKET_CONFIG = {
+  WEBSOCKET_URL: 'wss://urdego.site/urdego/connect',
   SUBSCRIBE_ROOM: (roomId: string) => `/urdego/sub/${roomId}`,
   SUBSCRIBE_ERROR: () => `/urdego/sub/error`,
   SUBSCRIBE_NOTIFICATION: (targetId: number) =>

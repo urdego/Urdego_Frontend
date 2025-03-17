@@ -3,8 +3,6 @@ import { Client } from '@stomp/stompjs';
 import { WEBSOCKET_CONFIG } from '@/config/webSocketConfig';
 import { PendingSubscription } from '@/lib/types/pendingSubscription';
 
-const WEBSOCKET_URL = 'wss://urdego.site/urdego/connect';
-
 interface WebSocketState {
   client: Client | null;
   isConnected: boolean;
@@ -105,7 +103,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     console.log('Attempting WebSocket connection...');
     const client = new Client({
-      brokerURL: WEBSOCKET_URL,
+      brokerURL: WEBSOCKET_CONFIG.WEBSOCKET_URL,
       reconnectDelay: 1000,
       onConnect: () => {
         console.log('WebSocket connected successfully.');
