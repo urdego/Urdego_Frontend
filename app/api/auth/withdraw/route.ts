@@ -1,6 +1,6 @@
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
-import { refreshAccessToken } from '@/lib/auth/refreshToken';
+import { refreshKakaoToken } from '@/lib/auth/refreshToken';
 
 const KAKAO_UNLINK_URI = 'https://kapi.kakao.com/v1/user/unlink';
 const APPLE_UNLINK_URI = 'https://appleid.apple.com/auth/revoke';
@@ -13,8 +13,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '인증 필요' }, { status: 401 });
     }
 
+    // 세션에서 userId 가져오기
+    const userId = token.userId;
+    if (!userId) {
+      throw new Error('유효한 사용자 ID가 없습니다.');
+    }
+
     // 요청 바디에서 탈퇴 사유 가져오기
-    const { userId, withDrawalReason } = await req.json();
+    const { withDrawalReason } = await req.json();
     let accessToken = token.accessToken;
 
     if (!accessToken || typeof accessToken !== 'string') {
@@ -40,9 +46,9 @@ export async function POST(req: NextRequest) {
             console.log('Access Token 만료됨, 갱신 시도');
 
             try {
-              // 카카오 토큰 갱신
-              const newTokenData = await refreshAccessToken(token);
-              accessToken = newTokenData.accessToken;
+              // 리팩토링된 함수 사용
+              const newTokenData = await refreshKakaoToken(token.refreshToken);
+              accessToken = newTokenData.access_token;
 
               // 다시 연결 해제 요청
               kakaoResponse = await fetch(KAKAO_UNLINK_URI, {
@@ -72,10 +78,17 @@ export async function POST(req: NextRequest) {
         );
       }
     } else if (token.provider === 'apple') {
-      // 애플 토큰 갱신
-      const refreshedToken = await refreshAccessToken(token);
+      // 애플 탈퇴 시에만 CSRF 토큰 추출
+      const cookies = req.cookies;
+      const csrfTokenCookie = cookies.get('__Host-next-auth.csrf-token');
 
-      // 애플 토큰 무효화 요청
+      if (!csrfTokenCookie) {
+        throw new Error('CSRF 토큰을 찾을 수 없습니다.');
+      }
+
+      // 쿠키 값에서 CSRF 토큰 추출
+      const csrfToken = csrfTokenCookie.value.split('%7C')[0]; // URL 디코딩 및 분리
+
       const response = await fetch(APPLE_UNLINK_URI, {
         method: 'POST',
         headers: {
@@ -84,8 +97,7 @@ export async function POST(req: NextRequest) {
         body: new URLSearchParams({
           client_id: process.env.APPLE_CLIENT_ID!,
           client_secret: process.env.APPLE_CLIENT_SECRET!,
-          token: refreshedToken.refreshToken as string, // 갱신된 리프레시 토큰 사용
-          token_type_hint: 'refresh_token',
+          token: csrfToken,
         }),
       });
 
