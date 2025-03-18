@@ -57,11 +57,6 @@ export const useWebSocketFunctions = () => {
     onMessageReceived: (message: WebSocketMessage) => void
   ) => {
     if (client && isConnected) {
-      if (subscribedRoom === roomId) {
-        console.log(`Already subscribed to room: ${roomId}`);
-        return;
-      }
-
       const subscriptionPath = WEBSOCKET_CONFIG.SUBSCRIBE_ROOM(roomId);
       console.log(`Subscribing to room: ${subscriptionPath}`);
 
@@ -70,13 +65,20 @@ export const useWebSocketFunctions = () => {
         onMessageReceived(JSON.parse(message.body));
       });
 
-      // 구독 정보 저장
+      // 로컬 상태에 구독 정보 저장
       setSubscriptions((prev) => ({
         ...prev,
         [roomId]: subscription,
       }));
 
       setSubscribedRoom(roomId);
+
+      // pendingSubscriptions 배열에도 추가하여 재구독 대상에 포함시키기
+      useWebSocketStore.getState().addPendingSubscription({
+        type: 'room',
+        identifier: roomId,
+        callback: onMessageReceived,
+      });
     } else {
       console.warn('WebSocket is not connected.');
     }

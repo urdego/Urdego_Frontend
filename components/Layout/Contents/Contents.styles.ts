@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const ScrollWapper = styled.div`
   position: relative;
-  width: calc(100% + 16px);
+  width: calc(100%);
   padding: 0 16px;
   display: flex;
   flex-direction: row;
@@ -51,6 +51,7 @@ export const SkeletonLocationContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const LocationTitle = styled.div`
@@ -68,7 +69,11 @@ export const LocationDetail = styled.div`
 `;
 
 export const IconContainer = styled.div`
-  position: relative;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+
   display: flex;
   align-items: center;
   justify-content: center;

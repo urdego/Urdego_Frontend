@@ -95,7 +95,7 @@ const WaitingRoom = () => {
         hasJoined.current = true;
       }
     }
-  }, [roomId, subscribeToRoom, sendMessage, userId, setGameId, router]);
+  }, [setRoomData]);
 
   // 상태 업데이트 확인 (디버깅용)
   useEffect(() => {
@@ -165,8 +165,8 @@ const WaitingRoom = () => {
     );
     isLeaving.current = true;
     unsubscribeFromRoom(String(roomId));
-    router.push('/home');
-  }, [roomId, unsubscribeFromRoom, router]);
+    window.location.href = '/home';
+  }, [roomId, unsubscribeFromRoom]);
 
   // 빈 카드가 disabled 되어야 하는 조건 (방장을 제외한 모든 플레이어가 준비완료 & 초대 모달이 닫힌 경우)
   const shouldDisableEmptyCard =

@@ -32,7 +32,7 @@ const Home = () => {
 
   /* 웹소켓 연결 실행, 연결 상태 가져오기 */
   const { isConnected, connectWebSocket } = useWebSocketStore();
-  /* notification, room, error 구독 */
+  /* notification, error 구독용 함수 */
   const { subscribeToNotification, subscribeToError } = useWebSocketFunctions();
   /* 사용자 정보 가져오기 */
   const { data: session } = useSession();
@@ -50,22 +50,41 @@ const Home = () => {
     if (!isConnected) connectWebSocket();
   }, [connectWebSocket, isConnected]);
 
-  // 구독 등록용 useEffect
+  // 구독 등록 및 pending subscription 등록 useEffect
   useEffect(() => {
     if (!isConnected || hasSubscribed.current || !userId) return;
-
     hasSubscribed.current = true;
+
+    // pending subscription에 알림 구독 정보를 등록
+    useWebSocketStore.getState().addPendingSubscription({
+      type: 'notification',
+      identifier: userId,
+      callback: (message: InviteWebSocketMessage) => {
+        console.log('Notification received:', message);
+        setNotification(message);
+      },
+    });
+
+    // 최초 구독 등록 (연결된 경우 즉시 구독)
     subscribeToNotification(userId, (message: InviteWebSocketMessage) => {
       console.log('Notification received:', message);
       setNotification(message);
     });
 
-    // 에러 메시지 구독 추가
+    // 에러 구독 등록 및 pending subscription 등록
+    useWebSocketStore.getState().addPendingSubscription({
+      type: 'error',
+      identifier: null,
+      callback: (message: ErrorWebSocketMessage) => {
+        console.log('Error received:', message);
+        // 에러 처리 로직 추가 가능
+      },
+    });
     subscribeToError((message: ErrorWebSocketMessage) => {
       console.log('Error received:', message);
-      // 에러 메시지 처리 로직 추가
+      // 에러 처리 로직 추가 가능
     });
-  }, [isConnected, subscribeToError, subscribeToNotification]);
+  }, [isConnected, userId, subscribeToNotification, subscribeToError]);
 
   // 메시지 처리용 useEffect (notification 상태 변경 시 실행)
   useEffect(() => {

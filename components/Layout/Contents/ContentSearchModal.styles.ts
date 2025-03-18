@@ -7,7 +7,7 @@ export const ModalWrapper = styled.div`
   left: 50%;
   transform: translateX(-50%);
 
-  width: 100%;
+  width: 100vw;
   min-width: 340px;
   max-width: 430px;
   height: 100vh;
@@ -18,6 +18,7 @@ export const ModalWrapper = styled.div`
   background: ${colors.etc.white};
   padding: 12px 16px 20px 16px;
   z-index: 999;
+  overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   &::-webkit-scrollbar {
