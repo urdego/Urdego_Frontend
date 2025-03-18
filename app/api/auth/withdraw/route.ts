@@ -1,42 +1,9 @@
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { refreshAccessToken } from '@/lib/auth/refreshToken';
 
 const KAKAO_UNLINK_URI = 'https://kapi.kakao.com/v1/user/unlink';
 const APPLE_UNLINK_URI = 'https://appleid.apple.com/auth/revoke';
-const KAKAO_TOKEN_URI = 'https://kauth.kakao.com/oauth/token';
-
-async function refreshKakaoToken(refreshToken: string) {
-  if (!refreshToken || typeof refreshToken !== 'string') {
-    throw new Error('유효한 Refresh Token이 없습니다.');
-  }
-
-  const response = await fetch(KAKAO_TOKEN_URI, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      client_id: process.env.KAKAO_CLIENT_ID!,
-      refresh_token: refreshToken,
-      client_secret: process.env.KAKAO_CLIENT_SECRET!, // (+ client_secret 활성화했기에 추가)
-    }),
-  });
-
-  const tokenData = await response.json();
-  console.log('카카오 토큰 갱신 응답:', tokenData);
-
-  if (!response.ok) {
-    console.error(
-      '카카오 토큰 갱신 실패:',
-      response.status,
-      response.statusText
-    );
-    throw new Error('카카오 토큰 갱신 실패');
-  }
-
-  return tokenData; // access_token 및 refresh_token 반환
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -73,8 +40,9 @@ export async function POST(req: NextRequest) {
             console.log('Access Token 만료됨, 갱신 시도');
 
             try {
-              const newTokenData = await refreshKakaoToken(token.refreshToken);
-              accessToken = newTokenData.access_token;
+              // 카카오 토큰 갱신
+              const newTokenData = await refreshAccessToken(token);
+              accessToken = newTokenData.accessToken;
 
               // 다시 연결 해제 요청
               kakaoResponse = await fetch(KAKAO_UNLINK_URI, {
@@ -104,11 +72,26 @@ export async function POST(req: NextRequest) {
         );
       }
     } else if (token.provider === 'apple') {
-      const appleResponse = await fetch(APPLE_UNLINK_URI, {
+      // 애플 토큰 갱신
+      const refreshedToken = await refreshAccessToken(token);
+
+      // 애플 토큰 무효화 요청
+      const response = await fetch(APPLE_UNLINK_URI, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: process.env.APPLE_CLIENT_ID!,
+          client_secret: process.env.APPLE_CLIENT_SECRET!,
+          token: refreshedToken.refreshToken as string, // 갱신된 리프레시 토큰 사용
+          token_type_hint: 'refresh_token',
+        }),
       });
-      if (!appleResponse.ok) {
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('애플 연결 해제 실패:', errorData);
         throw new Error('애플 연결 해제 실패');
       }
     }

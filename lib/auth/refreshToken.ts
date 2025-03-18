@@ -7,20 +7,37 @@ export async function refreshAccessToken(token: Token): Promise<Token> {
 
     if (!token.refreshToken) throw new Error('refresh token이 없습니다.');
 
-    const url =
-      token.provider === 'kakao'
-        ? 'https://kauth.kakao.com/oauth/token'
-        : 'https://appleid.apple.com/auth/token';
+    let url: string;
+    let body: URLSearchParams;
 
-    console.log('토큰 갱신 요청 URL:', url);
+    if (token.provider === 'kakao') {
+      url = 'https://kauth.kakao.com/oauth/token';
+      body = new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: process.env.KAKAO_CLIENT_ID!,
+        refresh_token: token.refreshToken,
+        client_secret: process.env.KAKAO_CLIENT_SECRET!,
+      });
+    } else if (token.provider === 'apple') {
+      url = 'https://appleid.apple.com/auth/token';
+      body = new URLSearchParams({
+        client_id: process.env.APPLE_CLIENT_ID!,
+        client_secret: process.env.APPLE_CLIENT_SECRET!,
+        grant_type: 'refresh_token',
+        refresh_token: token.refreshToken,
+      });
+    } else {
+      throw new Error('지원하지 않는 프로바이더입니다.');
+    }
 
-    const response = await axios.post(url, {
-      grant_type: 'refresh_token',
-      client_id: process.env[`${token.provider?.toUpperCase()}_CLIENT_ID`],
-      refresh_token: token.refreshToken,
+    const response = await axios.post(url, body, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
     });
 
     console.log('토큰 갱신 성공:', {
+      provider: token.provider,
       expires_in: response.data.expires_in,
       hasAccessToken: !!response.data.access_token,
       hasRefreshToken: !!response.data.refresh_token,
