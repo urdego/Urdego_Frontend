@@ -36,7 +36,7 @@ function UserListItem({ user, onInvite }: UserListItemProps) {
       )}
       <UserInfo>
         <UserId>{nickname}</UserId>
-        <Level>LV.{level}</Level>
+        <Level>Lvl.{level}</Level>
       </UserInfo>
       <InviteButton
         $invited={invited}
