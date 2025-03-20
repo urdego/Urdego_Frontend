@@ -78,11 +78,16 @@ export async function POST(req: NextRequest) {
         );
       }
     } else if (token.provider === 'apple') {
-      // 애플 탈퇴 시에 refreshToken 사용
-      const refreshToken = token.refreshToken;
-      if (!refreshToken || typeof refreshToken !== 'string') {
-        throw new Error('유효한 Refresh Token이 없습니다.');
+      // 애플 탈퇴 시에만 CSRF 토큰 추출
+      const cookies = req.cookies;
+      const csrfTokenCookie = cookies.get('__Host-next-auth.csrf-token');
+
+      if (!csrfTokenCookie) {
+        throw new Error('CSRF 토큰을 찾을 수 없습니다.');
       }
+
+      // 쿠키 값에서 CSRF 토큰 추출
+      const csrfToken = csrfTokenCookie.value.split('%7C')[0]; // URL 디코딩 및 분리
 
       const response = await fetch(APPLE_UNLINK_URI, {
         method: 'POST',
@@ -92,7 +97,7 @@ export async function POST(req: NextRequest) {
         body: new URLSearchParams({
           client_id: process.env.APPLE_CLIENT_ID!,
           client_secret: process.env.APPLE_CLIENT_SECRET!,
-          token: refreshToken, // refreshToken 사용
+          token: csrfToken,
         }),
       });
 
