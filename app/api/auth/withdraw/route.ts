@@ -87,7 +87,9 @@ export async function POST(req: NextRequest) {
       }
 
       // 쿠키 값에서 CSRF 토큰 추출
-      const csrfToken = csrfTokenCookie.value.split('%7C')[0]; // URL 디코딩 및 분리
+      console.log('CSRF 토큰 전체:', csrfTokenCookie.value);
+      const csrfToken = csrfTokenCookie.value;
+      console.log('사용할 CSRF 토큰:', csrfToken);
 
       const response = await fetch(APPLE_UNLINK_URI, {
         method: 'POST',
@@ -102,8 +104,15 @@ export async function POST(req: NextRequest) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('애플 연결 해제 실패:', errorData);
+        const responseText = await response.text();
+        console.error('애플 연결 해제 실패 원본 응답:', responseText);
+        try {
+          const errorData = JSON.parse(responseText);
+          console.error('애플 연결 해제 실패:', errorData);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          console.error('애플 응답 파싱 실패');
+        }
         throw new Error('애플 연결 해제 실패');
       }
     }
