@@ -82,10 +82,11 @@ export const Label = styled.div`
 `;
 
 export const ExitButtonWrapper = styled.div`
+  position: absolute;
+  right: 16px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-right: 20px;
 
   &:active {
     opacity: 0.7;
