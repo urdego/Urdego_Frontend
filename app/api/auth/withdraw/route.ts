@@ -1,42 +1,9 @@
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { refreshKakaoToken } from '@/lib/auth/refreshToken';
 
 const KAKAO_UNLINK_URI = 'https://kapi.kakao.com/v1/user/unlink';
 const APPLE_UNLINK_URI = 'https://appleid.apple.com/auth/revoke';
-const KAKAO_TOKEN_URI = 'https://kauth.kakao.com/oauth/token';
-
-async function refreshKakaoToken(refreshToken: string) {
-  if (!refreshToken || typeof refreshToken !== 'string') {
-    throw new Error('유효한 Refresh Token이 없습니다.');
-  }
-
-  const response = await fetch(KAKAO_TOKEN_URI, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-    body: new URLSearchParams({
-      grant_type: 'refresh_token',
-      client_id: process.env.KAKAO_CLIENT_ID!,
-      refresh_token: refreshToken,
-      client_secret: process.env.KAKAO_CLIENT_SECRET!, // (+ client_secret 활성화했기에 추가)
-    }),
-  });
-
-  const tokenData = await response.json();
-  console.log('카카오 토큰 갱신 응답:', tokenData);
-
-  if (!response.ok) {
-    console.error(
-      '카카오 토큰 갱신 실패:',
-      response.status,
-      response.statusText
-    );
-    throw new Error('카카오 토큰 갱신 실패');
-  }
-
-  return tokenData; // access_token 및 refresh_token 반환
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,8 +13,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '인증 필요' }, { status: 401 });
     }
 
+    // 세션에서 userId 가져오기
+    const userId = token.userId;
+    if (!userId) {
+      throw new Error('유효한 사용자 ID가 없습니다.');
+    }
+
     // 요청 바디에서 탈퇴 사유 가져오기
-    const { userId, withDrawalReason } = await req.json();
+    const { withDrawalReason } = await req.json();
     let accessToken = token.accessToken;
 
     if (!accessToken || typeof accessToken !== 'string') {
@@ -73,6 +46,7 @@ export async function POST(req: NextRequest) {
             console.log('Access Token 만료됨, 갱신 시도');
 
             try {
+              // 리팩토링된 함수 사용
               const newTokenData = await refreshKakaoToken(token.refreshToken);
               accessToken = newTokenData.access_token;
 
@@ -104,11 +78,41 @@ export async function POST(req: NextRequest) {
         );
       }
     } else if (token.provider === 'apple') {
-      const appleResponse = await fetch(APPLE_UNLINK_URI, {
+      // 애플 탈퇴 시에만 CSRF 토큰 추출
+      const cookies = req.cookies;
+      const csrfTokenCookie = cookies.get('__Host-next-auth.csrf-token');
+
+      if (!csrfTokenCookie) {
+        throw new Error('CSRF 토큰을 찾을 수 없습니다.');
+      }
+
+      // 쿠키 값에서 CSRF 토큰 추출
+      console.log('CSRF 토큰 전체:', csrfTokenCookie.value);
+      const csrfToken = csrfTokenCookie.value;
+      console.log('사용할 CSRF 토큰:', csrfToken);
+
+      const response = await fetch(APPLE_UNLINK_URI, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: process.env.APPLE_CLIENT_ID!,
+          client_secret: process.env.APPLE_CLIENT_SECRET!,
+          token: csrfToken,
+        }),
       });
-      if (!appleResponse.ok) {
+
+      if (!response.ok) {
+        const responseText = await response.text();
+        console.error('애플 연결 해제 실패 원본 응답:', responseText);
+        try {
+          const errorData = JSON.parse(responseText);
+          console.error('애플 연결 해제 실패:', errorData);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (e) {
+          console.error('애플 응답 파싱 실패');
+        }
         throw new Error('애플 연결 해제 실패');
       }
     }
