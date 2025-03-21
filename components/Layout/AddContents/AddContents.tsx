@@ -24,6 +24,7 @@ import AlertModal from '@/components/Common/AlertModal/AlertModal';
 import useGameStore from '@/stores/useGameStore';
 import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
+import color from '@/styles/color/palette';
 
 interface AddContentsProps {
   isVisible: boolean;
@@ -210,7 +211,13 @@ const AddContents = ({ isVisible, setIsVisible, title }: AddContentsProps) => {
               {title && <HeaderTitle>{title}</HeaderTitle>}
               {/* ★ 선택완료 클릭 시 handleConfirm 실행 */}
               <span
-                style={{ cursor: 'pointer', color: '#007aff' }}
+                style={{
+                  cursor: 'pointer',
+                  color:
+                    selectedLocations.length > 0
+                      ? color.etc.black
+                      : color.gray[70],
+                }}
                 onClick={handleConfirm}
               >
                 선택완료
