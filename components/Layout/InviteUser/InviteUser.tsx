@@ -13,6 +13,7 @@ import {
 } from './InviteUser.styles';
 import UserListItem from './UserListItem';
 import SearchIcon from '@styles/Icon/search-btn.svg';
+import Clear from '@styles/Icon/clear-btn.svg';
 import { IUser } from '@/components/Layout/InviteUser/InviteUser.types';
 
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
@@ -137,6 +138,15 @@ const InviteUser = ({ setInviteVisible, roomName }: InviteUserProps) => {
               value={searchWord}
               onChange={(e) => setSearchWord(e.target.value)}
             />
+            {searchWord && (
+              <Image
+                src={Clear}
+                alt="clear-icon"
+                width={16}
+                height={16}
+                onClick={() => setSearchWord('')}
+              />
+            )}
           </SearchBarWrapper>
           <UserList>
             {users
