@@ -15,7 +15,7 @@ export const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px; // 아이콘 주변 공간 확보
+  width: 40px;
 `;
 
 export const Message = styled.p`
@@ -24,7 +24,7 @@ export const Message = styled.p`
   display: flex;
   align-items: center;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.14px;
