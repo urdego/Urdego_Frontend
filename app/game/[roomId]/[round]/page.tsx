@@ -123,20 +123,23 @@ const GamePage = ({ params }: GamePageProps) => {
 
   // 다음 라운드 이동
   const handleNextRound = useCallback(() => {
-    const questionId = useGameStore.getState().questionId;
-    const userId = useUserStore.getState().userId;
-    const { lat, lng } = hasSubmitted
-      ? currentSelectedCoordinate || { lat: 0, lng: 0 }
-      : { lat: 0, lng: 0 };
+    // 이미 제출한 경우 추가 제출하지 않음
+    if (!hasSubmitted) {
+      const questionId = useGameStore.getState().questionId;
+      const userId = useUserStore.getState().userId;
+      const { lat, lng } = currentSelectedCoordinate || { lat: 0, lng: 0 };
 
-    // ANSWER_SUBMIT 메시지 전송
-    sendMessage(
-      'ANSWER_SUBMIT',
-      { questionId, userId, latitude: lat, longitude: lng } as InGamePayload,
-      'game'
-    );
+      // ANSWER_SUBMIT 메시지 전송
+      sendMessage(
+        'ANSWER_SUBMIT',
+        { questionId, userId, latitude: lat, longitude: lng } as InGamePayload,
+        'game'
+      );
 
-    console.log('제출 완료 또는 타임아웃으로 인한 제출 완료');
+      console.log('타임아웃으로 인한 제출 완료');
+    } else {
+      console.log('이미 제출된 상태, 추가 제출 없음');
+    }
 
     // 1초 지연 후 다음 라운드로 이동
     setTimeout(() => {

@@ -75,7 +75,7 @@ export const Level: React.FC<LevelProps> = ({ level, exp }) => {
   return (
     <>
       <InfoRow>
-        <LevelText>Lvl.{level}</LevelText>
+        <LevelText>Lv.{level}</LevelText>
         <UserName>{nickname}</UserName>
       </InfoRow>
       <ProgressRow>
