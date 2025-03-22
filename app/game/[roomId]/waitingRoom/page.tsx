@@ -20,6 +20,7 @@ import useUserStore from '@/stores/useUserStore';
 import { useWebSocketFunctions } from '@/hooks/websocket/useWebsocketFunctions';
 import { RoomPayload } from '@/lib/types/roomJoin';
 import { useRouter } from 'next/navigation';
+import AlertToast from '@/components/Common/Toast/AlertToast';
 
 const WaitingRoom = () => {
   const [isAddContentsVisible, setIsAddContentsVisible] = useState(false);
@@ -219,7 +220,16 @@ const WaitingRoom = () => {
               <WButton
                 buttonType="icon"
                 icon={ContentsBox}
-                onClick={() => setIsAddContentsVisible((prev) => !prev)}
+                onClick={() => {
+                  if (myIsReady) {
+                    AlertToast({
+                      message:
+                        '준비완료 상태에서 장소 선택을 변경할 수 없어요.',
+                    });
+                    return;
+                  }
+                  setIsAddContentsVisible((prev) => !prev);
+                }}
               />
               <WButton
                 buttonType="default"
