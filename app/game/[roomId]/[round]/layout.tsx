@@ -14,34 +14,12 @@ const InGameLayout = ({ children }: { children: React.ReactNode }) => {
     audioRef.current = new Audio('/music/InGameMusic.mp3');
 
     // 초기 오디오 설정
-    const initializeAudio = async () => {
-      if (audioRef.current) {
-        audioRef.current.loop = true;
-        audioRef.current.volume = 0.1;
-
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-        } catch (error) {
-          console.log('자동 재생 실패:', error);
-          setIsPlaying(false);
-
-          const handleUserInteraction = async () => {
-            try {
-              await audioRef.current?.play();
-              setIsPlaying(true);
-              document.removeEventListener('click', handleUserInteraction);
-            } catch (error) {
-              console.log('재생 실패:', error);
-            }
-          };
-
-          document.addEventListener('click', handleUserInteraction);
-        }
-      }
-    };
-
-    initializeAudio();
+    if (audioRef.current) {
+      audioRef.current.loop = true;
+      audioRef.current.volume = 0.1;
+      // 기본적으로 오디오는 비활성화 상태로 시작
+      setIsPlaying(false);
+    }
 
     return () => {
       if (audioRef.current) {
@@ -49,7 +27,7 @@ const InGameLayout = ({ children }: { children: React.ReactNode }) => {
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [setIsPlaying]);
 
   // 오디오 상태가 변경될 때마다 실행
   useEffect(() => {
@@ -120,10 +98,6 @@ const SwitchContainer = styled.div`
   cursor: pointer;
   margin: 0 auto;
   z-index: 300;
-
-  &:active {
-    outline: 2px solid red; /* 클릭 테스트 */
-  }
 `;
 
 const SoundOnIcon = styled.img.attrs({
