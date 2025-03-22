@@ -6,8 +6,7 @@ export const WaitingWrapper = styled.div`
   background-image: url(${BackgroundImage.src});
   background-size: cover;
   background-position: center;
-  min-height: 100dvh;
-  height: 100%;
+  height: calc(100vh - 40px);
   display: flex;
   justify-content: center;
   align-items: center;
