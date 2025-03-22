@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   ProfileInfoWrapper,
   ImageWrapper,
@@ -6,9 +7,15 @@ import {
   ProfileEmail,
   Level,
 } from '@/components/Layout/MyPage/ProfileInfo.styles';
-import Image from 'next/image';
 import useCharacterData from '@/hooks/character/useCharacterData';
 import { useCharacterState } from '@/hooks/character/useCharacterState';
+import {
+  SkeletonImageWrapper,
+  SkeletonInfoRow,
+  SkeletonLevel,
+  SkeletonName,
+  SkeletonEmail,
+} from './ProfileInfoSkeleton.styles';
 
 interface ProfileInfoProps {
   email: string;
@@ -16,16 +23,35 @@ interface ProfileInfoProps {
   activeCharacter: string;
 }
 
-const ProfileInfo = ({
+export default function ProfileInfo({
   email,
   nickname,
   activeCharacter,
-}: ProfileInfoProps) => {
+}: ProfileInfoProps) {
   const characters = useCharacterData({ ownCharacters: [activeCharacter] });
+  const { level } = useCharacterState();
+
+  // 스켈레톤 렌더링 조건
+  const isLoading = !email;
+
+  // 스켈레톤 조건부 렌더링
+  if (isLoading) {
+    return (
+      <ProfileInfoWrapper>
+        <SkeletonImageWrapper />
+        <SkeletonInfoRow>
+          <SkeletonLevel />
+          <SkeletonName />
+        </SkeletonInfoRow>
+        <SkeletonEmail />
+      </ProfileInfoWrapper>
+    );
+  }
+
+  // 실제 UI
   const activeCharacterData = characters.find(
     (character) => character.key === activeCharacter
   );
-  const { level } = useCharacterState();
 
   return (
     <ProfileInfoWrapper>
@@ -48,6 +74,4 @@ const ProfileInfo = ({
       <ProfileEmail>{email || '이메일 없음'}</ProfileEmail>
     </ProfileInfoWrapper>
   );
-};
-
-export default ProfileInfo;
+}
