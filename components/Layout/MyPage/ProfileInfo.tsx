@@ -28,7 +28,10 @@ export default function ProfileInfo({
   nickname,
   activeCharacter,
 }: ProfileInfoProps) {
-  const characters = useCharacterData({ ownCharacters: [activeCharacter] });
+  const characters = useCharacterData({
+    ownCharacters: [activeCharacter],
+    useMinImage: true,
+  });
   const { level } = useCharacterState();
 
   // 스켈레톤 렌더링 조건
