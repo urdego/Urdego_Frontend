@@ -10,7 +10,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "format": "prettier --write .",
-    "postbuild": "next-sitemap --config next-sitemap.config.js"
+    "postbuild": "next-sitemap --config next-sitemap.config.js",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@capacitor/camera": "^7.0.0",
@@ -70,6 +71,7 @@
     "@types/socket.io-client": "^3.0.0",
     "@types/styled-components": "^5.1.34",
     "@types/three": "^0.172.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.18",
     "eslint-plugin-storybook": "^0.11.0",

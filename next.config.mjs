@@ -3,6 +3,10 @@ const require = createRequire(import.meta.url);
 const withPWA = require('next-pwa')({
   dest: 'public',
 });
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: true,
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -37,12 +41,6 @@ const nextConfig = {
     domains: ['urdego.site'], // ✅ 외부 이미지 사용을 위해 허용할 도메인 추가
     unoptimized: true,
   },
-
-  transpilePackages: [
-    '@capacitor/core',
-    '@capacitor/camera',
-    '@capacitor/filesystem',
-  ],
 };
 
-export default withPWA(nextConfig);
+export default withBundleAnalyzer(withPWA(nextConfig));
