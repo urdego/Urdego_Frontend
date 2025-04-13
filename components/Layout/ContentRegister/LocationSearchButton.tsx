@@ -8,7 +8,12 @@ import {
 import { ClearIcon, SearchIcon } from './ContentRegisterIcon';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
-import LocationRegisterBottomSheet from '@/components/Layout/ContentRegister/LocationRegisterBottomSheet';
+// import LocationRegisterBottomSheet from '@/components/Layout/ContentRegister/LocationRegisterBottomSheet';
+import { lazy } from 'react';
+const LocationRegisterBottomSheet = lazy(
+  () =>
+    import('@/components/Layout/ContentRegister/LocationRegisterBottomSheet')
+);
 
 interface PlaceSearchButtonProps {
   index: number;
