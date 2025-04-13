@@ -1,12 +1,12 @@
 import GoogleMap from '@/components/Layout/LocationRegister/GoogleMap';
-import BottomSheet from './BottomSheet';
+import BottomSheet from '../../Common/BottomSheet/BottomSheet';
 import { useEffect, useState } from 'react';
 import {
   ButtonLayout,
   LocationRegisterWrapper,
-} from './ContentRegisterBottomSheet.styles';
-import { ContentHeader } from './BottomSheet.styles';
-import Button from '../Button/Button';
+} from './LocationRegisterBottomSheet.styles';
+import { ContentHeader } from '../../Common/BottomSheet/BottomSheet.styles';
+import Button from '../../Common/Button/Button';
 import useConvertLocationToAddress from '@/hooks/contentRegister/useConvertLocationToAddress';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 
