@@ -5,7 +5,6 @@ import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/ContentRegister/ContentRegisterItem';
 import Button from '@/components/Common/Button/Button';
 import PlusIconSrc from '@styles/Icon/Plus.svg';
-import TipCharacter from '@styles/Icon/Character/basicMin.webp';
 import {
   BottomLayout,
   ButtonLayout,
@@ -22,8 +21,8 @@ import useControlButtons from '@/hooks/contentRegister/useControlButtons';
 import usePlaceRegisterModeStore from '@/stores/contentRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import TipModal from '@/components/Layout/TipModal/TipModal';
-import Image from 'next/image';
-const PlayerTip = lazy(() => import('@/components/Common/Lottie/PlayerTip'));
+import PlayerTip from '@/components/Common/Lottie/PlayerTip';
+// const PlayerTip = lazy(() => import('@/components/Common/Lottie/PlayerTip'));
 
 const ContentRegisterPage = () => {
   // client state 불러오는 custom hook
@@ -64,19 +63,7 @@ const ContentRegisterPage = () => {
               </ModalLayout>
             ) : (
               <LottieLayout onClick={() => setIsTipOpen(true)}>
-                <Suspense
-                  fallback={
-                    <Image
-                      src={TipCharacter}
-                      width={74} // LottieLayout의 max-width와 동일하게 설정
-                      height={74} // 적절한 높이 (이미지 비율에 맞게 조정)
-                      style={{ width: '100%', height: 'auto' }}
-                      alt="tip-character"
-                    />
-                  }
-                >
-                  <PlayerTip />
-                </Suspense>
+                <PlayerTip />
               </LottieLayout>
             )}
             <ButtonLayout>

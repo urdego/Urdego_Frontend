@@ -8,7 +8,7 @@ import {
 import { ClearIcon, SearchIcon } from './ContentRegisterIcon';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
-import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/ContentRegisterBottomSheet';
+import LocationRegisterBottomSheet from '@/components/Layout/ContentRegister/LocationRegisterBottomSheet';
 
 interface PlaceSearchButtonProps {
   index: number;

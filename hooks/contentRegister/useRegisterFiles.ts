@@ -119,10 +119,30 @@ const useRegisterFiles = ({ index }: useUploadFilesProps) => {
 
         // 도로명 주소 저장
         // 역지오코딩으로 도로명 주소 반환
-        await handleReverseGeocoding({
-          index,
-          latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
-        });
+        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${gps.Latitude},${gps.Longitude}&key=${apiKey}`;
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+          console.error('❌ 응답 실패:', res.status, await res.text());
+          throw new Error('Geocoding request failed');
+        }
+
+        const data = await res.json();
+        console.log('📦 Geocoding 결과:', data);
+
+        if (data.status === 'OK') {
+          return data.results[0]?.formatted_address ?? '';
+        } else {
+          console.error('❌ Geocoding 실패 상태:', data.status);
+          throw new Error('Geocoding failed');
+        }
+
+        // await handleReverseGeocoding({
+        //   index,
+        //   latLng: { lat: gps.Latitude as number, lng: gps.Longitude as number },
+        // });
       } else {
         throw new Error(
           '위치 서비스를 활성화하시면, 자동으로 위치를 추가할 수 있어요!'
