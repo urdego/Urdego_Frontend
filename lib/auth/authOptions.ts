@@ -74,10 +74,11 @@ export const authOptions: NextAuthOptions = {
     callbackUrl: {
       name: `__Secure-next-auth.callback-url`,
       options: {
-        httpOnly: false,
-        sameSite: 'none',
+        httpOnly: true, // JS 접근 차단
+        sameSite: 'lax', // GET 요청과 top-level navigation에만 쿠키 전송 허용
         path: '/',
         secure: true,
+        // TODO: 토큰 만료 시간 maxAge 고민중
       },
     },
     pkceCodeVerifier: {
