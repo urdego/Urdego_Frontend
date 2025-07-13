@@ -52,9 +52,9 @@
 | Package Manager      | ![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white)                                                                                                                                        |
 | Version Control      | ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)                       |
 
-### Architecture
+### 🛠️ Architecture
 
-<img src="https://github.com/user-attachments/assets/72a93272-8abe-44d0-b9e4-14d609321154" width="800">
+<img src="./public/Urdergo_Architecture.png" width="800">
 
 ## 🎯 기능 소개
 
