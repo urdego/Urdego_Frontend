@@ -30,6 +30,22 @@
 - **기획기간** : 2024.12.18 ~ 2024.12.23
 - **개발기간** : 2025.01.02 ~ 2025.03.14
 
+
+## 🎯 기능 소개
+<img width="7680" height="4320" alt="2" src="https://github.com/user-attachments/assets/deeef220-950e-4f42-8ba4-5e2d200a65db" />
+<img width="7680" height="4320" alt="3" src="https://github.com/user-attachments/assets/c9e69b8f-2365-49a8-94ec-1975115d0eb8" />
+
+![4페이지](https://github.com/user-attachments/assets/77d75dc3-8aca-4835-bc9d-a6fd00bb4a1f)
+![5페이지](https://github.com/user-attachments/assets/aa39ce50-8543-453d-8650-3c29f75d8082)
+
+<img width="7680" height="4320" alt="6" src="https://github.com/user-attachments/assets/657206e6-79e3-46c8-9aa9-698d06045541" />
+<img width="7680" height="4320" alt="7" src="https://github.com/user-attachments/assets/ba82314e-c89d-4811-ae40-8303db4e4c88" />
+<img width="7680" height="4320" alt="8" src="https://github.com/user-attachments/assets/879298de-0214-42da-9fca-0ccaf7bc21db" />
+
+![9페이지](https://github.com/user-attachments/assets/71a8c3bd-9b86-4577-a5be-61963034f3af)
+![10페이지](https://github.com/user-attachments/assets/3857dd53-9c4b-489c-8fc7-9cbd2cd60ffa)
+
+
 ## 🛠️ 기술 스택
 
 ### Node.js Version
@@ -54,29 +70,6 @@
 
 <img src="./public/Urdergo_Architecture.png" width="800">
 
-## 🎯 기능 소개
-<img width="7680" height="4320" alt="2" src="https://github.com/user-attachments/assets/deeef220-950e-4f42-8ba4-5e2d200a65db" />
-<img width="7680" height="4320" alt="3" src="https://github.com/user-attachments/assets/c9e69b8f-2365-49a8-94ec-1975115d0eb8" />
-
-![4페이지](https://github.com/user-attachments/assets/77d75dc3-8aca-4835-bc9d-a6fd00bb4a1f)
-![5페이지](https://github.com/user-attachments/assets/aa39ce50-8543-453d-8650-3c29f75d8082)
-
-<img width="7680" height="4320" alt="6" src="https://github.com/user-attachments/assets/657206e6-79e3-46c8-9aa9-698d06045541" />
-<img width="7680" height="4320" alt="7" src="https://github.com/user-attachments/assets/ba82314e-c89d-4811-ae40-8303db4e4c88" />
-<img width="7680" height="4320" alt="8" src="https://github.com/user-attachments/assets/879298de-0214-42da-9fca-0ccaf7bc21db" />
-
-![9페이지](https://github.com/user-attachments/assets/71a8c3bd-9b86-4577-a5be-61963034f3af)
-![10페이지](https://github.com/user-attachments/assets/3857dd53-9c4b-489c-8fc7-9cbd2cd60ffa)
-
-
-
-
-## 🔧 기능 개선 문서
-
-서비스 개선을 위해 진행된 주요 기능 개선사항을 정리한 문서입니다.  
-팀 내 회고를 바탕으로 실질적인 문제를 해결하고, 사용자 경험을 더 향상시키고자 시도한 과정을 담았습니다.
-
-📄 **기능 개선 문서 전체 보기** 👉 [바로가기](https://witty-crime-33b.notion.site/22fbba7341bd818e9cf3c5dff17f3586?source=copy_link)
 
 ## 🗂️ 프로젝트 폴더 구조
 
@@ -181,3 +174,10 @@ Urdego_Frontend/
 ```
 
 </details>
+
+## 🔧 기능 개선 문서
+
+서비스 개선을 위해 진행된 주요 기능 개선사항을 정리한 문서입니다.  
+팀 내 회고를 바탕으로 실질적인 문제를 해결하고, 사용자 경험을 더 향상시키고자 시도한 과정을 담았습니다.
+
+📄 **기능 개선 문서 전체 보기** 👉 [바로가기](https://witty-crime-33b.notion.site/22fbba7341bd818e9cf3c5dff17f3586?source=copy_link)
