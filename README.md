@@ -1,12 +1,10 @@
 # 🗺️ 어데고?! - 위치 추적 게임 서비스
 
+
+<img width="5760" height="3240" alt="1new" src="https://github.com/user-attachments/assets/c1cd4e85-2023-4c5d-b701-4262a82e9eac" />
+
 <div align=center>
-
-<img src="https://github.com/user-attachments/assets/38306637-e5db-4335-93a5-82469e8d236e" width="300"><br/>
-<br/><strong> 소중한 사람들과 떠나는 추억 여행 🧳</strong><Br/>
-<strong>'어데고?!’</strong>는 사용자가 추천하거나 소중한 추억이 담긴 장소를 공유하고, 가족, 친구들과 함께 그 장소를 찾는 재미를 제공하는 서비스입니다. <br>지인들과 의미 있는 장소를 소재로 이야기를 나누며 추억을 공유하고 새로운 경험을 쌓을 수 있는 특별한 즐거움을 경험할 수 있습니다. <br> 이 서비스를 통해 바쁜 일상 속에서도 함께했던 소소한 순간들을 떠올리며 소중한 사람들과 따뜻한 추억을 새롭게 만들어 가세요!<br><br>
 <a href="https://urdego.vercel.app/">어데고?! 서비스 바로가기</a><Br/><Br/>
-
 </div>
 
 ## ✨ 멤버 소개
@@ -15,7 +13,7 @@
   
 | <img src="https://github.com/bluedog129.png" width="150" > | <img src="https://github.com/aaahyesu.png" width="150" > | <img src="https://github.com/minjeongss.png" width="150" > |
 | :--------------------------------------------: | :------------------------------------------: | :--------------------------------------------: |
-|    [최효종](https://github.com/bluedog129)     |     [김혜수](https://github.com/kod0751)     |    [김민정](https://github.com/minjeongss)     |
+|    [최효종](https://github.com/bluedog129)     |     [김혜수](https://github.com/aaahyesu)     |    [김민정](https://github.com/minjeongss)     |
 |     PM, User-Service, Notification-Service     |              팀장, Game-Service              |         Content-Service, User-Service          |
 
 </div>
@@ -57,22 +55,21 @@
 <img src="./public/Urdergo_Architecture.png" width="800">
 
 ## 🎯 기능 소개
+<img width="7680" height="4320" alt="2" src="https://github.com/user-attachments/assets/deeef220-950e-4f42-8ba4-5e2d200a65db" />
+<img width="7680" height="4320" alt="3" src="https://github.com/user-attachments/assets/c9e69b8f-2365-49a8-94ec-1975115d0eb8" />
 
-|                                      컨텐츠 업로드                                      |                                        컨텐츠 조회                                        |
-| :-------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-| ![ppt](https://github.com/user-attachments/assets/1c21460c-fef2-4355-9166-f23026880a69) | ![image](https://github.com/user-attachments/assets/92f6db29-93bd-4878-a731-87998c47bb67) |
+![4페이지](https://github.com/user-attachments/assets/77d75dc3-8aca-4835-bc9d-a6fd00bb4a1f)
+![5페이지](https://github.com/user-attachments/assets/aa39ce50-8543-453d-8650-3c29f75d8082)
 
-|                                         친구 초대                                         |                                          대기방                                           |
-| :---------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-| ![image](https://github.com/user-attachments/assets/e3747f88-687f-4275-b8e5-384f49beebc7) | ![image](https://github.com/user-attachments/assets/caacfdec-9429-4686-b6d3-fb9f24a8c7b0) |
+<img width="7680" height="4320" alt="6" src="https://github.com/user-attachments/assets/657206e6-79e3-46c8-9aa9-698d06045541" />
+<img width="7680" height="4320" alt="7" src="https://github.com/user-attachments/assets/ba82314e-c89d-4811-ae40-8303db4e4c88" />
+<img width="7680" height="4320" alt="8" src="https://github.com/user-attachments/assets/879298de-0214-42da-9fca-0ccaf7bc21db" />
 
-|                                         게임 시작                                         |                                         문제 출제                                         |
-| :---------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-| ![image](https://github.com/user-attachments/assets/0ef508c5-fdfb-4c1f-b2da-ccf3b1f345c0) | ![image](https://github.com/user-attachments/assets/448292d3-4124-4002-822a-12ceb08ec2fc) |
+![9페이지](https://github.com/user-attachments/assets/71a8c3bd-9b86-4577-a5be-61963034f3af)
+![10페이지](https://github.com/user-attachments/assets/3857dd53-9c4b-489c-8fc7-9cbd2cd60ffa)
 
-|                                              답안 제출                                               |                                              결과 반환                                               |
-| :--------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------: |
-| ![a7364026b0640d79](https://github.com/user-attachments/assets/345804da-a8bd-44e6-9cf8-9f8cfa71265f) | ![7209d730e9e4e594](https://github.com/user-attachments/assets/3b51a2de-272e-4561-b12f-07fc6bdeba0b) |
+
+
 
 ## 🔧 기능 개선 문서
 
