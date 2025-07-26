@@ -23,6 +23,7 @@ const ImageUpload = ({
         <ImageUploadInput
           type="file"
           accept="image/*"
+          aria-label="image-upload"
           multiple
           onChange={handleFilesUpload}
         />

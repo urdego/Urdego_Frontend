@@ -8,7 +8,12 @@ import {
 import { ClearIcon, SearchIcon } from './ContentRegisterIcon';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
 import useToggleBottomSheet from '@/hooks/bottomSheet/useToggleBottomSheet';
-import LocationRegisterBottomSheet from '@/components/Common/BottomSheet/ContentRegisterBottomSheet';
+// import LocationRegisterBottomSheet from '@/components/Layout/ContentRegister/LocationRegisterBottomSheet';
+import { lazy, Suspense } from 'react';
+const LocationRegisterBottomSheet = lazy(
+  () =>
+    import('@/components/Layout/ContentRegister/LocationRegisterBottomSheet')
+);
 
 interface PlaceSearchButtonProps {
   index: number;
@@ -36,11 +41,22 @@ const LocationSearchButton = ({ index, value }: PlaceSearchButtonProps) => {
           <LocationRegisterText>위치 추가하기</LocationRegisterText>
         </PlaceSearchButtonWrapper>
       )}
-      <LocationRegisterBottomSheet
-        index={index}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
+
+      <Suspense
+        fallback={
+          <div
+            style={{ position: 'absolute', width: 0, height: 0, opacity: 0 }}
+          >
+            loading...
+          </div>
+        }
+      >
+        <LocationRegisterBottomSheet
+          index={index}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+      </Suspense>
     </>
   );
 };

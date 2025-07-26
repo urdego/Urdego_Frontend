@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import TopBar from '@/components/Common/TopBar/TopBar';
 import PlaceRegister from '@/components/Layout/ContentRegister/ContentRegisterItem';
 import Button from '@/components/Common/Button/Button';
@@ -19,9 +20,9 @@ import useControlButtons from '@/hooks/contentRegister/useControlButtons';
 
 import usePlaceRegisterModeStore from '@/stores/contentRegisterModeStore';
 import usePlaceRegisterStore from '@/stores/contentRegisterStore';
-import PlayerTip from '@/components/Common/Lottie/PlayerTip';
 import TipModal from '@/components/Layout/TipModal/TipModal';
-import { useState } from 'react';
+import PlayerTip from '@/components/Common/Lottie/PlayerTip';
+// const PlayerTip = lazy(() => import('@/components/Common/Lottie/PlayerTip'));
 
 const ContentRegisterPage = () => {
   // client state 불러오는 custom hook

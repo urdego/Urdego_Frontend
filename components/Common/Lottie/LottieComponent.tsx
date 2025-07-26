@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import Lottie from 'lottie-web';
 
 interface LottiComponentProps {
@@ -28,4 +28,4 @@ const LottieComponent = ({ animationData }: LottiComponentProps) => {
   return <div ref={animationContainer} />;
 };
 
-export default LottieComponent;
+export default memo(LottieComponent);

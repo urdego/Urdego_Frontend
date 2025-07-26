@@ -10,6 +10,7 @@ import {
 
 import { Place } from '@/stores/contentRegisterStore';
 import useControlInput from '@/hooks/contentRegister/useControlInput';
+import { APIProvider } from '@vis.gl/react-google-maps';
 
 interface PlaceRegisterProps {
   index: number;
@@ -32,13 +33,17 @@ const ContentRegisterItem = ({ index, title, place }: PlaceRegisterProps) => {
           </PlaceContentResetButton>
         )}
       </PlaceRegistertext>
-      <PlacePreview index={index} place={place} />
-      <PlaceInput
-        placeholder="장소명"
-        value={place.title}
-        onChange={handleTitleChange}
-      />
-      <PlaceSearchButton index={index} value={place.address} />
+      <APIProvider
+        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
+      >
+        <PlacePreview index={index} place={place} />
+        <PlaceInput
+          placeholder="장소명"
+          value={place.title}
+          onChange={handleTitleChange}
+        />
+        <PlaceSearchButton index={index} value={place.address} />
+      </APIProvider>
       <PlaceInput
         placeholder="(선택) 힌트를 작성해주세요"
         value={place.hint}
